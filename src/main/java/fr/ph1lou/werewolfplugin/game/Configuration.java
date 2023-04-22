@@ -2,7 +2,9 @@ package fr.ph1lou.werewolfplugin.game;
 
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
+import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.Register;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
 import java.util.Map;
@@ -28,10 +30,10 @@ public class Configuration implements IConfiguration {
     private int spectatorMode;  // 0 no Spectators, 1 allowed for death players, 2 for all players;
     private boolean whiteList;
     private int playerMax;
-    private double borderSpeed ;
+    private double borderSpeed;
     private boolean meetUp;
 
-    public Configuration(){
+    public Configuration() {
         this.strengthRate = 30;
         this.resistanceRate = 20;
         this.limitProtectionIron = 3;
@@ -264,8 +266,13 @@ public class Configuration implements IConfiguration {
     @Override
     public void switchConfigValue(String key) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).switchConfigValue(key);
+
+                JavaPlugin.getPlugin(Main.class).getWereWolfAPI()
+                        .getListenersManager()
+                        .getConfiguration(key)
+                        .ifPresent(listenerWerewolf -> listenerWerewolf.register(!listenerWerewolf.isRegister()));
             }
         });
     }
@@ -273,8 +280,13 @@ public class Configuration implements IConfiguration {
     @Override
     public void switchScenarioValue(String key) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).switchScenarioValue(key);
+
+                JavaPlugin.getPlugin(Main.class).getWereWolfAPI()
+                        .getListenersManager()
+                        .getScenario(key)
+                        .ifPresent(listenerWerewolf -> listenerWerewolf.register(!listenerWerewolf.isRegister()));
             }
         });
     }
@@ -282,7 +294,7 @@ public class Configuration implements IConfiguration {
     @Override
     public void removeOneRole(String key) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).removeOneRole(key);
             }
         });
@@ -291,7 +303,7 @@ public class Configuration implements IConfiguration {
     @Override
     public void addOneRole(String key) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).addOneRole(key);
             }
         });
@@ -300,7 +312,7 @@ public class Configuration implements IConfiguration {
     @Override
     public void setRole(String key, int i) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).setRole(key, i);
             }
         });
@@ -308,7 +320,7 @@ public class Configuration implements IConfiguration {
 
     public void decreaseTimer(String key) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).decreaseTimer(key);
             }
         });
@@ -317,7 +329,7 @@ public class Configuration implements IConfiguration {
     @Override
     public void moveTimer(String key, int i) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).moveTimer(key, i);
             }
         });
@@ -326,8 +338,13 @@ public class Configuration implements IConfiguration {
     @Override
     public void setConfig(String key, boolean value) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).setConfig(key, value);
+
+                JavaPlugin.getPlugin(Main.class).getWereWolfAPI()
+                        .getListenersManager()
+                        .getConfiguration(key)
+                        .ifPresent(listenerWerewolf -> listenerWerewolf.register(value));
             }
         });
     }
@@ -335,8 +352,13 @@ public class Configuration implements IConfiguration {
     @Override
     public void setScenario(String key, boolean value) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).setScenario(key, value);
+
+                JavaPlugin.getPlugin(Main.class).getWereWolfAPI()
+                        .getListenersManager()
+                        .getScenario(key)
+                        .ifPresent(listenerWerewolf -> listenerWerewolf.register(value));
             }
         });
     }
@@ -344,7 +366,7 @@ public class Configuration implements IConfiguration {
     @Override
     public int getValue(String key) {
         return Register.get().getModuleKey(key).map(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 return this.storageConfigurations.get(addonKey).getValue(key);
             }
             return 0;
@@ -354,7 +376,7 @@ public class Configuration implements IConfiguration {
     @Override
     public void setValue(String key, int value) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).setValue(key, value);
             }
         });
@@ -363,7 +385,7 @@ public class Configuration implements IConfiguration {
     @Override
     public int getProbability(String key) {
         return Register.get().getModuleKey(key).map(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 return this.storageConfigurations.get(addonKey).getProbability(key);
             }
             return 0;
@@ -373,7 +395,7 @@ public class Configuration implements IConfiguration {
     @Override
     public void setProbability(String key, int probability) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).setProbability(key, probability);
             }
         });
@@ -382,7 +404,7 @@ public class Configuration implements IConfiguration {
     @Override
     public void setTimerValue(String key, int value) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).setTimerValue(key, value);
             }
         });
@@ -391,7 +413,7 @@ public class Configuration implements IConfiguration {
     @Override
     public int getTimerValue(String key) {
         return Register.get().getModuleKey(key).map(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 return this.storageConfigurations.get(addonKey).getTimerValue(key);
             }
             return 0;
@@ -401,7 +423,7 @@ public class Configuration implements IConfiguration {
     @Override
     public boolean isConfigActive(String key) {
         return Register.get().getModuleKey(key).map(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 return this.storageConfigurations.get(addonKey).isConfigActive(key);
             }
             return false;
@@ -411,7 +433,7 @@ public class Configuration implements IConfiguration {
     @Override
     public int getRoleCount(String key) {
         return Register.get().getModuleKey(key).map(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 return this.storageConfigurations.get(addonKey).getRoleCount(key);
             }
             return 0;
@@ -421,7 +443,7 @@ public class Configuration implements IConfiguration {
     @Override
     public int getLoverCount(String key) {
         return Register.get().getModuleKey(key).map(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 return this.storageConfigurations.get(addonKey).getLoverCount(key);
             }
             return 0;
@@ -431,7 +453,7 @@ public class Configuration implements IConfiguration {
     @Override
     public void setLoverCount(String key, int i) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).setLoverCount(key, i);
             }
         });
@@ -440,7 +462,7 @@ public class Configuration implements IConfiguration {
     @Override
     public void addOneLover(String key) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).addOneLover(key);
             }
         });
@@ -449,7 +471,7 @@ public class Configuration implements IConfiguration {
     @Override
     public void removeOneLover(String key) {
         Register.get().getModuleKey(key).ifPresent(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 this.storageConfigurations.get(addonKey).removeOneLover(key);
             }
         });
@@ -463,7 +485,7 @@ public class Configuration implements IConfiguration {
     @Override
     public boolean isScenarioActive(String key) {
         return Register.get().getModuleKey(key).map(addonKey -> {
-            if(this.storageConfigurations.containsKey(addonKey)){
+            if (this.storageConfigurations.containsKey(addonKey)) {
                 return this.storageConfigurations.get(addonKey).isScenarioActive(key);
             }
             return false;

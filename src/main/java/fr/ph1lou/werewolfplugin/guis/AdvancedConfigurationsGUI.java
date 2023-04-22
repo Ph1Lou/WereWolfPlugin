@@ -37,10 +37,10 @@ public class AdvancedConfigurationsGUI implements InventoryProvider {
                 .manager(api.getInvManager())
                 .provider(new AdvancedConfigurationsGUI(configuration, page))
                 .size(InventoryUtils.getRowNumbers((configuration.timers().length +
-                                configuration.configValues().length + configuration.configurations().length)*2, true),
+                                configuration.configValues().length + configuration.configurations().length) * 2, true),
                         9)
                 .title(game.translate("werewolf.menus.advanced_tool_role.menu",
-                                Formatter.role(game.translate(configuration.config().key()))))
+                        Formatter.role(game.translate(configuration.config().key()))))
                 .closeable(true)
                 .build();
     }
@@ -79,10 +79,6 @@ public class AdvancedConfigurationsGUI implements InventoryProvider {
             i.set(i.get() + 2);
         });
     }
-
-
-
-
 
 
 }

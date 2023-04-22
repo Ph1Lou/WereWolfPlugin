@@ -1,8 +1,8 @@
 package fr.ph1lou.werewolfplugin.tasks;
 
-import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
 

@@ -31,14 +31,14 @@ public class CommandStuffRole implements ICommand {
         IStuffManager stuffManager = game.getStuffs();
         UUID uuid = player.getUniqueId();
 
-        if(!stuffManager.isInTempStuff(uuid)){
+        if (!stuffManager.isInTempStuff(uuid)) {
             return;
         }
 
-        stuffManager.setStuffRole(args[0],  Arrays.stream(player.getInventory().getContents())
+        stuffManager.setStuffRole(args[0], Arrays.stream(player.getInventory().getContents())
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList()));
-        player.sendMessage(game.translate(Prefix.GREEN , "werewolf.commands.admin.loot_role.perform",
+        player.sendMessage(game.translate(Prefix.GREEN, "werewolf.commands.admin.loot_role.perform",
                 Formatter.role(game.translate(args[0]))));
 
 

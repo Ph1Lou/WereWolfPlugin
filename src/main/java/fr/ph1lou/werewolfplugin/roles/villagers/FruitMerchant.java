@@ -4,12 +4,12 @@ import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
-import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.fruitmerchant.FruitMerchantDeathEvent;
@@ -37,17 +37,17 @@ import java.util.Map;
 
 
 @Role(key = RoleBase.FRUIT_MERCHANT,
-         category = Category.VILLAGER, 
-         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
-         timers = {@Timer(key = TimerBase.FRUIT_MERCHANT_COOL_DOWN,
-                 defaultValue = 1200, meetUpValue = 5 * 60)},
- configValues = {@IntValue(key = IntValueBase.FRUIT_MERCHANT_DISTANCE,
-         defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.ORANGE_WOOL)})
+        category = Category.VILLAGER,
+        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
+        timers = {@Timer(key = TimerBase.FRUIT_MERCHANT_COOL_DOWN,
+                defaultValue = 1200, meetUpValue = 5 * 60)},
+        configValues = {@IntValue(key = IntValueBase.FRUIT_MERCHANT_DISTANCE,
+                defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.ORANGE_WOOL)})
 public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPower {
 
-    private boolean power = true;
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
-    private final Map<IPlayerWW,Integer> goldenAppleNumber = new HashMap<>();
+    private final Map<IPlayerWW, Integer> goldenAppleNumber = new HashMap<>();
+    private boolean power = true;
 
     public FruitMerchant(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -55,12 +55,12 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
 
     @Override
     public @NotNull String getDescription() {
-        return new DescriptionBuilder(game,this)
+        return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.fruit_merchant.description",
                         Formatter.number(game.getConfig().getValue(IntValueBase.FRUIT_MERCHANT_DISTANCE)),
                         Formatter.timer(Utils
                                 .conversion(game.getConfig()
-                                        .getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN)/2))))
+                                        .getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN) / 2))))
                 .setPower(game.translate("werewolf.roles.fruit_merchant.power"))
                 .build();
     }
@@ -73,7 +73,7 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
     @Override
     public void addAffectedPlayer(IPlayerWW iPlayerWW) {
         this.affectedPlayers.add(iPlayerWW);
-        this.goldenAppleNumber.put(iPlayerWW,Utils.countGoldenApple(iPlayerWW));
+        this.goldenAppleNumber.put(iPlayerWW, Utils.countGoldenApple(iPlayerWW));
     }
 
     @Override
@@ -103,31 +103,31 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
     }
 
     public int getGoldenAppleNumber(IPlayerWW playerWW1) {
-        return this.goldenAppleNumber.getOrDefault(playerWW1,0);
+        return this.goldenAppleNumber.getOrDefault(playerWW1, 0);
     }
 
     @EventHandler
-    public void onDeath(FinalDeathEvent event){
-        if(this.getPlayerWW().isState(StatePlayer.DEATH)){
+    public void onDeath(FinalDeathEvent event) {
+        if (this.getPlayerWW().isState(StatePlayer.DEATH)) {
             return;
         }
 
-        if(!this.goldenAppleNumber.containsKey(event.getPlayerWW())){
+        if (!this.goldenAppleNumber.containsKey(event.getPlayerWW())) {
             return;
         }
 
         FruitMerchantDeathEvent fruitMerchantDeathEvent = new FruitMerchantDeathEvent(this.getPlayerWW(),
-                event.getPlayerWW(),new GoldenCount(this.goldenAppleNumber.get(event.getPlayerWW()),
+                event.getPlayerWW(), new GoldenCount(this.goldenAppleNumber.get(event.getPlayerWW()),
                 Utils.countGoldenApple(event.getPlayerWW())));
 
         Bukkit.getPluginManager().callEvent(fruitMerchantDeathEvent);
 
-        if(fruitMerchantDeathEvent.isCancelled()){
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+        if (fruitMerchantDeathEvent.isCancelled()) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.fruit_merchant.info",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fruit_merchant.info",
                 Formatter.player(event.getPlayerWW().getName()),
                 Formatter.number(fruitMerchantDeathEvent.getGoldenAppleCount().getOldCount()),
                 Formatter.format("&number2&", fruitMerchantDeathEvent.getGoldenAppleCount().getNewCount()));
@@ -143,7 +143,7 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
 
         if (playerWW == null) return;
 
-        if(!playerWW.equals(this.getPlayerWW())){
+        if (!playerWW.equals(this.getPlayerWW())) {
             return;
         }
 
@@ -155,17 +155,17 @@ public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPow
     }
 
     @EventHandler
-    public void onEat(PlayerItemConsumeEvent event){
+    public void onEat(PlayerItemConsumeEvent event) {
 
         Player player = event.getPlayer();
         IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId()).orElse(null);
 
         if (playerWW == null) return;
 
-        if(!event.getItem().getType().isEdible()){
+        if (!event.getItem().getType().isEdible()) {
             return;
         }
 
-        player.setFoodLevel(player.getFoodLevel()+1);
+        player.setFoodLevel(player.getFoodLevel() + 1);
     }
 }

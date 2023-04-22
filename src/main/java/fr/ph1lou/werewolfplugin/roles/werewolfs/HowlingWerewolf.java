@@ -5,10 +5,10 @@ import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.Sound;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -19,6 +19,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -42,9 +43,10 @@ public class HowlingWerewolf extends RoleWereWolf {
 
     @Override
     public @NotNull String getDescription() {
-        return new DescriptionBuilder(game,this)
+        return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.howling_werewolf.description",
-                        Formatter.number(game.getConfig().getValue(IntValueBase.HOWLING_WEREWOLF_DISTANCE))))
+                        Formatter.number(game.getConfig().getValue(IntValueBase.HOWLING_WEREWOLF_DISTANCE)),
+                        Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.DAY_DURATION)))))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
@@ -55,18 +57,20 @@ public class HowlingWerewolf extends RoleWereWolf {
     }
 
     @EventHandler
-    public void onNight(NightEvent event){
+    public void onNight(NightEvent event) {
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
         Set<IPlayerWW> playerWWS = Bukkit.getOnlinePlayers()
-                .stream().map(Entity::getUniqueId)
+                .stream()
+                .map(Entity::getUniqueId)
                 .filter(uuid -> !this.getPlayerUUID().equals(uuid))
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> {
                     Location location = playerWW.getLocation();
                     Location playerLocation = this.getPlayerWW().getLocation();
@@ -75,50 +79,50 @@ public class HowlingWerewolf extends RoleWereWolf {
                 })
                 .collect(Collectors.toSet());
 
-        if(playerWWS.size() < 5){
+        if (playerWWS.size() < 5) {
             return;
         }
 
-        HowlEvent howlEvent = new HowlEvent(this.getPlayerWW(),playerWWS, (int) playerWWS
+        HowlEvent howlEvent = new HowlEvent(this.getPlayerWW(), playerWWS, (int) playerWWS
                 .stream()
                 .map(playerWW -> !playerWW.getRole().isWereWolf())
                 .count());
 
         Bukkit.getPluginManager().callEvent(howlEvent);
 
-        if(howlEvent.isCancelled()){
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+        if (howlEvent.isCancelled()) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
         playerWWS.forEach(playerWW -> playerWW.sendSound(Sound.WOLF_HOWL));
 
-        int heart=0;
-        if(howlEvent.getNotWerewolfSize() > 2){
-            if(howlEvent.getNotWerewolfSize() <= 3){
-                heart = 2;
+        int heart = 0;
+
+        if (howlEvent.getNotWerewolfSize() > 1) {
+            heart = 1;
+            if (howlEvent.getNotWerewolfSize() > 3) {
+                heart++;
             }
-            else if(howlEvent.getNotWerewolfSize() >= 6){
-                heart = 3;
+            if (howlEvent.getNotWerewolfSize() > 5) {
+                heart++;
             }
         }
 
-        if(heart == 0){
+        if (heart == 0) {
             return;
         }
 
-        int finalHeart = heart*2;
+        int finalHeart = heart * 2;
 
         this.getPlayerWW().addPlayerMaxHealth(finalHeart);
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.howling_werewolf.message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.howling_werewolf.message",
                 Formatter.number(howlEvent.getNotWerewolfSize()),
-                Formatter.format("&heart&",heart));
+                Formatter.format("&heart&", heart),
+                Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.DAY_DURATION))));
 
-        BukkitUtils.scheduleSyncDelayedTask(() ->  {
-            if(game.isState(StateGame.GAME)){
-                this.getPlayerWW().removePlayerMaxHealth(finalHeart);
-            }
-        });
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> this.getPlayerWW().removePlayerMaxHealth(finalHeart),
+                game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 20L);
     }
 }

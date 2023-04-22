@@ -5,12 +5,12 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfplugin.Main;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -36,7 +36,7 @@ public class WhiteListGUI implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType())
-                .setDisplayName(game.translate("werewolf.menus.return")).build()),
+                        .setDisplayName(game.translate("werewolf.menus.return")).build()),
                 e -> MainGUI.INVENTORY.open(player)));
     }
 
@@ -64,7 +64,7 @@ public class WhiteListGUI implements InventoryProvider {
                 .setDisplayName(game.translate("werewolf.menus.whitelist.spectator_mode"))
                 .setLore(Collections.singletonList(Arrays.asList(game.translate("werewolf.menus.whitelist.disable"),
                         game.translate("werewolf.menus.whitelist.death_only"),
-                game.translate("werewolf.menus.whitelist.enable")).get(config.getSpectatorMode())))
+                        game.translate("werewolf.menus.whitelist.enable")).get(config.getSpectatorMode())))
                 .build()), e -> {
             if (e.isLeftClick()) {
                 config.setSpectatorMode((config.getSpectatorMode() + 1) % 3);

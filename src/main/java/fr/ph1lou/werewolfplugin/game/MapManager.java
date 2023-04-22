@@ -57,15 +57,14 @@ public class MapManager implements IMapManager {
     public void generateMap(int mapRadius) {
 
         int chunksPerRun = 80;
-        if (this.wft == null || this.wft.getPercentageCompleted() == 100) {
+        if (this.wft == null) {
             this.wft = new WorldFillTask(
-                    Bukkit.getServer(),
-                    world.getName(),
+                    world,
                     chunksPerRun,
                     false,
                     mapRadius);
 
-            this.wft.setTaskID(BukkitUtils.scheduleSyncRepeatingTask(this.wft, 1, 1));
+            this.wft.setTaskID(BukkitUtils.scheduleSyncRepeatingTask(game, this.wft, 1, 1));
         }
     }
 
@@ -77,7 +76,7 @@ public class MapManager implements IMapManager {
 
 
     public void createMap(boolean roofed) {
-        Bukkit.broadcastMessage(game.translate(Prefix.RED , "werewolf.commands.admin.preview.create"));
+        Bukkit.broadcastMessage(game.translate(Prefix.RED, "werewolf.commands.admin.preview.create"));
         WorldCreator wc = new WorldCreator("werewolf_map");
         wc.environment(World.Environment.NORMAL);
         wc.type(WorldType.NORMAL);
@@ -103,8 +102,7 @@ public class MapManager implements IMapManager {
             } catch (IOException ignored) {
                 this.createMap();
             }
-        }
-        else {
+        } else {
             this.createMap();
         }
 
@@ -122,10 +120,12 @@ public class MapManager implements IMapManager {
             wft = null;
         }
 
+        World lobby = Bukkit.getWorlds().get(0);
+
         Bukkit.getOnlinePlayers()
                 .stream()
                 .filter(player -> player.getWorld().equals(world))
-                .forEach(player -> player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation()));
+                .forEach(player -> player.teleport(lobby.getSpawnLocation()));
 
         try {
             Bukkit.unloadWorld(world, false);
@@ -133,33 +133,6 @@ public class MapManager implements IMapManager {
             this.world = null;
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void setWorld(boolean roofed) {
-
-        world.setAutoSave(false);
-        world.setWeatherDuration(0);
-        world.setThundering(false);
-        world.setTime(0);
-        world.setPVP(false);
-        VersionUtils.getVersionUtils().setGameRuleValue(world, "doFireTick", false);
-        VersionUtils.getVersionUtils().setGameRuleValue(world, "reducedDebugInfo", true);
-        VersionUtils.getVersionUtils().setGameRuleValue(world, "naturalRegeneration", false);
-        VersionUtils.getVersionUtils().setGameRuleValue(world, "keepInventory", true);
-        VersionUtils.getVersionUtils().setGameRuleValue(world, "announceAdvancements", false);
-        world.save();
-
-        world.getWorldBorder().reset();
-
-        if (roofed) {
-            VersionUtils.getVersionUtils().findBiome(world)
-                    .thenAccept(location -> BukkitUtils
-                            .scheduleSyncDelayedTask(() -> this
-                                    .generatePlatform(world, location.getBlockX(), location.getBlockZ())));
-        }
-        else{
-            this.generatePlatform(world, world.getSpawnLocation().getBlockX(), world.getSpawnLocation().getBlockZ());
         }
     }
 
@@ -189,16 +162,15 @@ public class MapManager implements IMapManager {
                 location4.getBlock().setType(Material.BARRIER, false);
             }
         }
-
-        if(world.equals(this.world)){
-            generateMap(game.getConfig().getBorderMax()/2);
+        if (world.equals(this.world)) {
+            generateMap(game.getConfig().getBorderMax() / 2);
         }
     }
 
     @Override
     public void changeBorder(int mapRadius) {
 
-        if(!game.isState(StateGame.LOBBY)){
+        if (!game.isState(StateGame.LOBBY)) {
             return;
         }
 
@@ -224,15 +196,14 @@ public class MapManager implements IMapManager {
 
         double radius = wb.getSize() / 3;
 
-        if(radius <= 50){
+        if (radius <= 50) {
             playerWW.teleport(this.world.getSpawnLocation().add(new Vector(0, -3, 0)));
-        }
-        else {
+        } else {
             int x = (int) (Math.round(radius * Math.cos(d) + world.getSpawnLocation().getX()));
             int z = (int) (Math.round(radius * Math.sin(d) + world.getSpawnLocation().getZ()));
             playerWW.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z));
         }
-        playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER, 400, 0,NO_FALL));
+        playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER, 400, 0, NO_FALL));
     }
 
     @Override
@@ -240,6 +211,33 @@ public class MapManager implements IMapManager {
         return this.world;
     }
 
+    public void setWorld(boolean roofed) {
+
+        Main main = JavaPlugin.getPlugin(Main.class);
+
+        world.setAutoSave(false);
+        world.setWeatherDuration(0);
+        world.setThundering(false);
+        world.setTime(0);
+        world.setPVP(false);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "doFireTick", false);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "reducedDebugInfo", true);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "naturalRegeneration", false);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "keepInventory", true);
+        VersionUtils.getVersionUtils().setGameRuleValue(world, "announceAdvancements", false);
+        world.save();
+
+        world.getWorldBorder().reset();
+
+        if (roofed) {
+            VersionUtils.getVersionUtils().findBiome(world)
+                    .thenAccept(location -> Bukkit.getScheduler()
+                            .scheduleSyncDelayedTask(main, () -> this
+                                    .generatePlatform(world, location.getBlockX(), location.getBlockZ())));
+        } else {
+            this.generatePlatform(world, world.getSpawnLocation().getBlockX(), world.getSpawnLocation().getBlockZ());
+        }
+    }
 
     @Override
     public double getPercentageGenerated() {

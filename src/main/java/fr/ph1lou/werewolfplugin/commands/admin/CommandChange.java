@@ -19,13 +19,13 @@ public class CommandChange implements ICommand {
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
 
-        player.sendMessage(game.translate(Prefix.YELLOW , "werewolf.commands.admin.change.in_progress"));
+        player.sendMessage(game.translate(Prefix.YELLOW, "werewolf.commands.admin.change.in_progress"));
         try {
             game.getMapManager().loadMap();
         } catch (IOException ignored) {
         }
 
-        player.sendMessage(game.translate(Prefix.GREEN , "werewolf.commands.admin.change.finished"));
+        player.sendMessage(game.translate(Prefix.GREEN, "werewolf.commands.admin.change.finished"));
 
     }
 }

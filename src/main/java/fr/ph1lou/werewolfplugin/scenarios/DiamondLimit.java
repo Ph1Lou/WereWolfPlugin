@@ -4,10 +4,10 @@ import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
-import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.StateGame;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,7 +24,7 @@ import java.util.Map;
         configValues = @IntValue(key = IntValueBase.DIAMOND_LIMIT, defaultValue = 17,
                 meetUpValue = 0,
                 step = 1,
-        item = UniversalMaterial.DIAMOND))
+                item = UniversalMaterial.DIAMOND))
 public class DiamondLimit extends ListenerWerewolf {
 
     final Map<String, Integer> diamondPerPlayer = new HashMap<>();

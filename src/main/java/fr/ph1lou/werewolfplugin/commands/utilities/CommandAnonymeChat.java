@@ -1,13 +1,13 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -19,13 +19,13 @@ import java.util.UUID;
 
 @PlayerCommand(key = "werewolf.commands.player.anonymous_chat.command",
         descriptionKey = "werewolf.commands.player.anonymous_chat.description",
-        statesGame = {StateGame.START, StateGame.GAME},
+        statesGame = { StateGame.START, StateGame.GAME },
         statesPlayer = StatePlayer.ALIVE)
 public class CommandAnonymeChat implements ICommand {
 
     private final int cesar = (int) (Math.random() * 26) + 1;
     private final Map<String, UUID> players = new HashMap<>();
-    private final char[] alphabet1 = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_'};
+    private final char[] alphabet1 = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_' };
 
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
@@ -34,7 +34,7 @@ public class CommandAnonymeChat implements ICommand {
 
 
         if (args.length == 0) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.player.anonymous_chat.empty"));
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.commands.player.anonymous_chat.empty"));
             return;
         }
 
@@ -53,10 +53,10 @@ public class CommandAnonymeChat implements ICommand {
                     String response = sb.substring(args[0].length() + args[1].length() + 2);
                     player1.sendMessage(game.translate("werewolf.commands.player.message.received",
                             Formatter.player(player.getName()),
-                            Formatter.format("&message&",response)));
+                            Formatter.format("&message&", response)));
                     player.sendMessage(game.translate("werewolf.commands.player.message.send",
                             Formatter.player(game.translate("werewolf.commands.player.anonymous_chat.anonyme")),
-                            Formatter.format("&message&",response)));
+                            Formatter.format("&message&", response)));
                     return;
                 }
             }
@@ -71,7 +71,7 @@ public class CommandAnonymeChat implements ICommand {
             if (player1 != null) {
                 TextComponent anonymeMessage = new TextComponent(game.translate("werewolf.commands.player.anonymous_chat.send",
                         Formatter.player(player.getName()),
-                        Formatter.format("&message&",sb.toString())));
+                        Formatter.format("&message&", sb.toString())));
                 anonymeMessage.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/tell %s", player.getName())));
                 player1.spigot().sendMessage(anonymeMessage);
                 i++;
@@ -87,7 +87,7 @@ public class CommandAnonymeChat implements ICommand {
                             new TextComponent(game.translate(
                                     "werewolf.commands.player.anonymous_chat.send",
                                     Formatter.player(game.translate("werewolf.commands.player.anonymous_chat.anonyme")),
-                                    Formatter.format("&message&",sb.toString())));
+                                    Formatter.format("&message&", sb.toString())));
                     anonymeMessage.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
                             String.format("/ww %s ? %s %s",
                                     game.translate("werewolf.commands.player.anonymous_chat.command"),
@@ -99,11 +99,11 @@ public class CommandAnonymeChat implements ICommand {
         }
 
         if (i == 0) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.commands.player.anonymous_chat.failure"));
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.commands.player.anonymous_chat.failure"));
         } else
             player.sendMessage(game.translate("werewolf.commands.player.message.send",
                     Formatter.player(game.translate("werewolf.commands.admin.moderator.name")),
-                    Formatter.format("&message&",sb.toString())));
+                    Formatter.format("&message&", sb.toString())));
 
 
     }

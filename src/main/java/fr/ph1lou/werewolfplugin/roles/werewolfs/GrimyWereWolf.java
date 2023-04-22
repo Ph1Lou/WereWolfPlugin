@@ -2,17 +2,13 @@ package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
+import fr.ph1lou.werewolfapi.enums.Camp;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UpdateCompositionReason;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
@@ -20,9 +16,13 @@ import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.grim_werewolf.GrimEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
-import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Role(key = RoleBase.GRIMY_WEREWOLF,
-        category = Category.WEREWOLF, 
+        category = Category.WEREWOLF,
         attributes = {RoleAttribute.WEREWOLF})
 public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPower {
 
@@ -92,7 +92,7 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
             this.power = false;
         } else if (!this.affectedPlayer.isEmpty()) {
             game.getConfig().removeOneRole(this.affectedPlayer.get(0).getRole().getKey());
-            Bukkit.broadcastMessage(game.translate(Prefix.GREEN , "werewolf.roles.grimy_werewolf.actualize",
+            Bukkit.broadcastMessage(game.translate(Prefix.GREEN, "werewolf.roles.grimy_werewolf.actualize",
                     Formatter.role(game.translate(this.affectedPlayer.get(0).getRole().getKey()))));
         }
 
@@ -127,10 +127,10 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
         Bukkit.getPluginManager().callEvent(grimEvent);
 
         if (grimEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
-        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN , "werewolf.roles.grimy_werewolf.perform",
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.grimy_werewolf.perform",
                 Formatter.player(event.getPlayerWW().getName()),
                 Formatter.role(game.translate(event.getPlayerWW().getRole().getKey())));
 

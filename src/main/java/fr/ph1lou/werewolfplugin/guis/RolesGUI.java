@@ -7,15 +7,14 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
-import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
@@ -82,7 +81,7 @@ public class RolesGUI implements InventoryProvider {
     @Override
     public void update(Player player, InventoryContents contents) {
 
-        Main main=JavaPlugin.getPlugin(Main.class);
+        Main main = JavaPlugin.getPlugin(Main.class);
         GameManager game = (GameManager) main.getWereWolfAPI();
         IConfiguration config = game.getConfig();
         Pagination pagination = contents.pagination();
@@ -217,9 +216,7 @@ public class RolesGUI implements InventoryProvider {
                         List<String> lore2 = new ArrayList<>(lore);
 
 
-
-
-                        if(game.getConfig().getRoleCount(key) > 0){
+                        if (game.getConfig().getRoleCount(key) > 0) {
                             lore2.addAll(AdvancedConfigurationUtils.getLore(game,
                                     roleRegister.getMetaDatas().loreKey(),
                                     roleRegister.getMetaDatas().configurations(),
@@ -229,7 +226,7 @@ public class RolesGUI implements InventoryProvider {
                         }
                         Arrays.stream(roleRegister.getMetaDatas().requireRoles())
                                 .forEach(roleKey -> lore2.add(game.translate("werewolf.menus.roles.need",
-                                Formatter.role(game.translate(roleKey)))));
+                                        Formatter.role(game.translate(roleKey)))));
                         main.getRegisterManager().getRolesRegister().stream()
                                 .filter(roleRegister1 -> Arrays.stream(roleRegister1.getMetaDatas().requireRoles())
                                         .anyMatch(requiredRole -> requiredRole.equals(roleRegister1.getMetaDatas().key())))
@@ -282,7 +279,7 @@ public class RolesGUI implements InventoryProvider {
                                 if (e.isShiftClick()) {
                                     AdvancedRolesGUI.getInventory(roleRegister.getMetaDatas(), pagination.getPage()).open(player);
                                 } else if (e.isLeftClick()) {
-                                    if(incompatible.isPresent()){
+                                    if (incompatible.isPresent()) {
                                         return;
                                     }
                                     if (Arrays.stream(roleRegister.getMetaDatas().requireRoles())
@@ -305,7 +302,7 @@ public class RolesGUI implements InventoryProvider {
 
     public void selectMinus(GameManager game, String key) {
 
-        if(game.isState(StateGame.GAME)) return;
+        if (game.isState(StateGame.GAME)) return;
 
         IConfiguration config = game.getConfig();
         if (config.getRoleCount(key) > 0) {
@@ -316,7 +313,7 @@ public class RolesGUI implements InventoryProvider {
 
     public void selectPlus(GameManager game, String key) {
 
-        if(game.isState(StateGame.GAME)) return;
+        if (game.isState(StateGame.GAME)) return;
 
         IConfiguration config = game.getConfig();
         config.addOneRole(key);

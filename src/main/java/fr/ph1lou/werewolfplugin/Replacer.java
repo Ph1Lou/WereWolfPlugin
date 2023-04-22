@@ -4,8 +4,7 @@ import com.pieterdebot.biomemapping.Biome;
 import com.pieterdebot.biomemapping.BiomeMappingAPI;
 
 public class Replacer {
-
-    public static void replaceBiomes(){
+    public static void replaceBiomes() {
         BiomeMappingAPI biome = new BiomeMappingAPI();
         replaceBiome(biome, Biome.BEACH, Biome.FOREST);
         replaceBiome(biome, Biome.WOODED_HILLS, Biome.PLAINS);
@@ -17,7 +16,10 @@ public class Replacer {
         replaceBiome(biome, Biome.MODIFIED_JUNGLE, Biome.FOREST);
         replaceBiome(biome, Biome.MODIFIED_JUNGLE_EDGE, Biome.FOREST);
         replaceBiome(biome, Biome.TAIGA_MOUNTAINS, Biome.FOREST);
+        replaceBiome(biome, Biome.MOUNTAINS, Biome.FOREST);
         replaceBiome(biome, Biome.TAIGA_HILLS, Biome.FOREST);
+        replaceBiome(biome, Biome.ERODED_BADLANDS, Biome.FOREST);
+        replaceBiome(biome, Biome.BADLANDS, Biome.FOREST);
         replaceBiome(biome, Biome.SNOWY_TAIGA_MOUNTAINS, Biome.FOREST);
         replaceBiome(biome, Biome.SNOWY_TAIGA_HILLS, Biome.FOREST);
         replaceBiome(biome, Biome.GRAVELLY_MOUNTAINS, Biome.FOREST);
@@ -35,15 +37,20 @@ public class Replacer {
         replaceBiome(biome, Biome.DEEP_LUKEWARM_OCEAN, Biome.FOREST);
         replaceBiome(biome, Biome.DEEP_FROZEN_OCEAN, Biome.FOREST);
         replaceBiome(biome, Biome.DEEP_COLD_OCEAN, Biome.FOREST);
+        replaceBiome(biome, Biome.RIVER, Biome.FOREST);
     }
 
-    private static void replaceBiome(BiomeMappingAPI biome, Biome initial, Biome finalBiome){
-        try {
-            if(biome.biomeSupported(initial)){
+
+    private static void replaceBiome(BiomeMappingAPI biome, Biome initial, Biome finalBiome) {
+        try { //beach par forest holder 13474 biomebase 14176 id 36 new biomebase 14876
+            if (biome.biomeSupported(initial)) {
                 biome.replaceBiomes(initial, finalBiome);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 }

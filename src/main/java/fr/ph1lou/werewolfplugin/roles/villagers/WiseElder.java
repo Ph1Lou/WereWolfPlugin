@@ -29,8 +29,8 @@ import java.util.Optional;
  * @author Hephaisto
  */
 
-@Role(key = RoleBase.WISE_ELDER, 
-        category = Category.VILLAGER, 
+@Role(key = RoleBase.WISE_ELDER,
+        category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
         configValues = {@IntValue(key = IntValueBase.WISE_ELDER_DISTANCE,
                 defaultValue = 15,
@@ -71,11 +71,11 @@ public class WiseElder extends RoleVillage {
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -85,20 +85,20 @@ public class WiseElder extends RoleVillage {
 
         if (this.active) {
 
-            WiseElderRevealAuraAmountEvent wiseElderRevealAuraAmountEvent = new WiseElderRevealAuraAmountEvent(getPlayerWW(),neutralCounter,darkCounter,lightCounter);
+            WiseElderRevealAuraAmountEvent wiseElderRevealAuraAmountEvent = new WiseElderRevealAuraAmountEvent(getPlayerWW(), neutralCounter, darkCounter, lightCounter);
 
             Bukkit.getPluginManager().callEvent(wiseElderRevealAuraAmountEvent);
 
-            if(wiseElderRevealAuraAmountEvent.isCancelled()){
-                this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            if (wiseElderRevealAuraAmountEvent.isCancelled()) {
+                this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
                 resetCounters();
                 return;
             }
 
-            getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.roles.wise_elder.end_of_cycle",
-                    Formatter.format("&neutral&",neutralCounter),
-                    Formatter.format("&dark&",darkCounter),
-                    Formatter.format("&light&",lightCounter));
+            getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.wise_elder.end_of_cycle",
+                    Formatter.format("&neutral&", neutralCounter),
+                    Formatter.format("&dark&", darkCounter),
+                    Formatter.format("&light&", lightCounter));
 
             resetCounters();
         }
@@ -107,7 +107,7 @@ public class WiseElder extends RoleVillage {
     @Override
     public void second() {
 
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
@@ -122,7 +122,7 @@ public class WiseElder extends RoleVillage {
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE) && checkDistance(iPlayerWW,location))
+                .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE) && checkDistance(iPlayerWW, location))
                 .map(IPlayerWW::getRole)
                 .map(IRole::getAura)
                 .forEach(aura -> {
@@ -151,7 +151,8 @@ public class WiseElder extends RoleVillage {
 
     /**
      * Check that the given PlayerWW is within 15 blocks of the Location
-     * @param player the PlayerWW
+     *
+     * @param player   the PlayerWW
      * @param location the location to compare
      * @return true if the player is within 15 blocks of the location, false otherwise
      */

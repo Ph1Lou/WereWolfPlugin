@@ -32,7 +32,7 @@ public class CommandTenebrous implements ICommandRole {
     public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] strings) {
 
         if (game.isDay(Day.DAY)) {
-            playerWW.sendMessageWithKey(Prefix.RED,"werewolf.roles.tenebrous_werewolf.not_night");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.tenebrous_werewolf.not_night");
             return;
         }
 
@@ -50,7 +50,7 @@ public class CommandTenebrous implements ICommandRole {
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED,"werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
@@ -63,16 +63,16 @@ public class CommandTenebrous implements ICommandRole {
             role.addAffectedPlayer(p);
             p.addPotionModifier(PotionModifier.add(PotionEffectType.BLINDNESS, game.getConfig()
                     .getTimerValue(TimerBase.WEREWOLF_TENEBROUS_DURATION) * 20, 1, playerWW.getRole().getKey()));
-            p.sendMessageWithKey(Prefix.RED ,"werewolf.roles.tenebrous_werewolf.darkness");
+            p.sendMessageWithKey(Prefix.RED, "werewolf.roles.tenebrous_werewolf.darkness");
         }
 
-        List<IPlayerWW> werewolves =  game.getPlayersWW().stream()
-                .filter(player1->player1.isState(StatePlayer.ALIVE))
+        List<IPlayerWW> werewolves = game.getPlayersWW().stream()
+                .filter(player1 -> player1.isState(StatePlayer.ALIVE))
                 .filter(player1 -> player1.getRole().isWereWolf()).collect(Collectors.toList());
 
-        playerWW.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.DARK,1,false));
+        playerWW.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.DARK, 1, false));
 
-        for (IPlayerWW ww :  werewolves) {
+        for (IPlayerWW ww : werewolves) {
             ww.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.tenebrous_werewolf.darkness_wolves");
         }
 

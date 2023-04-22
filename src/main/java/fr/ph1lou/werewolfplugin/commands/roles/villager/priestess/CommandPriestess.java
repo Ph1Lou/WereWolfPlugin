@@ -32,27 +32,27 @@ public class CommandPriestess implements ICommandRole {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
         if (playerWW.getLocation().getWorld() != playerArg.getWorld() ||
                 playerWW.getLocation().distance(playerArg.getLocation()) >
                         game.getConfig().getValue(IntValueBase.PRIESTESS_DISTANCE)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.priestess.distance",
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.priestess.distance",
                     Formatter.number(game.getConfig().getValue(IntValueBase.PRIESTESS_DISTANCE)));
             return;
         }
 
         if (playerWW.getHealth() < 5) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.seer.not_enough_life");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.seer.not_enough_life");
         } else {
             IRole role1 = playerWW1.getRole();
 
@@ -61,7 +61,7 @@ public class CommandPriestess implements ICommandRole {
             Bukkit.getPluginManager().callEvent(priestessEvent);
 
             if (priestessEvent.isCancelled()) {
-                playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
                 return;
             }
 
@@ -69,9 +69,9 @@ public class CommandPriestess implements ICommandRole {
 
             playerWW.removePlayerMaxHealth(4);
 
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.priestess.message",
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.priestess.message",
                     Formatter.player(playerArg.getName()),
-                    Formatter.format("&camp&",game.translate(priestessEvent.getCamp())));
+                    Formatter.format("&camp&", game.translate(priestessEvent.getCamp())));
 
         }
     }

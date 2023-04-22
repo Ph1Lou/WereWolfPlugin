@@ -5,9 +5,9 @@ import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.TrollEvent;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
@@ -80,7 +80,8 @@ public class RoleDuration extends ListenerWerewolf {
                 role = roleRegister.getClazz().getConstructor(WereWolfAPI.class,
                         IPlayerWW.class).newInstance(game,
                         playerWW);
-            } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException exception) {
+            } catch (IllegalAccessException | InstantiationException | InvocationTargetException |
+                     NoSuchMethodException exception) {
                 exception.printStackTrace();
                 role = new Villager(game, playerWW);
             }
@@ -91,15 +92,14 @@ public class RoleDuration extends ListenerWerewolf {
         game.getPlayersWW()
                 .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
 
-        BukkitUtils.scheduleSyncDelayedTask(game::checkVictory);
+        BukkitUtils.scheduleSyncDelayedTask(game, game::checkVictory);
     }
 
 
-
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onRepartitionFirst(RepartitionEvent event){
+    public void onRepartitionFirst(RepartitionEvent event) {
         if (this.getGame().getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) {
-            Bukkit.getPluginManager().callEvent(new TrollEvent());
+            Bukkit.getPluginManager().callEvent(new TrollEvent(this.getGame().getConfig().getTrollKey()));
             event.setCancelled(true);
         }
     }
@@ -115,7 +115,7 @@ public class RoleDuration extends ListenerWerewolf {
         Register.get().getRolesRegister()
                 .forEach(roleRegister -> {
 
-                    if (roleRegister.getMetaDatas().key().equals(game.getConfig().getTrollKey())) {
+                    if (roleRegister.getMetaDatas().key().equals(event.getTrollKey())) {
 
                         game.getPlayersWW()
                                 .forEach(playerWW -> {
@@ -125,7 +125,8 @@ public class RoleDuration extends ListenerWerewolf {
                                                         IPlayerWW.class)
                                                 .newInstance(game,
                                                         playerWW);
-                                    } catch (InstantiationException | InvocationTargetException | IllegalAccessException | NoSuchMethodException exception) {
+                                    } catch (InstantiationException | InvocationTargetException |
+                                             IllegalAccessException | NoSuchMethodException exception) {
                                         exception.printStackTrace();
                                         role = new Villager(game, playerWW);
                                     }
@@ -140,32 +141,30 @@ public class RoleDuration extends ListenerWerewolf {
         game.getPlayersWW()
                 .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
 
-            if (!game.isState(StateGame.END)) {
-                game.getPlayersWW()
-                        .forEach(playerWW -> {
-                            HandlerList.unregisterAll(playerWW.getRole());
-                            Sound.PORTAL_TRIGGER.play(playerWW);
-                            playerWW.clearPotionEffects();
-                            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.announcement.troll");
-                            playerWW.addPlayerMaxHealth(20 - playerWW.getMaxHealth());
-                        });
-                game.getPlayersWW().forEach(IPlayerWW::clearLover);
-                Iterator<? extends ILover> iterator = game.getLoversManager().getLovers().iterator();
-                while (iterator.hasNext()){
-                    HandlerList.unregisterAll(iterator.next());
-                    iterator.remove();
-                }
+            game.getPlayersWW()
+                    .forEach(playerWW -> {
+                        HandlerList.unregisterAll(playerWW.getRole());
+                        Sound.PORTAL_TRIGGER.play(playerWW);
+                        playerWW.clearPotionEffects();
+                        playerWW.sendMessageWithKey(Prefix.RED, "werewolf.announcement.troll");
+                        playerWW.addPlayerMaxHealth(20 - playerWW.getMaxHealth());
+                    });
+            game.getPlayersWW().forEach(IPlayerWW::clearLover);
+            Iterator<? extends ILover> iterator = game.getLoversManager().getLovers().iterator();
+            while (iterator.hasNext()) {
+                HandlerList.unregisterAll(iterator.next());
+                iterator.remove();
+            }
 
-                if (game.getConfig().isConfigActive(ConfigBase.DOUBLE_TROLL)) {
-                    Bukkit.getPluginManager().callEvent(new TrollEvent());
-                    game.getConfig().switchConfigValue(ConfigBase.DOUBLE_TROLL);
-                    game.setDebug(false);
-                } else {
-                    game.getConfig().setConfig(ConfigBase.TROLL_ROLE, false);
-                    Bukkit.getPluginManager().callEvent(new RepartitionEvent());
-                }
+            if (game.getConfig().isConfigActive(ConfigBase.DOUBLE_TROLL)) {
+                Bukkit.getPluginManager().callEvent(new TrollEvent(game.getConfig().getTrollKey()));
+                game.getConfig().switchConfigValue(ConfigBase.DOUBLE_TROLL);
+                game.setDebug(false);
+            } else {
+                game.getConfig().setConfig(ConfigBase.TROLL_ROLE, false);
+                Bukkit.getPluginManager().callEvent(new RepartitionEvent());
             }
 
         }, 1800L);

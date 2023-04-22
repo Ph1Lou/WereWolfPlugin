@@ -17,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -43,11 +44,15 @@ public class ChatListener implements Listener {
                 args[0].equalsIgnoreCase("/bukkit:rl") ||
                 args[0].equalsIgnoreCase("/bukkit:reload")) {
             event.setCancelled(true);
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.disabled_command"));
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.check.disabled_command"));
+        } else if (args[0].equalsIgnoreCase("/stop") ||
+                args[0].equalsIgnoreCase("/bukkit:stop")) {
+            event.setCancelled(true);
+            player.performCommand(String.format("a %s", game.translate("werewolf.commands.admin.stop.command")));
         } else if (args[0].equalsIgnoreCase("/me") ||
                 args[0].equalsIgnoreCase("/minecraft:me")) {
             event.setCancelled(true);
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.disabled_command"));
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.check.disabled_command"));
         } else if (args[0].equalsIgnoreCase("/tellRaw") ||
                 args[0].equalsIgnoreCase("/msg") ||
                 args[0].equalsIgnoreCase("/tell") ||
@@ -60,7 +65,7 @@ public class ChatListener implements Listener {
 
             if (recipient == null) {
                 player.sendMessage(game.
-                        translate(Prefix.RED , "werewolf.check.offline_player"));
+                        translate(Prefix.RED, "werewolf.check.offline_player"));
                 return;
             }
 
@@ -68,7 +73,7 @@ public class ChatListener implements Listener {
 
                 if (!moderationManager.isStaff(recipient.getUniqueId()) &&
                         !moderationManager.isStaff(player.getUniqueId())) {
-                    player.sendMessage(game.translate(Prefix.RED , "werewolf.check.permission_denied"));
+                    player.sendMessage(game.translate(Prefix.RED, "werewolf.check.permission_denied"));
                     return;
                 }
             }
@@ -80,10 +85,10 @@ public class ChatListener implements Listener {
             sb.delete(0, args[0].length() + args[1].length() + 2);
             recipient.sendMessage(game.translate("werewolf.commands.player.message.received",
                     Formatter.player(player.getName()),
-                    Formatter.format("&message&",sb.toString())));
+                    Formatter.format("&message&", sb.toString())));
             player.sendMessage(game.translate("werewolf.commands.player.message.send",
                     Formatter.player(args[1]),
-                    Formatter.format("&message&",sb.toString())));
+                    Formatter.format("&message&", sb.toString())));
             Sound.ANVIL_USE.play(recipient);
         }
     }
@@ -104,9 +109,9 @@ public class ChatListener implements Listener {
                 .findFirst()
                 .orElse(null);
 
-        if(contributor != null){
+        if (contributor != null) {
 
-            switch(contributor.getLevel()){
+            switch (contributor.getLevel()) {
                 case 0:
                     format = "§b✦§r %s"; //Ph1Lou
                     break;
@@ -125,17 +130,16 @@ public class ChatListener implements Listener {
                 default:
                     format = "§6ø§r %s";
                     break;
-                    //¤
+                //¤
             }
 
             format = game.translate("werewolf.commands.admin.chat.template",
                     Formatter.player(format),
-                    Formatter.format("&message&","%s"));
-        }
-        else {
+                    Formatter.format("&message&", "%s"));
+        } else {
             format = game.translate("werewolf.commands.admin.chat.template",
                     Formatter.player("%s"),
-                    Formatter.format("&message&","%s"));
+                    Formatter.format("&message&", "%s"));
         }
 
         if (moderationManager.getHosts().contains(uuid)) {
@@ -148,7 +152,7 @@ public class ChatListener implements Listener {
 
         if (!game.getConfig().isConfigActive(ConfigBase.CHAT)) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(game.translate(Prefix.RED , "werewolf.commands.admin.chat.off"));
+            event.getPlayer().sendMessage(game.translate(Prefix.RED, "werewolf.commands.admin.chat.off"));
 
         } else if (game.getConfig().isConfigActive(ConfigBase.PROXIMITY_CHAT) &&
                 !game.isState(StateGame.LOBBY)) {
@@ -177,8 +181,8 @@ public class ChatListener implements Listener {
     private String obfuscation(String message, float percentage) {
 
         StringBuilder returnMessage = new StringBuilder();
-        for(int i=0;i<message.length();i++){
-            char charOfMessage =message.charAt(i);
+        for (int i = 0; i < message.length(); i++) {
+            char charOfMessage = message.charAt(i);
 
             if (Math.random() < percentage) {
                 if (charOfMessage != ' ') {
@@ -202,8 +206,8 @@ public class ChatListener implements Listener {
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
                 .forEach(player -> player.sendMessage(game.translate("werewolf.commands.player.ww_chat.modo",
-                        Formatter.format("&name&",event.getPlayerWW().getName()),
-                        Formatter.format("&message&",event.getMessage()))));
+                        Formatter.format("&name&", event.getPlayerWW().getName()),
+                        Formatter.format("&message&", event.getMessage()))));
 
     }
 }

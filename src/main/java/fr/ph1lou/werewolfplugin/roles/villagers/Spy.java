@@ -1,11 +1,14 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.actionablestory.ActionableStoryEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.roles.spy.SpyResultEvent;
@@ -26,7 +29,8 @@ import java.util.List;
 
 @Role(key = RoleBase.SPY,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION})
+        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
+        configValues = @IntValue(key = IntValueBase.SPY_DAY, defaultValue = 5, meetUpValue = 2, step = 1, item = UniversalMaterial.ANVIL))
 public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
 
     @Nullable
@@ -45,7 +49,7 @@ public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
 
     @Override
     public void removeAffectedPlayer(IPlayerWW iPlayerWW) {
-        if(iPlayerWW.equals(this.playerWW)){
+        if (iPlayerWW.equals(this.playerWW)) {
             this.playerWW = null;
         }
     }
@@ -57,7 +61,7 @@ public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
 
     @Override
     public List<? extends IPlayerWW> getAffectedPlayers() {
-        if(this.playerWW == null){
+        if (this.playerWW == null) {
             return Collections.emptyList();
         }
         return Collections.singletonList(this.playerWW);
@@ -66,7 +70,8 @@ public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.roles.spy.description"))
+                .setDescription(game.translate("werewolf.roles.spy.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.SPY_DAY))))
                 .build();
     }
 
@@ -76,25 +81,26 @@ public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
     }
 
     @EventHandler
-    public void onActionableStory(ActionableStoryEvent event){
+    public void onActionableStory(ActionableStoryEvent event) {
         game.getPlayerWW(event.getPlayer())
                 .ifPresent(iPlayerWW -> {
-                    if(iPlayerWW.equals(this.playerWW)){
+                    if (iPlayerWW.equals(this.playerWW)) {
                         this.count++;
                     }
                 });
     }
 
     @EventHandler
-    public void onDay(DayEvent event){
-        if(event.getNumber()>=5){
+    public void onDay(DayEvent event) {
+
+        if (event.getNumber() >= game.getConfig().getValue(IntValueBase.SPY_DAY)) {
             this.power = true;
         }
 
-        if(this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (this.getPlayerWW().isState(StatePlayer.ALIVE)) {
 
-            if(this.isAbilityEnabled()){
-                if(this.playerWW != null){
+            if (this.isAbilityEnabled()) {
+                if (this.playerWW != null) {
 
                     SpyResultEvent spyResultEvent = new SpyResultEvent(this.getPlayerWW(),
                             this.playerWW,
@@ -102,10 +108,9 @@ public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
 
                     Bukkit.getPluginManager().callEvent(spyResultEvent);
 
-                    if(spyResultEvent.isCancelled()){
-                        this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
-                    }
-                    else{
+                    if (spyResultEvent.isCancelled()) {
+                        this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
+                    } else {
                         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
                                 "werewolf.roles.spy.result",
                                 Formatter.player(this.playerWW.getName()),
@@ -114,7 +119,7 @@ public class Spy extends RoleVillage implements IAffectedPlayers, IPower {
                 }
             }
 
-            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.roles.spy.use_power");
+            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.spy.use_power");
         }
 
         this.count = 0;

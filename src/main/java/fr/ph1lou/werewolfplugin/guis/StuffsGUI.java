@@ -86,11 +86,11 @@ public class StuffsGUI implements InventoryProvider {
             inventory.clear();
 
             ItemStack itemStack = new ItemStack(Material.BARRIER);
-            inventory.setArmorContents(new ItemStack[]{ itemStack, itemStack, itemStack, itemStack});
+            inventory.setArmorContents(new ItemStack[]{itemStack, itemStack, itemStack, itemStack});
 
             game.getStuffs().getStartLoot().forEach(inventory::addItem);
 
-            TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW , "werewolf.commands.admin.stuff_start.valid"));
+            TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW, "werewolf.commands.admin.stuff_start.valid"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s", game.translate("werewolf.commands.admin.stuff_start.command"))));
             player.spigot().sendMessage(msg);
             player.closeInventory();
@@ -119,11 +119,11 @@ public class StuffsGUI implements InventoryProvider {
             inventory.clear();
 
             ItemStack itemStack = new ItemStack(Material.BARRIER);
-            inventory.setArmorContents(new ItemStack[]{ itemStack, itemStack, itemStack, itemStack});
+            inventory.setArmorContents(new ItemStack[]{itemStack, itemStack, itemStack, itemStack});
 
             stuffManager.getDeathLoot().forEach(inventory::addItem);
 
-            TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW , "werewolf.commands.admin.loot_death.valid"));
+            TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW, "werewolf.commands.admin.loot_death.valid"));
             msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s", game.translate("werewolf.commands.admin.loot_death.command"))));
             player.spigot().sendMessage(msg);
             player.closeInventory();

@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.roles.mire.MireNearbyPlayerUnderThreeHeartEvent;
@@ -61,49 +62,51 @@ public class Mire extends RoleVillage {
     @EventHandler
     public void playerDamage(EntityDamageEvent event) {
 
-        if(!(event.getEntity() instanceof Player)) return;
+        if (!(event.getEntity() instanceof Player)) return;
 
         Player player = (Player) event.getEntity();
 
         IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId()).orElse(null);
 
-        if(playerWW == null) return;
+        if (playerWW == null) return;
 
-        if(!playerWW.isState(StatePlayer.ALIVE)) return;
+        if (!this.game.isState(StateGame.GAME)) {
+            return;
+        }
 
-        if(playerWW.getHealth() >= 6) return;
+        if (!playerWW.isState(StatePlayer.ALIVE)) return;
 
-        if(playerWW.equals(getPlayerWW())) {
+        if (playerWW.getHealth() >= 6) return;
+
+        if (playerWW.equals(getPlayerWW())) {
 
             MireUnderThreeHeartsEvent event1 = new MireUnderThreeHeartsEvent(this.getPlayerWW());
 
             Bukkit.getPluginManager().callEvent(event1);
 
-            if(!event1.isCancelled()){
+            if (!event1.isCancelled()) {
                 playerWW.addPotionModifier(
                         //TODO : FAIRE CONFIG POUR AJOUTER QU'UN COEUR
                         PotionModifier.add(PotionEffectType.ABSORPTION, 600, 0, this.getKey()));
-            }
-            else{
-                this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            } else {
+                this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             }
 
         } else {
 
-            if(getPlayerWW().getLocation().getWorld() == playerWW.getLocation().getWorld() &&
+            if (getPlayerWW().getLocation().getWorld() == playerWW.getLocation().getWorld() &&
                     getPlayerWW().getLocation().distance(playerWW.getLocation()) <
-                    game.getConfig().getValue(IntValueBase.MIRE_DISTANCE)) {
+                            game.getConfig().getValue(IntValueBase.MIRE_DISTANCE)) {
 
                 MireNearbyPlayerUnderThreeHeartEvent event1 = new MireNearbyPlayerUnderThreeHeartEvent(this.getPlayerWW(), playerWW);
 
                 Bukkit.getPluginManager().callEvent(event1);
 
-                if(!event1.isCancelled()){
+                if (!event1.isCancelled()) {
                     getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.mire.warning_death",
                             Formatter.number(game.getConfig().getValue(IntValueBase.MIRE_DISTANCE)));
-                }
-                else{
-                    this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+                } else {
+                    this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
                 }
             }
         }
@@ -113,7 +116,7 @@ public class Mire extends RoleVillage {
     public void eatGoldenApple(PlayerItemConsumeEvent event) {
         if (!event.getItem().getType().equals(Material.GOLDEN_APPLE)) return;
 
-        if(!event.getPlayer().getUniqueId().equals(getPlayerUUID())) return;
+        if (!event.getPlayer().getUniqueId().equals(getPlayerUUID())) return;
 
         List<IPlayerWW> playerWWS = Bukkit.getOnlinePlayers()
                 .stream()
@@ -125,18 +128,17 @@ public class Mire extends RoleVillage {
                 .sorted(Comparator.comparingDouble(value -> value.getHealth() / value.getMaxHealth()))
                 .collect(Collectors.toList());
 
-        if(playerWWS.isEmpty()) {
+        if (playerWWS.isEmpty()) {
             getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.mire.all_full",
                     Formatter.number(game.getConfig().getValue(IntValueBase.MIRE_DISTANCE)));
-        }
-        else{
+        } else {
             IPlayerWW playerWW = playerWWS.get(0);
             MireNearbyPlayerUnderThreeHeartEvent event1 =
                     new MireNearbyPlayerUnderThreeHeartEvent(this.getPlayerWW(), playerWW);
 
             Bukkit.getPluginManager().callEvent(event1);
 
-            if(!event1.isCancelled()){
+            if (!event1.isCancelled()) {
                 getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.mire.min_health",
                         Formatter.player(playerWW.getName()));
             }

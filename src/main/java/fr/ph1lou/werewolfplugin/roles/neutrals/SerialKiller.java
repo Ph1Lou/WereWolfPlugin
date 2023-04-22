@@ -2,20 +2,20 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import fr.ph1lou.werewolfapi.events.roles.serial_killer.SerialKillerEvent;
-import fr.ph1lou.werewolfapi.role.interfaces.IPower;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
+import fr.ph1lou.werewolfapi.role.interfaces.IPower;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -25,16 +25,15 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.SERIAL_KILLER,
-         category = Category.NEUTRAL,
+        category = Category.NEUTRAL,
         attributes = RoleAttribute.NEUTRAL)
 public class SerialKiller extends RoleNeutral implements IPower {
 
+    private boolean power = true;
+    private int extraHeart = 0;
     public SerialKiller(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
     }
-
-    private boolean power = true;
-    private int extraHeart = 0;
 
     @Override
     public void setPower(boolean power) {
@@ -54,7 +53,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
                 .setEquipments(game.translate("werewolf.roles.serial_killer.limit"))
                 .setItems(game.translate("werewolf.roles.serial_killer.items"))
                 .setEffects(game.translate("werewolf.roles.serial_killer.effect"))
-                .addExtraLines(game.translate("werewolf.roles.serial_killer.hearts", Formatter.format("&heart&",extraHeart / 2)))
+                .addExtraLines(game.translate("werewolf.roles.serial_killer.hearts", Formatter.format("&heart&", extraHeart / 2)))
                 .build();
     }
 
@@ -79,28 +78,27 @@ public class SerialKiller extends RoleNeutral implements IPower {
                     item.getType().equals(Material.DIAMOND_CHESTPLATE)) {
                 event.getFinalEnchants().put(Enchantment.PROTECTION_ENVIRONMENTAL,
                         Math.min(event.getEnchants().get(
-                                Enchantment.PROTECTION_ENVIRONMENTAL),
+                                        Enchantment.PROTECTION_ENVIRONMENTAL),
                                 game.getConfig().getLimitProtectionDiamond() + 1));
             } else {
                 event.getFinalEnchants().put(Enchantment.PROTECTION_ENVIRONMENTAL,
                         Math.min(event.getEnchants().get(
-                                Enchantment.PROTECTION_ENVIRONMENTAL),
+                                        Enchantment.PROTECTION_ENVIRONMENTAL),
                                 game.getConfig().getLimitProtectionIron() + 1));
             }
         }
-        if(event.getEnchants().containsKey(Enchantment.DAMAGE_ALL)){
+        if (event.getEnchants().containsKey(Enchantment.DAMAGE_ALL)) {
             if (item.getType().equals(Material.DIAMOND_SWORD)) {
                 event.getFinalEnchants().put(Enchantment.DAMAGE_ALL,
                         Math.min(event.getEnchants().get(Enchantment.DAMAGE_ALL),
                                 game.getConfig().getLimitSharpnessDiamond() + 1));
-            }
-            else {
+            } else {
                 event.getFinalEnchants().put(Enchantment.DAMAGE_ALL,
                         Math.min(event.getEnchants().get(Enchantment.DAMAGE_ALL),
                                 game.getConfig().getLimitSharpnessIron() + 1));
             }
         }
-        if(event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)) {
+        if (event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)) {
             event.getFinalEnchants().put(Enchantment.ARROW_DAMAGE,
                     Math.min(event.getEnchants().get(Enchantment.ARROW_DAMAGE),
                             game.getConfig().getLimitPowerBow() + 1));
@@ -113,7 +111,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
 
         if (!hasPower()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, this.getKey()));
     }
 
     @Override
@@ -135,7 +133,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
                 this.getPlayerWW(),
                 playerWW));
         if (hasPower()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(), 0));
             setPower(false);
         }
         if (!isAbilityEnabled()) return;
@@ -149,7 +147,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
     public void disableAbilitiesRole() {
 
         if (this.hasPower()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(), 0));
         }
 
     }

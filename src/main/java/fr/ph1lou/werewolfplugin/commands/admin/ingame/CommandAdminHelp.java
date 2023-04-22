@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.registers.IRegisterManager;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Register;
@@ -23,7 +23,7 @@ public class CommandAdminHelp implements ICommand {
 
         IRegisterManager registerManager = Register.get();
 
-        TextComponent textComponent1 = new TextComponent(game.translate(Prefix.GREEN , "werewolf.commands.admin.help.help"));
+        TextComponent textComponent1 = new TextComponent(game.translate(Prefix.GREEN, "werewolf.commands.admin.help.help"));
 
         for (Wrapper<ICommand, AdminCommand> adminCommand : registerManager.getAdminCommandsRegister()) {
             if (!adminCommand.getMetaDatas().descriptionKey().isEmpty()) {
@@ -38,7 +38,7 @@ public class CommandAdminHelp implements ICommand {
                                 new ComponentBuilder(
                                         game.translate(adminCommand.getMetaDatas().descriptionKey()))
                                         .create()));
-                textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,String.format("/a %s ",
+                textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/a %s ",
                         game.translate(adminCommand.getMetaDatas().key()))));
                 textComponent1.addExtra(textComponent);
             }

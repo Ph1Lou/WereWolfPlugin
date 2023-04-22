@@ -17,7 +17,7 @@ public class CommandEnchantments implements ICommand {
 
         player.sendMessage(
                 game.translate(
-                        Prefix.BLUE,"werewolf.commands.player.enchantments.title"
+                        Prefix.BLUE, "werewolf.commands.player.enchantments.title"
                 )
         );
 
@@ -45,10 +45,10 @@ public class CommandEnchantments implements ICommand {
                 game.translate(
                         "werewolf.commands.player.enchantments.knock_back_depth_rider",
                         Formatter.number(game.getConfig().getLimitKnockBack()),
-                        Formatter.format("&number2&",game.getConfig().getLimitDepthStrider())));
+                        Formatter.format("&number2&", game.getConfig().getLimitDepthStrider())));
 
-        if(game.getConfig().isKnockBackForInvisibleRoleOnly()){
-            player.sendMessage( game.translate("werewolf.commands.player.enchantments.knock_back_invisible"));
+        if (game.getConfig().isKnockBackForInvisibleRoleOnly()) {
+            player.sendMessage(game.translate("werewolf.commands.player.enchantments.knock_back_invisible"));
         }
 
         player.sendMessage(game.translate("werewolf.commands.player.enchantments.note"));

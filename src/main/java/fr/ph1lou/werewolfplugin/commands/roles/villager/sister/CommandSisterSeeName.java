@@ -27,7 +27,7 @@ public class CommandSisterSeeName implements ICommandRole {
         IAffectedPlayers affectedPlayers = (IAffectedPlayers) playerWW.getRole();
 
         if (!affectedPlayers.getAffectedPlayers().contains(killerWW)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.sister.already");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.sister.already");
             return;
         }
 
@@ -38,15 +38,15 @@ public class CommandSisterSeeName implements ICommandRole {
         Bukkit.getPluginManager().callEvent(sisterSeeNameEvent);
 
         if (sisterSeeNameEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
 
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.sister.reveal_killer_name",
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.sister.reveal_killer_name",
                 Formatter.player(
-                killerWW != null ?
-                        killerWW.getName() :
-                        game.translate("werewolf.utils.pve")));
+                        killerWW != null ?
+                                killerWW.getName() :
+                                game.translate("werewolf.utils.pve")));
     }
 }

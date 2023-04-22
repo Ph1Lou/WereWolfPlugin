@@ -45,11 +45,12 @@ public class TrollChoiceGUI implements InventoryProvider {
     }
 
 
-
     @Override
     public void init(Player player, InventoryContents contents) {
         WereWolfAPI game = JavaPlugin.getPlugin(Main.class).getWereWolfAPI();
-        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menus.return")).build()), e -> AdvancedSettingsGUI.INVENTORY.open(player)));
+        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType())
+                .setDisplayName(game.translate("werewolf.menus.return")).build()),
+                e -> AdvancedSettingsGUI.INVENTORY.open(player)));
     }
 
     @Override
@@ -93,7 +94,8 @@ public class TrollChoiceGUI implements InventoryProvider {
                         .compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
                 .forEach(roleRegister -> {
 
-                    Optional<String> addonKey = Register.get().getModuleKey(roleRegister.getMetaDatas().key());
+                    String key = roleRegister.getMetaDatas().key();
+                    Optional<String> addonKey = Register.get().getModuleKey(key);
 
                     if (roleRegister.getMetaDatas().category() == this.category
                             ||
@@ -101,18 +103,17 @@ public class TrollChoiceGUI implements InventoryProvider {
                                     !addonKey.get().equals(Main.KEY) &&
                                     this.category == Category.ADDONS)) {
 
-                        String key = roleRegister.getMetaDatas().key();
                         List<String> lore = Arrays.stream(roleRegister.getMetaDatas().loreKey())
                                 .map(game::translate)
                                 .collect(Collectors.toList());
 
                         if (config.getTrollKey().equals(key)) {
                             items.add(ClickableItem.empty(new ItemBuilder(UniversalMaterial.GREEN_TERRACOTTA.getStack()).setLore(lore)
-                                    .setDisplayName(game.translate(roleRegister.getMetaDatas().key())).build()));
+                                    .setDisplayName(game.translate(key)).build()));
                         } else {
                             items.add(ClickableItem.of((new ItemBuilder(UniversalMaterial.RED_TERRACOTTA.getStack())
                                     .setLore(lore)
-                                    .setDisplayName(game.translate(roleRegister.getMetaDatas().key())).build()), event ->
+                                    .setDisplayName(game.translate(key)).build()), event ->
                                     config.setTrollKey(roleRegister.getMetaDatas().key())));
                         }
 

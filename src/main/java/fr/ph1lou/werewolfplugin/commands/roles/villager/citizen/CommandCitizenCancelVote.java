@@ -23,7 +23,7 @@ public class CommandCitizenCancelVote implements ICommandRole {
     @Override
     public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
-        if(game.getConfig().isConfigActive(ConfigBase.NEW_VOTE)){
+        if (game.getConfig().isConfigActive(ConfigBase.NEW_VOTE)) {
             return;
         }
 
@@ -35,7 +35,7 @@ public class CommandCitizenCancelVote implements ICommandRole {
         Citizen citizen = (Citizen) playerWW.getRole();
 
         if (!game.getVoteManager().isStatus(VoteStatus.WAITING)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.power");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
             return;
         }
 
@@ -46,18 +46,18 @@ public class CommandCitizenCancelVote implements ICommandRole {
         Bukkit.getPluginManager().callEvent(cancelVoteEvent);
 
         if (cancelVoteEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
         game.getVoteManager().resetVote();
         Bukkit.broadcastMessage(game.translate(
-                Prefix.GREEN , "werewolf.roles.citizen.cancelling_broadcast"));
+                Prefix.GREEN, "werewolf.roles.citizen.cancelling_broadcast"));
 
         if (voteWW == null) return;
 
         playerWW.sendMessageWithKey(
-                Prefix.YELLOW , "werewolf.roles.citizen.cancelling_vote_perform",
+                Prefix.YELLOW, "werewolf.roles.citizen.cancelling_vote_perform",
                 Formatter.player(voteWW.getName()));
         citizen.addAffectedPlayer(voteWW);
 

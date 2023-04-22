@@ -16,7 +16,7 @@ import fr.ph1lou.werewolfplugin.commands.Admin;
 import fr.ph1lou.werewolfplugin.commands.Command;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.game.MapManager;
-import fr.ph1lou.werewolfplugin.statistiks.Events;
+import fr.ph1lou.werewolfplugin.statistiks.StatisticsEvents;
 import fr.ph1lou.werewolfplugin.statistiks.StatistiksUtils;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
@@ -38,18 +38,15 @@ import java.util.Objects;
 public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     public static final String KEY = "werewolf.name";
+    private final InventoryManager invManager = new InventoryManager(this);
     private WereWolfAPI currentGame;
     private Register registerManager;
-    private final InventoryManager invManager = new InventoryManager(this);
-    private GameReview currentGameReview;
 
-    public Main()
-    {
+    public Main() {
         super();
     }
 
-    protected Main(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file)
-    {
+    protected Main(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
     }
 
@@ -72,9 +69,10 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                         this,
                         ServicePriority.Normal);
         this.invManager.init();
-        BukkitUtils.registerListener(new Events(this));
+
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             this.registerManager = new Register(this); //to do before all things who need register
+            BukkitUtils.registerListener(new StatisticsEvents(this));
             Objects.requireNonNull(getCommand("a")).setExecutor(new Admin(this));
             Objects.requireNonNull(getCommand("ww")).setExecutor(new Command(this));
             GameManager.createGame(this, wereWolfAPI -> this.currentGame = wereWolfAPI);
@@ -87,7 +85,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                         VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
                     }), 0, 4);
         });
-
         StatistiksUtils.loadContributors();
     }
 
@@ -113,14 +110,6 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     public void createGame() {
         GameManager.createGame(this, wereWolfAPI -> this.currentGame = wereWolfAPI);
-    }
-
-    public GameReview getCurrentGameReview() {
-        return currentGameReview;
-    }
-
-    public void setCurrentGameReview(GameReview currentGameReview) {
-        this.currentGameReview = currentGameReview;
     }
 }
 

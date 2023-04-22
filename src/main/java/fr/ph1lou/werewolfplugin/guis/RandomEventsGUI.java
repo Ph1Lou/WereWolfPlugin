@@ -6,7 +6,7 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -71,21 +71,18 @@ public class RandomEventsGUI implements InventoryProvider {
 
                         if (e.isShiftClick()) {
                             AdvancedEventsGUI.getInventory(randomEventRegister.getMetaDatas(), pagination.getPage()).open(player);
-                        }
-                        else if (e.isLeftClick()) {
+                        } else if (e.isLeftClick()) {
                             int probability = config.getProbability(key);
                             config.setProbability(key, (probability + 1) % 101);
                             game.getListenersManager().getRandomEvent(key).ifPresent(listenerWerewolf -> listenerWerewolf
                                     .register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(key)));
                             e.setCurrentItem(getItemStack(game, randomEventRegister));
-                        }
-                        else if (e.isRightClick()) {
+                        } else if (e.isRightClick()) {
                             int probability = config.getProbability(key);
                             config.setProbability(key, ((probability - 1) + 101) % 101);
                             if (probability == 1) {
                                 game.getListenersManager().getRandomEvent(key).ifPresent(listenerWerewolf -> listenerWerewolf.register(false));
-                            }
-                            else{
+                            } else {
                                 game.getListenersManager().getRandomEvent(key).ifPresent(listenerWerewolf -> listenerWerewolf
                                         .register(game.getRandom().nextDouble() * 100 < game.getConfig().getProbability(key)));
                             }
@@ -99,7 +96,7 @@ public class RandomEventsGUI implements InventoryProvider {
         InventoryUtils.fillInventory(game, items, pagination, contents, () -> INVENTORY, 45);
     }
 
-    private ItemStack getItemStack(GameManager game, Wrapper<ListenerWerewolf, Event> randomEventRegister) {
+    private ItemStack getItemStack(GameManager game, Wrapper<ListenerWerewolf, RandomEvent> randomEventRegister) {
 
         String key = randomEventRegister.getMetaDatas().key();
         IConfiguration config = game.getConfig();

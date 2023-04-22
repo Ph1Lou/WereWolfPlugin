@@ -1,11 +1,11 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfplugin.Main;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -30,7 +30,7 @@ public class Timber extends ListenerWerewolf {
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
 
-        if(this.getGame().getConfig().getTimerValue(TimerBase.PVP) <= 0){
+        if (this.getGame().getConfig().getTimerValue(TimerBase.PVP) <= 0) {
             return;
         }
 
@@ -50,13 +50,13 @@ public class Timber extends ListenerWerewolf {
                             block.setType(Material.AIR);
                             finalItems.addAll(items);
                         }
-                            BlockFace[] values;
-                            for (int length = (values = BlockFace.values()).length, j = 0; j < length; ++j) {
-                                BlockFace face = values[j];
-                                if (UniversalMaterial.isLog(block.getRelative(face).getType())) {
-                                    bList.add(block.getRelative(face));
-                                }
+                        BlockFace[] values;
+                        for (int length = (values = BlockFace.values()).length, j = 0; j < length; ++j) {
+                            BlockFace face = values[j];
+                            if (UniversalMaterial.isLog(block.getRelative(face).getType())) {
+                                bList.add(block.getRelative(face));
                             }
+                        }
                         bList.remove(block);
                     }
                     if (bList.size() == 0) {

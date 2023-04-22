@@ -3,11 +3,11 @@ package fr.ph1lou.werewolfplugin.roles.werewolfs;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -28,11 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Role(key = RoleBase.AVENGER_WEREWOLF, 
-          category = Category.WEREWOLF, 
-          attributes = RoleAttribute.WEREWOLF,
+@Role(key = RoleBase.AVENGER_WEREWOLF,
+        category = Category.WEREWOLF,
+        attributes = RoleAttribute.WEREWOLF,
         configValues = {@IntValue(key = IntValueBase.AVENGER_WEREWOLF_DISTANCE,
-        defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.RED_WOOL)})
+                defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.RED_WOOL)})
 public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
@@ -47,8 +47,8 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.avenger_werewolf.description",
-                                Formatter.number(game.getConfig()
-                                        .getValue(IntValueBase.AVENGER_WEREWOLF_DISTANCE))))
+                        Formatter.number(game.getConfig()
+                                .getValue(IntValueBase.AVENGER_WEREWOLF_DISTANCE))))
                 .setPower(game.translate("werewolf.roles.avenger_werewolf.power"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
@@ -71,12 +71,12 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
         Bukkit.getPluginManager().callEvent(event1);
 
         if (event1.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN , "werewolf.roles.avenger_werewolf.remove",
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.avenger_werewolf.remove",
                 Formatter.player(event.getPlayerWW().getName()));
         this.getPlayerWW().addPlayerMaxHealth(2);
     }
@@ -115,7 +115,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
                         }
 
                         this.affectedPlayers.add(playerWW);
-                        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.avenger_werewolf.add",
+                        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.avenger_werewolf.add",
                                 Formatter.player(playerWW.getName()));
                     }
                 });
@@ -147,7 +147,6 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
         return new ArrayList<>(this.affectedPlayers);
     }
 
-   
 
     @Override
     public Aura getDefaultAura() {

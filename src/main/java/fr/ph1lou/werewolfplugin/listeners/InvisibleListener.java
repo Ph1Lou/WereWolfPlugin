@@ -26,13 +26,13 @@ public class InvisibleListener implements Listener {
     //todo à tester
 
     public InvisibleListener(WereWolfAPI game) {
-        this.game=game;
+        this.game = game;
     }
 
     @EventHandler
-    public void onEnchantment(EnchantmentEvent event){
+    public void onEnchantment(EnchantmentEvent event) {
 
-        if(!(event.getPlayerWW().getRole() instanceof IInvisible)){
+        if (!(event.getPlayerWW().getRole() instanceof IInvisible)) {
             return;
         }
 
@@ -47,26 +47,25 @@ public class InvisibleListener implements Listener {
     @EventHandler
     public void onInvisibleRemoveGoldenParticle(InvisibleEvent event) {
 
-        if(game.getConfig().getGoldenAppleParticles() != 1){
+        if (game.getConfig().getGoldenAppleParticles() != 1) {
             return;
         }
 
         Player player = Bukkit.getPlayer(event.getPlayerWW().getUUID());
 
-        if(player == null){
+        if (player == null) {
             return;
         }
 
         event.getPlayerWW().getPotionModifiers()
                 .forEach(potionModifier -> {
-                    if(potionModifier.getPotionEffectType() == PotionEffectType.ABSORPTION){
-                        if(event.isInvisible()){
+                    if (potionModifier.getPotionEffectType() == PotionEffectType.ABSORPTION) {
+                        if (event.isInvisible()) {
                             player.removePotionEffect(PotionEffectType.ABSORPTION);
                             player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,
                                     potionModifier.getDuration() - (game.getTimer() - potionModifier.getTimer()) * 20,
                                     potionModifier.getAmplifier(), false, false));
-                        }
-                        else{
+                        } else {
                             player.removePotionEffect(PotionEffectType.ABSORPTION);
                             player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,
                                     potionModifier.getDuration() - (game.getTimer() - potionModifier.getTimer()) * 20,
@@ -81,27 +80,27 @@ public class InvisibleListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onResurrection(ResurrectionEvent event) {
 
-        if(!(event.getPlayerWW().getRole() instanceof IInvisible)){
+        if (!(event.getPlayerWW().getRole() instanceof IInvisible)) {
             return;
         }
 
-        if(event.getPlayerWW().getPotionModifiers()
+        if (event.getPlayerWW().getPotionModifiers()
                 .stream()
-                .noneMatch(potionModifier -> potionModifier.getPotionEffectType() == PotionEffectType.INVISIBILITY)){
+                .noneMatch(potionModifier -> potionModifier.getPotionEffectType() == PotionEffectType.INVISIBILITY)) {
             return;
         }
 
-        ((IInvisible)event.getPlayerWW().getRole()).setInvisible(false);
+        ((IInvisible) event.getPlayerWW().getRole()).setInvisible(false);
     }
 
     @EventHandler
     public void onFinalDeath(DeathItemsEvent event) {
 
-        if(!(event.getPlayerWW().getRole() instanceof IInvisible)){
+        if (!(event.getPlayerWW().getRole() instanceof IInvisible)) {
             return;
         }
 
-        ((IInvisible)event.getPlayerWW().getRole()).setInvisible(false);
+        ((IInvisible) event.getPlayerWW().getRole()).setInvisible(false);
 
         if (!this.game.getConfig().isKnockBackForInvisibleRoleOnly()) return;
 
@@ -115,21 +114,21 @@ public class InvisibleListener implements Listener {
     @EventHandler
     public void onStealEvent(StealEvent event) {
 
-        if(!(event.getThiefWW().getRole() instanceof IInvisible)){
+        if (!(event.getPlayerWW().getRole() instanceof IInvisible)) {
             return;
         }
 
-        ((IInvisible)event.getThiefWW().getRole()).setInvisible(false);
+        ((IInvisible) event.getPlayerWW().getRole()).setInvisible(false);
     }
 
     @EventHandler
     public void onGoldenAppleEat(GoldenAppleParticleEvent event) {
 
-        if(!(event.getPlayerWW().getRole() instanceof IInvisible)){
+        if (!(event.getPlayerWW().getRole() instanceof IInvisible)) {
             return;
         }
 
-        if (!((IInvisible)event.getPlayerWW().getRole()).isInvisible()) return;
+        if (!((IInvisible) event.getPlayerWW().getRole()).isInvisible()) return;
 
         event.setCancelled(true);
     }

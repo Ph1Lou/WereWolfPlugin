@@ -84,11 +84,11 @@ public class AmnesiacLover implements ILover, Listener {
         IPlayerWW playerWW1 = getOtherLover(event.getPlayerWW());
 
         game.getPlayersWW().forEach(playerWW -> {
-            AnnouncementLoverDeathEvent event1 = new AnnouncementLoverDeathEvent(event.getPlayerWW(),playerWW,"werewolf.lovers.lover.lover_death");
+            AnnouncementLoverDeathEvent event1 = new AnnouncementLoverDeathEvent(event.getPlayerWW(), playerWW, "werewolf.lovers.lover.lover_death");
             Bukkit.getPluginManager().callEvent(event1);
 
-            if(!event1.isCancelled()){
-                playerWW.sendMessageWithKey("werewolf.lovers.lover.lover_death",Formatter.player(playerWW1.getName()));
+            if (!event1.isCancelled()) {
+                playerWW.sendMessageWithKey("werewolf.lovers.lover.lover_death", Formatter.player(playerWW1.getName()));
             }
 
         });
@@ -97,9 +97,9 @@ public class AmnesiacLover implements ILover, Listener {
                 .filter(uuid -> !game.getPlayerWW(uuid).isPresent())
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
-                .forEach(player1 -> player1.sendMessage(game.translate("werewolf.lovers.lover.lover_death",Formatter.player(playerWW1.getName()))));
+                .forEach(player1 -> player1.sendMessage(game.translate("werewolf.lovers.lover.lover_death", Formatter.player(playerWW1.getName()))));
 
-        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.lovers.lover.lover_death",Formatter.player(playerWW1.getName())));
+        Bukkit.getConsoleSender().sendMessage(game.translate("werewolf.lovers.lover.lover_death", Formatter.player(playerWW1.getName())));
 
         Bukkit.getPluginManager().callEvent(
                 new AmnesiacLoverDeathEvent(event.getPlayerWW(), playerWW1));

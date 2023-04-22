@@ -21,7 +21,7 @@ public class CommandConfigurations implements ICommand {
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        player.sendMessage(game.translate(Prefix.ORANGE,"werewolf.commands.player.configurations.list"));
+        player.sendMessage(game.translate(Prefix.ORANGE, "werewolf.commands.player.configurations.list"));
 
         String message = Register.get().getConfigsRegister()
                 .stream()
@@ -30,7 +30,7 @@ public class CommandConfigurations implements ICommand {
                 .filter(ConfigurationBasic::appearInMenu)
                 .filter(ConfigurationBasic::appearInConfigurationList)
                 .filter(configurationWrapper -> game.getConfig().isConfigActive(configurationWrapper.key()) &&
-                        this.hideCompositionCondition(game, configurationWrapper.key()))
+                                                this.hideCompositionCondition(game, configurationWrapper.key()))
                 .map(configurationWrapper -> "§a-§f " + game.translate(configurationWrapper.key()))
                 .sorted(String::compareToIgnoreCase)
                 .collect(Collectors.joining("\n"));
@@ -40,6 +40,6 @@ public class CommandConfigurations implements ICommand {
 
     private boolean hideCompositionCondition(WereWolfAPI game, String key) {
         return !key.equals(ConfigBase.LONE_WOLF)
-                || !game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION);
+               || !game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION);
     }
 }

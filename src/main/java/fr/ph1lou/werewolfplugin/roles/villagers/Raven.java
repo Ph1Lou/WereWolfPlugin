@@ -2,22 +2,22 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
-import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
+import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Role(key = RoleBase.RAVEN,
-         category = Category.VILLAGER,
-         attributes = RoleAttribute.VILLAGER)
+        category = Category.VILLAGER,
+        attributes = RoleAttribute.VILLAGER)
 public class Raven extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -69,10 +69,10 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
     public void onDay(DayEvent event) {
 
         if (this.last != null) {
-            this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.JUMP,this.getKey(),0));
+            this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.JUMP, this.getKey(), 0));
 
             this.last.getRole().removeAuraModifier(this.getKey());
-            this.last.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.raven.no_longer_curse");
+            this.last.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.raven.no_longer_curse");
             this.last = null;
         }
 
@@ -82,7 +82,7 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
 
         setPower(true);
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.raven.curse_message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.raven.curse_message",
                 Formatter.timer(game, TimerBase.POWER_DURATION));
     }
 

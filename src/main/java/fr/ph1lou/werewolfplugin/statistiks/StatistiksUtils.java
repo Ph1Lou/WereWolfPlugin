@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.statistics.impl.GameReview;
-import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.save.FileUtils_;
@@ -33,26 +32,26 @@ import java.util.stream.Collectors;
 
 public class StatistiksUtils {
 
+    private static final List<Contributor> contributors = new ArrayList<>(Collections.singleton(new Contributor(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396"), 0)));
     private static List<String> messages = new ArrayList<>();
     private static int index = 0;
-    private static final List<Contributor> contributors = new ArrayList<>(Collections.singleton(new Contributor(UUID.fromString("056be797-2a0b-4807-9af5-37faf5384396"), 0)));
 
-    public static String getMessage(){
-        return messages.size() == 0 ? "" : messages.get(index++%messages.size());
+    public static String getMessage() {
+        return messages.size() == 0 ? "" : messages.get(index++ % messages.size());
     }
 
-    public static List<? extends Contributor> getContributors(){
+    public static List<? extends Contributor> getContributors() {
         return contributors;
     }
 
-    public static void loadMessages(){
+    public static void loadMessages() {
 
         Main main = JavaPlugin.getPlugin(Main.class);
         WereWolfAPI game = main.getWereWolfAPI();
         String language = main.getConfig().getString("lang");
 
         try {
-            URL url = new URL("https://api.ph1lou.fr/messages/"+language);
+            URL url = new URL("https://api.ph1lou.fr/messages/" + language);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
@@ -67,14 +66,14 @@ public class StatistiksUtils {
                 }
 
                 messages = Arrays.stream(new Gson().fromJson(response.toString(), String[].class))
-                        .map(s -> game.translate(Prefix.LIGHT_BLUE)+s).collect(Collectors.toList());
+                        .map(s -> game.translate(Prefix.LIGHT_BLUE) + s).collect(Collectors.toList());
             } catch (Exception ignored) {
             }
         } catch (IOException ignored) {
         }
     }
 
-    public static void loadContributors(){
+    public static void loadContributors() {
 
         try {
 
@@ -100,28 +99,30 @@ public class StatistiksUtils {
         }
     }
 
-    public static void postGame(Main main, @NotNull GameReview gameReview){
-
-        if (gameReview.getWinnerCampKey() == null) return;
+    public static void postGame(Main main, @NotNull GameReview gameReview) {
 
         String jsonInputString = Serializer.serialize(gameReview);
-        File file = new File(main.getDataFolder() + File.separator + "statistiks", gameReview.getGameUUID() + ".json");
+        File file = new File(main.getDataFolder() + File.separator + "statistics", gameReview.getGameUUID() + ".json");
 
         FileUtils_.save(file, jsonInputString);
 
+        if (gameReview.getWinnerCampKey() == null || gameReview.getWinnerCampKey().equals(StatisticsEvents.DEBUG)) {
+            Bukkit.getLogger().warning("[WereWolfPlugin] Statistics no send because game not ended");
+            return;
+        }
 
         if (gameReview.getPlayersCount() < 17) {
-            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because player size < 17");
+            Bukkit.getLogger().warning("[WereWolfPlugin] Statistics no send because player size < 17");
             return;
         }
 
         if (main.getWereWolfAPI().getTimer() < 3600) {
-            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because game duration < 1h");
+            Bukkit.getLogger().warning("[WereWolfPlugin] Statistics no send because game duration < 1h");
             return;
         }
 
-        if(((GameManager) main.getWereWolfAPI()).isCrack()){
-            Bukkit.getLogger().warning("[WereWolfPlugin] Statistiks no send because Server Crack");
+        if (((GameManager) main.getWereWolfAPI()).isCrack()) {
+            Bukkit.getLogger().warning("[WereWolfPlugin] Statistics no send because Server Crack");
             return;
         }
 
@@ -143,11 +144,10 @@ public class StatistiksUtils {
             try (BufferedReader ignored1 = new BufferedReader(
                     new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
 
-                TextComponent msg = new TextComponent(main.getWereWolfAPI().translate(Prefix.ORANGE,"werewolf.statistics"));
+                TextComponent msg = new TextComponent(main.getWereWolfAPI().translate(Prefix.ORANGE, "werewolf.statistics"));
                 msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
                         String.format("https://werewolf.ph1lou.fr/game-view/%s", gameReview.getGameUUID().toString())));
-                BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getOnlinePlayers()
-                        .forEach(player -> player.spigot().sendMessage(msg)), 100);
+                Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(msg));
             } catch (Exception ignored) {
             }
         } catch (IOException ignored) {

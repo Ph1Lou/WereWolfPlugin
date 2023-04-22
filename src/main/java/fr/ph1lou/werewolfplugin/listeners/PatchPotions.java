@@ -53,7 +53,7 @@ public class PatchPotions implements Listener {
     }
 
     @EventHandler
-    public void onEffectGet(PotionSplashEvent event){
+    public void onEffectGet(PotionSplashEvent event) {
 
         event.setCancelled(true);
         event.getAffectedEntities().stream()
@@ -61,25 +61,21 @@ public class PatchPotions implements Listener {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(playerWW -> event.getPotion().getEffects().forEach(potionEffect -> {
-                    if(potionEffect.getDuration() == 1){ //handle instant potion
-                        if(potionEffect.getType().equals(PotionEffectType.HEAL)){
-                            if(potionEffect.getAmplifier() == 0){
+                    if (potionEffect.getDuration() == 1) { //handle instant potion
+                        if (potionEffect.getType().equals(PotionEffectType.HEAL)) {
+                            if (potionEffect.getAmplifier() == 0) {
                                 playerWW.addPlayerHealth(4);
-                            }
-                            else{
+                            } else {
                                 playerWW.addPlayerHealth(8);
                             }
-                        }
-                        else if (potionEffect.getType().equals(PotionEffectType.HARM)){
-                            if(potionEffect.getAmplifier() == 0){
+                        } else if (potionEffect.getType().equals(PotionEffectType.HARM)) {
+                            if (potionEffect.getAmplifier() == 0) {
                                 playerWW.removePlayerHealth(6);
-                            }
-                            else{
+                            } else {
                                 playerWW.removePlayerHealth(12);
                             }
                         }
-                    }
-                    else{
+                    } else {
                         playerWW.addPotionModifier(PotionModifier.add(
                                 potionEffect.getType(),
                                 potionEffect.getDuration(),
@@ -91,27 +87,26 @@ public class PatchPotions implements Listener {
 
 
     @EventHandler
-    public void onDrinkPotionEvent(PlayerItemConsumeEvent event){
+    public void onDrinkPotionEvent(PlayerItemConsumeEvent event) {
 
         Player player = event.getPlayer();
         ItemStack itemStack = event.getItem();
         Collection<PotionEffect> potionEffectList = VersionUtils.getVersionUtils()
                 .getPotionEffect(itemStack);
 
-        if(!potionEffectList.isEmpty()) {
+        if (!potionEffectList.isEmpty()) {
 
             event.setCancelled(true);
 
-            BukkitUtils.scheduleSyncDelayedTask(() ->
+            BukkitUtils.scheduleSyncDelayedTask(game, () ->
             {
                 ItemStack itemStack1 = VersionUtils.getVersionUtils().getItemInHand(player);
 
-                if(itemStack1.getAmount() > 1){
-                    itemStack1.setAmount(itemStack1.getAmount()-1);
-                    VersionUtils.getVersionUtils().setItemInHand(player,itemStack1);
-                }
-                else{
-                    VersionUtils.getVersionUtils().setItemInHand(player,null);
+                if (itemStack1.getAmount() > 1) {
+                    itemStack1.setAmount(itemStack1.getAmount() - 1);
+                    VersionUtils.getVersionUtils().setItemInHand(player, itemStack1);
+                } else {
+                    VersionUtils.getVersionUtils().setItemInHand(player, null);
                 }
                 player.getInventory().addItem(new ItemStack(Material.GLASS_BOTTLE));
             });

@@ -2,10 +2,6 @@ package fr.ph1lou.werewolfplugin.roles.lovers;
 
 import fr.ph1lou.werewolfapi.annotations.Lover;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.lovers.ILover;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -14,6 +10,10 @@ import fr.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
 import fr.ph1lou.werewolfapi.events.lovers.CursedLoverDeathEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -65,7 +65,7 @@ public class CursedLover implements ILover, Listener {
         Bukkit.getPluginManager().callEvent(
                 new CursedLoverDeathEvent(event.getPlayerWW(), playerWW1));
 
-        playerWW1.sendMessageWithKey(Prefix.RED , "werewolf.lovers.cursed_lover.death_cursed_lover");
+        playerWW1.sendMessageWithKey(Prefix.RED, "werewolf.lovers.cursed_lover.death_cursed_lover");
 
         playerWW1.removePlayerMaxHealth(2);
 
@@ -100,7 +100,7 @@ public class CursedLover implements ILover, Listener {
 
         if (!event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) return;
 
-        if(!(event.getEntity() instanceof Player)) return;
+        if (!(event.getEntity() instanceof Player)) return;
 
         Player player = (Player) event.getEntity();
         UUID uuid = player.getUniqueId();

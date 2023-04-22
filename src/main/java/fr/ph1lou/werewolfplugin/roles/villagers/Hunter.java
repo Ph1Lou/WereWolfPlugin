@@ -3,12 +3,12 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfKillEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -70,7 +70,7 @@ public class Hunter extends RoleVillage implements IPower {
             if (game.getConfig().isConfigActive(ConfigBase.HUNTER_CAN_SHOOT)) {
                 this.setPower(true);
                 getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.hunter.perform");
-                BukkitUtils.scheduleSyncDelayedTask(() -> {
+                BukkitUtils.scheduleSyncDelayedTask(game, () -> {
                     getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.check.end_selection");
                     setPower(false);
                 }, 20 * 30);
@@ -107,9 +107,8 @@ public class Hunter extends RoleVillage implements IPower {
         IPlayerWW targetWW = game.getPlayerWW(target.getUniqueId()).orElse(null);
         if (targetWW == null || !targetWW.getRole().isWereWolf()) return;
 
-        event.setDamage(event.getDamage() * (1 + (game.getConfig().getStrengthRate()/100f) * (0.5 + damageBonus)));
+        event.setDamage(event.getDamage() * (1 + (game.getConfig().getStrengthRate() / 100f) * (0.5 + damageBonus)));
     }
-
     @EventHandler
     public void onWerewolfKillEvent(WereWolfKillEvent event) {
         if (event.getVictimWW().equals(getPlayerWW())) {

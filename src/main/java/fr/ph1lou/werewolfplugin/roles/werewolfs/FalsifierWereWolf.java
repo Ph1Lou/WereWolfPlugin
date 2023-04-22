@@ -1,21 +1,21 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
+import fr.ph1lou.werewolfapi.enums.Camp;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.SelectionEndEvent;
 import fr.ph1lou.werewolfapi.events.roles.falsifier_werewolf.NewDisplayRole;
-import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
+import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -59,7 +59,7 @@ public class FalsifierWereWolf extends RoleWereWolf {
                 players.add(playerWW1.getUUID());
             }
         }
-        if (players.size() <= 0) {
+        if (players.isEmpty()) {
             return;
         }
 
@@ -70,7 +70,7 @@ public class FalsifierWereWolf extends RoleWereWolf {
         Bukkit.getPluginManager().callEvent(newDisplayRole);
 
         if (newDisplayRole.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             setDisplayCamp(Camp.WEREWOLF.getKey());
             setDisplayRole(RoleBase.FALSIFIER_WEREWOLF);
             displayAura = Aura.DARK;
@@ -79,7 +79,7 @@ public class FalsifierWereWolf extends RoleWereWolf {
             setDisplayCamp(newDisplayRole.getNewDisplayCamp());
             displayAura = roles.getDefaultAura();
         }
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.falsifier_werewolf.display_role_message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.falsifier_werewolf.display_role_message",
                 Formatter.role(game.translate(getDisplayRole())));
     }
 
@@ -91,7 +91,7 @@ public class FalsifierWereWolf extends RoleWereWolf {
                 .setDescription(game.translate("werewolf.roles.falsifier_werewolf.description"))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .addExtraLines(game.translate("werewolf.roles.falsifier_werewolf.role",
-                                Formatter.role(game.translate(this.getDisplayRole()))))
+                        Formatter.role(game.translate(this.getDisplayRole()))))
                 .build();
     }
 

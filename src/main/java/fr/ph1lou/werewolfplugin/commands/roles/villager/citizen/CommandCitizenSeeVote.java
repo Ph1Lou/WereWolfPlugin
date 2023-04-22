@@ -20,12 +20,11 @@ import java.util.UUID;
         roleKeys = RoleBase.CITIZEN,
         argNumbers = 0,
         autoCompletion = false)
-public class CommandCitizenSeeVote implements ICommandRole
-{
+public class CommandCitizenSeeVote implements ICommandRole {
     @Override
     public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
-        Citizen citizen = (Citizen)playerWW.getRole();
+        Citizen citizen = (Citizen) playerWW.getRole();
         if (!game.getConfig().isConfigActive(ConfigBase.NEW_VOTE)) {
             this.oldVote(game, playerWW, citizen);
             return;
@@ -40,8 +39,7 @@ public class CommandCitizenSeeVote implements ICommandRole
         UUID uuid;
         try {
             uuid = UUID.fromString(result);
-        }
-        catch (IllegalArgumentException ignored) {
+        } catch (IllegalArgumentException ignored) {
             return;
         }
         IPlayerWW playerWW2 = game.getPlayerWW(uuid).orElse(null);
@@ -83,7 +81,7 @@ public class CommandCitizenSeeVote implements ICommandRole
 
         game.getVoteManager().getPlayerVotes()
                 .forEach((voterWW, voteWW) -> playerWW.sendMessageWithKey("werewolf.roles.citizen.see_vote",
-                Formatter.format("&voter&", voterWW.getName()),
-                Formatter.player(voteWW.getName())));
+                        Formatter.format("&voter&", voterWW.getName()),
+                        Formatter.player(voteWW.getName())));
     }
 }

@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @PlayerCommand(key = "werewolf.commands.player.role.command",
         descriptionKey = "werewolf.commands.player.role.description",
-        statesGame = {StateGame.GAME, StateGame.END},
+        statesGame = { StateGame.GAME, StateGame.END },
         argNumbers = 0)
 public class CommandRole implements ICommand {
 

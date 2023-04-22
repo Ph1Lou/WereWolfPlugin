@@ -3,14 +3,15 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -36,20 +37,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Role(key = RoleBase.BARBARIAN, 
-        category = Category.NEUTRAL, 
+@Role(key = RoleBase.BARBARIAN,
+        category = Category.NEUTRAL,
         attributes = RoleAttribute.NEUTRAL,
         configValues = @IntValue(key = IntValueBase.BARBARIAN_DISTANCE,
-                defaultValue = 25, 
-                meetUpValue = 25, 
-                step = 5, 
+                defaultValue = 25,
+                meetUpValue = 25,
+                step = 5,
                 item = UniversalMaterial.GRAY_WOOL))
 public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
 
+    private final Set<IPlayerWW> damagedPlayers = new HashSet<>();
     @Nullable
     private IPlayerWW playerWW;
     private boolean power = true;
-    private final Set<IPlayerWW> damagedPlayers = new HashSet<>();
 
     public Barbarian(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -71,31 +72,31 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
     }
 
     @EventHandler
-    public void onMaskedDeath(FirstDeathEvent event){
+    public void onMaskedDeath(FirstDeathEvent event) {
 
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
-        if(!this.hasPower()){
+        if (!this.hasPower()) {
             return;
         }
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        if(event.getPlayerWW().getDeathLocation().getWorld() !=
-                this.getPlayerWW().getLocation().getWorld()){
+        if (event.getPlayerWW().getDeathLocation().getWorld() !=
+                this.getPlayerWW().getLocation().getWorld()) {
             return;
         }
 
-        if(event.getPlayerWW().getDeathLocation().distance(this.getPlayerWW().getLocation())
-                > game.getConfig().getValue(IntValueBase.BARBARIAN_DISTANCE)){
+        if (event.getPlayerWW().getDeathLocation().distance(this.getPlayerWW().getLocation())
+                > game.getConfig().getValue(IntValueBase.BARBARIAN_DISTANCE)) {
             return;
         }
 
         TextComponent hideMessage = new TextComponent(
                 game.translate(
-                        Prefix.YELLOW , "werewolf.roles.barbarian.click_message",
+                        Prefix.YELLOW, "werewolf.roles.barbarian.click_message",
                         Formatter.player(event.getPlayerWW().getName())));
         hideMessage.setClickEvent(
                 new ClickEvent(ClickEvent.Action.RUN_COMMAND,
@@ -111,21 +112,28 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onMaskedDeathAnnouncement(AnnouncementDeathEvent event){
+    public void onCompositionUpdate(UpdateCompositionEvent event) {
+        if (event.getPlayerWW().equals(this.playerWW)) {
+            event.setCancelled(true);
+        }
+    }
 
-        if(!this.isAbilityEnabled()){
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onMaskedDeathAnnouncement(AnnouncementDeathEvent event) {
+
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if(event.getTargetPlayer().equals(this.getPlayerWW())){
+        if (event.getTargetPlayer().equals(this.getPlayerWW())) {
             return;
         }
 
-        if(event.getPlayerWW().equals(this.playerWW)){
+        if (event.getPlayerWW().equals(this.playerWW)) {
             event.setFormat("werewolf.announcement.death_message");
         }
     }
@@ -133,11 +141,11 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
     @EventHandler
     private void onPlayerDamageByPlayer(EntityDamageByEntityEvent event) {
 
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
-        if(!game.isState(StateGame.GAME)){
+        if (!game.isState(StateGame.GAME)) {
             return;
         }
 
@@ -157,18 +165,17 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
             if (!(shooter instanceof Player)) return;
 
             striker = (Player) shooter;
-        }
-        else{
+        } else {
             striker = (Player) event.getDamager();
         }
 
-        if(!striker.getUniqueId().equals(this.getPlayerUUID())){
+        if (!striker.getUniqueId().equals(this.getPlayerUUID())) {
             return;
         }
 
         game.getPlayerWW(player.getUniqueId())
                 .ifPresent(playerWW -> {
-                    if(!this.damagedPlayers.contains(playerWW)){
+                    if (!this.damagedPlayers.contains(playerWW)) {
                         this.damagedPlayers.add(playerWW);
                         event.setDamage(event.getDamage() * 2);
                     }
@@ -182,7 +189,7 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
 
     @Override
     public void removeAffectedPlayer(IPlayerWW playerWW) {
-        if(playerWW.equals(this.playerWW)){
+        if (playerWW.equals(this.playerWW)) {
             this.playerWW = null;
         }
     }

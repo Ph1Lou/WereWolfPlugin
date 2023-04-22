@@ -46,11 +46,11 @@ public class AdvancedRolesGUI implements InventoryProvider {
                 .manager(api.getInvManager())
                 .provider(new AdvancedRolesGUI(register, page))
                 .size(InventoryUtils.getRowNumbers(
-                                (register.configurations().length
-                        +register.timers().length +
-                        register.configValues().length + 1)*2, true), 9)
+                        (register.configurations().length
+                                + register.timers().length +
+                                register.configValues().length + 1) * 2, true), 9)
                 .title(game.translate("werewolf.menus.advanced_tool_role.menu",
-                                Formatter.role(game.translate(register.key()))))
+                        Formatter.role(game.translate(register.key()))))
                 .closeable(true)
                 .build();
     }
@@ -124,12 +124,12 @@ public class AdvancedRolesGUI implements InventoryProvider {
 
         inventory.clear();
         ItemStack itemStack = new ItemStack(Material.BARRIER);
-        inventory.setArmorContents(new ItemStack[]{ itemStack, itemStack, itemStack, itemStack});
+        inventory.setArmorContents(new ItemStack[]{itemStack, itemStack, itemStack, itemStack});
 
         for (ItemStack item : game.getStuffs().getStuffRole(this.register.key())) {
             player.getInventory().addItem(item);
         }
-        TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW , "werewolf.commands.admin.loot_role.valid",
+        TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW, "werewolf.commands.admin.loot_role.valid",
                 Formatter.role(game.translate(register.key()))));
         msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s %s",
                 game.translate("werewolf.commands.admin.loot_role.command"), this.register.key())));

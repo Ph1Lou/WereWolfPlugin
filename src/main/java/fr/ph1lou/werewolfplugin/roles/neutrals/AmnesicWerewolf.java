@@ -1,15 +1,11 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.Day;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -17,8 +13,12 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.roles.amnesiac.AmnesiacTransformationEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
-import fr.ph1lou.werewolfapi.role.interfaces.ITransformed;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
+import fr.ph1lou.werewolfapi.role.interfaces.ITransformed;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
@@ -44,10 +44,9 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
 
         if (!isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,RoleBase.WEREWOLF));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, RoleBase.WEREWOLF));
 
     }
-
 
 
     @EventHandler
@@ -59,7 +58,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
 
         this.getPlayerWW()
                 .addPotionModifier(
-                        PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,RoleBase.WEREWOLF,0));
+                        PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, RoleBase.WEREWOLF, 0));
 
     }
 
@@ -80,7 +79,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
         Bukkit.getPluginManager().callEvent(amnesiacTransformationEvent);
 
         if (amnesiacTransformationEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.transformation");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.transformation");
             return;
         }
 
@@ -96,14 +95,14 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
     @Override
     public void recoverPotionEffect() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION, this.getKey()));
 
 
         if (game.isDay(Day.DAY)) return;
 
         if (!isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,RoleBase.WEREWOLF));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, RoleBase.WEREWOLF));
 
     }
 
@@ -125,20 +124,20 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
         return this.transformed;
     }
 
+    @Override
+    public void setTransformed(boolean transformed) {
+        this.transformed = transformed;
+    }
+
     @EventHandler
     public void onEndPlayerMessage(EndPlayerMessageEvent event) {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         StringBuilder sb = event.getEndMessage();
-        if(this.isTransformed()){
+        if (this.isTransformed()) {
             sb.append(game.translate("werewolf.end.transform"));
         }
-    }
-
-    @Override
-    public void setTransformed(boolean transformed) {
-        this.transformed=transformed;
     }
 
     @Override
@@ -149,11 +148,11 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
     @Override
     public void disableAbilitiesRole() {
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,RoleBase.WEREWOLF,0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, RoleBase.WEREWOLF, 0));
     }
 
 }

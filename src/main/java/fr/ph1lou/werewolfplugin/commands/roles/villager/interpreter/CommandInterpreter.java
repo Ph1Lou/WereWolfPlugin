@@ -22,7 +22,7 @@ public class CommandInterpreter implements ICommandRole {
 
         Interpreter interpreter = (Interpreter) playerWW.getRole();
 
-        if(!interpreter.isRoleValid(args[0])){
+        if (!interpreter.isRoleValid(args[0])) {
             return;
         }
 
@@ -32,7 +32,7 @@ public class CommandInterpreter implements ICommandRole {
         Bukkit.getPluginManager().callEvent(interpreterEvent);
 
         if (interpreterEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 

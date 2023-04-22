@@ -1,13 +1,13 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -43,14 +43,15 @@ import java.util.stream.Collectors;
 
 
 @Role(key = RoleBase.INTERPRETER,
-        category = Category.VILLAGER, 
+        category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER)
 public class Interpreter extends RoleVillage implements IPower {
 
-    private boolean power = false;
     private final Set<Wrapper<IRole, Role>> roles = new HashSet<>();
+    private boolean power = false;
     @Nullable
     private IRole role;
+    private boolean used = false;
 
     public Interpreter(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -65,7 +66,7 @@ public class Interpreter extends RoleVillage implements IPower {
                         .anyMatch(roleAttribute -> roleAttribute == RoleAttribute.INFORMATION))
                 .collect(Collectors.toList());
 
-        if(roles.size() == 0){
+        if (roles.size() == 0) {
             return;
         }
 
@@ -87,7 +88,7 @@ public class Interpreter extends RoleVillage implements IPower {
                         .noneMatch(roleAttribute -> roleAttribute == RoleAttribute.INFORMATION))
                 .collect(Collectors.toList());
 
-        if(roles.size() == 0){
+        if (roles.size() == 0) {
             return;
         }
 
@@ -107,7 +108,7 @@ public class Interpreter extends RoleVillage implements IPower {
                         .noneMatch(roleAttribute -> roleAttribute == RoleAttribute.INFORMATION))
                 .collect(Collectors.toList());
 
-        if(roles.size() == 0){
+        if (roles.size() == 0) {
             return;
         }
 
@@ -128,22 +129,23 @@ public class Interpreter extends RoleVillage implements IPower {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onNight(NightEvent nightEvent){
+    public void onNight(NightEvent nightEvent) {
 
-        if(!this.getPlayerWW().getRole().equals(this)){
+        if (!this.getPlayerWW().getRole().equals(this)) {
             return;
         }
 
-        if(this.used){
+        if (this.used) {
             return; //Si encore avec le rôle
         }
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if(!this.isAbilityEnabled()){
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+
+            if (!this.isAbilityEnabled()) {
                 return;
             }
 
-            if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
                 return;
             }
 
@@ -156,13 +158,13 @@ public class Interpreter extends RoleVillage implements IPower {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onDeath(FinalDeathEvent event){
+    public void onDeath(FinalDeathEvent event) {
 
-        if(!event.getPlayerWW().equals(this.getPlayerWW())){
+        if (!event.getPlayerWW().equals(this.getPlayerWW())) {
             return;
         }
 
-        if(this.getPlayerWW().getRole().equals(this)){
+        if (this.getPlayerWW().getRole().equals(this)) {
             return;
         }
 
@@ -171,21 +173,21 @@ public class Interpreter extends RoleVillage implements IPower {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onDay(DayEvent event){
+    public void onDay(DayEvent event) {
 
-        if(!this.getPlayerWW().getRole().equals(this)){
+        if (!this.getPlayerWW().getRole().equals(this)) {
             return;
         }
 
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if(!this.hasPower()){
+        if (!this.hasPower()) {
             return;
         }
 
@@ -195,42 +197,41 @@ public class Interpreter extends RoleVillage implements IPower {
 
     }
 
-    private boolean used = false;
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDayEnd(DayEvent event) {
 
-        if(this.getPlayerWW().getRole().equals(this)){
+        if (this.getPlayerWW().getRole().equals(this)) {
             return; // Si interprete ne fait rien sinon redevient interprete
         }
 
-        if(this.role == null){
+        if (this.role == null) {
             return;
         }
 
-        if(!this.used){
+        if (!this.used) {
             this.used = true;
             return;
         }
 
-        if (!game.isState(StateGame.END) && !this.getPlayerWW().isState(StatePlayer.DEATH)) {
+        if (!this.getPlayerWW().isState(StatePlayer.DEATH)) {
+
             HandlerList.unregisterAll(this.role);
             this.role = null;
             this.getPlayerWW().clearPotionEffects(this.getPlayerWW().getRole().getKey());
             this.getPlayerWW().setRole(this);
 
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
-            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.roles.interpreter.end");
+            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.interpreter.end");
             this.used = false;
         }
     }
 
-    public boolean isRoleValid(String roleKey){
+    public boolean isRoleValid(String roleKey) {
         return this.roles.stream()
                 .anyMatch(roleRegister -> roleRegister.getMetaDatas().key().equals(roleKey));
     }
 
-    public void activateRole(String roleKey){
+    public void activateRole(String roleKey) {
 
         this.roles.removeIf(roleRegister -> {
             if (roleRegister.getMetaDatas().key().equals(roleKey)) {
@@ -239,12 +240,12 @@ public class Interpreter extends RoleVillage implements IPower {
                     this.role = roleRegister.getClazz()
                             .getConstructor(WereWolfAPI.class,
                                     IPlayerWW.class).newInstance(game,
-                            this.getPlayerWW());
+                                    this.getPlayerWW());
 
-                    if(this.isWereWolf()){
+                    if (this.isWereWolf()) {
                         role.setInfected();
                     }
-                    if(this.isNeutral()){
+                    if (this.isNeutral()) {
                         role.setTransformedToNeutral(true);
                     }
 
@@ -259,7 +260,8 @@ public class Interpreter extends RoleVillage implements IPower {
                     this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.interpreter.perform",
                             Formatter.role(game.translate(roleKey)));
                     return true;
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                         NoSuchMethodException ignored) {
                 }
 
             }
@@ -274,7 +276,7 @@ public class Interpreter extends RoleVillage implements IPower {
     }
 
     private TextComponent changeRole(String roleKey) {
-        TextComponent textComponent = new TextComponent(this.game.translate(Prefix.GREEN,"werewolf.roles.interpreter.click",
+        TextComponent textComponent = new TextComponent(this.game.translate(Prefix.GREEN, "werewolf.roles.interpreter.click",
                 Formatter.role(game.translate(roleKey))));
         textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s",
                 this.game.translate("werewolf.roles.interpreter.command"), roleKey)));

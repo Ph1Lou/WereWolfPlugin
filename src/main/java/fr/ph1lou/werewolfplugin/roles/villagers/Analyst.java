@@ -2,20 +2,20 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
-import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,12 +30,12 @@ import java.util.List;
                 RoleAttribute.MINOR_INFORMATION},
         timers = {@Timer(key = TimerBase.ANALYSE_DURATION, defaultValue = 1800,
                 meetUpValue = 6 * 60,
-        decrementAfterRole = true)})
+                decrementAfterRole = true)})
 public class Analyst extends RoleWithLimitedSelectionDuration implements ILimitedUse, IAffectedPlayers {
 
+    private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
     private int use = 0;
     private boolean power2 = true;
-    private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
 
     public Analyst(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -44,13 +44,13 @@ public class Analyst extends RoleWithLimitedSelectionDuration implements ILimite
 
     @Override
     public @NotNull String getDescription() {
-        return new DescriptionBuilder(game,this)
+        return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.analyst.description",
                         Formatter.timer(
                                 Utils.conversion(
                                         Math.max(0,
                                                 Math.max(0,
-                                                        game.getConfig().getTimerValue(TimerBase.ROLE_DURATION))+
+                                                        game.getConfig().getTimerValue(TimerBase.ROLE_DURATION)) +
                                                         game.getConfig().getTimerValue(TimerBase.ANALYSE_DURATION))))))
                 .build();
     }
@@ -63,11 +63,11 @@ public class Analyst extends RoleWithLimitedSelectionDuration implements ILimite
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDay(DayEvent event) {
 
-        if(this.use >= 5){
+        if (this.use >= 5) {
             return;
         }
 
-        if(game.getConfig().getTimerValue(TimerBase.ANALYSE_DURATION) > 0){
+        if (game.getConfig().getTimerValue(TimerBase.ANALYSE_DURATION) > 0) {
             return;
         }
 
@@ -78,7 +78,7 @@ public class Analyst extends RoleWithLimitedSelectionDuration implements ILimite
         }
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW , "werewolf.roles.analyst.message_see",
+                Prefix.YELLOW, "werewolf.roles.analyst.message_see",
                 Formatter.number(5 - this.use),
                 Formatter.timer(game, TimerBase.POWER_DURATION));
     }

@@ -3,12 +3,12 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
@@ -96,32 +96,30 @@ public class BearTrainer extends RoleVillage {
         if (player == null) return;
 
         if (event.isCancelled()) {
-            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.cancel"));
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.check.cancel"));
             return;
         }
 
         String builder = event.getPlayerWWS().stream().map(ignored ->
-                game.translate("werewolf.roles.bear_trainer.growling"))
+                        game.translate("werewolf.roles.bear_trainer.growling"))
                 .collect(Collectors.joining());
 
         Bukkit.getOnlinePlayers()
                 .forEach(Sound.WOLF_GROWL::play);
 
-        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW , "werewolf.roles.bear_trainer.growling_message",
-                Formatter.format("&growling&",builder)));
+        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW, "werewolf.roles.bear_trainer.growling_message",
+                Formatter.format("&growling&", builder)));
 
         int growl = event.getPlayerWWS().size();
 
         this.removeAuraModifier(this.getKey());
 
-        if(growl == 0){
-            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.LIGHT,1,true));
-        }
-        else if(growl == 1){
-            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.NEUTRAL,1,true));
-        }
-        else{
-            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK,1,true));
+        if (growl == 0) {
+            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.LIGHT, 1, true));
+        } else if (growl == 1) {
+            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.NEUTRAL, 1, true));
+        } else {
+            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK, 1, true));
         }
 
     }
@@ -131,7 +129,7 @@ public class BearTrainer extends RoleVillage {
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.bear_trainer.description",
-                                Formatter.number(game.getConfig().getValue(IntValueBase.BEAR_TRAINER_DISTANCE))))
+                        Formatter.number(game.getConfig().getValue(IntValueBase.BEAR_TRAINER_DISTANCE))))
                 .build();
     }
 

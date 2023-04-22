@@ -20,19 +20,19 @@ public class LanguageManager implements ILanguageManager {
     private final Map<String, Map<String, JsonValue>> texts = new HashMap<>();
     private final WereWolfAPI game;
 
-    public LanguageManager(WereWolfAPI game){
+    public LanguageManager(WereWolfAPI game) {
         this.game = game;
     }
 
     @Override
     public void loadTranslations(String key, Map<String, JsonValue> map) {
         this.texts.put(key, map);
-        if(Main.KEY.startsWith(key)){ //Update ScoreBoard Title
+        if (Main.KEY.startsWith(key)) { //Update ScoreBoard Title
             Bukkit.getOnlinePlayers()
                     .stream()
                     .map(Entity::getUniqueId)
-                    .filter(uuid -> ((GameManager)game).getBoards().containsKey(uuid))
-                    .map(uuid -> ((GameManager)game).getBoards().get(uuid))
+                    .filter(uuid -> ((GameManager) game).getBoards().containsKey(uuid))
+                    .map(uuid -> ((GameManager) game).getBoards().get(uuid))
                     .forEach(fastBoard -> fastBoard.updateTitle(
                             game.translate("werewolf.score_board.title")));
         }
@@ -42,15 +42,15 @@ public class LanguageManager implements ILanguageManager {
 
         String keyDomain = key.split("\\.")[0];
 
-        if(this.texts.containsKey(keyDomain)){
+        if (this.texts.containsKey(keyDomain)) {
 
             Map<String, JsonValue> translations = this.texts.get(keyDomain);
 
-            if(translations.containsKey(key)){
+            if (translations.containsKey(key)) {
 
                 JsonValue jsonValue = translations.get(key);
 
-                if(jsonValue.isArray()){
+                if (jsonValue.isArray()) {
                     return jsonValue
                             .asArray()
                             .values()
@@ -58,14 +58,13 @@ public class LanguageManager implements ILanguageManager {
                             .map(JsonValue::asString)
                             .map(s -> {
                                 String message = s;
-                                for(Formatter formatter:formatters){
+                                for (Formatter formatter : formatters) {
                                     message = formatter.handle(message);
                                 }
                                 return message;
                             })
                             .collect(Collectors.toList());
-                }
-                else{
+                } else {
                     return Collections.singletonList(String.format("Message %s is not an array", key));
                 }
             }
@@ -78,22 +77,21 @@ public class LanguageManager implements ILanguageManager {
 
         String keyDomain = key.split("\\.")[0];
 
-        if(this.texts.containsKey(keyDomain)){
+        if (this.texts.containsKey(keyDomain)) {
 
             Map<String, JsonValue> translations = this.texts.get(keyDomain);
 
-            if(translations.containsKey(key)){
+            if (translations.containsKey(key)) {
 
                 JsonValue jsonValue = translations.get(key);
 
-                if(jsonValue.isString()){
+                if (jsonValue.isString()) {
                     String message = jsonValue.asString();
-                    for(Formatter formatter:formatters){
+                    for (Formatter formatter : formatters) {
                         message = formatter.handle(message);
                     }
                     return message;
-                }
-                else{
+                } else {
                     return String.format("Message %s is not a string", key);
                 }
             }

@@ -1,19 +1,19 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.random_events.FindAllLootBoxEvent;
 import fr.ph1lou.werewolfapi.events.random_events.LootBoxEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Event(key = EventBase.LOOT_BOX,
+@RandomEvent(key = EventBase.LOOT_BOX,
         loreKey = "werewolf.random_events.loot_box.description")
 public class LootBox extends ListenerWerewolf {
 
@@ -204,7 +204,7 @@ public class LootBox extends ListenerWerewolf {
         chestLocation.clear();
         chestHasBeenOpen.clear();
         register(false);
-        Bukkit.broadcastMessage(game.translate(Prefix.GREEN , "werewolf.random_events.loot_box.all_chest_find"));
+        Bukkit.broadcastMessage(game.translate(Prefix.GREEN, "werewolf.random_events.loot_box.all_chest_find"));
 
         Bukkit.getPluginManager().callEvent(new FindAllLootBoxEvent());
     }

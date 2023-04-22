@@ -3,29 +3,28 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
-import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.events.roles.wild_child.AutoModelEvent;
 import fr.ph1lou.werewolfapi.events.roles.wild_child.ModelEvent;
 import fr.ph1lou.werewolfapi.events.roles.wild_child.WildChildTransformationEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.ITransformed;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -39,19 +38,18 @@ import java.util.List;
         category = Category.VILLAGER,
         timers = {@Timer(key = TimerBase.MODEL_DURATION,
                 defaultValue = 240, meetUpValue = 240,
-        decrementAfterRole = true,
-        onZero = AutoModelEvent.class)},
+                decrementAfterRole = true,
+                onZero = AutoModelEvent.class)},
         attributes = RoleAttribute.HYBRID)
 public class WildChild extends RoleVillage implements IAffectedPlayers, ITransformed, IPower {
 
-    boolean transformed = false;
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
+    boolean transformed = false;
+    private boolean power = true;
 
     public WildChild(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
     }
-
-    private boolean power = true;
 
     @Override
     public void setPower(boolean power) {
@@ -65,13 +63,13 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
     }
 
     @Override
-    public boolean isTransformed(){
+    public boolean isTransformed() {
         return transformed;
     }
 
     @Override
-    public void setTransformed(boolean transformed){
-        this.transformed=transformed;
+    public void setTransformed(boolean transformed) {
+        this.transformed = transformed;
     }
 
     @Override
@@ -111,7 +109,7 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.wild_child.reveal_model",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.wild_child.reveal_model",
                 Formatter.player(model.getName()));
         this.getPlayerWW().sendSound(Sound.BAT_IDLE);
     }
@@ -123,60 +121,18 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
                 .setDescription(game.translate("werewolf.roles.wild_child.description"))
                 .addExtraLines(game.translate("werewolf.roles.wild_child.model",
                         Formatter.player(
-                        affectedPlayer.isEmpty() ?
-                                !transformed ?
-                                        game.translate("werewolf.roles.wild_child.design_model",
-                                                Formatter.timer(game, TimerBase.MODEL_DURATION))
+                                affectedPlayer.isEmpty() ?
+                                        !transformed ?
+                                                game.translate("werewolf.roles.wild_child.design_model",
+                                                        Formatter.timer(game, TimerBase.MODEL_DURATION))
+                                                :
+                                                game.translate("werewolf.roles.wild_child.model_none")
                                         :
-                                        game.translate("werewolf.roles.wild_child.model_none")
-                                :
-                                transformed ?
-                                        game.translate("werewolf.roles.wild_child.model_death")
-                                        :
-                                        affectedPlayer.get(0).getName())))
+                                        transformed ?
+                                                game.translate("werewolf.roles.wild_child.model_death")
+                                                :
+                                                affectedPlayer.get(0).getName())))
                 .build();
-
-
-    }
-
-
-    @EventHandler
-    public void onStealEvent(StealEvent event) {
-
-        if (!event.getThiefWW().equals(getPlayerWW())) return;
-
-        if (!transformed) {
-            return;
-        }
-
-        if (this.affectedPlayer.isEmpty()) return;
-
-        IPlayerWW model = getAffectedPlayers().get(0);
-
-        if (model.equals(getPlayerWW())) {
-
-            WildChildTransformationEvent wildChildTransformationEvent =
-                    new WildChildTransformationEvent(
-                            this.getPlayerWW(),
-                            getPlayerWW());
-
-            Bukkit.getPluginManager().callEvent(wildChildTransformationEvent);
-
-            if (wildChildTransformationEvent.isCancelled()) {
-                this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.transformation");
-                return;
-            }
-
-            setTransformed(true);
-
-            if (!super.isWereWolf()) {
-                Bukkit.getPluginManager().callEvent(
-                        new NewWereWolfEvent(getPlayerWW()));
-            }
-
-        } else
-            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.wild_child.reveal_model",
-                    Formatter.format("&format&",model.getName()));
 
 
     }
@@ -214,7 +170,7 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
 
         if (wildChildTransformationEvent.isCancelled()) {
             this.getPlayerWW().sendMessageWithKey(
-                    Prefix.RED , "werewolf.check.transformation");
+                    Prefix.RED, "werewolf.check.transformation");
             return;
         }
 
@@ -227,31 +183,13 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
     }
 
     @EventHandler
-    public void onTargetIsStolen(StealEvent event) {
-
-        IPlayerWW playerWW = event.getPlayerWW();
-        IPlayerWW thiefWW = event.getThiefWW();
-
-        if (!getAffectedPlayers().contains(playerWW)) return;
-
-        removeAffectedPlayer(playerWW);
-        addAffectedPlayer(thiefWW);
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
-        this.getPlayerWW().sendMessageWithKey(
-                Prefix.ORANGE , "werewolf.roles.wild_child.change",
-                Formatter.player(thiefWW.getName()));
-    }
-
-    @EventHandler
-    public void onEndPlayerMessage(EndPlayerMessageEvent event){
+    public void onEndPlayerMessage(EndPlayerMessageEvent event) {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         StringBuilder sb = event.getEndMessage();
 
-        if(!getAffectedPlayers().isEmpty()) {
+        if (!getAffectedPlayers().isEmpty()) {
 
             IPlayerWW modelWW = getAffectedPlayers().get(0);
 
@@ -260,7 +198,7 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
                         Formatter.player(modelWW.getName())));
             }
         }
-        if(transformed){
+        if (transformed) {
             sb.append(game.translate("werewolf.end.transform"));
         }
     }

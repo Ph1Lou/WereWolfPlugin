@@ -5,16 +5,15 @@ import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.roles.fox.SniffEvent;
@@ -50,11 +49,11 @@ import java.util.List;
                 @IntValue(key = IntValueBase.FOX_SMELL_NUMBER, defaultValue = 3, meetUpValue = 3, step = 1, item = UniversalMaterial.CARROT),
                 @IntValue(key = IntValueBase.FOX_DISTANCE, defaultValue = 20, meetUpValue = 20, step = 5, item = UniversalMaterial.ORANGE_WOOL)})
 public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffectedPlayers, IPower {
-    
+
+    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private float progress = 0;
     private int use = 0;
     private boolean power = false;
-    private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
 
     public Fox(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -139,7 +138,7 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
             return;
         }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.fox.smell_message",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fox.smell_message",
                 Formatter.number(game.getConfig().getValue(IntValueBase.FOX_SMELL_NUMBER) - getUse()));
     }
 
@@ -150,11 +149,11 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.fox.description",
                         Formatter.number(game.getConfig().getValue(IntValueBase.FOX_DISTANCE)),
-                                Formatter.timer(game, TimerBase.FOX_SMELL_DURATION),
-                                Formatter.format("&number1&",game.getConfig().getValue(IntValueBase.FOX_SMELL_NUMBER) - use)))
+                        Formatter.timer(game, TimerBase.FOX_SMELL_DURATION),
+                        Formatter.format("&number1&", game.getConfig().getValue(IntValueBase.FOX_SMELL_NUMBER) - use)))
                 .setEffects(game.translate("werewolf.roles.fox.effect"))
-                .setPower(game.translate( "werewolf.roles.fox.progress",
-                        Formatter.format("&progress&",Math.min(100, Math.floor(this.getProgress())))))
+                .setPower(game.translate("werewolf.roles.fox.progress",
+                        Formatter.format("&progress&", Math.min(100, Math.floor(this.getProgress())))))
                 .build();
     }
 
@@ -199,8 +198,8 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
 
         if (temp % 10 > 0 && temp % 10 <= 100f /
                 (game.getConfig().getTimerValue(TimerBase.FOX_SMELL_DURATION) + 1)) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.fox.progress",
-                    Formatter.format("&progress&",Math.min(100, Math.floor(temp))));
+            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fox.progress",
+                    Formatter.format("&progress&", Math.min(100, Math.floor(temp))));
         }
 
         if (temp >= 100) {
@@ -216,30 +215,28 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
 
             if (!sniffEvent.isCancelled()) {
                 if (sniffEvent.isWereWolf()) {
-                    this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.fox.werewolf",
+                    this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fox.werewolf",
                             Formatter.player(playerWW.getName()));
-                    this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.fox.warn");
+                    this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fox.warn");
 
-                    this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK,1,false));
+                    this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK, 1, false));
 
                 } else {
                     this.getPlayerWW().sendMessageWithKey(
-                            Prefix.YELLOW , "werewolf.roles.fox.not_werewolf",
+                            Prefix.YELLOW, "werewolf.roles.fox.not_werewolf",
                             Formatter.player(playerWW.getName()));
                 }
 
 
                 if (sniffEvent.isWereWolf()) {
-                    BukkitUtils.scheduleSyncDelayedTask(() -> {
-                        if (game.isState(StateGame.GAME)) {
-                            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.fox.smell");
-                            playerWW.sendSound(Sound.DONKEY_ANGRY);
-                        }
+                    BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+                        playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.fox.smell");
+                        playerWW.sendSound(Sound.DONKEY_ANGRY);
                     }, 20 * 60 * 5);
                 }
 
             } else {
-                this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+                this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             }
 
             clearAffectedPlayer();

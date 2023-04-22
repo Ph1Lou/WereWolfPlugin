@@ -4,12 +4,12 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
-import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
@@ -39,13 +39,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
-@Role(key = RoleBase.SISTER, 
-        category = Category.VILLAGER, 
-        attributes = RoleAttribute.VILLAGER, 
+@Role(key = RoleBase.SISTER,
+        category = Category.VILLAGER,
+        attributes = RoleAttribute.VILLAGER,
         configValues = {@IntValue(key = IntValueBase.SISTER_DISTANCE,
-                defaultValue = 20, 
-                meetUpValue = 20, 
-                step = 2, 
+                defaultValue = 20,
+                meetUpValue = 20,
+                step = 2,
                 item = UniversalMaterial.GRAY_WOOL)},
         requireDouble = true)
 public class Sister extends RoleVillage implements IAffectedPlayers {
@@ -63,19 +63,19 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
         String extraLines;
 
         if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST) > 0) {
-            extraLines= game.translate("werewolf.roles.sister.sisters_list",
+            extraLines = game.translate("werewolf.roles.sister.sisters_list",
                     Formatter.format("&list&",
                             Utils.conversion(game.getConfig()
                                     .getTimerValue(TimerBase.WEREWOLF_LIST))));
         } else {
-            extraLines= game.translate("werewolf.roles.sister.sisters_list",
-                    Formatter.format("&list&",this.getSister()));
+            extraLines = game.translate("werewolf.roles.sister.sisters_list",
+                    Formatter.format("&list&", this.getSister()));
         }
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.sister.description"))
                 .setEffects(game.translate("werewolf.roles.sister.effect",
-                        Formatter.number( game.getConfig().getValue(IntValueBase.SISTER_DISTANCE))))
+                        Formatter.number(game.getConfig().getValue(IntValueBase.SISTER_DISTANCE))))
                 .addExtraLines(extraLines)
                 .build();
     }
@@ -88,8 +88,8 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
 
     @EventHandler
     public void onWerewolfList(WereWolfListEvent event) {
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.sister.sisters_list",
-                Formatter.format("&list&",this.getSister()));
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.sister.sisters_list",
+                Formatter.format("&list&", this.getSister()));
     }
 
     private String getSister() {
@@ -153,7 +153,7 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
 
         IPlayerWW sisterWW = event.getSister();
         IPlayerWW killerWW = event.getKiller();
-        TextComponent textComponent = new TextComponent(game.translate(Prefix.YELLOW , "werewolf.roles.sister.choice"));
+        TextComponent textComponent = new TextComponent(game.translate(Prefix.YELLOW, "werewolf.roles.sister.choice"));
 
         TextComponent name = new TextComponent(
                 game.translate("werewolf.roles.sister.name"));

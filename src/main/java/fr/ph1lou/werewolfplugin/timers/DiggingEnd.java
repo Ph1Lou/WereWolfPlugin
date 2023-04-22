@@ -1,11 +1,11 @@
 package fr.ph1lou.werewolfplugin.timers;
 
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.events.game.timers.DiggingEndEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -31,10 +31,10 @@ public class DiggingEnd extends ListenerWerewolf {
     }
 
     @EventHandler
-    public void onDiggingEnd(DiggingEndEvent event){
+    public void onDiggingEnd(DiggingEndEvent event) {
         Bukkit.getOnlinePlayers()
                 .forEach(player -> {
-                    player.sendMessage(this.getGame().translate(Prefix.ORANGE , "werewolf.announcement.mining"));
+                    player.sendMessage(this.getGame().translate(Prefix.ORANGE, "werewolf.announcement.mining"));
                     Sound.ANVIL_BREAK.play(player);
                 });
     }

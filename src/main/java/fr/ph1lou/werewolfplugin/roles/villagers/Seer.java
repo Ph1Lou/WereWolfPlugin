@@ -4,13 +4,13 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -34,9 +34,8 @@ import java.util.List;
         configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.SEER_EVERY_OTHER_DAY))})
 public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
-    private int dayNumber = -8;
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
-
+    private int dayNumber = -8;
     private boolean disablePower = false;
 
     public Seer(WereWolfAPI api, IPlayerWW playerWW) {
@@ -80,14 +79,14 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
 
         if (disablePower) {
             disablePower = false;
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.roles.seer.disable");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.seer.disable");
             return;
         }
 
         setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW , "werewolf.roles.seer.see_camp_message",
+                Prefix.YELLOW, "werewolf.roles.seer.see_camp_message",
                 Formatter.timer(game, TimerBase.POWER_DURATION));
     }
 
@@ -111,7 +110,7 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
     @Override
     public void recoverPotionEffect() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION,this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION, this.getKey()));
     }
 
     public void setDisablePower() {

@@ -3,19 +3,19 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.enums.VillagerKit;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.roles.villager.VillagerKitEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
@@ -34,11 +34,11 @@ public class Villager extends RoleVillage {
     public Villager(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
         if (!game.isState(StateGame.GAME)) return;
-        
+
         villagerKit = VillagerKit.values()[(int) Math.floor(game.getRandom().nextFloat() * VillagerKit.values().length)];
-        
+
         if (game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) return;
-        
+
         Bukkit.getPluginManager().callEvent(new VillagerKitEvent(this.getPlayerWW(), villagerKit.getKey()));
     }
 
@@ -55,7 +55,7 @@ public class Villager extends RoleVillage {
 
         if (game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) return;
 
-        if(!this.isAbilityEnabled()) return;
+        if (!this.isAbilityEnabled()) return;
 
         switch (villagerKit) {
             case GOLEM:
@@ -99,7 +99,7 @@ public class Villager extends RoleVillage {
         StringBuilder sb = event.getEndMessage();
 
         sb.append(game.translate("werewolf.roles.villager.kit",
-                Formatter.format("&kit&",game.translate(villagerKit.getKey()))));
+                Formatter.format("&kit&", game.translate(villagerKit.getKey()))));
 
     }
 

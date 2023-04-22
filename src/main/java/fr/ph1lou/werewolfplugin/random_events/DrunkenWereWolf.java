@@ -1,15 +1,15 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.random_events.DrunkenWereWolfEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Event(key = EventBase.DRUNKEN_WEREWOLF, loreKey = "werewolf.random_events.drunken_werewolf.description")
+@RandomEvent(key = EventBase.DRUNKEN_WEREWOLF, loreKey = "werewolf.random_events.drunken_werewolf.description")
 public class DrunkenWereWolf extends ListenerWerewolf {
 
     private final Set<UUID> fakeList = new HashSet<>();

@@ -6,8 +6,6 @@ import org.bukkit.Bukkit;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +14,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.stream.Collectors;
 
 
@@ -60,7 +59,7 @@ public class FileUtils_ {
         }
 
 
-        try (final Writer fw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
+        try (final Writer fw = new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8)) {
 
             jsonObject.writeTo(fw, WriterConfig.PRETTY_PRINT);
             fw.flush();
@@ -82,7 +81,7 @@ public class FileUtils_ {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try (OutputStream out = new FileOutputStream(file)) {
+        try (OutputStream out = Files.newOutputStream(file.toPath())) {
             byte[] buf = new byte[1024];
             int len;
             while ((len = source.read(buf)) > 0) {
@@ -117,7 +116,7 @@ public class FileUtils_ {
         if (file.exists()) {
 
             try (final BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(file), StandardCharsets.UTF_8))) {
+                    Files.newInputStream(file.toPath()), StandardCharsets.UTF_8))) {
 
 
                 final StringBuilder text = new StringBuilder();

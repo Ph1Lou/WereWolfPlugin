@@ -33,24 +33,24 @@ public class CommandWitch implements ICommandRole {
 
 
         if (Bukkit.getPlayer(UUID.fromString(args[0])) == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = UUID.fromString(args[0]);
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
         if (!game.getConfig().isConfigActive(ConfigBase.WITCH_AUTO_RESURRECTION) && argUUID.equals(uuid)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_yourself");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
             return;
         }
 
         if (!playerWW1.isState(StatePlayer.JUDGEMENT)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_in_judgement");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_in_judgement");
             return;
         }
 
@@ -63,13 +63,13 @@ public class CommandWitch implements ICommandRole {
         Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
 
         if (witchResurrectionEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
         ((IAffectedPlayers) witch).addAffectedPlayer(playerWW1);
         game.resurrection(playerWW1);
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.witch.resuscitation_perform",
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.witch.resuscitation_perform",
                 Formatter.player(playerWW1.getName()));
     }
 }

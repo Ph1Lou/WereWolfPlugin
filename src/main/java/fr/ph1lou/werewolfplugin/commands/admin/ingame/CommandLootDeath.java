@@ -33,10 +33,10 @@ public class CommandLootDeath implements ICommand {
                 .filter(Objects::nonNull)
                 .forEach(stuffManager::addDeathLoot);
 
-        player.sendMessage(game.translate(Prefix.GREEN , "werewolf.commands.admin.loot_death.perform"));
+        player.sendMessage(game.translate(Prefix.GREEN, "werewolf.commands.admin.loot_death.perform"));
         player.setGameMode(GameMode.ADVENTURE);
 
-        if(!stuffManager.isInTempStuff(uuid)){
+        if (!stuffManager.isInTempStuff(uuid)) {
             return;
         }
         ItemStack[] items = stuffManager.recoverTempStuff(uuid);

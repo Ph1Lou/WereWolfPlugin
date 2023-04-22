@@ -39,6 +39,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -54,40 +55,41 @@ public class GameManager implements WereWolfAPI {
     private final Main main;
     private final Map<UUID, FastBoard> boards = new HashMap<>();
     private final Map<UUID, IPlayerWW> playersWW = new HashMap<>();
-    private StateGame state;
-    private Day day;
-    private boolean debug;
     private final ScoreBoard score = new ScoreBoard(this);
-    private IVoteManager voteManager = new VoteManager(this);
     private final LoversManagement loversManage = new LoversManagement(this);
     private final ModerationManager moderationManager = new ModerationManager(this);
     private final WerewolfChatHandler werewolfChatHandler = new WerewolfChatHandler();
     private final MapManager mapManager = new MapManager(this);
-    private Configuration configuration;
     private final End end = new End(this);
     private final StuffManager stuff = new StuffManager();
     private final LanguageManager languageManager = new LanguageManager(this);
     private final ListenersManager listenersManager = new ListenersManager(this);
     private final Random r = new Random(System.currentTimeMillis());
     private final UUID gameUUID = UUID.randomUUID();
+    private StateGame state;
+    private Day day;
+    private boolean debug;
+    private IVoteManager voteManager;
+    private Configuration configuration;
     private String gameName;
     private int groupSize = 5;
     private int playerSize = 0;
     private int timer = 0;
     private boolean crack = false;
     private int roleInitialSize = 0;
+    private final List<Integer> scheduleId = new ArrayList<>();
 
     private GameManager(Main main) {
         this.main = main;
     }
 
-    public static void createGame(Main main, Consumer<WereWolfAPI> game){
+    public static void createGame(Main main, Consumer<WereWolfAPI> game) {
         GameManager gameManager = new GameManager(main);
         game.accept(gameManager);
         gameManager.init();
     }
 
-    private void init(){
+    private void init() {
 
         this.debug = main.getConfig().getBoolean("debug");
         this.setDay(Day.DAY);
@@ -108,10 +110,10 @@ public class GameManager implements WereWolfAPI {
         if (this.moderationManager.getWhiteListedPlayers().contains(uuid)) {
             finalJoin(player);
         } else if (this.getPlayersCount() >= this.configuration.getPlayerMax()) {
-            player.sendMessage(translate(Prefix.RED , "werewolf.check.full"));
+            player.sendMessage(translate(Prefix.RED, "werewolf.check.full"));
             this.moderationManager.addQueue(player);
         } else if (this.configuration.isWhiteList()) {
-            player.sendMessage(translate(Prefix.RED , "werewolf.commands.admin.whitelist.player_not_whitelisted"));
+            player.sendMessage(translate(Prefix.RED, "werewolf.commands.admin.whitelist.player_not_whitelisted"));
             this.moderationManager.addQueue(player);
         } else {
             finalJoin(player);
@@ -128,7 +130,7 @@ public class GameManager implements WereWolfAPI {
         this.playerSize++;
         Bukkit.broadcastMessage(translate("werewolf.announcement.join",
                 Formatter.number(this.getPlayersCount()),
-                Formatter.format("&sum&",this.getRoleInitialSize()),
+                Formatter.format("&sum&", this.getRoleInitialSize()),
                 Formatter.player(player.getName())));
         player.setGameMode(GameMode.ADVENTURE);
         IPlayerWW playerWW = new PlayerWW(this, player);
@@ -143,12 +145,11 @@ public class GameManager implements WereWolfAPI {
             DefaultArtifactVersion loadVersion = new DefaultArtifactVersion(main.getDescription().getVersion());
 
             if (loadVersion.compareTo(siteVersion) == 0) {
-                player.sendMessage(this.translate(Prefix.GREEN , "werewolf.update.up_to_date"));
+                player.sendMessage(this.translate(Prefix.GREEN, "werewolf.update.up_to_date"));
             } else if (loadVersion.compareTo(siteVersion) < 0) {
-                player.sendMessage(this.translate(Prefix.ORANGE , "werewolf.update.out_of_date"));
-            }
-            else {
-                player.sendMessage(this.translate(Prefix.GREEN , "werewolf.update.snapshot"));
+                player.sendMessage(this.translate(Prefix.ORANGE, "werewolf.update.out_of_date"));
+            } else {
+                player.sendMessage(this.translate(Prefix.GREEN, "werewolf.update.snapshot"));
             }
         });
 
@@ -171,10 +172,6 @@ public class GameManager implements WereWolfAPI {
         Bukkit.getPluginManager().callEvent(new FinalJoinEvent(playerWW));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
         this.mapManager.transportation(playerWW, 0);
-    }
-
-    public void setState(StateGame state) {
-        this.state = state;
     }
 
     @Override
@@ -201,7 +198,6 @@ public class GameManager implements WereWolfAPI {
         return this.day == day;
     }
 
-
     @Override
     public void checkVictory() {
         end.checkVictory();
@@ -217,11 +213,13 @@ public class GameManager implements WereWolfAPI {
 
         this.listenersManager.delete();
 
+        this.cleanSchedules();
+
         this.main.createGame();
 
         GameManager newGame = (GameManager) this.main.getWereWolfAPI();
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
+        BukkitUtils.scheduleSyncDelayedTask(newGame, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 FastBoard fastboard = new FastBoard(player);
                 fastboard.updateTitle(newGame.translate("werewolf.score_board.title"));
@@ -242,11 +240,17 @@ public class GameManager implements WereWolfAPI {
         newGame.mapManager.createMap();
     }
 
+    public void cleanSchedules() {
+        this.scheduleId.removeIf(integer -> {
+            Bukkit.getScheduler().cancelTask(integer);
+            return true;
+        });
+    }
+
     @Override
     public Collection<? extends IPlayerWW> getPlayersWW() {
         return this.playersWW.values();
     }
-
 
     @Override
     public Optional<IPlayerWW> getPlayerWW(UUID uuid) {
@@ -258,7 +262,6 @@ public class GameManager implements WereWolfAPI {
         return Optional.of(this.playersWW.get(uuid));
     }
 
-
     @Override
     public IConfiguration getConfig() {
         return this.configuration;
@@ -268,18 +271,16 @@ public class GameManager implements WereWolfAPI {
         this.configuration = configuration;
     }
 
-
     @Override
     public String translate(String key, Formatter... formatters) {
-        return translate("",key,formatters);
+        return translate("", key, formatters);
     }
-
 
     @Override
     public String translate(String prefixKey, String key, Formatter... formatters) {
         String message = this.languageManager.getTranslation(key, formatters);
-        String prefix = prefixKey.isEmpty() ? "": this.languageManager.getTranslation(prefixKey);
-        return prefix+message;
+        String prefix = prefixKey.isEmpty() ? "" : this.languageManager.getTranslation(prefixKey);
+        return prefix + message;
     }
 
     @Override
@@ -300,6 +301,11 @@ public class GameManager implements WereWolfAPI {
     @Override
     public IVoteManager getVoteManager() {
         return this.voteManager;
+    }
+
+    @Override
+    public void setVoteManager(IVoteManager iVoteManager) {
+        this.voteManager = iVoteManager;
     }
 
     @Override
@@ -336,7 +342,7 @@ public class GameManager implements WereWolfAPI {
 
     @Override
     public void setGroup(int groupSize) {
-        this.groupSize=groupSize;
+        this.groupSize = groupSize;
     }
 
     @Override
@@ -344,9 +350,17 @@ public class GameManager implements WereWolfAPI {
         return this.timer;
     }
 
+    public void setTimer(int timer) {
+        this.timer = timer;
+    }
+
     @Override
     public int getRoleInitialSize() {
         return this.roleInitialSize;
+    }
+
+    public void setRoleInitialSize(int roleInitialSize) {
+        this.roleInitialSize = roleInitialSize;
     }
 
     @Override
@@ -373,6 +387,9 @@ public class GameManager implements WereWolfAPI {
         return this.state;
     }
 
+    public void setState(StateGame state) {
+        this.state = state;
+    }
 
     public boolean isDebug() {
         return this.debug;
@@ -382,28 +399,14 @@ public class GameManager implements WereWolfAPI {
         this.debug = debug;
     }
 
-
     public void remove(UUID uuid) {
-        if(this.playersWW.remove(uuid) != null){
+        if (this.playersWW.remove(uuid) != null) {
             this.playerSize--;
         }
     }
 
-    public void setRoleInitialSize(int roleInitialSize) {
-        this.roleInitialSize = roleInitialSize;
-    }
-
     public void setPlayerSize(int playerSize) {
         this.playerSize = playerSize;
-    }
-
-    public void setTimer(int timer) {
-        this.timer = timer;
-    }
-
-    @Override
-    public void setVoteManager(IVoteManager iVoteManager) {
-        this.voteManager = iVoteManager;
     }
 
     @Override
@@ -430,6 +433,11 @@ public class GameManager implements WereWolfAPI {
     @Override
     public IListenersManager getListenersManager() {
         return this.listenersManager;
+    }
+
+    @Override
+    public void addScheduleId(int id) {
+        this.scheduleId.add(id);
     }
 
     public boolean isCrack() {

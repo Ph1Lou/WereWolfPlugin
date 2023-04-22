@@ -28,8 +28,8 @@ import org.bukkit.potion.PotionEffectType;
 
 public class SmallFeaturesListener implements Listener {
 
-    private final GameManager game;
     public final static String GOLDEN_APPLE = "golden_apple";
+    private final GameManager game;
 
     public SmallFeaturesListener(WereWolfAPI game) {
         this.game = (GameManager) game;
@@ -38,29 +38,29 @@ public class SmallFeaturesListener implements Listener {
     @EventHandler
     public void onBarrierEditionInventoryMode(InventoryClickEvent event) {
 
-        if(event.getClickedInventory() == null){
+        if (event.getClickedInventory() == null) {
             return;
         }
 
-        if(event.getCurrentItem() == null){
+        if (event.getCurrentItem() == null) {
             return;
         }
 
-        if(event.getClickedInventory().getType() != InventoryType.PLAYER){
+        if (event.getClickedInventory().getType() != InventoryType.PLAYER) {
             return;
         }
 
-        if(event.getCurrentItem().getType() != Material.BARRIER){
+        if (event.getCurrentItem().getType() != Material.BARRIER) {
             return;
         }
 
-        if(event.getSlotType() != InventoryType.SlotType.ARMOR){
+        if (event.getSlotType() != InventoryType.SlotType.ARMOR) {
             return;
         }
 
         event.setCancelled(true);
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> ((Player)event.getView().getPlayer()).updateInventory());
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> ((Player) event.getView().getPlayer()).updateInventory());
     }
 
     @EventHandler
@@ -94,55 +94,56 @@ public class SmallFeaturesListener implements Listener {
     public void onAppleEat(PlayerItemConsumeEvent event) {
 
         Player player = event.getPlayer();
+        ItemStack itemStack = event.getItem();
         IPlayerWW playerWW = game.getPlayerWW(player.getUniqueId()).orElse(null);
 
         if (playerWW == null) return;
 
         if (UniversalMaterial.ENCHANTED_GOLDEN_APPLE.getStack(
-                event.getItem().getAmount()).equals(event.getItem())) {
+                itemStack.getAmount()).equals(itemStack)) {
             event.setCancelled(true);
-            BukkitUtils.scheduleSyncDelayedTask(() ->
-                    player.getInventory().remove(event.getItem()));
+            BukkitUtils.scheduleSyncDelayedTask(game, () ->
+                    player.getInventory().remove(itemStack));
 
         } else if (event.getItem().getType().equals(Material.GOLDEN_APPLE)) {
 
             event.setCancelled(true);
-            player.setFoodLevel(player.getFoodLevel()+4);
-            player.setSaturation(player.getSaturation()+9.6f);
-            BukkitUtils.scheduleSyncDelayedTask(() -> {
+            player.setFoodLevel(player.getFoodLevel() + 4);
+            player.setSaturation(player.getSaturation() + 9.6f);
 
-                ItemStack itemStack = VersionUtils.getVersionUtils().getItemInHand(player);
+            ItemStack itemStack1 = VersionUtils.getVersionUtils().getItemInHand(player);
 
-                if(itemStack.getAmount() > 1){
-                    itemStack.setAmount(itemStack.getAmount()-1);
-                    VersionUtils.getVersionUtils().setItemInHand(player,itemStack);
-                }
-                else{
-                    VersionUtils.getVersionUtils().setItemInHand(player,null);
-                }
-                if (game.getConfig().getGoldenAppleParticles() == 2) {
+            if (itemStack1.getType() != Material.GOLDEN_APPLE) {
+                return;
+            }
+
+            if (itemStack.getAmount() > 1) {
+                itemStack.setAmount(itemStack.getAmount() - 1);
+                VersionUtils.getVersionUtils().setItemInHand(player, itemStack);
+            } else {
+                VersionUtils.getVersionUtils().setItemInHand(player, null);
+            }
+            if (game.getConfig().getGoldenAppleParticles() == 2) {
+                this.addGoldenPotionEffectsWithParticles(player);
+            } else if (game.getConfig().getGoldenAppleParticles() == 1) {
+
+                GoldenAppleParticleEvent goldenAppleParticleEvent =
+                        new GoldenAppleParticleEvent(playerWW);
+
+                Bukkit.getPluginManager().callEvent(goldenAppleParticleEvent);
+
+                if (!goldenAppleParticleEvent.isCancelled()) {
                     this.addGoldenPotionEffectsWithParticles(player);
                 }
-                else if (game.getConfig().getGoldenAppleParticles() == 1) {
+            }
 
-                    GoldenAppleParticleEvent goldenAppleParticleEvent =
-                            new GoldenAppleParticleEvent(playerWW);
-
-                    Bukkit.getPluginManager().callEvent(goldenAppleParticleEvent);
-
-                    if (!goldenAppleParticleEvent.isCancelled()) {
-                        this.addGoldenPotionEffectsWithParticles(player);
-                    }
-                }
-
-                this.setGoldenAppleEffects(playerWW);
-            });
+            this.setGoldenAppleEffects(playerWW);
         }
     }
 
     private void addGoldenPotionEffectsWithParticles(Player player) {
-        player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,2400,0));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,100,1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 2400, 0));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 1));
 
     }
 

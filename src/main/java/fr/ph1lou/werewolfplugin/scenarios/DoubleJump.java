@@ -1,8 +1,8 @@
 package fr.ph1lou.werewolfplugin.scenarios;
 
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
@@ -40,8 +40,7 @@ public class DoubleJump extends ListenerWerewolf {
                 long secs = (System.currentTimeMillis() - this.jumpTime.get(uuid)) / 1000L;
                 if (secs > 15L) {
                     this.jumpTime.remove(uuid);
-                }
-                else if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
                     event.setCancelled(true);
                 }
             }
@@ -66,7 +65,7 @@ public class DoubleJump extends ListenerWerewolf {
         player.setVelocity(player.getLocation().getDirection().multiply(vel).setY(1));
 
         this.jumpTime.put(uuid, System.currentTimeMillis());
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
+        BukkitUtils.scheduleSyncDelayedTask(this.getGame(), () -> {
             if (player.isFlying()) {
                 player.setAllowFlight(false);
             }

@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -45,15 +45,15 @@ public class Rabbit extends RoleVillage {
     @Override
     public void second() {
 
-        if(!this.isAbilityEnabled()) return;
+        if (!this.isAbilityEnabled()) return;
 
         Player player = Bukkit.getPlayer(this.getPlayerUUID());
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE) || player == null) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE) || player == null) return;
 
         boolean belowHearts = this.getPlayerWW().getHealth() < 6;
 
-        if(this.belowHearts == belowHearts) return;
+        if (this.belowHearts == belowHearts) return;
 
         player.setWalkSpeed(defaultWalkSpeed * (this.belowHearts ? 1.2f : 1.1f));
         this.belowHearts = belowHearts;
@@ -62,37 +62,37 @@ public class Rabbit extends RoleVillage {
     @EventHandler
     protected void onCheckReduceDamage(EntityDamageByEntityEvent event) {
 
-        if(!this.isAbilityEnabled()) return;
+        if (!this.isAbilityEnabled()) return;
 
-        if(!(event.getEntity() instanceof Player)) return;
+        if (!(event.getEntity() instanceof Player)) return;
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if(this.getPlayerWW().getHealth() >= 12) {
+        if (this.getPlayerWW().getHealth() >= 12) {
             return;
         }
 
         IPlayerWW victimWW = this.game.getPlayerWW(event.getEntity().getUniqueId()).orElse(null);
 
-        if(victimWW == null || !victimWW.isState(StatePlayer.ALIVE)) {
+        if (victimWW == null || !victimWW.isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if(victimWW.getRole().isNeutral() || victimWW.getRole().isWereWolf()){
+        if (victimWW.getRole().isNeutral() || victimWW.getRole().isWereWolf()) {
             return;
         }
 
-        if(victimWW.getLocation().getWorld() != this.getPlayerWW().getLocation().getWorld()) {
+        if (victimWW.getLocation().getWorld() != this.getPlayerWW().getLocation().getWorld()) {
             return;
         }
 
-        if(victimWW.getLocation().distance(this.getPlayerWW().getLocation()) > 20) {
+        if (victimWW.getLocation().distance(this.getPlayerWW().getLocation()) > 20) {
             return;
         }
 
-        if(victimWW.getPotionModifiers()
+        if (victimWW.getPotionModifiers()
                 .stream()
                 .anyMatch(p -> p.getPotionEffectType() == PotionEffectType.DAMAGE_RESISTANCE)) {
             return;
@@ -106,12 +106,12 @@ public class Rabbit extends RoleVillage {
 
         if (!this.isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS,this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS, this.getKey()));
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,this.getKey(), 0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS, this.getKey(), 0));
     }
 
     @Override
@@ -124,10 +124,10 @@ public class Rabbit extends RoleVillage {
 
         if (!this.isAbilityEnabled()) return;
 
-        if(game.isDay(Day.DAY)){
+        if (game.isDay(Day.DAY)) {
             return;
         }
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS,this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS, this.getKey()));
     }
 }

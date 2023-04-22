@@ -1,21 +1,20 @@
 package fr.ph1lou.werewolfplugin.random_events;
 
-import fr.ph1lou.werewolfapi.annotations.Event;
+import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.random_events.AmnesicEvent;
 import fr.ph1lou.werewolfapi.events.random_events.AmnesicTransformEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -29,7 +28,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Event(key = EventBase.AMNESIC,
+@RandomEvent(key = EventBase.AMNESIC,
         loreKey = "werewolf.random_events.amnesic.description",
         timers = @Timer(key = Amnesic.TIMER, defaultValue = 300, meetUpValue = 180, step = 30))
 public class Amnesic extends ListenerWerewolf {
@@ -120,11 +119,7 @@ public class Amnesic extends ListenerWerewolf {
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent((Player) event.getEntity()));
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (!game.isState(StateGame.END)) {
-                this.revealWereWolf();
-            }
-        }, 20L * game.getConfig().getTimerValue(TIMER));
+        BukkitUtils.scheduleSyncDelayedTask(game, this::revealWereWolf, 20L * game.getConfig().getTimerValue(TIMER));
     }
 
 
@@ -158,14 +153,14 @@ public class Amnesic extends ListenerWerewolf {
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
 
-        playerWW.sendMessageWithKey(Prefix.ORANGE , "werewolf.roles.werewolf.new_werewolf");
+        playerWW.sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.werewolf.new_werewolf");
         Sound.WOLF_HOWL.play(playerWW);
 
-        this.temp.sendMessageWithKey(Prefix.GREEN , "werewolf.random_events.amnesic.new",
+        this.temp.sendMessageWithKey(Prefix.GREEN, "werewolf.random_events.amnesic.new",
                 Formatter.player(playerWW.getName()),
                 Formatter.timer(game, TIMER));
 
-        BukkitUtils.scheduleSyncDelayedTask(this::revealWereWolf, 20L * game.getConfig().getTimerValue(TIMER));
+        BukkitUtils.scheduleSyncDelayedTask(game, this::revealWereWolf, 20L * game.getConfig().getTimerValue(TIMER));
 
     }
 

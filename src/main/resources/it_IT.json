@@ -37,6 +37,17 @@
       }
     },
     "roles": {
+      "mire": {
+        "display": "Modello di test",
+        "description": "Quando mangiate una mela d'oro, conoscete il nome del giocatore con meno vita (in % alla sua vita massimale).\nQuando un giocatore vicino (a meno di &number& blocchi) passa sotto i 3 ♥, ricevete un messaggio.",
+        "effect": "2 ♥ di Assorbimento sotto i 3 ♥",
+        "min_health": "Il giocatore &player& è il piu basso in vita.",
+        "all_full": "Tutti i giocatori hanno la vita riempita o non c'è nessuno nelle vicinanze (§b&number&§f blocchi).",
+        "warning_death": "Un giocatore a meno di &number& blocchi da voi è sul punto di morire !",
+        "configurations": {
+          "distance": "Campo di azione del Modello di test §b&number&§r"
+        }
+      },
       "serial_killer": {
         "display": "Omicida seriale",
         "items": "Un libro Affilatezza III, un libro Protezione III e un libro Potenza III",
@@ -592,7 +603,7 @@
         "command": "fascinare",
         "timer": "Potrete uccidere il vostro fascinato &player& senza malus tra &timer&",
         "affected": "Il vostro fascinato è &player&, potete ucciderlo senza malus",
-        "reveal": "Il vostro innamoramento con &player& era in realtà falso",
+        "reveal": "La vostra coppia con &player& era una falsa coppia",
         "before_count_down": "Il vostro fascinato è morto prima della fine del timer, perdete 3 cuori permanenti",
         "lover_death": "Avete guadagnate l'effetto §bVelocità§f e 10 cuori di assorbimento visto che gli innamorati sono morti",
         "perform": "Avete appena fascinato &player&",
@@ -731,7 +742,7 @@
         "end_of_cycle": "Ricevete il contenuto del contatori =>\nContatore Aura §fNeutra§f: &neutral&§r.\n Contatore Aura 0Oscura§f: &dark&§r.\n Contatore Aura §eLuminosae§f: &light&",
         "configurations": {
           "distance": "Campo di azione del Vecchio Saggio §b&number&",
-          "begin_day": "Inizio del potere §b&number&"
+          "begin_day": "Inizio del potere al Giorno : §b&number&"
         }
       },
       "tenebrous_werewolf": {
@@ -889,6 +900,21 @@
         "reveal_pseudos": "Il nome del giocatore che avete aggiunto alla lista dei Lupi è tra : §b&names&",
         "command": "activate",
         "perform": "Il vostro potere è stato attivato"
+      },
+      "poacher": {
+        "display": "Bracconiere",
+        "actionbar_1": "§c========§r",
+        "actionbar_2": "§6========§r",
+        "description": "Votre action bar se colore en rouge à - de §b&number&§f blocs d’un cadavre de Loup.\nEn y restant §b&timer&§f, vous pouvez prendre sa fourrure.\nDès la première fourrure récupérée, vous apparaissez Loup-Garou pour tous les rôles à infos.",
+        "effects": "Une fourrure : Resistance §b10%§f puis §b+3%§f de Resistance par fourrure",
+        "fur_numbers": "Nombre de fourrures : §b&number&",
+        "recover": "Vous récuperez la fourrure de §b&player&",
+        "timers": {
+          "progress": "Durée de la récupération de la fourrure §b&timer&"
+        },
+        "configurations": {
+          "distance": "Champ d'action du Braconnier §b&number&§f blocs"
+        }
       }
     },
     "announcement": {
@@ -897,9 +923,9 @@
       "border": "Il muro comincia a spostarsi",
       "mining": "Minaggio Disattivato",
       "day": "È il giorno §b&number&§r ✸",
-      "death_message_with_role": "  §b&player&§r è morto, era §b&role&§r",
+      "death_message_with_role": "§b&player&§r è morto, era §b&role&§r",
       "death_message_with_camp": "§b&player&§r è morto, era nel campo dei §b&role&",
-      "death_message": "      §b&player&§r è morto",
+      "death_message": "§b&player&§r è morto",
       "review_role": "Per rivedere la descrizione §b/ww ruolo",
       "troll": "Va bene, lo scherzo è durato abbastanza ! Ecco il tuo vero ruolo : ",
       "lover_troll": "Il troll San Valentino è finito, il vostro innamoramento era falso",
@@ -1156,7 +1182,7 @@
             "§aAngelo, Incantatrice, Fuoco Folletto, Giocatore di Flauto, §6Cupido",
             "Ruoli con l'aura Neutra :",
             " §cLupo Mannaro Perfido, Lupo Mannaro Amnesico, Lupo Mannaro Pauroso, Lupo Mannaro Vendicatore",
-            "§bSciamano, Comediano, Fratello Siamese, Cacciatore, Anziano, Oracolo, Eremita, Guardia, Detective, Piccola Bambina, Serva dedicata",
+            "§bChaman, Comédien, Frère Siamois, Chasseur, Ancien, Oracle, Ermite, Garde, Détective, Petite Fille, Servante Dévouée, Mire, Braconnier",
             "§aImitatore, Barbaro, §6Bambino Selvaggio, Ladro, Piantagrane, Crook, Teppista",
             "Ruoli con l'aura Neutra :",
             "§cTutti gli altro Lupi Mannari",
@@ -1482,7 +1508,7 @@
         "name": "Mostra il ruolo alla morte"
       },
       "show_role_category_to_death": {
-        "name": "Mostra la Categoria del ruolo alla morte"
+        "name": "Mette il campo del Ruolo alla Morte"
       },
       "vote": {
         "name": "Voto",
@@ -1537,7 +1563,8 @@
       },
       "lone_wolf": {
         "name": "Lupo Solitario",
-        "message": "Diventate Solitario. Da ora in poi, dovete vincere da Solo. Per questa missione, beneficiate di quattro cuori permanenti supplementari (nella limite di 15 cuori massimi)"
+        "message": "Diventate Solitario. Da ora in poi, dovete vincere da Solo. Per questa missione, beneficiate di quattro cuori permanenti supplementari (nella limite di 15 cuori massimi)",
+        "timer": "Durée de déclenchement du Loup Solitaire (§b&timer&§f)"
       },
       "new_vote": {
         "name": "Nuovo voto"
@@ -1553,8 +1580,8 @@
         "description": "permette di attivare il systema di Ruoli nascosti senza avere una sacerdotessa nella composizione.\nUn giocatore nel villaggio è scelto casualmente all'inizio della partita senza che lo sappia",
         "magic": "§kCucu"
       },
-      "thiercelieu": {
-        "name": "Thiercelieu",
+      "thiercelieux": {
+        "name": "Thiercelieux",
         "description": "I morti sono annunciati la mattina"
       }
     },
@@ -1745,6 +1772,25 @@
         "perform": "La vostra voce è stata mandata o aggiornata",
         "timer_start": "Inizio dell' attivazione (§b&timer&§f)",
         "period": "Periodo di attivazione dell evento (§b&timer&§f)"
+      },
+      "not_all_werewolfs": {
+        "name": "Non Tutti Lupi",
+        "description": "Quando un Lupo (qualunque sia) muore, apparira come '' Lupo Mannaro'' nel suo messaggio di morte. La composizione messa indica soltanto il numero totale di Lupi Mannari."
+      },
+      "wolf_fleas": {
+        "name": "Pulci di Lupo",
+        "description": "Chaque joueur Loups en début de partie reçoit\n à un instant aléatoire à partir de §b&timer_start&§f et pendant §b&period&§f\n un message lui indiquant qu’il a attrapé des puces.\nDès lors, après §b&duration&§f cumulées passées à côté de tout joueur non-Loup, \ncelui-ci saura qu’un LG est proche de lui.\nPour se débarrasser définitivement de ses puces, \nun Loup doit plonger entièrement dans l’eau sans armure.",
+        "target_message": "Qualcosa vi fa prurrito...",
+        "werewolf_message": "Avete preso delle pulci ! Dovete tuffarvi completamente nell acqua e senza armatura per sbarazzarvene",
+        "cleaned": "Perdete le vostri pulci",
+        "timer_start": "Inizio dell attivazione (§b&timer&§f)",
+        "period": "Periodo di attivazione dell evento (§b&timer&§f)",
+        "duration": "Durata prima della propagazione delle pulci (§b&timer&§f)",
+        "distance": "Distanza di propagazione delle pulci §b&number&"
+      },
+      "incomplete_list": {
+        "name": "Liste à Trous",
+        "description": "Les membres du camp des Loups n’ont dans leur liste \nque le pseudo de la moitié de leurs coéquipiers. \nTout joueur qui rejoint le camp des Loups par la suite\n aura accès à l’intégralité de la liste\n et fera partie de la liste chez tous ses coéquipiers."
       }
     },
     "check": {

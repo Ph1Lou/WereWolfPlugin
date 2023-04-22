@@ -1,10 +1,10 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.info.oracle;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
-import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.oracle.OracleEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -33,14 +33,14 @@ public class CommandOracle implements ICommandRole {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
@@ -51,14 +51,14 @@ public class CommandOracle implements ICommandRole {
         Bukkit.getPluginManager().callEvent(oracleEvent);
 
         if (oracleEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
         ((IAffectedPlayers) oracle).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey(Prefix.RED , "werewolf.roles.oracle.message",
+        playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.oracle.message",
                 Formatter.player(playerWW1.getName()),
-                Formatter.format("&aura&",aura.getChatColor() + game.translate(aura.getKey())));
+                Formatter.format("&aura&", aura.getChatColor() + game.translate(aura.getKey())));
     }
 }

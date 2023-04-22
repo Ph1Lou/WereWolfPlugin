@@ -19,10 +19,10 @@ import java.util.Optional;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class ConfigurationLoader {
 
-    public static void deleteConfig(String name){
+    public static void deleteConfig(String name) {
 
         Main main = JavaPlugin.getPlugin(Main.class);
-        File fileConfigPlugin = new File(main.getDataFolder() + File.separator + "configs", name+ ".json");
+        File fileConfigPlugin = new File(main.getDataFolder() + File.separator + "configs", name + ".json");
         fileConfigPlugin.delete();
 
         main.getRegisterManager().getModulesRegister()
@@ -40,7 +40,7 @@ public class ConfigurationLoader {
 
     }
 
-    public static void saveConfig(WereWolfAPI game, String name){
+    public static void saveConfig(WereWolfAPI game, String name) {
 
         Main main = JavaPlugin.getPlugin(Main.class);
 
@@ -50,7 +50,7 @@ public class ConfigurationLoader {
 
         FileUtils_.save(file, Serializer.serialize(game.getConfig()));
 
-        ((Configuration)game.getConfig()).getStorageConfigurations()
+        ((Configuration) game.getConfig()).getStorageConfigurations()
                 .forEach(storageConfiguration -> main.getRegisterManager()
                         .getModulesRegister()
                         .stream()
@@ -69,7 +69,7 @@ public class ConfigurationLoader {
 
     }
 
-    public static void loadConfig(GameManager game, String name){
+    public static void loadConfig(GameManager game, String name) {
 
         Main main = JavaPlugin.getPlugin(Main.class);
 
@@ -87,10 +87,9 @@ public class ConfigurationLoader {
 
         Configuration config;
 
-        if(!file.exists()){
-            config =  new Configuration().setConfigurations(configurationMap);
-        }
-        else{
+        if (!file.exists()) {
+            config = new Configuration().setConfigurations(configurationMap);
+        } else {
             config = Serializer.deserialize(FileUtils_.loadContent(file))
                     .setConfigurations(configurationMap);
         }
@@ -104,13 +103,14 @@ public class ConfigurationLoader {
             game.setRoleInitialSize(game.getRoleInitialSize() + config.getRoleCount(key));
         }
     }
-    private static StorageConfiguration loadConfig(JavaPlugin plugin, String name){
+
+    private static StorageConfiguration loadConfig(JavaPlugin plugin, String name) {
 
         File file = new File(plugin.getDataFolder()
                 + File.separator + "values"
                 + File.separator, name + ".json");
 
-        if(!file.exists()){
+        if (!file.exists()) {
             return new StorageConfiguration();
         }
 

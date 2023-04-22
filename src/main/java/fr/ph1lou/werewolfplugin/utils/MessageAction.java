@@ -5,17 +5,17 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class MessageAction {
 
     private TextComponent messageComponent;
-    private String messageString="";
+    private String messageString = "";
 
-    public MessageAction(TextComponent message){
-        this.messageComponent=message;
+    public MessageAction(TextComponent message) {
+        this.messageComponent = message;
     }
 
-    public MessageAction(String message){
-        this.messageString=message;
+    public MessageAction(String message) {
+        this.messageString = message;
     }
 
-    public boolean isMessageComponent(){
+    public boolean isMessageComponent() {
         return this.messageComponent != null;
     }
 

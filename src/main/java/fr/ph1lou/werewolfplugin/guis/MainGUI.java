@@ -28,8 +28,6 @@ import java.util.UUID;
 
 public class MainGUI implements InventoryProvider {
 
-    private int surprise = 0;
-
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("config")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
@@ -38,6 +36,7 @@ public class MainGUI implements InventoryProvider {
             .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menus.main.name"))
             .closeable(true)
             .build();
+    private int surprise = 0;
 
     @Override
     public void init(Player player, InventoryContents contents) {
@@ -47,7 +46,7 @@ public class MainGUI implements InventoryProvider {
                 .setDisplayName(game.translate("werewolf.menus.whitelist.name"))
                 .build()), e -> WhiteListGUI.INVENTORY.open(player)));
 
-        contents.set(0,8,ClickableItem.of((new ItemBuilder(UniversalMaterial.ARROW.getStack())
+        contents.set(0, 8, ClickableItem.of((new ItemBuilder(UniversalMaterial.ARROW.getStack())
                 .setDisplayName(game.translate("werewolf.menus.addon.name")))
                 .build(), e -> AddonsGUI.INVENTORY.open(player)));
 
@@ -102,7 +101,7 @@ public class MainGUI implements InventoryProvider {
                 .build()), e -> AdvancedSettingsGUI.INVENTORY.open(player)));
 
         List<String> lore = new ArrayList<>();
-        if(game.isDebug()){
+        if (game.isDebug()) {
             lore.add(game.translate("werewolf.utils.debug"));
         }
 
@@ -124,7 +123,7 @@ public class MainGUI implements InventoryProvider {
                     surprise = 0;
                 }
                 List<String> lore1 = new ArrayList<>();
-                if(game.isDebug()){
+                if (game.isDebug()) {
                     lore1.add(game.translate("werewolf.utils.debug"));
                 }
                 e.setCurrentItem(new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
@@ -157,7 +156,7 @@ public class MainGUI implements InventoryProvider {
         contents.set(0, 3, ClickableItem.of((new ItemBuilder(UniversalMaterial.GOLDEN_SWORD.getStack())
                 .setDisplayName(game.translate("werewolf.menus.meet_up.button",
                         Formatter.format("&on&", game.translate(game.getConfig().isMeetUp() ?
-                                "werewolf.utils.on":
+                                "werewolf.utils.on" :
                                 "werewolf.utils.off"))))
                 .build()), e -> MeetUpGUI.INVENTORY.open(player)));
 

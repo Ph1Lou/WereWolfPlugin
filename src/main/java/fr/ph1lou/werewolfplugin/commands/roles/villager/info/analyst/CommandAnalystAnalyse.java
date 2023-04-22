@@ -1,11 +1,11 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.info.analyst;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.analyst.AnalystExtraDetailsEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -34,31 +34,31 @@ public class CommandAnalystAnalyse implements ICommandRole {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
-        if(!analyst.getAffectedPlayers().contains(playerWW1)){
-            playerWW.sendMessageWithKey(Prefix.ORANGE,"werewolf.roles.analyst.not_affected");
+        if (!analyst.getAffectedPlayers().contains(playerWW1)) {
+            playerWW.sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.analyst.not_affected");
             return;
         }
 
-        if(!analyst.isPower2()){
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.power");
+        if (!analyst.isPower2()) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
             return;
         }
 
         analyst.setPower2(false);
 
 
-        AnalystExtraDetailsEvent analystEvent = new AnalystExtraDetailsEvent(playerWW,playerWW1, playerWW1.getPotionModifiers()
+        AnalystExtraDetailsEvent analystEvent = new AnalystExtraDetailsEvent(playerWW, playerWW1, playerWW1.getPotionModifiers()
                 .stream()
                 .filter(PotionModifier::isAdd)
                 .map(PotionModifier::getPotionEffectType)
@@ -66,26 +66,25 @@ public class CommandAnalystAnalyse implements ICommandRole {
 
         Bukkit.getPluginManager().callEvent(analystEvent);
 
-        if(analystEvent.isCancelled()){
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+        if (analystEvent.isCancelled()) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
-        playerWW.sendMessageWithKey(Prefix.GREEN,"werewolf.roles.analyst.effects",
+        playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.analyst.effects",
                 Formatter.player(playerWW1.getName()),
-                Formatter.format("&list&",analystEvent.getPotions()
+                Formatter.format("&list&", analystEvent.getPotions()
                         .stream()
                         .map(PotionEffectType::getName)
                         .collect(Collectors.joining(", "))));
 
-        if(playerWW1.getRole().isCamp(Camp.VILLAGER)){
-            playerWW1.sendMessageWithKey(Prefix.RED,"werewolf.roles.analyst.call_back");
-        }
-        else{
-            playerWW1.sendMessageWithKey(Prefix.RED,"werewolf.roles.analyst.call_back_no_villager",
+        if (playerWW1.getRole().isCamp(Camp.VILLAGER)) {
+            playerWW1.sendMessageWithKey(Prefix.RED, "werewolf.roles.analyst.call_back");
+        } else {
+            playerWW1.sendMessageWithKey(Prefix.RED, "werewolf.roles.analyst.call_back_no_villager",
                     Formatter.player(playerWW.getName()));
         }
 
-        analyst.addAuraModifier(new AuraModifier(analyst.getKey(), Aura.DARK,1,false));
+        analyst.addAuraModifier(new AuraModifier(analyst.getKey(), Aura.DARK, 1, false));
     }
 }

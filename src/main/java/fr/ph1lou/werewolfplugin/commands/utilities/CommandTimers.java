@@ -19,7 +19,7 @@ public class CommandTimers implements ICommand {
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        player.sendMessage(game.translate(Prefix.BLUE,"werewolf.commands.player.timers.list"));
+        player.sendMessage(game.translate(Prefix.BLUE, "werewolf.commands.player.timers.list"));
 
         String message = Register.get().getTimersRegister()
                 .stream()
@@ -28,22 +28,22 @@ public class CommandTimers implements ICommand {
                         .compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
                 .sorted(Comparator.comparingInt(o -> game.getConfig().getTimerValue(o.getMetaDatas().key())))
                 .sorted((o1, o2) -> {
-                    if(o1.getMetaDatas().decrement() && o2.getMetaDatas().decrement()){
+                    if (o1.getMetaDatas().decrement() && o2.getMetaDatas().decrement()) {
                         return 0;
                     }
-                    if(o1.getMetaDatas().decrement()){
+                    if (o1.getMetaDatas().decrement()) {
                         return -1;
                     }
-                    if(o2.getMetaDatas().decrement()){
+                    if (o2.getMetaDatas().decrement()) {
                         return 1;
                     }
-                    if(o1.getMetaDatas().decrementAfterRole() && o2.getMetaDatas().decrementAfterRole()){
+                    if (o1.getMetaDatas().decrementAfterRole() && o2.getMetaDatas().decrementAfterRole()) {
                         return 0;
                     }
-                    if(o1.getMetaDatas().decrementAfterRole()){
+                    if (o1.getMetaDatas().decrementAfterRole()) {
                         return -1;
                     }
-                    if(o2.getMetaDatas().decrementAfterRole()){
+                    if (o2.getMetaDatas().decrementAfterRole()) {
                         return 1;
                     }
                     return 0;

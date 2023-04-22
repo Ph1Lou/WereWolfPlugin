@@ -2,20 +2,20 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
+import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
@@ -38,7 +38,7 @@ public class Assassin extends RoleNeutral {
     public void onNight(NightEvent event) {
 
         this.getPlayerWW()
-                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
+                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(), 0));
 
     }
 
@@ -48,12 +48,12 @@ public class Assassin extends RoleNeutral {
         if (!isAbilityEnabled()) return;
 
         this.getPlayerWW()
-                .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,this.getKey()));
+                .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, this.getKey()));
 
     }
 
     @EventHandler
-    public void onEnchantment(EnchantmentEvent event){
+    public void onEnchantment(EnchantmentEvent event) {
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
@@ -80,19 +80,18 @@ public class Assassin extends RoleNeutral {
                                 game.getConfig().getLimitProtectionIron() + 1));
             }
         }
-        if(event.getEnchants().containsKey(Enchantment.DAMAGE_ALL)){
+        if (event.getEnchants().containsKey(Enchantment.DAMAGE_ALL)) {
             if (item.getType().equals(Material.DIAMOND_SWORD)) {
                 event.getFinalEnchants().put(Enchantment.DAMAGE_ALL,
                         Math.min(event.getEnchants().get(Enchantment.DAMAGE_ALL),
                                 game.getConfig().getLimitSharpnessDiamond() + 1));
-            }
-            else {
+            } else {
                 event.getFinalEnchants().put(Enchantment.DAMAGE_ALL,
                         Math.min(event.getEnchants().get(Enchantment.DAMAGE_ALL),
                                 game.getConfig().getLimitSharpnessIron() + 1));
             }
         }
-        if(event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)) {
+        if (event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)) {
             event.getFinalEnchants().put(Enchantment.ARROW_DAMAGE,
                     Math.min(event.getEnchants().get(Enchantment.ARROW_DAMAGE),
                             game.getConfig().getLimitPowerBow() + 1));
@@ -123,7 +122,7 @@ public class Assassin extends RoleNeutral {
 
         if (!isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, this.getKey()));
     }
 
     @Override
@@ -134,6 +133,6 @@ public class Assassin extends RoleNeutral {
     @Override
     public void disableAbilitiesRole() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,this.getKey(),0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(), 0));
     }
 }

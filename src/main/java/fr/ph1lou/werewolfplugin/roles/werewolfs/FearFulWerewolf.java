@@ -3,10 +3,10 @@ package fr.ph1lou.werewolfplugin.roles.werewolfs;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.enums.UpdateCompositionReason;
@@ -31,11 +31,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-@Role(key = RoleBase.FEARFUL_WEREWOLF, 
-        category = Category.WEREWOLF, 
+@Role(key = RoleBase.FEARFUL_WEREWOLF,
+        category = Category.WEREWOLF,
         attributes = RoleAttribute.WEREWOLF,
         configValues = @IntValue(key = IntValueBase.FEARFUL_WEREWOLF_DISTANCE,
-        defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.MAGENTA_WOOL))
+                defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.MAGENTA_WOOL))
 public class FearFulWerewolf extends RoleWereWolf {
     public FearFulWerewolf(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -43,7 +43,7 @@ public class FearFulWerewolf extends RoleWereWolf {
 
     @Override
     public @NotNull String getDescription() {
-        return new DescriptionBuilder(game,this)
+        return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.fearful_werewolf.description",
                         Formatter.number(game.getConfig().getValue(IntValueBase.FEARFUL_WEREWOLF_DISTANCE))))
                 .setEffects(game.translate("werewolf.roles.fearful_werewolf.effects"))
@@ -56,22 +56,13 @@ public class FearFulWerewolf extends RoleWereWolf {
     }
 
     @EventHandler
-    public void onUpdateCompo(UpdateCompositionEvent event){
+    public void onUpdateCompo(UpdateCompositionEvent event) {
 
-        if(event.getReason() != UpdateCompositionReason.DEATH){
+        if (event.getReason() != UpdateCompositionReason.DEATH) {
             return;
         }
 
-        if(!event.getKey().equals(RoleBase.FEARFUL_WEREWOLF)){
-            return;
-        }
-
-        event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onVote(VoteEvent event){
-        if(!event.getPlayerWW().equals(this.getPlayerWW())){
+        if (!event.getKey().equals(RoleBase.FEARFUL_WEREWOLF)) {
             return;
         }
 
@@ -79,8 +70,17 @@ public class FearFulWerewolf extends RoleWereWolf {
     }
 
     @EventHandler
-    public void onDeath(AnnouncementDeathEvent event){
-        if(!event.getPlayerWW().equals(this.getPlayerWW())){
+    public void onVote(VoteEvent event) {
+        if (!event.getPlayerWW().equals(this.getPlayerWW())) {
+            return;
+        }
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onDeath(AnnouncementDeathEvent event) {
+        if (!event.getPlayerWW().equals(this.getPlayerWW())) {
             return;
         }
 
@@ -90,11 +90,11 @@ public class FearFulWerewolf extends RoleWereWolf {
     @EventHandler(priority = EventPriority.HIGH)
     public void onUpdate(UpdatePlayerNameTagEvent event) {
 
-        if(!event.getPlayerUUID().equals(this.getPlayerUUID())){
+        if (!event.getPlayerUUID().equals(this.getPlayerUUID())) {
             return;
         }
 
-        if(!this.getPlayerWW().isState(StatePlayer.DEATH)){
+        if (!this.getPlayerWW().isState(StatePlayer.DEATH)) {
             return;
         }
 
@@ -102,8 +102,8 @@ public class FearFulWerewolf extends RoleWereWolf {
     }
 
     @EventHandler
-    public void onLoverDeathMessage(AnnouncementLoverDeathEvent event){
-        if(event.getPlayerWW().equals(this.getPlayerWW())){
+    public void onLoverDeathMessage(AnnouncementLoverDeathEvent event) {
+        if (event.getPlayerWW().equals(this.getPlayerWW())) {
             event.setCancelled(true);
         }
     }
@@ -111,11 +111,11 @@ public class FearFulWerewolf extends RoleWereWolf {
     @Override
     public void second() {
 
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -132,57 +132,53 @@ public class FearFulWerewolf extends RoleWereWolf {
                     Location fearful = this.getPlayerWW().getLocation();
                     Location player = iPlayerWW.getLocation();
                     return (fearful.getWorld() == player.getWorld() &&
-                    fearful.distance(player) < game.getConfig().getValue(IntValueBase.FEARFUL_WEREWOLF_DISTANCE));
+                            fearful.distance(player) < game.getConfig().getValue(IntValueBase.FEARFUL_WEREWOLF_DISTANCE));
                 })
                 .count();
 
-        if(number == 0){
+        if (number == 0) {
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.add(PotionEffectType.SPEED,
                             this.getKey()));
-        }
-        else{
+        } else {
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
-                            this.getKey(),0));
+                            this.getKey(), 0));
         }
 
-        if(number >= 4){
+        if (number >= 4) {
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS,
                             this.getKey()));
-        }
-        else{
+        } else {
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
-                            this.getKey(),0));
+                            this.getKey(), 0));
         }
 
-        if(number <= 2){
-            if(game.isDay(Day.DAY)){
+        if (number <= 2) {
+            if (game.isDay(Day.DAY)) {
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,
                                 this.getKey()));
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                                RoleBase.WEREWOLF,0));
-            }
-            else{
+                                RoleBase.WEREWOLF, 0));
+            } else {
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,
                                 RoleBase.WEREWOLF));
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                                this.getKey(),0));
+                                this.getKey(), 0));
             }
-        }
-        else{
+        } else {
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
-                            RoleBase.WEREWOLF,0));
+                            RoleBase.WEREWOLF, 0));
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                            this.getKey(),0));
+                            this.getKey(), 0));
         }
     }
 
@@ -191,12 +187,12 @@ public class FearFulWerewolf extends RoleWereWolf {
 
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
-                        this.getKey(),0));
+                        this.getKey(), 0));
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                        this.getKey(),0));
+                        this.getKey(), 0));
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
-                        this.getKey(),0));
+                        this.getKey(), 0));
     }
 }

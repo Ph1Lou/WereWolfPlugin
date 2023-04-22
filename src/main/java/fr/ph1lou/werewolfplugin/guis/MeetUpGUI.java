@@ -46,7 +46,7 @@ public class MeetUpGUI implements InventoryProvider {
         contents.set(0, 4, ClickableItem.of((new ItemBuilder(game.getConfig().isMeetUp() ?
                 Material.BARRIER : UniversalMaterial.GOLDEN_SWORD.getType())
                 .setDisplayName(game.translate(game.getConfig().isMeetUp() ?
-                        "werewolf.menus.meet_up.disable":
+                        "werewolf.menus.meet_up.disable" :
                         "werewolf.menus.meet_up.enable"))
                 .setLore(game.translate("werewolf.menus.meet_up.warning"))
                 .build()), e -> {
@@ -54,13 +54,12 @@ public class MeetUpGUI implements InventoryProvider {
             game.getConfig().resetSwitchMeetUp();
             game.getListenersManager().updateListeners();
 
-            if(game.getConfig().isMeetUp()){
+            if (game.getConfig().isMeetUp()) {
                 StuffLoader.loadAllStuffMeetUP(game);
                 game.getConfig().setBorderMax(1000);
                 game.getConfig().setBorderMin(300);
                 game.getMapManager().changeBorder(game.getConfig().getBorderMax() / 2);
-            }
-            else{
+            } else {
                 StuffLoader.loadAllStuffDefault(game);
                 game.getConfig().setBorderMax(2000);
                 game.getConfig().setBorderMin(500);
@@ -71,7 +70,7 @@ public class MeetUpGUI implements InventoryProvider {
             e.setCurrentItem(new ItemBuilder(game.getConfig().isMeetUp() ?
                     Material.BARRIER : UniversalMaterial.GOLDEN_SWORD.getType())
                     .setDisplayName(game.translate(game.getConfig().isMeetUp() ?
-                            "werewolf.menus.meet_up.disable":
+                            "werewolf.menus.meet_up.disable" :
                             "werewolf.menus.meet_up.enable"))
                     .setLore(game.translate("werewolf.menus.meet_up.warning"))
                     .build());

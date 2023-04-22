@@ -3,12 +3,11 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -32,8 +31,8 @@ import java.util.Comparator;
 import java.util.Optional;
 
 
-@Role(key = RoleBase.NECROMANCER, 
-        category = Category.NEUTRAL, 
+@Role(key = RoleBase.NECROMANCER,
+        category = Category.NEUTRAL,
         attributes = RoleAttribute.NEUTRAL,
         configValues = {@IntValue(key = IntValueBase.NECROMANCER_DISTANCE,
                 defaultValue = 70, meetUpValue = 70, step = 5, item = UniversalMaterial.BLACK_WOOL)})
@@ -54,8 +53,8 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.necromancer.description",
                         Formatter.number(game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE))))
-                .setPower(game.translate(this.power?"werewolf.roles.necromancer.power_disable":
-                        "werewolf.roles.necromancer.power_enable",
+                .setPower(game.translate(this.power ? "werewolf.roles.necromancer.power_disable" :
+                                "werewolf.roles.necromancer.power_enable",
                         Formatter.number((int) Math.min(100, Math.floor(this.getProgress())))))
                 .build();
     }
@@ -66,27 +65,27 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
     }
 
     @EventHandler
-    public void OnFirstDeath(FirstDeathEvent event){
+    public void OnFirstDeath(FirstDeathEvent event) {
 
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
-        if(this.hasPower()){
+        if (this.hasPower()) {
             return;
         }
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if(this.playerWW != null){
+        if (this.playerWW != null) {
             return;
         }
 
-        if(event.getPlayerWW().getDeathLocation()
+        if (event.getPlayerWW().getDeathLocation()
                 .distance(this.getPlayerWW().getLocation())
-                > game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE)){
+                > game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE)) {
             return;
         }
 
@@ -95,7 +94,7 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
 
         Bukkit.getPluginManager().callEvent(necromancerResurrectionEvent);
 
-        if(necromancerResurrectionEvent.isCancelled()){
+        if (necromancerResurrectionEvent.isCancelled()) {
             this.getPlayerWW()
                     .sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
@@ -103,29 +102,29 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
 
         this.playerWW = event.getPlayerWW();
 
-        this.playerWW.sendMessageWithKey(Prefix.RED,"werewolf.roles.necromancer.resurrection");
+        this.playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.necromancer.resurrection");
 
         event.setCancelled(true);
 
         game.resurrection(event.getPlayerWW());
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.necromancer.perform",
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.necromancer.perform",
                 Formatter.player(event.getPlayerWW().getName()));
     }
 
     @EventHandler
-    public void OnDeath(FinalDeathEvent event){
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+    public void OnDeath(FinalDeathEvent event) {
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if(!event.getPlayerWW().equals(this.playerWW)){
+        if (!event.getPlayerWW().equals(this.playerWW)) {
             return;
         }
 
         this.playerWW = event.getPlayerWW().getLastKiller().orElse(null);
 
-        if(this.getPlayerWW().equals(this.playerWW)){
+        if (this.getPlayerWW().equals(this.playerWW)) {
             this.playerWW = Bukkit.getOnlinePlayers().stream()
                     .map(Entity::getUniqueId)
                     .filter(uuid -> !this.getPlayerUUID().equals(uuid))
@@ -142,8 +141,8 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
                     .orElse(null);
         }
 
-        if(this.playerWW != null){
-            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.roles.necromancer.new_victim",
+        if (this.playerWW != null) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.necromancer.new_victim",
                     Formatter.player(this.playerWW.getName()));
         }
     }
@@ -154,74 +153,70 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
     }
 
     @EventHandler
-    public void OnNecromancerDeath(FinalDeathEvent event){
+    public void OnNecromancerDeath(FinalDeathEvent event) {
 
-        if(!event.getPlayerWW().equals(this.getPlayerWW())){
+        if (!event.getPlayerWW().equals(this.getPlayerWW())) {
             return;
         }
 
-        if(this.playerWW == null){
+        if (this.playerWW == null) {
             return;
         }
 
-        if(!this.playerWW.isState(StatePlayer.ALIVE)){
+        if (!this.playerWW.isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        this.playerWW.sendMessageWithKey(Prefix.ORANGE,"werewolf.roles.necromancer.necromancer_death");
+        this.playerWW.sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.necromancer.necromancer_death");
 
-        int task = BukkitUtils.scheduleSyncRepeatingTask(() -> {
-            if (this.game.isState(StateGame.GAME)) {
-                playerWW.addPlayerMaxHealth(2);
-            }
-        }, 20 * 60 * 3, 20 * 60 * 3);
-        BukkitUtils.scheduleSyncDelayedTask(() -> Bukkit.getScheduler().cancelTask(task), this.health * 20 * 61 * 3L);
+        int task = BukkitUtils.scheduleSyncRepeatingTask(game, () -> playerWW.addPlayerMaxHealth(2), 20 * 60 * 3, 20 * 60 * 3);
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getScheduler().cancelTask(task), this.health * 20 * 61 * 3L);
     }
 
     @Override
     public void second() {
 
-        if(this.playerWW == null){
+        if (this.playerWW == null) {
             return;
         }
 
-        if(!this.isAbilityEnabled()){
+        if (!this.isAbilityEnabled()) {
             return;
         }
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if(this.health >= 7){
+        if (this.health >= 7) {
             return;
         }
 
-        if(!this.playerWW.isState(StatePlayer.ALIVE)){
+        if (!this.playerWW.isState(StatePlayer.ALIVE)) {
             return;
         }
 
         double distance = this.playerWW.getLocation()
                 .distance(this.getPlayerWW().getLocation());
 
-        if(distance >
-                game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE)){
+        if (distance >
+                game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE)) {
             return;
         }
 
         this.progress += game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE) /
-                Math.max(distance, game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE)/4f)
+                Math.max(distance, game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE) / 4f)
                 *
                 1 / 6f;
 
-        if(this.progress >= 100){
+        if (this.progress >= 100) {
             this.progress = 0;
             health++;
             this.playerWW.removePlayerMaxHealth(2);
             this.getPlayerWW().addPlayerMaxHealth(2);
-            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,"werewolf.roles.necromancer.steal",
+            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.necromancer.steal",
                     Formatter.player(this.playerWW.getName()));
-            this.playerWW.sendMessageWithKey(Prefix.RED,"werewolf.roles.necromancer.necromancer_steal");
+            this.playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.necromancer.necromancer_steal");
         }
     }
 

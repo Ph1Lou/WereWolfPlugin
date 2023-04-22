@@ -18,10 +18,10 @@ import fr.ph1lou.werewolfplugin.save.StuffLoader;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.Collections;
 
 public class SaveGUI implements InventoryProvider {
 
@@ -30,10 +30,11 @@ public class SaveGUI implements InventoryProvider {
             .id("save")
             .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
             .provider(new SaveGUI())
-            .size(2, 9)
+            .size(3, 9)
             .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menus.save.name"))
             .closeable(true)
             .build();
+    private static final int SAVE_MAX = 17;
 
     private int j = 0;
 
@@ -42,7 +43,8 @@ public class SaveGUI implements InventoryProvider {
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);
         WereWolfAPI game = main.getWereWolfAPI();
-        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menus.return")).build()), e -> MainGUI.INVENTORY.open(player)));
+        contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menus.return")).build()),
+                e -> MainGUI.INVENTORY.open(player)));
     }
 
     @Override
@@ -54,71 +56,72 @@ public class SaveGUI implements InventoryProvider {
         File repertoire = new File(main.getDataFolder() + File.separator + "configs");
         File[] files = repertoire.listFiles();
 
-        contents.set(1, 0, ClickableItem.of((new ItemBuilder(Material.EMERALD_BLOCK).setDisplayName(game.translate("werewolf.menus.save.new")).build()), e -> new AnvilGUI.Builder()
-                .onComplete((player2, text) -> {
-                    if(text.isEmpty()){
-                        return AnvilGUI.Response.text("Incorrect.");
-                    }
-                    save(main, text, player);
-                    return AnvilGUI.Response.close();
-                })
-                .title(game.translate("werewolf.menus.save.save_menu"))
-                .itemLeft(new ItemStack(Material.EMERALD_BLOCK))
-                .plugin(main)
-                .onClose((player2) -> BukkitUtils.scheduleSyncDelayedTask(() -> SaveGUI.INVENTORY.open(player)))
-                .open(player)));
+        contents.set(2, 0, ClickableItem.of(
+                (new ItemBuilder(Material.EMERALD_BLOCK).setDisplayName(game.translate("werewolf.menus.save.new")).build())
+                , e -> new AnvilGUI.Builder()
+                        .text(game.translate("werewolf.menus.save.save_name"))
+                        .onComplete((completion) -> {
+                            save(main, completion.getText(), player);
+                            return Collections.singletonList(AnvilGUI.ResponseAction.close());
+                        })
+                        .itemLeft(UniversalMaterial.FEATHER.getStack())
+                        .onClose((player2) -> BukkitUtils.scheduleSyncDelayedTask(game, () -> SaveGUI.INVENTORY.open(player2)))
+                        .title(game.translate("werewolf.menus.save.save_menu"))
+                        .plugin(main)
+                        .open(player)));
 
         if (files == null) return;
 
         if (j >= files.length) {
-            j = Math.max(0, Math.min(8, files.length) - 1);
+            j = Math.max(0, Math.min(SAVE_MAX, files.length) - 1);
         }
 
+        for (int i = 0; i < SAVE_MAX; i++) {
 
-        for (int i = 0; i < 8; i++) {
+            int column = (i + 1) / 9;
+            int row = (i + 1) % 9;
 
-            if (i >= Math.min(files.length, 8)) {
-
-                contents.set(0, i + 1, null);
+            if (i >= Math.min(files.length, SAVE_MAX)) {
+                contents.set(column, row, null);
             } else if (i == j) {
-                contents.set(0, i + 1,
+                contents.set(column, row,
                         ClickableItem.empty((new ItemBuilder(UniversalMaterial.FEATHER.getType())
                                 .setDisplayName(game.translate("werewolf.menus.save.configuration",
-                                        Formatter.format("&save&",files[i].getName()))).build())));
+                                        Formatter.format("&save&", files[i].getName()))).build())));
             } else {
                 int finalI = i;
-                contents.set(0, i + 1, ClickableItem.of((new ItemBuilder(UniversalMaterial.PAPER.getType())
+                contents.set(column, row, ClickableItem.of((new ItemBuilder(UniversalMaterial.PAPER.getType())
                         .setDisplayName(game.translate("werewolf.menus.save.configuration",
-                                Formatter.format("&save&",files[i].getName())))
+                                Formatter.format("&save&", files[i].getName())))
                         .build()), e -> j = finalI));
             }
         }
 
         if (files.length != 0) {
-            contents.set(1, 3,
+            contents.set(2, 3,
                     ClickableItem.of((new ItemBuilder(
                             UniversalMaterial.BED.getType())
                             .setDisplayName(game.translate("werewolf.menus.save.load",
-                                    Formatter.format("&save&",files[j].getName())))
+                                    Formatter.format("&save&", files[j].getName())))
                             .build()), e -> {
                         load(main);
-                        player.sendMessage(game.translate(Prefix.GREEN , "werewolf.menus.save.load_message",
-                                Formatter.format("&save&",files[j].getName())));
+                        player.sendMessage(game.translate(Prefix.GREEN, "werewolf.menus.save.load_message",
+                                Formatter.format("&save&", files[j].getName())));
                     }));
-            contents.set(1, 5, ClickableItem.of((
+            contents.set(2, 5, ClickableItem.of((
                     new ItemBuilder(UniversalMaterial.BARRIER.getType())
                             .setDisplayName(game.translate("werewolf.menus.save.delete",
-                                    Formatter.format("&save&",files[j].getName())))
+                                    Formatter.format("&save&", files[j].getName())))
                             .build()), e -> {
-                player.sendMessage(game.translate(Prefix.RED , "werewolf.menus.save.delete_message",
-                        Formatter.format("&save&",files[j].getName())));
+                player.sendMessage(game.translate(Prefix.RED, "werewolf.menus.save.delete_message",
+                        Formatter.format("&save&", files[j].getName())));
                 erase(main);
+                update(player, contents);
             }));
         } else {
-            contents.set(1, 3, null);
-            contents.set(1, 5, null);
+            contents.set(2, 3, null);
+            contents.set(2, 5, null);
         }
-
     }
 
 
@@ -138,11 +141,13 @@ public class SaveGUI implements InventoryProvider {
         WereWolfAPI game = main.getWereWolfAPI();
         File repertoire = new File(main.getDataFolder() + File.separator + "configs");
         File[] files = repertoire.listFiles();
-        if (files == null || files.length < 8) {
+        if (files == null || files.length < SAVE_MAX) {
             ConfigurationLoader.saveConfig(game, saveName);
             StuffLoader.saveStuff(game, saveName);
-            player.sendMessage(game.translate(Prefix.GREEN , "werewolf.menus.save.success"));
-        } else player.sendMessage(game.translate(Prefix.RED , "werewolf.menus.save.failure"));
+            player.sendMessage(game.translate(Prefix.GREEN, "werewolf.menus.save.success"));
+        } else {
+            player.sendMessage(game.translate(Prefix.RED, "werewolf.menus.save.failure"));
+        }
     }
 
     public void erase(Main main) {

@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
 
 public class Admin implements TabExecutor {
 
-    private final Main main;
     private static Admin instance;
-    private final Map<String ,ICommand> commands = new HashMap<>();
+    private final Main main;
+    private final Map<String, ICommand> commands = new HashMap<>();
 
     public Admin(Main main) {
         this.main = main;
@@ -40,20 +40,21 @@ public class Admin implements TabExecutor {
 
     }
 
-    public <T> T instantiate(Class<T> clazz){
+    public static Admin get() {
+        return instance;
+    }
 
-        if(ICommand.class.isAssignableFrom(clazz)){
+    public <T> T instantiate(Class<T> clazz) {
+
+        if (ICommand.class.isAssignableFrom(clazz)) {
             try {
                 return clazz.getConstructor().newInstance();
-            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException |
+                     InvocationTargetException e) {
                 e.printStackTrace();
             }
         }
         return null;
-    }
-
-    public static Admin get() {
-        return instance;
     }
 
     @Override
@@ -62,7 +63,7 @@ public class Admin implements TabExecutor {
         WereWolfAPI game = main.getWereWolfAPI();
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(game.translate(Prefix.RED , "werewolf.check.console"));
+            sender.sendMessage(game.translate(Prefix.RED, "werewolf.check.console"));
             return true;
         }
 
@@ -92,7 +93,7 @@ public class Admin implements TabExecutor {
                     found.set(true);
                 });
 
-        if (!found.get() && !commandName.equals("h")) {
+        if (!found.get() && game.getModerationManager().isStaff(player.getUniqueId())) {
             execute("h", player, new String[0]);
         }
     }
@@ -106,15 +107,15 @@ public class Admin implements TabExecutor {
                 Arrays.stream(adminCommand.statesGame())
                         .noneMatch(stateGame -> stateGame == game.getState())) {
             if (seePermissionMessages) {
-                player.sendMessage(game.translate(Prefix.RED , "werewolf.check.state"));
+                player.sendMessage(game.translate(Prefix.RED, "werewolf.check.state"));
             }
             return false;
         }
 
         if (adminCommand.argNumbers().length > 0 &&
-            Arrays.stream(adminCommand.argNumbers()).noneMatch(value -> value == args)) {
+                Arrays.stream(adminCommand.argNumbers()).noneMatch(value -> value == args)) {
             if (seePermissionMessages) {
-                player.sendMessage(game.translate(Prefix.RED , "werewolf.check.parameters",
+                player.sendMessage(game.translate(Prefix.RED, "werewolf.check.parameters",
                         Formatter.number(Arrays.stream(adminCommand.argNumbers()).min().orElse(0))));
             }
             return false;
@@ -122,7 +123,7 @@ public class Admin implements TabExecutor {
 
         if (!checkPermission(adminCommand, player)) {
             if (seePermissionMessages) {
-                player.sendMessage(game.translate(Prefix.RED , "werewolf.check.permission_denied"));
+                player.sendMessage(game.translate(Prefix.RED, "werewolf.check.permission_denied"));
             }
             return false;
         }

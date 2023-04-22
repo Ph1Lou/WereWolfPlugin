@@ -32,26 +32,26 @@ public class CommandWildChild implements ICommandRole {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
         if (argUUID.equals(uuid)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.not_yourself");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
             return;
         }
 
         ((IAffectedPlayers) wildChild).addAffectedPlayer(playerWW1);
         ((IPower) wildChild).setPower(false);
         Bukkit.getPluginManager().callEvent(new ModelEvent(playerWW, playerWW1));
-        playerWW.sendMessageWithKey(Prefix.YELLOW , "werewolf.roles.wild_child.reveal_model",
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.wild_child.reveal_model",
                 Formatter.player(playerArg.getName()));
     }
 }

@@ -1,22 +1,21 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
-
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.elder.ElderResurrectionEvent;
-import fr.ph1lou.werewolfapi.role.interfaces.IPower;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.interfaces.IPower;
+import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -65,10 +64,14 @@ public class Elder extends RoleVillage implements IPower {
     @Override
     public void recoverPotionEffect() {
 
-        if(!isAbilityEnabled()) return;
+        if (!isAbilityEnabled()) return;
+
+        if(!this.power){
+            return;
+        }
 
         this.getPlayerWW().addPotionModifier(PotionModifier
-                .add(PotionEffectType.DAMAGE_RESISTANCE,this.getKey()));
+                .add(PotionEffectType.DAMAGE_RESISTANCE, this.getKey()));
     }
 
     @Override
@@ -102,20 +105,20 @@ public class Elder extends RoleVillage implements IPower {
         setPower(false);
 
         if (elderResurrectionEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
         } else {
             if (elderResurrectionEvent.isKillerAVillager()) {
                 killerWW.ifPresent(playerWW -> {
                     playerWW.removePlayerHealth(10);
                     playerWW.getRole().disableAbilities();
-                    playerWW.sendMessageWithKey(Prefix.RED,"werewolf.roles.elder.info_villager");
+                    playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.elder.info_villager");
                 });
-            }
-            else{
+            } else {
                 killerWW.ifPresent(playerWW -> {
-                    if(playerWW.getRole().isWereWolf()){
+                    if (playerWW.getRole().isWereWolf()) {
                         event.setCancelled(true);
                         game.resurrection(getPlayerWW());
+                        this.disableAbilities();
                     }
                 });
             }
@@ -126,6 +129,6 @@ public class Elder extends RoleVillage implements IPower {
     public void disableAbilitiesRole() {
 
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
-                this.getKey(),0));
+                this.getKey(), 0));
     }
 }

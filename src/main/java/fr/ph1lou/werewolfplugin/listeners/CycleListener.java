@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
-import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Day;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayWillComeEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -37,7 +37,7 @@ public class CycleListener implements Listener {
 
         game.getMapManager().getWorld().setTime(23500);
 
-        Bukkit.broadcastMessage(game.translate(Prefix.ORANGE , "werewolf.announcement.day",
+        Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.announcement.day",
                 Formatter.number(event.getNumber())));
         groupSizeChange();
 
@@ -47,12 +47,7 @@ public class CycleListener implements Listener {
         if (2L * game.getConfig().getTimerValue(TimerBase.DAY_DURATION)
                 - duration > 0) {
 
-            BukkitUtils.scheduleSyncDelayedTask(() -> {
-
-                if (!game.isState(StateGame.END)) {
-                    Bukkit.getPluginManager().callEvent(new SelectionEndEvent());
-                }
-            }, duration * 20);
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new SelectionEndEvent()), duration * 20);
 
         }
     }
@@ -66,38 +61,26 @@ public class CycleListener implements Listener {
 
         if (game.isState(StateGame.END)) return;
 
-        if(event.getNumber()%2==0){
-            BukkitUtils.scheduleSyncDelayedTask(() -> {
-                if(!game.isState(StateGame.END)){
-                    String message = StatistiksUtils.getMessage();
-                    if(!message.isEmpty()){
-                        Bukkit.broadcastMessage(message);
-                    }
+        if (event.getNumber() % 2 == 0) {
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+                String message = StatistiksUtils.getMessage();
+                if (!message.isEmpty()) {
+                    Bukkit.broadcastMessage(message);
                 }
             }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 10L);
         }
 
         game.getMapManager().getWorld().setTime(12000);
 
-        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW , "werewolf.announcement.night",
+        Bukkit.broadcastMessage(game.translate(Prefix.YELLOW, "werewolf.announcement.night",
                 Formatter.number(event.getNumber())));
         groupSizeChange();
 
         if (duration > 0) {
-            BukkitUtils.scheduleSyncDelayedTask(() -> {
-                if (!game.isState(StateGame.END)) {
-                    Bukkit.getPluginManager().callEvent(new DayWillComeEvent());
-                }
-
-            }, duration * 20);
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new DayWillComeEvent()), duration * 20);
         }
 
-        BukkitUtils.scheduleSyncDelayedTask(() -> {
-            if (!game.isState(StateGame.END)) {
-                Bukkit.getPluginManager().callEvent(new DayEvent(event.getNumber() + 1));
-            }
-
-        }, (duration + 30) * 20);
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new DayEvent(event.getNumber() + 1)), (duration + 30) * 20);
     }
 
     public void groupSizeChange() {
@@ -109,7 +92,7 @@ public class CycleListener implements Listener {
                     .forEach(player -> {
                         player.sendMessage(
                                 game.translate(
-                                        Prefix.ORANGE , "werewolf.commands.admin.group.group_change",
+                                        Prefix.ORANGE, "werewolf.commands.admin.group.group_change",
                                         Formatter.number(game.getGroup())));
                         VersionUtils.getVersionUtils().sendTitle(
                                 player,

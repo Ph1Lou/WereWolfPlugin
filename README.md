@@ -1,4 +1,8 @@
-# WereWolfPlugin
+# WereWolfPlugin / LG UHC
+
+[![Crowdin](https://badges.crowdin.net/plugin-werewolf-uhc/localized.svg)](https://crowdin.com/project/plugin-werewolf-uhc)
+
+This project is a minecraft spigot plugin to play UHC Werewolf.
 
 # Découvrez l'API du plugin ici
 
@@ -6,20 +10,11 @@
 
 # Librairies use
 
-## For the ScoreBoard 
-<https://github.com/MrMicky-FR/FastBoard>
-
-## For the GUI 
-<https://github.com/MinusKube/SmartInvs>
-
-## For get input for save name 
-<https://github.com/WesJD/AnvilGUI>
-
-## Spigot api 
-<https://www.spigotmc.org/>
-
-## Patch Biomes
-<https://github.com/Mezy/BiomeMapping>
+<https://github.com/MrMicky-FR/FastBoard>  
+<https://github.com/MinusKube/SmartInvs>  
+<https://github.com/WesJD/AnvilGUI>  
+<https://www.spigotmc.org/>  
+<https://github.com/Mezy/BiomeMapping>  
 
 ## License
 

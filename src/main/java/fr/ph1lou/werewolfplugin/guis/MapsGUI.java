@@ -53,10 +53,10 @@ public class MapsGUI implements InventoryProvider {
             contents.set(0, i, ClickableItem.of((
                             new ItemBuilder(UniversalMaterial.MAP.getType())
                                     .setDisplayName(game.translate("werewolf.menus.maps.map",
-                                            Formatter.format("&world&",file.getName()))).build()),
+                                            Formatter.format("&world&", file.getName()))).build()),
                     e -> {
                         if (!game.isState(StateGame.LOBBY)) {
-                            player.sendMessage(game.translate(Prefix.RED , "werewolf.check.game_in_progress"));
+                            player.sendMessage(game.translate(Prefix.RED, "werewolf.check.game_in_progress"));
                             return;
                         }
                         game.getMapManager().loadMap(file);
@@ -68,9 +68,9 @@ public class MapsGUI implements InventoryProvider {
         contents.set(1, 1, ClickableItem.of((
                         new ItemBuilder(UniversalMaterial.LAVA_BUCKET.getType())
                                 .setDisplayName(game.translate("werewolf.menus.maps.new")).build()),
-                e -> BukkitUtils.scheduleSyncDelayedTask(() -> {
+                e -> BukkitUtils.scheduleSyncDelayedTask(game, () -> {
                     if (!game.isState(StateGame.LOBBY)) {
-                        player.sendMessage(game.translate(Prefix.RED , "werewolf.check.game_in_progress"));
+                        player.sendMessage(game.translate(Prefix.RED, "werewolf.check.game_in_progress"));
                         return;
                     }
                     player.closeInventory();

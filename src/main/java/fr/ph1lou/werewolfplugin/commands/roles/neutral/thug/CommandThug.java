@@ -32,19 +32,19 @@ public class CommandThug implements ICommandRole {
         Player playerArg = Bukkit.getPlayer(args[0]);
 
         if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.offline_player");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
             return;
         }
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
         if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.player_not_found");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
         if (((IAffectedPlayers) thug).getAffectedPlayers().contains(playerWW1)) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.already_get_power");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.already_get_power");
             return;
         }
 
@@ -56,16 +56,16 @@ public class CommandThug implements ICommandRole {
         Bukkit.getPluginManager().callEvent(thugEvent);
 
         if (thugEvent.isCancelled()) {
-            playerWW.sendMessageWithKey(Prefix.RED , "werewolf.check.cancel");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
         ((IAffectedPlayers) thug).clearAffectedPlayer();
         ((IAffectedPlayers) thug).addAffectedPlayer(playerWW1);
 
-        playerWW.sendMessageWithKey(Prefix.YELLOW,"werewolf.roles.thug.perform",Formatter.player(playerWW1.getName()));
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.thug.perform", Formatter.player(playerWW1.getName()));
 
-        playerWW1.sendMessageWithKey(Prefix.RED,"werewolf.roles.thug.alert");
+        playerWW1.sendMessageWithKey(Prefix.RED, "werewolf.roles.thug.alert");
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW1));
     }
