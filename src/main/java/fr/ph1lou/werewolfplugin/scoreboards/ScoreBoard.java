@@ -9,6 +9,8 @@ import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
+import fr.ph1lou.werewolfapi.game.IScoreboard;
+import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.Utils;
@@ -26,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class ScoreBoard {
+public class ScoreBoard implements IScoreboard {
 
     private final GameManager game;
     private final List<String> scoreboardLobby = new ArrayList<>();
@@ -35,20 +37,45 @@ public class ScoreBoard {
     private final List<String> roles = new ArrayList<>();
     private int day;
     private String dayState;
+    private final List<Formatter> formatters = new ArrayList<>();
 
     public ScoreBoard(GameManager game) {
         this.game = game;
+        this.formatters.add(Formatter.format("&players&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getPlayersCount())));
+        this.formatters.add(Formatter.format("&roles&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getRoleInitialSize())));
+        this.formatters.add(Formatter.format("&max&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getConfig().getPlayerMax())));
+        this.formatters.add(Formatter.format("&name&", WereWolfAPI::getGameName));
+
+        this.formatters.add(Formatter.format("&timer&", (wereWolfAPI) -> Utils.conversion(wereWolfAPI.getTimer())));
+        this.formatters.add(Formatter.format("&day&", (wereWolfAPI) -> String.valueOf(this.day)));
+        this.formatters.add(Formatter.format("&group&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getGroup())));
+        this.formatters.add(Formatter.format("&border&", (wereWolfAPI) -> {
+            if (game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN) > 0) {
+                return Utils.conversion(game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN));
+            }
+            return game.translate("werewolf.utils.on");
+        }));
+        this.formatters.add(Formatter.format("&daystate&", (wereWolfAPI) -> this.dayState));
+
+        this.formatters.add(Formatter.format("&border_size&", (wereWolfAPI) -> {
+
+                    WorldBorder wb = wereWolfAPI.getMapManager().getWorld().getWorldBorder();
+                    String borderSize = String.valueOf(Math.round(wb.getSize()));
+
+                    if (game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN) <= 0) {
+                        if (wb.getSize() != wereWolfAPI.getConfig().getBorderMin()) {
+                            return borderSize + " > " + wereWolfAPI.getConfig().getBorderMin();
+                        }
+                    }
+                    return borderSize;
+                }));
     }
 
     public void updateScoreBoard1() {
 
         scoreboardLobby.clear();
 
-        scoreboardLobby.addAll(game.translateArray("werewolf.score_board.scoreboard_lobby",
-                        Formatter.format("&players&", game.getPlayersCount()),
-                        Formatter.format("&roles&", game.getRoleInitialSize()),
-                        Formatter.format("&max&", game.getConfig().getPlayerMax()),
-                        Formatter.format("&name&", game.getGameName()))
+        scoreboardLobby.addAll(game.translateArray("werewolf.score_board.scoreboard_lobby", formatters.toArray(new Formatter[0]))
                 .stream()
                 .map(s -> s.substring(0, Math.min(30, s.length())))
                 .collect(Collectors.toList()));
@@ -90,18 +117,7 @@ public class ScoreBoard {
 
     private void updateGlobalScoreBoard2() {
 
-        WorldBorder wb = game.getMapManager().getWorld().getWorldBorder();
-        String borderSize = String.valueOf(Math.round(wb.getSize()));
-        String border;
 
-        if (game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN) > 0) {
-            border = Utils.conversion(game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN));
-        } else {
-            border = game.translate("werewolf.utils.on");
-            if (wb.getSize() != game.getConfig().getBorderMin()) {
-                borderSize = borderSize + " > " + game.getConfig().getBorderMin();
-            }
-        }
 
         scoreboardGame.clear();
 
@@ -112,14 +128,7 @@ public class ScoreBoard {
 
 
         scoreboardGame.addAll(game.translateArray("werewolf.score_board.scoreboard_game",
-                        Formatter.timer(Utils.conversion(game.getTimer())),
-                        Formatter.format("&day&", this.day),
-                        Formatter.format("&players&", game.getPlayersCount()),
-                        Formatter.format("&group&", game.getGroup()),
-                        Formatter.format("&border&", border),
-                        Formatter.format("&daystate&", this.dayState),
-                        Formatter.format("&border_size&", borderSize),
-                        Formatter.format("&name&", game.getGameName()))
+                        formatters.toArray(new Formatter[0]))
                 .stream()
                 .map(s -> s.substring(0, Math.min(30, s.length())))
                 .collect(Collectors.toList()));
@@ -188,10 +197,13 @@ public class ScoreBoard {
 
                 composition = composition.subList(inf, Math.min(composition.size(), inf + 6));
 
+                List<Formatter> formatters1 = new ArrayList<>(this.formatters);
+                formatters1.add(Formatter.format("&current&", inf / 6 + 1));
+                formatters1.add(Formatter.format("&sum&", total));
+                formatters1.add(Formatter.format("&name&", game.getGameName()));
+
                 this.roles.addAll(game.translateArray("werewolf.score_board.scoreboard_role",
-                                Formatter.format("&current&", inf / 6 + 1),
-                                Formatter.format("&sum&", total),
-                                Formatter.format("&name&", game.getGameName()))
+                                formatters1.toArray(new Formatter[0]))
                         .stream()
                         .map(s -> s.substring(0, Math.min(30, s.length())))
                         .collect(Collectors.toList()));
@@ -215,7 +227,7 @@ public class ScoreBoard {
                 .collect(Collectors.toList());
 
         scoreboardScore.addAll(game.translateArray("werewolf.score_board.scoreboard_score",
-                        Formatter.format("&name&", game.getGameName()))
+                        this.formatters.toArray(new Formatter[0]))
                 .stream()
                 .map(s -> s.substring(0, Math.min(30, s.length())))
                 .collect(Collectors.toList()));
@@ -254,18 +266,15 @@ public class ScoreBoard {
         String bot = "";
 
         if (game.isState(StateGame.START) || game.isState(StateGame.GAME)) {
-            bot = game.translate("werewolf.tab.timer",
-                    Formatter.timer(Utils.conversion(game.getTimer())),
-                    Formatter.format("&day&", day),
-                    Formatter.format("&day_state&", dayState));
+            bot = game.translate("werewolf.tab.timer", this.formatters.toArray(new Formatter[0]));
         }
 
-        bot += game.translate("werewolf.tab.bot");
+        bot += game.translate("werewolf.tab.bot", this.formatters.toArray(new Formatter[0]));
 
         for (FastBoard board : game.getBoards().values()) {
 
             VersionUtils.getVersionUtils().sendTabTitle(board.getPlayer(),
-                    game.translate("werewolf.tab.top"),
+                    game.translate("werewolf.tab.top", this.formatters.toArray(new Formatter[0])),
                     bot);
 
             if (game.isState(StateGame.END)) {
@@ -279,5 +288,11 @@ public class ScoreBoard {
             }
         }
 
+    }
+
+    @Override
+    public IScoreboard addFormatter(Formatter formatter) {
+        this.formatters.add(formatter);
+        return this;
     }
 }

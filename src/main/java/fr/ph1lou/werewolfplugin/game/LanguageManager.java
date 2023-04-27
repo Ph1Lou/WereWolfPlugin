@@ -59,7 +59,7 @@ public class LanguageManager implements ILanguageManager {
                             .map(s -> {
                                 String message = s;
                                 for (Formatter formatter : formatters) {
-                                    message = formatter.handle(message);
+                                    message = formatter.handle(game, message);
                                 }
                                 return message;
                             })
@@ -88,7 +88,7 @@ public class LanguageManager implements ILanguageManager {
                 if (jsonValue.isString()) {
                     String message = jsonValue.asString();
                     for (Formatter formatter : formatters) {
-                        message = formatter.handle(message);
+                        message = formatter.handle(game, message);
                     }
                     return message;
                 } else {

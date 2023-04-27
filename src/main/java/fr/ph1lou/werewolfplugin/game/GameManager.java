@@ -15,6 +15,7 @@ import fr.ph1lou.werewolfapi.game.ILanguageManager;
 import fr.ph1lou.werewolfapi.game.IListenersManager;
 import fr.ph1lou.werewolfapi.game.IMapManager;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
+import fr.ph1lou.werewolfapi.game.IScoreboard;
 import fr.ph1lou.werewolfapi.game.IStuffManager;
 import fr.ph1lou.werewolfapi.game.IWerewolfChatHandler;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -440,6 +441,11 @@ public class GameManager implements WereWolfAPI {
         this.scheduleId.add(id);
     }
 
+    @Override
+    public IScoreboard getScoreboard() {
+        return this.score;
+    }
+
     public boolean isCrack() {
         return crack;
     }
@@ -447,9 +453,4 @@ public class GameManager implements WereWolfAPI {
     public void setCrack() {
         this.crack = true;
     }
-
-    public ScoreBoard getScore() {
-        return this.score;
-    }
-
 }

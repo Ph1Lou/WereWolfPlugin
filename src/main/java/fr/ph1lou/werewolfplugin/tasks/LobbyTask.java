@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.tasks;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfplugin.game.GameManager;
+import fr.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
@@ -23,7 +24,7 @@ public class LobbyTask extends BukkitRunnable {
             return;
         }
 
-        game.getScore().updateBoard();
+        ((ScoreBoard) game.getScoreboard()).updateBoard();
 
         if (game.isState(StateGame.TRANSPORTATION)) {
             cancel();

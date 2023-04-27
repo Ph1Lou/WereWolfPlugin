@@ -13,6 +13,7 @@ import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.game.Configuration;
 import fr.ph1lou.werewolfplugin.game.GameManager;
+import fr.ph1lou.werewolfplugin.scoreboards.ScoreBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
@@ -36,13 +37,13 @@ public class GameTask extends BukkitRunnable {
     public void run() {
 
         if (game.isState(StateGame.END)) {
-            game.getScore().updateBoard();
+            ((ScoreBoard) game.getScoreboard()).updateBoard();
             cancel();
             return;
         }
 
         World world = game.getMapManager().getWorld();
-        game.getScore().updateBoard();
+        ((ScoreBoard) game.getScoreboard()).updateBoard();
 
 
         game.getPlayersWW()
