@@ -35,6 +35,10 @@ public class ChatListener implements Listener {
     @EventHandler
     private void onCommand(PlayerCommandPreprocessEvent event) {
 
+        if(event.isCancelled()){
+            return;
+        }
+
         Player player = event.getPlayer();
         String[] args = event.getMessage().split(" ");
         IModerationManager moderationManager = game.getModerationManager();
