@@ -11,6 +11,7 @@ import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
+import fr.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -27,7 +28,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Role(key = RoleBase.RAVEN,
         category = Category.VILLAGER,
@@ -106,6 +110,12 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
         return Aura.DARK;
     }
 
+    @Override
+    public Set<IPlayerWW> getPlayersMet() {
+        return game.getPlayersWW().stream()
+                .filter(playerWW -> !playerWW.equals(this.getPlayerWW()))
+                .collect(Collectors.toSet());
+    }
 
     @EventHandler
     public void onVoteEvent(VoteEvent event) {
@@ -113,6 +123,26 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         game.getVoteManager().setVotes(event.getTargetWW(), 1 + game.getVoteManager().getVotes(event.getTargetWW()));
+    }
+
+    @EventHandler
+    public void onVoteEndEvent(VoteResultEvent event) {
+
+        if(event.getPlayerWW() == null){
+            return;
+        }
+
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            return;
+        }
+
+        if(!Objects.equals(game.getVoteManager().getPlayerVote(this.getPlayerWW()).orElse(null), event.getPlayerWW())){
+            return;
+        }
+
+        this.getPlayerWW().sendMessageWithKey(Prefix.BLUE, "werewolf.roles.raven.raven_player_voted");
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, 60 * 20, -1, this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, 60 * 20, -1, this.getKey()));
     }
 
     @EventHandler

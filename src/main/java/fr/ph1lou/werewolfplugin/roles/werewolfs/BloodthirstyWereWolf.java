@@ -72,7 +72,7 @@ import java.util.stream.Collectors;
                 )}
 )
 public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPower {
-    private static float BASE_SPEED = 0.2f;
+    private static final float BASE_SPEED = 0.2f;
     private boolean havePower = false;
     public boolean haveDealDamage = false;
     public boolean speedIsAdded = false;
@@ -84,7 +84,7 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
 
     public BloodthirstyWereWolf(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
-        this.speedModification = this.BASE_SPEED * (game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_SPEED) / 100F);
+        this.speedModification = BASE_SPEED * (game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_SPEED) / 100F);
     }
 
     @Override
@@ -174,7 +174,7 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
             if(!this.speedIsAdded){
                 float playerWalkSpeed = player.getWalkSpeed();
 
-                this.speedModification = this.BASE_SPEED * game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_SPEED) / 100F;
+                this.speedModification = BASE_SPEED * game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_SPEED) / 100F;
                 player.setWalkSpeed(playerWalkSpeed + this.speedModification);
 
                 this.speedIsAdded = true;

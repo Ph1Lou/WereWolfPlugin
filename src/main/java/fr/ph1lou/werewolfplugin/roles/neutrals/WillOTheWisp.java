@@ -2,9 +2,12 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
@@ -12,10 +15,10 @@ import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
-import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.roles.InvisibleEvent;
 import fr.ph1lou.werewolfapi.events.roles.will_o_the_wisp.WillOTheWispRecoverRoleEvent;
+import fr.ph1lou.werewolfapi.events.roles.will_o_the_wisp.WillOTheWispTeleportEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -23,9 +26,11 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import fr.ph1lou.werewolfapi.role.interfaces.IInvisible;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
+import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -33,14 +38,22 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -49,12 +62,20 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.WILL_O_THE_WISP,
         category = Category.NEUTRAL, attributes = RoleAttribute.NEUTRAL,
         configValues = {@IntValue(key = IntValueBase.WILL_O_THE_WISP_DISTANCE,
-                defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.YELLOW_WOOL)})
-public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse {
+                defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.YELLOW_WOOL)},
+        timers = {@Timer (key = TimerBase.WILL_O_THE_WISP_DURATION_INCENDIARY_MADNESS, defaultValue = 45, meetUpValue = 45),
+                @Timer(key = TimerBase.WILL_O_THE_WISP_COOLDOWN_INCENDIARY_MADNESS, defaultValue = 10*60, meetUpValue = 5*60),
+                @Timer(key = TimerBase.WILL_O_THE_WISP_COOLDOWN_TP, defaultValue = 10*60, meetUpValue = 5*60)})
+public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse, IPower {
 
+    public final static String INCENDIARY_MADNESS = "incendiary_madness";
     private boolean invisible = false;
     private int use = 0;
     private int timer = -1;
+    private boolean power = true;
+
+    private boolean canBeTeleported = true;
+    private final Map<UUID, Integer> onFirePlayers = new HashMap<>();
 
     public WillOTheWisp(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -66,27 +87,18 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                 .setDescription(game.translate("werewolf.roles.will_o_the_wisp.description",
                         Formatter.number(game.getConfig().getValue(IntValueBase.WILL_O_THE_WISP_DISTANCE))))
                 .setEffects(game.translate("werewolf.roles.will_o_the_wisp.effects"))
-                .setCommand(game.translate("werewolf.roles.will_o_the_wisp.command_info",
-                        Formatter.number(2 - this.use),
-                        Formatter.format("&number2&", game.getConfig().getValue(IntValueBase.WILL_O_THE_WISP_DISTANCE))))
+                .addExtraLines(game.translate("werewolf.roles.will_o_the_wisp.feather",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.WILL_O_THE_WISP_DISTANCE)),
+                        Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.WILL_O_THE_WISP_COOLDOWN_TP)))))
+                .setCommand(game.translate("werewolf.roles.will_o_the_wisp.incendiary_madness",
+                        Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.WILL_O_THE_WISP_COOLDOWN_INCENDIARY_MADNESS))),
+                        Formatter.format("&timer2&", Utils.conversion(game.getConfig().getTimerValue(TimerBase.WILL_O_THE_WISP_DURATION_INCENDIARY_MADNESS)))))
                 .build();
     }
 
     @Override
     public void recoverPower() {
 
-    }
-
-    @Override
-    public void recoverPotionEffect() {
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
-
-        if (game.isDay(Day.DAY)) {
-            this.getPlayerWW().addPotionModifier(PotionModifier
-                    .add(PotionEffectType.SPEED, this.getKey()));
-        }
     }
 
     @Override
@@ -136,9 +148,6 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
     public void onNight(NightEvent event) {
 
 
-        this.getPlayerWW().addPotionModifier(PotionModifier
-                .remove(PotionEffectType.SPEED, this.getKey(), 0));
-
         if (!this.isAbilityEnabled()) {
             return;
         }
@@ -183,7 +192,107 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
     }
 
     @EventHandler
-    private void onCloseInvent(InventoryCloseEvent event) {
+    public void onInteraction(EntityDamageByEntityEvent event) {
+
+        if (!event.getDamager().getUniqueId().equals(this.getPlayerUUID())) {
+            return;
+        }
+
+        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+            return;
+        }
+
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+
+        if(this.getPlayerWW().getPotionModifiers().stream()
+                .noneMatch(potionModifier -> potionModifier.getIdentifier().equals(INCENDIARY_MADNESS))){
+            return;
+        }
+
+        Player damagedPlayer = (Player) event.getEntity();
+
+        if(this.onFirePlayers.containsKey(damagedPlayer.getUniqueId())){
+            Bukkit.getScheduler().cancelTask(this.onFirePlayers.get(damagedPlayer.getUniqueId()));
+        }
+
+        this.onFirePlayers.put(damagedPlayer.getUniqueId(), BukkitUtils.scheduleSyncDelayedTask(game,
+                () -> this.onFirePlayers.remove(damagedPlayer.getUniqueId()),
+                8*20));
+        damagedPlayer.setFireTicks(8* 20);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    private void onPlayerDamage(EntityDamageEvent event) {
+
+        if (!(event.getEntity() instanceof Player)) return;
+
+        if(!event.isCancelled()){
+            return;
+        }
+
+        if (event.getCause().equals(EntityDamageEvent.DamageCause.FIRE_TICK)
+            && this.onFirePlayers.containsKey(event.getEntity().getUniqueId())) {
+            event.setCancelled(false);
+        }
+    }
+
+
+    @EventHandler
+    public void onInteractWithFeather(PlayerInteractEvent playerInteractEvent){
+
+
+        if(playerInteractEvent.getItem().getType() != Material.FEATHER){
+            return;
+        }
+
+        if(!playerInteractEvent.getPlayer().getUniqueId().equals(this.getPlayerUUID())){
+            return;
+        }
+
+        if(!this.canBeTeleported){
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.will_o_the_wisp.wait_cooldown_tp");
+            return;
+        }
+
+        if (!this.isInvisible()) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.will_o_the_wisp.should_be_invisible");
+            return;
+        }
+
+        this.canBeTeleported = false;
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            this.canBeTeleported = true;
+            if(this.getPlayerWW().isState(StatePlayer.ALIVE)){
+                this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.will_o_the_wisp.colldown_end_tp");
+            }
+        }, game.getConfig().getTimerValue(TimerBase.WILL_O_THE_WISP_COOLDOWN_TP) * 20L);
+
+        WillOTheWispTeleportEvent willOTheWispTeleportEvent = new WillOTheWispTeleportEvent(this.getPlayerWW(), this.getUse());
+        Bukkit.getPluginManager().callEvent(willOTheWispTeleportEvent);
+        this.setUse(this.getUse() + 1);
+
+        if (willOTheWispTeleportEvent.isCancelled()) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
+            return;
+        }
+
+        Vector vector = this.getPlayerWW().getEyeLocation().getDirection();
+        vector
+                .normalize()
+                .multiply(game.getConfig().getValue(IntValueBase.WILL_O_THE_WISP_DISTANCE))
+                .setY(Objects.requireNonNull(this.getPlayerWW().getLocation().getWorld()).getHighestBlockYAt(this.getPlayerWW().getLocation()) - this.getPlayerWW().getLocation().getBlockY() + 10);
+
+        this.getPlayerWW().teleport(this.getPlayerWW().getLocation().add(vector));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WITHER,
+                400,
+                0,
+                this.getPlayerWW().getRole().getKey()));
+    }
+
+    @EventHandler
+    public void onCloseInvent(InventoryCloseEvent event) {
 
         Player player = (Player) event.getPlayer();
         UUID uuid = player.getUniqueId();
@@ -208,8 +317,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
 
                 player.sendMessage(game.translate(Prefix.GREEN,
                         "werewolf.roles.little_girl.remove_armor_perform"));
-                this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,
-                        "werewolf.roles.will_o_the_wisp.use_tp", Formatter.number(2 - this.use));
+
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INVISIBILITY,
                         this.getKey()));
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION,
@@ -292,17 +400,6 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
         }
     }
 
-    @EventHandler
-    public void onDay(DayEvent event) {
-
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
-
-        this.getPlayerWW().addPotionModifier(PotionModifier
-                .add(PotionEffectType.SPEED, this.getKey()));
-    }
-
     @Override
     public boolean isInvisible() {
         return this.invisible;
@@ -321,5 +418,20 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
     @Override
     public void setUse(int use) {
         this.use = use;
+    }
+
+    @Override
+    public void setPower(boolean power) {
+        this.power = power;
+    }
+
+    @Override
+    public boolean hasPower() {
+        return this.power;
+    }
+
+    @Override
+    public Aura getDefaultAura() {
+        return Aura.LIGHT;
     }
 }

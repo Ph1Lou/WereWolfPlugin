@@ -18,6 +18,7 @@ import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.WorldBorder;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class ScoreBoard implements IScoreboard {
         this.game = game;
 
         this.formatters.add(Formatter.format("&players&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getPlayersCount())));
-        this.formatters.add(Formatter.format("&roles&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getRoleInitialSize())));
+        this.formatters.add(Formatter.format("&roles_total&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getRoleInitialSize())));
         this.formatters.add(Formatter.format("&max&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getConfig().getPlayerMax())));
         this.formatters.add(Formatter.format("&name&", WereWolfAPI::getGameName));
 
@@ -61,7 +62,12 @@ public class ScoreBoard implements IScoreboard {
 
         this.formatters.add(Formatter.format("&border_size&", (wereWolfAPI) -> {
 
-                    WorldBorder wb = wereWolfAPI.getMapManager().getWorld().getWorldBorder();
+                    World world = wereWolfAPI.getMapManager().getWorld();
+
+                    if(world == null){
+                        return String.valueOf(wereWolfAPI.getConfig().getBorderMin());
+                    }
+                    WorldBorder wb = world.getWorldBorder();
                     String borderSize = String.valueOf(Math.round(wb.getSize()));
 
                     if (wereWolfAPI.getConfig().getTimerValue(TimerBase.BORDER_BEGIN) <= 0) {
@@ -194,7 +200,6 @@ public class ScoreBoard implements IScoreboard {
                 List<Formatter> formatters1 = new ArrayList<>(this.formatters);
                 formatters1.add(Formatter.format("&current&", inf / 6 + 1));
                 formatters1.add(Formatter.format("&sum&", total));
-                formatters1.add(Formatter.format("&name&", game.getGameName()));
 
                 this.roles.addAll(game.translateArray("werewolf.score_board.scoreboard_role",
                                 formatters1.toArray(new Formatter[0]))

@@ -45,7 +45,7 @@ public class VoteGui implements InventoryProvider {
         List<ClickableItem> items = new ArrayList<>();
 
         game.getPlayerWW(player.getUniqueId())
-                .ifPresent(playerWW -> playerWW.getPlayersMet()
+                .ifPresent(playerWW -> playerWW.getRole().getPlayersMet()
                         .stream()
                         .filter(playerWW1 -> !game.getVoteManager().getAlreadyVotedPlayers().contains(playerWW1))
                         .filter(playerWW1 -> !playerWW1.isState(StatePlayer.DEATH))

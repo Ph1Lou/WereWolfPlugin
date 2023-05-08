@@ -33,6 +33,7 @@ public class Villager extends RoleVillage {
 
     public Villager(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
+
         if (!game.isState(StateGame.GAME)) return;
 
         villagerKit = VillagerKit.values()[(int) Math.floor(game.getRandom().nextFloat() * VillagerKit.values().length)];

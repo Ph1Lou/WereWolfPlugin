@@ -229,3 +229,7 @@ werewolf.roles.hunter.display:
       meta-type: ENCHANTED
       stored-enchants:
         ARROW_DAMAGE: 3
+werewolf.roles.will_o_the_wisp.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: FEATHER

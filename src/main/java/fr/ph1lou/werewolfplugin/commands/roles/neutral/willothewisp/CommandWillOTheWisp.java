@@ -1,65 +1,55 @@
 package fr.ph1lou.werewolfplugin.commands.roles.neutral.willothewisp;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
-import fr.ph1lou.werewolfapi.events.roles.will_o_the_wisp.WillOTheWispTeleportEvent;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.events.roles.will_o_the_wisp.WillOTheWispIncendiaryMadnessEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.role.interfaces.IInvisible;
-import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
-import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfapi.utils.Utils;
+import fr.ph1lou.werewolfplugin.roles.neutrals.WillOTheWisp;
 import org.bukkit.Bukkit;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
-import java.util.Objects;
-
-@RoleCommand(key = "werewolf.roles.will_o_the_wisp.command",
+@RoleCommand(key = "werewolf.roles.will_o_the_wisp.command_incendiary",
         roleKeys = RoleBase.WILL_O_THE_WISP,
-        argNumbers = 0)
+        argNumbers = 0,
+        requiredPower = true)
 public class CommandWillOTheWisp implements ICommandRole {
 
     @Override
     public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
-        IRole willOTheWisp = playerWW.getRole();
+        WillOTheWisp willOTheWisp = (WillOTheWisp) playerWW.getRole();
 
+        willOTheWisp.setPower(false);
 
-        if (!(willOTheWisp instanceof ILimitedUse) || ((ILimitedUse) willOTheWisp).getUse() >= 2) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
-            return;
-        }
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            willOTheWisp.setPower(true);
+            if(playerWW.isState(StatePlayer.ALIVE)){
+                playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.will_o_the_wisp.colldown_end");
+            }
+        }, game.getConfig().getTimerValue(TimerBase.WILL_O_THE_WISP_COOLDOWN_INCENDIARY_MADNESS)* 20L);
 
-        if (!(willOTheWisp instanceof IInvisible) || !((IInvisible) willOTheWisp).isInvisible()) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.will_o_the_wisp.should_be_invisible");
-            return;
-        }
+        WillOTheWispIncendiaryMadnessEvent willOTheWispIncendiaryMadnessEvent = new WillOTheWispIncendiaryMadnessEvent(playerWW);
 
-        ((ILimitedUse) willOTheWisp).setUse(((ILimitedUse) willOTheWisp).getUse() + 1);
+        Bukkit.getPluginManager().callEvent(willOTheWispIncendiaryMadnessEvent);
 
-        WillOTheWispTeleportEvent willOTheWispTeleportEvent = new WillOTheWispTeleportEvent(playerWW, ((ILimitedUse) willOTheWisp).getUse());
-        Bukkit.getPluginManager().callEvent(willOTheWispTeleportEvent);
-
-        if (willOTheWispTeleportEvent.isCancelled()) {
+        if(willOTheWispIncendiaryMadnessEvent.isCancelled()){
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
 
-        Vector vector = playerWW.getEyeLocation().getDirection();
-        vector
-                .normalize()
-                .multiply(game.getConfig().getValue(IntValueBase.WILL_O_THE_WISP_DISTANCE))
-                .setY(Objects.requireNonNull(playerWW.getLocation().getWorld()).getHighestBlockYAt(playerWW.getLocation()) - playerWW.getLocation().getBlockY() + 10);
-
-        playerWW.teleport(playerWW.getLocation().add(vector));
-        playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER,
-                400,
-                0,
-                playerWW.getRole().getKey()));
-
+        playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.will_o_the_wisp.perform_madness",
+                Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.WILL_O_THE_WISP_DURATION_INCENDIARY_MADNESS))));
+        playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.SPEED,
+                game.getConfig().getTimerValue(TimerBase.WILL_O_THE_WISP_DURATION_INCENDIARY_MADNESS) * 20,
+                0, WillOTheWisp.INCENDIARY_MADNESS));
     }
 }

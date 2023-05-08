@@ -15,6 +15,7 @@ import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.roles.fox.SniffEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -29,6 +30,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IProgress;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -37,6 +39,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +57,8 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
     private float progress = 0;
     private int use = 0;
     private boolean power = false;
+    @Nullable
+    private IPlayerWW lastPlayerSmell = null;
 
     public Fox(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -214,6 +219,9 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
             Bukkit.getPluginManager().callEvent(sniffEvent);
 
             if (!sniffEvent.isCancelled()) {
+
+                this.lastPlayerSmell = sniffEvent.getTargetWW();
+
                 if (sniffEvent.isWereWolf()) {
                     this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fox.werewolf",
                             Formatter.player(playerWW.getName()));
@@ -242,5 +250,28 @@ public class Fox extends RoleVillage implements IProgress, ILimitedUse, IAffecte
             clearAffectedPlayer();
             setProgress(0f);
         }
+    }
+
+    @EventHandler
+    public void onActionBarRequest(ActionBarEvent event) {
+
+        if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
+
+        if (this.lastPlayerSmell == null) return;
+
+        StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
+
+        Player player = Bukkit.getPlayer(event.getPlayerUUID());
+
+        if (player == null) return;
+
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        stringBuilder.append("§b ")
+                .append(this.lastPlayerSmell.getName())
+                .append(" ")
+                .append(Utils.updateArrow(player, this.lastPlayerSmell.getLocation()));
+
+        event.setActionBar(stringBuilder.toString());
     }
 }

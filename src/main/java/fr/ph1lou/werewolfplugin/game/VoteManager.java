@@ -57,7 +57,7 @@ public class VoteManager implements Listener, IVoteManager {
 
     public void setOneVote(IPlayerWW voterWW, IPlayerWW vote) {
 
-        if (!voterWW.getPlayersMet().contains(vote)) {
+        if (!voterWW.getRole().getPlayersMet().contains(vote)) {
             voterWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.not_met",
                     Formatter.number(game.getConfig().getValue(IntValueBase.VOTE_DISTANCE)));
             return;

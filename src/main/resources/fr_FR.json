@@ -272,7 +272,7 @@
       "fox": {
         "display": "Renard",
         "effect": "Trois minutes de Vitesse après chaque kill",
-        "description": "Vous pouvez flairer les joueurs pour savoir si ils sont Loup-Garou. Les joueurs devront se situer à moins de §b&number&§f blocs pendant §b&timer&§f. Vous disposez de §b&number1&§f flair(s).",
+        "description": "Vous pouvez flairer les joueurs pour savoir si ils sont Loup-Garou. Les joueurs devront se situer à moins de §b&number&§f blocs pendant §b&timer&§f. Vous disposez de §b&number1&§f flair(s). Une fleche vous amène au dernier joueur flairé",
         "smell_message": "Vous pouvez flairer un joueur §b/ww flairer§f. Si vous êtes déjà en train de flairer quelqu'un, il sera remplacé par le nouveau joueur et la progression sera remise à 0. Il vous reste §b&number&§r flair(s)",
         "smell_beginning": "Vous commencez à flairer §b&player&",
         "not_werewolf": "&player& §an'est pas dans le camp des Loups Garous",
@@ -294,9 +294,10 @@
         "display": "Corbeau",
         "effect": "Chute Amortie",
         "item": "Livre Chute Amortie III",
-        "description": "Votre vote compte double. Vous pouvez maudire un joueur chaque matin qui obtiendra l'effet Saut amélioré II pendant une journée.",
-        "curse_message": "Maudissez un joueur pour la journée §b/ww maudire§r, vous avez §b&timer&",
+        "description": "Votre vote compte double. \nVous pouvez voter pour un joueur que vous n'avez pas encore rencontré. \nSi le joueur est voté par le plus grand nombre, \nvous obtenez une minutes de Force et de Vitesse",
+        "curse_message": "Maudissez un joueur qui obtiendra l'effet Saut amélioré II pendant une journée pour la journée §b/ww maudire§r, vous avez §b&timer&",
         "curse_perform": "Vous venez de maudire §b&player&",
+        "raven_player_voted": "Vous obtenez une minutes de Force et de Vitesse car le joueur le plus voté est celui que vous aviez voté",
         "get_curse": "Vous venez d'être maudit par le corbeau. Vous obtenez Jump Boost jusqu'au matin",
         "no_longer_curse": "Vous n'êtes plus maudit",
         "command": "maudire"
@@ -651,14 +652,21 @@
       "will_o_the_wisp": {
         "display": "Feu Follet",
         "description": "Invisible : vous pouvez voir les particules bleues de la petite fille et rouges du loup perfide. Au début de la nuit, vous recevez le rôle d'un joueur situé à moins de §b&number&§f blocs de vous",
-        "effects": "Vitesse le jour, Invisibilité et 4 coeurs d'absorption pendant 5 minutes en retirant son armure",
-        "command": "tp",
-        "command_info": "Invisible : vous pouvez, encore §b&number&§f fois pendant la partie, vous téléporter &number2& blocs en avant avec /ww tp",
-        "should_be_invisible": "Vous devez être invisible pour utiliser cette commande",
+        "effects": "Invisibilité et 4 coeurs d'absorption pendant 5 minutes en retirant son armure",
+        "command_incendiary": "folie",
+        "feather": "Pouvoir : Vous pouvez vous téléporter de &number& blocs toutes les §b&timer&§f en étant invisible en faisant clique droit sur une plume\n",
+        "incendiary_madness": "Vous pouvez déclencher ure folie incendiaire toutes les §b&timer&§f avec §b/ww folie§f. Elle vous procure Vitesse I et mets le feu au joueur que vous tapez pendant §b&timer2&§f",
+        "should_be_invisible": "Vous devez être invisible pour vous téléporter",
+        "perform_madness": "Vous venez de déclencher votre folie incendiaire. Elle vous procure Vitesse I pendant §b&timer& et mets en feu les joueurs que vous tapez ",
+        "colldown_end": "Vous pouvez de nouveau déclencher votre folie incendiaire avec §b/ww folie",
+        "colldown_end_tp": "Vous pouvez de nouveau vous téléporter avec votre plume",
         "role_reveal": "Un joueur situé à moins de §b&number&§f blocs est §b&role&",
-        "use_tp": "Vous pouvez encore utiliser §b&number&§f fois votre commande §b/ww tp§f ",
+        "wait_cooldown_tp": "Vous devez attendre la fin du cooldown",
         "configurations": {
-          "distance": "Champ d'action du Feu Follet §b&number&"
+          "distance": "Champ d'action du Feu Follet §b&number&",
+          "cooldown_tp": "Cooldown téléportation (§b&timer&§r)",
+          "duration_madness": "Durée folie incendiaire (§b&timer&§r)",
+          "cooldown_madness": "Cooldown folie incendiaire (§b&timer&§r)"
         }
       },
       "howling_werewolf": {
@@ -1568,7 +1576,7 @@
     },
     "tab": {
       "top": "§4§lLOUP GAROU UHC",
-      "timer": "Timer §b&timer&§f - Jour §b&day& §f(§b&day_state&§f)\n",
+      "timer": "Timer §b&timer&§f - Jour §b&day& §f(§b&daystate&§f)\n",
       "bot": "§7Plugin réalisé par §bPh1Lou"
     },
     "action_bar": {
@@ -1595,7 +1603,7 @@
         "§3§m-----↠§8infos§3§m↞------",
         "En attente de joueurs ",
         "§3§m------------------",
-        "Joueurs : §b&players&§r/§b&roles&",
+        "Joueurs : §b&players&§r/§b&roles_total&",
         "§3§m------------------",
         "Joueurs Max : §b&max&",
         "§3§m-----↠§8game§3§m↞------",
