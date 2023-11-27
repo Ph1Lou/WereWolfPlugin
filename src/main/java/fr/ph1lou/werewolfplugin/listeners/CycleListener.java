@@ -35,6 +35,11 @@ public class CycleListener implements Listener {
 
         if (game.isState(StateGame.END)) return;
 
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            Bukkit.getPluginManager().callEvent(new NightEvent(event.getNumber()));
+
+        }, game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 20L);
+
         game.getMapManager().getWorld().setTime(23500);
 
         Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.announcement.day",

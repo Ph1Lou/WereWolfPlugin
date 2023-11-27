@@ -239,7 +239,6 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
         if(e.getNumber() % 2 != game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_MAX_LIFE_DETECT_DAY) % 2){
             return;
         }
-
         float max_life = game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_MAX_LIFE_DETECT) / 100f;
         List<IPlayerWW> players = game.getPlayersWW().stream()
                 .filter(player1 -> player1 != this.getPlayerWW())

@@ -51,6 +51,7 @@ public class WhiteListGUI implements InventoryProvider {
                 game.translate("werewolf.menus.whitelist.close") :
                 game.translate("werewolf.menus.whitelist.open")).build()), e -> {
             config.setWhiteList(!config.isWhiteList());
+            //todo add event in API
             game.getModerationManager().checkQueue();
 
             e.setCurrentItem(new ItemBuilder(UniversalMaterial.MAP.getType())

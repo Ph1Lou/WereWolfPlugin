@@ -140,7 +140,6 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
         if (roleClone == null) {
             return;
         }
-
         HandlerList.unregisterAll(this);
 
         this.getPlayerWW().setRole(roleClone);

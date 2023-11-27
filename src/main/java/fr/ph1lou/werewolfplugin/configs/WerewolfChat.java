@@ -42,7 +42,6 @@ public class WerewolfChat extends ListenerWerewolf {
         if (game.isState(StateGame.END)) return;
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
-            Bukkit.getPluginManager().callEvent(new NightEvent(event.getNumber()));
             game.getWerewolfChatHandler().enableWereWolfChat();
             BukkitUtils.scheduleSyncDelayedTask(game, () -> game.getWerewolfChatHandler().disableWereWolfChat(),
                     game.getConfig().getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION) * 20L);

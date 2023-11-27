@@ -216,6 +216,8 @@ public class Innkeeper extends RoleVillage implements IPower {
                         playerWWS.get(0),
                         playerWWS.size());
 
+                this.setPower(false);
+
                 Bukkit.getPluginManager()
                         .callEvent(innkeeperInfoMeetEvent);
                 if (!innkeeperInfoMeetEvent.isCancelled()) {
