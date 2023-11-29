@@ -92,10 +92,8 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
 
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onSecondDeathEvent(SecondDeathEvent event) {
-
-        if (event.isCancelled()) return;
 
         if (!hasPower()) return;
 

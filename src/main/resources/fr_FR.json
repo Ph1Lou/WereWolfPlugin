@@ -940,16 +940,6 @@
           "distance": "Champ d'action du Braconnier §b&number&§f blocs"
         }
       },
-      "voodoo_wizard": {
-        "display": "Sorcier Vaudou",
-        "description": "Vous pouvez fabriquer une poupée vaudou à l'effigie de chaque joueur dont vous avez été à proximité (§b&number& blocs) pendant 5 minutes.\nEn revanche, vous pouvez n'en posséder que 3 simultanément. \nLorsque cette poupée est attaquée, elle disparaît et vous serez notifié. \nVous avez ensuite 5 minutes pour sacrifier 2 ♥ permanents et connaître l'identité de l'attaquant",
-        "command_doll": "doll",
-        "command_reveal_name": "reveal",
-        "notify_damage": "La poupée Vaudou à l'effigie de §b&player& a été attaquée !\nVous avez §b&timer§f pour sacrifier 2 ♥ permanents et connaître l'identité de l'attaquant en utilisant §b/ww reveal§f",
-        "reveal_enemy": "La personne ayant blessé la poupée Vaudou à l'effigie de §b&player&§f est §b&name&",
-        "doll_ally": "Vous fabriquez une poupée Vaudou à l'effigie de §b&player&§f.\nVous serez notifié si cette poupée est attaquée par un joueur.\nA la suite de cet assaut, la poupée disparaît et vous avez 5 minutes pour sacrifier 2 ♥ permanents afin de connaître l'identité de l'assaillant avec §b/ww reveal",
-        "not_an_ally": "Vous n'avez pas encore passé 5 minutes à proximité de §b&player&§f, vous pouvez donc pas encore fabriquer de poupée à son effigie"
-      },
       "bonesetter": {
         "display": "Rebouteux",
         "description": "Vous pouvez appliquer une guérison automatique à 3 joueurs dans la partie sauf vous-même (les cibles sont au courant) : lorsque ces joueurs tomberont en-dessous de 4 ♥, ils recevront 7 secondes de Régénération II (3 ♥ de heal).\nVous recevez un message lorsqu'une des cibles active la guérison (sans savoir qui).\nVous disposez également de 3 ♥ de Régénération sur les pommes d'or.",
@@ -2025,7 +2015,7 @@
     },
     "description": {
       "_": "§b================================",
-      "doc": "https://docs.google.com/spreadsheets/d/1jkos7zslxBl6NCWy4FXuQXtFkvtPLa9e6UOlpmcsDm0/edit?usp=sharing",
+      "doc": "https://cylenosheavenly.gitbook.io/doc-loup-garou-uhc-plugin-ph1lou/",
       "role": "§fVous êtes §b&role&\n",
       "description": "§bDescription :§f &text&\n",
       "camp": "§fCamp des §b&camp&\n",

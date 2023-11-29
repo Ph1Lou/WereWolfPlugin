@@ -73,7 +73,7 @@ public class PlayerListener implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     private void onPlayerDamage(EntityDamageEvent event) {
 
 

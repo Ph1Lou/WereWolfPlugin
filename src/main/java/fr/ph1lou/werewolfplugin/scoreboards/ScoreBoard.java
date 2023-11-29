@@ -253,6 +253,9 @@ public class ScoreBoard implements IScoreboard {
         if (!game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION)) {
             updateScoreBoardRole();
         }
+        else{
+            this.roles.clear();
+        }
 
         if (roles.isEmpty()) {
             if (game.isState(StateGame.LOBBY)) {

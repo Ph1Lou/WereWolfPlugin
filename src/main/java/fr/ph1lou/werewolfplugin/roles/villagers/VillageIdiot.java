@@ -92,12 +92,9 @@ public class VillageIdiot extends RoleVillage implements IPower {
     }
 
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onSecondDeathEvent(SecondDeathEvent event) {
 
-        if (event.isCancelled()) {
-            return;
-        }
         if (!event.getPlayerWW().equals(this.getPlayerWW())) {
             return;
         }

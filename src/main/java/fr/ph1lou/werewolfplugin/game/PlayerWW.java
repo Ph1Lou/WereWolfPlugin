@@ -671,6 +671,11 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
+    public void removeDeathRole(String role) {
+        this.deathRoles.remove(role);
+    }
+
+    @Override
     public String getDeathRole() {
         if (this.deathRoles.isEmpty()) {
             return this.role.getKey();

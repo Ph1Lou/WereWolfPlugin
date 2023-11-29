@@ -209,10 +209,8 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.succubus.charming_message");
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onSecondDeathEvent(SecondDeathEvent event) {
-
-        if (event.isCancelled()) return;
 
         if (!this.getPlayerWW().equals(event.getPlayerWW())) return;
 

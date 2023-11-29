@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.events.game.utils.GoldenAppleParticleEvent;
 import fr.ph1lou.werewolfapi.events.roles.InvisibleEvent;
 import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.role.interfaces.IInvisible;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
@@ -89,6 +90,8 @@ public class InvisibleListener implements Listener {
                 .noneMatch(potionModifier -> potionModifier.getPotionEffectType() == PotionEffectType.INVISIBILITY)) {
             return;
         }
+
+        event.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY, event.getPlayerWW().getRole().getKey()));
 
         ((IInvisible) event.getPlayerWW().getRole()).setInvisible(false);
     }

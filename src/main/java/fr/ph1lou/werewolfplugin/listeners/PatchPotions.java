@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
 
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -60,6 +61,7 @@ public class PatchPotions implements Listener {
                 .map(livingEntity -> game.getPlayerWW(livingEntity.getUniqueId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .forEach(playerWW -> event.getPotion().getEffects().forEach(potionEffect -> {
                     if (potionEffect.getDuration() == 1) { //handle instant potion
                         if (potionEffect.getType().equals(PotionEffectType.HEAL)) {

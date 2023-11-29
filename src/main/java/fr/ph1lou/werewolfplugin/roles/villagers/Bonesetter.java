@@ -53,7 +53,7 @@ public class Bonesetter extends RoleVillage implements IAffectedPlayers, ILimite
 
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onDamage(EntityDamageEvent event) {
         if (!isAbilityEnabled()) return;
 

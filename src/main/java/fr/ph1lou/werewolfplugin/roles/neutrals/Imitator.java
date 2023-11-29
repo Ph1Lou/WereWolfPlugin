@@ -104,7 +104,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onFirstDeathEvent(FirstDeathEvent event) {
 
         IPlayerWW playerWW = event.getPlayerWW();

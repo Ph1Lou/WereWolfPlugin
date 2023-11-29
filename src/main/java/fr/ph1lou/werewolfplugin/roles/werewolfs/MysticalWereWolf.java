@@ -5,6 +5,7 @@ import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
+import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -79,8 +80,10 @@ public class MysticalWereWolf extends RoleWereWolf {
         }
 
         List<IPlayerWW> roles = game.getPlayersWW()
-                .stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .filter(playerWW -> !playerWW.getRole().isWereWolf())
+                .stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .filter(playerWW -> !playerWW.getRole().isDisplayCamp(Camp.WEREWOLF.getKey()) ||
+                                    (playerWW.getRole().getDisplayCamp().equals(playerWW.getRole().getCamp().getKey()) && !playerWW.getRole().isWereWolf()))
                 .collect(Collectors.toList());
 
         if (roles.isEmpty()) return;

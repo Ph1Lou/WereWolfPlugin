@@ -9,7 +9,7 @@ import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
-import fr.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
+import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.guard.GuardResurrectionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -46,10 +46,8 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
         this.last = playerWW;
     }
 
-    @EventHandler(priority = EventPriority.LOW)
-    public void onThirdDeathEvent(ThirdDeathEvent event) {
-
-        if (event.isCancelled()) return;
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onSecondDeathEvent(SecondDeathEvent event) {
 
         if (!this.powerFinal) {
             return;

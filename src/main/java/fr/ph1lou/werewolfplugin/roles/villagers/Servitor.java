@@ -10,7 +10,7 @@ import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
-import fr.ph1lou.werewolfapi.events.game.life_cycle.ThirdDeathEvent;
+import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorDefinitiveMasterEvent;
 import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorMasterChosenEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -24,6 +24,7 @@ import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
@@ -93,14 +94,12 @@ public class Servitor extends RoleVillage implements IPower {
                 Formatter.player(master.getName()));
     }
 
-    @EventHandler
-    public void onThirdDeathEvent(ThirdDeathEvent event) {
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onSecondDeathEvent(SecondDeathEvent event) {
 
         if (!this.isAbilityEnabled()) {
             return;
         }
-
-        if (event.isCancelled()) return;
 
         if (!hasPower()) return;
 

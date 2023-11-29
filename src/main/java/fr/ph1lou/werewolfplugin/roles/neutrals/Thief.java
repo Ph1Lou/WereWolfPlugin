@@ -119,7 +119,7 @@ public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
                 this.getKey()));
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onFirstDeathEvent(FirstDeathEvent event) {
 
         IPlayerWW playerWW = event.getPlayerWW();

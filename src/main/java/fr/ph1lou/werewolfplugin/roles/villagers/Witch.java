@@ -100,10 +100,8 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
     }
 
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onThirdDeathEvent(ThirdDeathEvent event) {
-
-        if (event.isCancelled()) return;
 
         if (!hasPower()) return;
 
