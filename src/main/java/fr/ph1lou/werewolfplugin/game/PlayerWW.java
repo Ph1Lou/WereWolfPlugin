@@ -684,8 +684,12 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
-    public ChatColor getColor(IPlayerWW iPlayerWW) {
-        return this.colors.getOrDefault(iPlayerWW, ChatColor.RESET);
+    public String getColor(IPlayerWW iPlayerWW) {
+
+        if(this.colors.containsKey(iPlayerWW)){
+            return this.colors.get(iPlayerWW).toString();
+        }
+        return "";
     }
 
     @Override

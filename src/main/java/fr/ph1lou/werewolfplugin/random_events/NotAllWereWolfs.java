@@ -24,6 +24,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RandomEvent(key = EventBase.NOT_ALL_WEREWOLFS, loreKey = "werewolf.random_events.not_all_werewolfs.description")
@@ -105,6 +106,8 @@ public class NotAllWereWolfs extends ListenerWerewolf {
     }
 
     private boolean isDefaultWereWolf(String key) {
-        return Register.get().getRolesRegister().stream().filter(r -> r.getMetaDatas().key().equalsIgnoreCase(key)).anyMatch(r -> r.getMetaDatas().category() == Category.WEREWOLF);
+        return Register.get().getRolesRegister().stream().filter(r -> r.getMetaDatas().key().equalsIgnoreCase(key))
+                .anyMatch(r -> r.getMetaDatas().category() == Category.WEREWOLF ||
+                               Objects.equals(r.getMetaDatas().key(), RoleBase.WHITE_WEREWOLF));
     }
 }

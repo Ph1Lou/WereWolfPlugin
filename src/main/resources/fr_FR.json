@@ -295,7 +295,7 @@
         "effect": "Chute Amortie",
         "item": "Livre Chute Amortie III",
         "description": "Votre vote compte double. \nVous pouvez voter pour un joueur que vous n'avez pas encore rencontré. \nSi le joueur est voté par le plus grand nombre, \nvous obtenez une minutes de Force et de Vitesse",
-        "curse_message": "Maudissez un joueur qui obtiendra l'effet Saut amélioré II pendant une journée pour la journée §b/ww maudire§r, vous avez §b&timer&",
+        "curse_message": "Maudissez un joueur qui obtiendra l'effet Saut amélioré I pendant une journée pour la journée §b/ww maudire§r, vous avez §b&timer&",
         "curse_perform": "Vous venez de maudire §b&player&",
         "raven_player_voted": "Vous obtenez une minutes de Force et de Vitesse car le joueur le plus voté est celui que vous aviez voté",
         "get_curse": "Vous venez d'être maudit par le corbeau. Vous obtenez Jump Boost jusqu'au matin",
@@ -1285,7 +1285,7 @@
         },
         "late": {
           "command": "late",
-          "description": "Pour rajouter un joueur au cours de la partie",
+          "description": "Pour rajouter un joueur en retard au cours de la partie",
           "in_game": "Le joueur est déjà dans la partie",
           "launch": "§b&player&§r vient d'être rajouté à la partie",
           "teleportation": "Attendez la fin de la téléportaton avant de rajouter un nouveau joueur"
