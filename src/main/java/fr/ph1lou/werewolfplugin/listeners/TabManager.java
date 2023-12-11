@@ -118,17 +118,17 @@ public class TabManager implements Listener {
                 sb.toString()));
     }
 
-    private void set(Player player, Player target, UpdateModeratorNameTagEvent event2, String prefix) {
+    private void set(Player player, Player target, UpdateModeratorNameTagEvent updateModeratorNameTagEvent, String prefix) {
 
-        UpdatePlayerNameTagEvent event1 = new UpdatePlayerNameTagEvent(player.getUniqueId(), target.getUniqueId(), prefix);
+        UpdatePlayerNameTagEvent updatePlayerNameTagEvent = new UpdatePlayerNameTagEvent(player.getUniqueId(), target.getUniqueId(), prefix);
 
-        Bukkit.getPluginManager().callEvent(event1);
+        Bukkit.getPluginManager().callEvent(updatePlayerNameTagEvent);
 
         Scoreboard scoreboard = target.getScoreboard();
         Team team = scoreboard.getTeam(player.getName());
-        StringBuilder sb = new StringBuilder(event1.getPrefix());
+        StringBuilder sb = new StringBuilder(updatePlayerNameTagEvent.getPrefix());
 
-        if (event1.isTabVisibility()) {
+        if (updatePlayerNameTagEvent.isTabVisibility()) {
             VersionUtils.getVersionUtils().showPlayer(target, player);
         } else {
             VersionUtils.getVersionUtils().hidePlayer(target, player);
@@ -159,18 +159,18 @@ public class TabManager implements Listener {
                             }));
 
             if (game.getModerationManager().getModerators().contains(uuid1)) {
-                String string1 = event2.getSuffix() + event1.getSuffix();
+                String string1 = updateModeratorNameTagEvent.getSuffix() + updatePlayerNameTagEvent.getSuffix();
                 team.setSuffix(string1.substring(0, Math.min(16, string1.length())));
-                String string2 = sb + event2.getPrefix();
+                String string2 = sb + updateModeratorNameTagEvent.getPrefix();
                 team.setPrefix(string2.substring(0, Math.min(16, string2.length())));
                 VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, true);
 
             } else {
-                String string1 = event1.getSuffix();
+                String string1 = updatePlayerNameTagEvent.getSuffix();
                 team.setSuffix(string1.substring(0, Math.min(16, string1.length())));
                 String string2 = sb.toString();
                 team.setPrefix(string2.substring(Math.max(string2.length() - 16, 0)));
-                VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, event1.isVisibility());
+                VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, updatePlayerNameTagEvent.isVisibility());
 
             }
         }

@@ -235,7 +235,6 @@ public class Interpreter extends RoleVillage implements IPower {
                             return;
                         }
 
-
                         if (!this.getPlayerWW().isState(StatePlayer.DEATH)) {
 
                             HandlerList.unregisterAll(this.role);

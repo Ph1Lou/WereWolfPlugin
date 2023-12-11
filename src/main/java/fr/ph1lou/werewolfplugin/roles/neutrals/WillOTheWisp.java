@@ -243,7 +243,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
     public void onInteractWithFeather(PlayerInteractEvent playerInteractEvent){
 
 
-        if(playerInteractEvent.getItem().getType() != Material.FEATHER){
+        if(playerInteractEvent.getItem() == null || playerInteractEvent.getItem().getType() != Material.FEATHER){
             return;
         }
 

@@ -23,8 +23,8 @@ public class WorldFillTask implements Runnable {
     private final CoordXZ lastChunk = new CoordXZ(0, 0);
     // general task-related reference data
     private Server server;
-    private BorderData border = null;
-    private WorldFileData worldData = null;
+    private BorderData border;
+    private WorldFileData worldData;
     private boolean readyToGo = false;
     private boolean paused = false;
     private boolean pausedForMemory = false;

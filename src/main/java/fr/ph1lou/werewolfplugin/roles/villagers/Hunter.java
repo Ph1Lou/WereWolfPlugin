@@ -10,6 +10,7 @@ import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
+import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfKillEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -18,6 +19,7 @@ import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -45,6 +47,8 @@ public class Hunter extends RoleVillage implements IPower {
         DescriptionBuilder descBuilder = new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.hunter.description"))
                 .setItems(game.translate("werewolf.roles.hunter.items"))
+                .setEquipments(game.translate("werewolf.roles.hunter.stuff",
+                        Formatter.number(game.getConfig().getLimitPowerBow() + 1)))
                 .setEffects(game.translate("werewolf.roles.hunter.effect", Formatter.format("&number&", 0.5 + damageBonus)));
         if (game.getConfig().isConfigActive(ConfigBase.HUNTER_CAN_SHOOT)) {
             descBuilder = descBuilder.addExtraLines(game.translate("werewolf.roles.hunter.description_shoot"));
@@ -124,5 +128,17 @@ public class Hunter extends RoleVillage implements IPower {
     @Override
     public boolean hasPower() {
         return power;
+    }
+
+    @EventHandler
+    public void onEnchantment(EnchantmentEvent event) {
+
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
+
+        if (event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)) {
+            event.getFinalEnchants().put(Enchantment.ARROW_DAMAGE,
+                    Math.min(event.getEnchants().get(Enchantment.ARROW_DAMAGE),
+                            game.getConfig().getLimitPowerBow() + 1));
+        }
     }
 }

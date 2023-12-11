@@ -11,7 +11,6 @@ import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.necromancer.NecromancerResurrectionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;

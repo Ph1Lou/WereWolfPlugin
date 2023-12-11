@@ -57,9 +57,7 @@ public class ChoiceGui implements InventoryProvider {
                                         .setHead(targetWW.getName(),
                                                 Bukkit.getOfflinePlayer(targetWW.getReviewUUID()))
                                         .setDisplayName(playerWW.getColor(targetWW)+targetWW.getName())
-                                        .build()), e -> {
-                            ColorsGUI.getInventory(targetWW).open(player);
-                        }))));
+                                        .build()), e -> ColorsGUI.getInventory(targetWW).open(player)))));
 
         InventoryUtils.fillInventory(game, items, pagination, contents, () -> getInventory(player), 36);
     }

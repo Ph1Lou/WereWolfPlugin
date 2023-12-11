@@ -81,11 +81,9 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
                     .setDescription(game.translate("werewolf.roles.romulus_remus.description_naive"))
                     .setPower(game.translate("werewolf.roles.romulus_remus.power_naive",
                             Formatter.number(game.getConfig().getValue(IntValueBase.ROMULUS_REMUS_DISTANCE_BROTHER))));
-            getBrother().ifPresent(brother -> {
-                descriptionBuilder.addExtraLines(
-                        game.translate("werewolf.roles.romulus_remus.brother_name",
-                                Formatter.format("&name&", brother.getName())));
-            });
+            getBrother().ifPresent(brother -> descriptionBuilder.addExtraLines(
+                    game.translate("werewolf.roles.romulus_remus.brother_name",
+                            Formatter.format("&name&", brother.getName()))));
             getMother().ifPresent(mother -> descriptionBuilder.addExtraLines(game.translate("werewolf.roles.romulus_remus.mother_role",
                     Formatter.format("&role&", game.translate(mother.getRole().getKey())))));
             return descriptionBuilder.build();
@@ -408,8 +406,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
         }
 
         if (mother.getLocation().distance(location) < 20) {
-            BukkitUtils.scheduleSyncDelayedTask(game, () -> {
-                mother.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.romulus_remus.mother_message"); }, 20 * 60 * 2);
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> mother.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.romulus_remus.mother_message"), 20 * 60 * 2);
             metMother = true;
         }
     }
