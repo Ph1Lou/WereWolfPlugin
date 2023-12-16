@@ -53,31 +53,17 @@ public class PatchPotions implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onEffectGet(PotionSplashEvent event) {
 
-        event.setCancelled(true);
         event.getAffectedEntities().stream()
                 .map(livingEntity -> game.getPlayerWW(livingEntity.getUniqueId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .forEach(playerWW -> event.getPotion().getEffects().forEach(potionEffect -> {
-                    if (potionEffect.getDuration() == 1) { //handle instant potion
-                        if (potionEffect.getType().equals(PotionEffectType.HEAL)) {
-                            if (potionEffect.getAmplifier() == 0) {
-                                playerWW.addPlayerHealth(4);
-                            } else {
-                                playerWW.addPlayerHealth(8);
-                            }
-                        } else if (potionEffect.getType().equals(PotionEffectType.HARM)) {
-                            if (potionEffect.getAmplifier() == 0) {
-                                playerWW.removePlayerHealth(6);
-                            } else {
-                                playerWW.removePlayerHealth(12);
-                            }
-                        }
-                    } else {
+                    if (potionEffect.getDuration() != 1) { // Instant splash potion
+                        event.setCancelled(true);
                         playerWW.addPotionModifier(PotionModifier.add(
                                 potionEffect.getType(),
                                 potionEffect.getDuration(),
