@@ -15,6 +15,7 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
@@ -25,6 +26,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -42,6 +44,25 @@ public class RoleDuration extends ListenerWerewolf {
 
     public RoleDuration(WereWolfAPI main) {
         super(main);
+    }
+
+
+    private void roleAnnouncement(IPlayerWW playerWW) {
+
+        IRole iRole = playerWW.getRole();
+        Sound.EXPLODE.play(playerWW);
+        playerWW.sendMessageWithKey("werewolf.description.description_message",
+                Formatter.format("&description&", iRole.getDescription()));
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.announcement.review_role");
+
+        iRole.recoverPotionEffects();
+        iRole.recoverPower();
+
+        if (this.getGame().getConfig().isConfigActive(ConfigBase.TROLL_ROLE)) return;
+
+        for (ItemStack i : getGame().getStuffs().getStuffRole(iRole.getKey())) {
+            playerWW.addItem(i);
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -90,7 +111,7 @@ public class RoleDuration extends ListenerWerewolf {
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
         }
         game.getPlayersWW()
-                .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
+                .forEach(this::roleAnnouncement);
 
         BukkitUtils.scheduleSyncDelayedTask(game, game::checkVictory);
     }
@@ -139,7 +160,7 @@ public class RoleDuration extends ListenerWerewolf {
 
 
         game.getPlayersWW()
-                .forEach(playerWW -> playerWW.getRole().roleAnnouncement());
+                .forEach(this::roleAnnouncement);
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
 

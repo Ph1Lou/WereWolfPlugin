@@ -150,11 +150,11 @@ public class CursedLover implements ILover, Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onDetectVictoryCancel(WinConditionsCheckEvent event) {
 
-        if (event.isCancelled()) return;
+        if (event.isWin()) return;
 
         if (this.death) return;
 
-        event.setCancelled(true);
+        event.setWin();
     }
 
     @Override

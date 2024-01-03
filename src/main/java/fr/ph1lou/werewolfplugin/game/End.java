@@ -27,6 +27,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -54,10 +55,10 @@ public class End {
             return;
         }
 
-        Set<IRole> iRolesAlive = game.getPlayersWW().stream()
+        List<IRole> iRolesAlive = game.getPlayersWW().stream()
                 .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
 
         if (iRolesAlive.isEmpty()) {
@@ -87,7 +88,7 @@ public class End {
         WinConditionsCheckEvent winConditionsCheckEvent = new WinConditionsCheckEvent();
         Bukkit.getPluginManager().callEvent(winConditionsCheckEvent);
 
-        if (winConditionsCheckEvent.isCancelled()) {
+        if (winConditionsCheckEvent.isWin()) {
             String winnerTeam = winConditionsCheckEvent.getVictoryTeam();
 
             if (winnerTeam.isEmpty()) return;
@@ -97,7 +98,11 @@ public class End {
             return;
         }
 
-        if(iRolesAlive.stream().noneMatch(ICamp::isNeutral)){
+        if(iRolesAlive.size() == 1 && iRolesAlive.stream().allMatch(ICamp::isNeutral)){
+            winner = iRolesAlive.get(0).getKey();
+            end();
+        }
+        else if(iRolesAlive.stream().noneMatch(ICamp::isNeutral)){
 
             if (iRolesAlive.stream().allMatch(ICamp::isWereWolf)) {
                 winner = Category.WEREWOLF.getKey();

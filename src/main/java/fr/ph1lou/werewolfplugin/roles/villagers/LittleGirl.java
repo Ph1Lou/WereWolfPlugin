@@ -221,16 +221,9 @@ public class LittleGirl extends RoleVillage implements IInvisible {
     @EventHandler
     public void onWWChatLittleGirl(WereWolfChatEvent event) {
 
-        if (event.isCancelled()) return;
+        if (!this.getPlayerWW().equals(event.getTargetWW())) return;
 
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
-        if (isWereWolf()) { //pour éviter qu'elle ait le message en double
-            return;
-        }
-
-        event.sendMessage(this.getPlayerWW());
-
+        event.setCancelled(false);
     }
 
     @Override

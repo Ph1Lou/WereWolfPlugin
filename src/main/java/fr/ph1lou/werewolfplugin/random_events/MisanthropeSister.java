@@ -73,7 +73,7 @@ public class MisanthropeSister extends ListenerWerewolf {
 
     @EventHandler
     public void onRequestWerewolfList(AppearInWereWolfListEvent event) {
-        if (this.sisterWW != null && event.getPlayerUUID().equals(this.sisterWW.getUUID())) {
+        if (event.getTargetWW().equals(this.sisterWW)) {
             event.setAppear(false);
         }
     }

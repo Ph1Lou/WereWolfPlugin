@@ -469,7 +469,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
     @EventHandler
     public void onDetectVictoryWithProtege(WinConditionsCheckEvent event) {
 
-        if (event.isCancelled()) return;
+        if (event.isWin()) return;
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
@@ -509,7 +509,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
         }
 
         if (game.getPlayersCount() == list.size()) {
-            event.setCancelled(true);
+            event.setWin();
             event.setVictoryTeam(RoleBase.GUARDIAN_ANGEL);
         }
     }

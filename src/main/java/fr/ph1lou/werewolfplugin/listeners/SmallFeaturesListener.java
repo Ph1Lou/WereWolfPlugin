@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.utils.GoldenAppleParticleEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -10,16 +11,19 @@ import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
@@ -172,5 +176,12 @@ public class SmallFeaturesListener implements Listener {
     @EventHandler
     public void initWorld(WorldInitEvent event) {
         event.getWorld().setKeepSpawnInMemory(false); //for avoid crash when map change
+    }
+
+    @EventHandler
+    public void onLoad(EntitySpawnEvent event){
+        if(game.isState(StateGame.LOBBY)){
+            event.setCancelled(true);
+        }
     }
 }

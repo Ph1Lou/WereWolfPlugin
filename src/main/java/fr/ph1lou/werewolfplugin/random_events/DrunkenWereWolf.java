@@ -18,13 +18,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RandomEvent(key = EventBase.DRUNKEN_WEREWOLF, loreKey = "werewolf.random_events.drunken_werewolf.description")
 public class DrunkenWereWolf extends ListenerWerewolf {
 
-    private final Set<UUID> fakeList = new HashSet<>();
+    private final Set<IPlayerWW> fakeList = new HashSet<>();
     private IPlayerWW temp;
 
 
@@ -60,9 +59,8 @@ public class DrunkenWereWolf extends ListenerWerewolf {
             return;
         }
 
-        List<UUID> fakeListPool = game.getPlayersWW().stream()
+        List<IPlayerWW> fakeListPool = game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .map(IPlayerWW::getUUID)
                 .collect(Collectors.toList());
 
         if (fakeListPool.size() < playerWWS.size()) {
@@ -78,10 +76,9 @@ public class DrunkenWereWolf extends ListenerWerewolf {
         this.fakeList.addAll(game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.getRole().isKey(RoleBase.ALPHA_WEREWOLF))
-                .map(IPlayerWW::getUUID)
                 .collect(Collectors.toList()));
 
-        this.fakeList.add(this.temp.getUUID());
+        this.fakeList.add(this.temp);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -89,10 +86,10 @@ public class DrunkenWereWolf extends ListenerWerewolf {
 
         if (this.temp == null) return;
 
-        if (!event.getRequesterUUID().equals(this.temp.getUUID())) {
+        if (!event.getPlayerWW().equals(this.temp)) {
             return;
         }
 
-        event.setAppear(this.fakeList.contains(event.getPlayerUUID()));
+        event.setAppear(this.fakeList.contains(event.getTargetWW()));
     }
 }

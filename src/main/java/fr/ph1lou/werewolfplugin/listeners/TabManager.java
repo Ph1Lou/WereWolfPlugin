@@ -135,30 +135,31 @@ public class TabManager implements Listener {
         }
 
         if (team != null) {
-            UUID uuid1 = target.getUniqueId();
-            RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(uuid1);
-            Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
+            game.getPlayerWW(target.getUniqueId()).ifPresent(targetWW -> {
+                RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(targetWW);
+                Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
-            if (requestSeeWereWolfListEvent.isAccept()) {
-                AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(player.getUniqueId(), uuid1);
-                Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
-                if (appearInWereWolfListEvent.isAppear()) {
-                    if (game.getConfig().isConfigActive(ConfigBase.RED_NAME_TAG)) {
-                        sb.append(ChatColor.DARK_RED);
-                    }
-                }
-            }
+                game.getPlayerWW(player.getUniqueId())
+                        .ifPresent(playerWW -> {
 
-            game.getPlayerWW(target.getUniqueId())
-                    .ifPresent(targetWW -> game.getPlayerWW(player.getUniqueId())
-                            .ifPresent(playerWW -> {
-                                if(playerWW.isState(StatePlayer.ALIVE)){
-                                    sb.append(targetWW.getColor(playerWW));
+                            if (requestSeeWereWolfListEvent.isAccept()) {
+                                AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(targetWW, playerWW);
+                                Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
+                                if (appearInWereWolfListEvent.isAppear()) {
+                                    if (game.getConfig().isConfigActive(ConfigBase.RED_NAME_TAG)) {
+                                        sb.append(ChatColor.DARK_RED);
+                                    }
                                 }
-                            }));
+                            }
+                            if(playerWW.isState(StatePlayer.ALIVE)){
+                                sb.append(targetWW.getColor(playerWW));
+                            }
+                        });
 
-            if (game.getModerationManager().getModerators().contains(uuid1)) {
+            });
+
+            if (game.getModerationManager().getModerators().contains(target.getUniqueId())) {
                 String string1 = updateModeratorNameTagEvent.getSuffix() + updatePlayerNameTagEvent.getSuffix();
                 team.setSuffix(string1.substring(0, Math.min(16, string1.length())));
                 String string2 = sb + updateModeratorNameTagEvent.getPrefix();

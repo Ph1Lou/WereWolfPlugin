@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class Amnesic extends ListenerWerewolf {
 
     public final static String TIMER = "werewolf.random_events.amnesic.timer";
-    private final List<UUID> list = new ArrayList<>();
+    private final List<IPlayerWW> list = new ArrayList<>();
     private IPlayerWW temp;
 
     public Amnesic(WereWolfAPI main) {
@@ -68,7 +68,7 @@ public class Amnesic extends ListenerWerewolf {
             return;
         }
 
-        this.list.add(this.temp.getUUID());
+        this.list.add(this.temp);
     }
 
 
@@ -129,23 +129,19 @@ public class Amnesic extends ListenerWerewolf {
 
         WereWolfAPI game = this.getGame();
 
-        List<UUID> playerWWS = game.getPlayersWW().stream()
+        List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
-                .map(IPlayerWW::getUUID)
-                .filter(uuid -> !this.list.contains(uuid))
+                .filter(playerWW -> !this.list.contains(playerWW))
                 .collect(Collectors.toList());
 
         if (playerWWS.isEmpty()) return;
 
         Collections.shuffle(playerWWS, game.getRandom());
 
-        UUID uuid = playerWWS.get(0);
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
+        IPlayerWW playerWW = playerWWS.get(0);
 
-        if (playerWW == null) return;
-
-        this.list.add(uuid);
+        this.list.add(playerWW);
 
         Player player = Bukkit.getPlayer(this.temp.getUUID());
 
@@ -170,15 +166,15 @@ public class Amnesic extends ListenerWerewolf {
 
         if (this.temp == null) return;
 
-        if (event.getPlayerUUID().equals(this.temp.getUUID())) {
-            event.setAppear(this.list.contains(event.getRequesterUUID()));
+        if (event.getTargetWW().equals(this.temp)) {
+            event.setAppear(this.list.contains(event.getPlayerWW()));
             return;
         }
 
-        if (!event.getRequesterUUID().equals(this.temp.getUUID())) {
+        if (!event.getPlayerWW().equals(this.temp)) {
             return;
         }
 
-        event.setAppear(this.list.contains(event.getPlayerUUID()));
+        event.setAppear(this.list.contains(event.getTargetWW()));
     }
 }

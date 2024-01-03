@@ -23,8 +23,8 @@ public class WorldFillTask implements Runnable {
     private final CoordXZ lastChunk = new CoordXZ(0, 0);
     // general task-related reference data
     private Server server;
-    private BorderData border;
-    private WorldFileData worldData;
+    private final BorderData border;
+    private final WorldFileData worldData;
     private boolean readyToGo = false;
     private boolean paused = false;
     private boolean pausedForMemory = false;
@@ -94,9 +94,9 @@ public class WorldFillTask implements Runnable {
         this.readyToGo = true;
     }
 
-    public void setTaskID(int ID) {
-        if (ID == -1) this.stop();
-        this.taskID = ID;
+    public void setTaskID(int id) {
+        if (id == -1) this.stop();
+        this.taskID = id;
     }
 
     @Override
@@ -160,7 +160,8 @@ public class WorldFillTask implements Runnable {
         for (CoordXZ unload : chunksToUnload) {
             if (!chunkOnUnloadPreventionList(unload.x, unload.z)) {
                 VersionUtils.getVersionUtils().setChunkForceLoaded(world, unload.x, unload.z, false);
-                world.unloadChunkRequest(unload.x, unload.z);
+                world.unloadChunk(unload.x, unload.z);
+                //world.unloadChunkRequest(unload.x, unload.z);
             }
         }
 
@@ -315,8 +316,9 @@ public class WorldFillTask implements Runnable {
             return;
 
         readyToGo = false;
-        if (taskID != -1)
+        if (taskID != -1) {
             server.getScheduler().cancelTask(taskID);
+        }
         server = null;
         // go ahead and unload any chunks we still have loaded
         // Set preventUnload to empty first so the ChunkUnloadEvent Listener
@@ -402,9 +404,6 @@ public class WorldFillTask implements Runnable {
             if (chunk != null) {
                 // toggle "force loaded" flag on for chunk to prevent it from being unloaded while we need it
                 VersionUtils.getVersionUtils().setChunkForceLoaded(world, x, z, true);
-
-                // alternatively for 1.14.4+
-                //world.addPluginChunkTicket(x, z, pluginInstance);
             }
         });
     }

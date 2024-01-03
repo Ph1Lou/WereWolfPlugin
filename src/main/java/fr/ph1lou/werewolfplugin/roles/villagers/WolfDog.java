@@ -2,7 +2,6 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
@@ -26,6 +25,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.interfaces.ITransformed;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
@@ -87,47 +87,29 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
         this.power = false;
     }
 
-    @Override
-    @EventHandler
-    public void onWWChat(WereWolfChatEvent event) {
 
-        if (event.isCancelled()) return;
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onWerewolfWHat(WereWolfChatEvent event){
 
-        if (this.transformed && !super.isWereWolf()) {
-            event.setCancelled(true);
+        if(!event.getTargetWW().equals(this.getPlayerWW())){
             return;
         }
 
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
-        event.sendMessage(this.getPlayerWW());
-
+        if(!this.transformed){
+            event.setCancelled(false);
+        }
     }
 
-    @Override
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onNightForWereWolf(NightEvent event) {
 
-        if (!isAbilityEnabled()) return;
-
-        if (super.isWereWolf()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, RoleBase.WEREWOLF));
+        if (!super.isWereWolf()) {
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, RoleBase.WEREWOLF, 0));
         }
-
-        if (transformed || !super.isWereWolf()) return;
-
-
-        if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT)) return;
-
-        openWereWolfChat();
-
     }
 
-    @Override
     @EventHandler
     public void onChatSpeak(WereWolfCanSpeakInChatEvent event) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
@@ -136,11 +118,11 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
         event.setCanSpeak(true);
     }
 
-    @Override
+
     @EventHandler
     public void onAppearInWereWolfList(AppearInWereWolfListEvent event) {
 
-        if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
+        if (!getPlayerWW().equals(event.getPlayerWW())) return;
 
         if (this.getPlayerWW().isState(StatePlayer.DEATH)) return;
 

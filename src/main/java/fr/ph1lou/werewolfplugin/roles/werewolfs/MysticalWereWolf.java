@@ -11,7 +11,7 @@ import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.mystical_werewolf.MysticalWerewolfRevelationEvent;
-import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
+import fr.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -55,16 +55,12 @@ public class MysticalWereWolf extends RoleWereWolf {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onMessage(WereWolfChatEvent event) {
+    public void onMessage(WereWolfCanSpeakInChatEvent event) {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.mystical_werewolf.no_message");
-        event.setCancelled(true);
-    }
-
-    @Override
-    protected void openWereWolfChat() {
+        event.setCanSpeak(false);
     }
 
     @EventHandler

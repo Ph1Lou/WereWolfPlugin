@@ -18,6 +18,7 @@ import fr.ph1lou.werewolfplugin.listeners.PatchPotions;
 import fr.ph1lou.werewolfplugin.listeners.PlayerListener;
 import fr.ph1lou.werewolfplugin.listeners.SmallFeaturesListener;
 import fr.ph1lou.werewolfplugin.listeners.TabManager;
+import fr.ph1lou.werewolfplugin.listeners.WerewolfListener;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
@@ -50,6 +51,7 @@ public class ListenersManager implements IListenersManager {
         this.listeners.add(new CycleListener(this.game));
         this.listeners.add(new ActionBarListener(this.game));
         this.listeners.add(new TabManager(this.game));
+        this.listeners.add(new WerewolfListener(this.game));
         this.listeners.add(new DeathListener(this.game));
         this.listeners.add(new DamagesListener(this.game));
         this.listeners.add(new InvisibleListener(this.game));

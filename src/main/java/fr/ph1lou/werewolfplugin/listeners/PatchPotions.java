@@ -62,7 +62,7 @@ public class PatchPotions implements Listener {
                 .map(Optional::get)
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .forEach(playerWW -> event.getPotion().getEffects().forEach(potionEffect -> {
-                    if (potionEffect.getDuration() != 1) { // Instant splash potion
+                    if (potionEffect.getDuration() != 1) { // !Instant splash potion
                         event.setCancelled(true);
                         playerWW.addPotionModifier(PotionModifier.add(
                                 potionEffect.getType(),

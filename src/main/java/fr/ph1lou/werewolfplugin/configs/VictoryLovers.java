@@ -21,19 +21,19 @@ public class VictoryLovers extends ListenerWerewolf {
     @EventHandler(priority = EventPriority.LOW)
     public void onDetectVictoryCancel(WinConditionsCheckEvent event) {
 
-        if (event.isCancelled()) return;
+        if (event.isWin()) return;
 
         WereWolfAPI game = this.getGame();
 
         if (game.getLoversManager().getLovers().stream()
                 .filter(ILover::isAlive).anyMatch(ILover -> ILover.isKey(LoverBase.LOVER))) {
-            event.setCancelled(true);
+            event.setWin();
             return;
         }
 
         if (game.getLoversManager().getLovers().stream()
                 .filter(ILover::isAlive).anyMatch(ILover -> ILover.isKey(LoverBase.AMNESIAC_LOVER))) {
-            event.setCancelled(true);
+            event.setWin();
         }
     }
 

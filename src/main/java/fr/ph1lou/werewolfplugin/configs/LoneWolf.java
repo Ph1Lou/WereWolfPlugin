@@ -46,6 +46,7 @@ public class LoneWolf extends ListenerWerewolf {
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
                 .filter(IRole::isWereWolf)
+                .filter(iRole -> !iRole.isNeutral())
                 .collect(Collectors.toList());
 
         if (roleWWs.isEmpty()) return;

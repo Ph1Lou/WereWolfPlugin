@@ -24,27 +24,27 @@ import java.util.Map;
 // by the way, this region file handler was created based on the divulged region file format: http://mojang.com/2011/02/16/minecraft-save-file-format-in-beta-1-3/
 
 public class WorldFileData {
-    private final World world;
+    private final File world;
     private final Map<CoordXZ, List<Boolean>> regionChunkExistence = Collections.synchronizedMap(new HashMap<>());
     private File regionFolder = null;
     private File[] regionFiles = null;
 
     // the constructor is private; use create() method above to create an instance of this class.
     private WorldFileData(World world) {
-        this.world = world;
+        this.world = world.getWorldFolder();
     }
 
     // Use this static method to create a new instance of this class. If null is returned, there was a problem so any process relying on this should be cancelled.
     public static WorldFileData create(World world) {
         WorldFileData newData = new WorldFileData(world);
 
-        newData.regionFolder = new File(newData.world.getWorldFolder(), "region");
+        newData.regionFolder = new File(newData.world, "region");
         if (!newData.regionFolder.exists() || !newData.regionFolder.isDirectory()) {
             // check for region folder inside a DIM* folder (DIM-1 for nether, DIM1 for end, DIMwhatever for custom world types)
-            File[] possibleDimFolders = newData.world.getWorldFolder().listFiles(new DimFolderFileFilter());
+            File[] possibleDimFolders = newData.world.listFiles(new DimFolderFileFilter());
             if (possibleDimFolders != null) {
                 for (File possibleDimFolder : possibleDimFolders) {
-                    File possible = new File(newData.world.getWorldFolder(), possibleDimFolder.getName() + File.separator + "region");
+                    File possible = new File(newData.world, possibleDimFolder.getName() + File.separator + "region");
                     if (possible.exists() && possible.isDirectory()) {
                         newData.regionFolder = possible;
                         break;
@@ -52,7 +52,7 @@ public class WorldFileData {
                 }
             }
             if (!newData.regionFolder.exists() || !newData.regionFolder.isDirectory()) {
-                newData.sendMessage("Could not validate folder for world's region files. Looked in " + newData.world.getWorldFolder().getPath() + " for valid DIM* folder with a region folder in it.");
+                newData.sendMessage("Could not validate folder for world's region files. Looked in " + newData.world.getPath() + " for valid DIM* folder with a region folder in it.");
                 return null;
             }
         }

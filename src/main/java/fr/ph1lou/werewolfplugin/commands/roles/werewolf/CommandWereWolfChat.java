@@ -8,6 +8,7 @@ import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
+import fr.ph1lou.werewolfapi.events.werewolf.WereWolfSiteChatEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -54,8 +55,14 @@ public class CommandWereWolfChat implements ICommand {
 
                     game.getWerewolfChatHandler().addMessage(playerWW, sb.toString());
 
-                    WereWolfChatEvent wereWolfChatEvent = new WereWolfChatEvent(playerWW, sb.toString());
-                    Bukkit.getPluginManager().callEvent(wereWolfChatEvent);
+                    game.getPlayersWW()
+                            .stream()
+                            .filter(playerWW1 -> !playerWW1.isState(StatePlayer.DEATH))
+                            .forEach(playerWW1 -> {
+                        WereWolfChatEvent wereWolfChatEvent = new WereWolfChatEvent(playerWW, playerWW1, sb.toString());
+                        Bukkit.getPluginManager().callEvent(wereWolfChatEvent);
+                    });
+                    Bukkit.getPluginManager().callEvent(new WereWolfSiteChatEvent(playerWW, sb.toString()));
                 } else {
                     playerWW.sendMessageWithKey(Prefix.RED, "werewolf.commands.player.ww_chat.timer");
                 }

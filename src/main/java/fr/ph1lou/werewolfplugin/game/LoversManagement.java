@@ -98,7 +98,6 @@ public class LoversManagement implements ILoverManager {
             lovers.add(new AmnesiacLover(game, playerWW1, playerWW2));
             i++;
         }
-        game.getConfig().setLoverCount(LoverBase.AMNESIAC_LOVER, 0);
     }
 
 

@@ -242,10 +242,8 @@ public class GameManager implements WereWolfAPI {
     }
 
     public void cleanSchedules() {
-        this.scheduleId.removeIf(integer -> {
-            Bukkit.getScheduler().cancelTask(integer);
-            return true;
-        });
+        this.scheduleId.forEach(integer -> Bukkit.getScheduler().cancelTask(integer));
+        this.scheduleId.clear();
     }
 
     @Override

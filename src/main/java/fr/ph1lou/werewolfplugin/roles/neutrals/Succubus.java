@@ -252,7 +252,7 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
     @EventHandler
     public void onDetectVictoryWitchCharmed(WinConditionsCheckEvent event) {
 
-        if (event.isCancelled()) return;
+        if (event.isWin()) return;
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
@@ -285,7 +285,7 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
         }
 
         if (game.getPlayersCount() == list.size()) {
-            event.setCancelled(true);
+            event.setWin();
             event.setVictoryTeam(RoleBase.SUCCUBUS);
         }
     }

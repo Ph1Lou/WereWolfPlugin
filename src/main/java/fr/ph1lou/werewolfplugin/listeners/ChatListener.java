@@ -202,9 +202,8 @@ public class ChatListener implements Listener {
         return returnMessage.toString();
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onChatWW(WereWolfChatEvent event) {
-        if (event.isCancelled()) return;
 
         game.getModerationManager().getModerators().stream()
                 .map(Bukkit::getPlayer)

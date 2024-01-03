@@ -37,7 +37,7 @@ public class CommandWereWolf implements ICommand {
             return;
         }
 
-        RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(uuid);
+        RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(playerWW);
         Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
         if (!requestSeeWereWolfListEvent.isAccept()) {
@@ -49,8 +49,7 @@ public class CommandWereWolf implements ICommand {
 
         for (IPlayerWW playerWW1 : game.getPlayersWW()) {
 
-            AppearInWereWolfListEvent appearInWereWolfListEvent =
-                    new AppearInWereWolfListEvent(playerWW1.getUUID(), uuid);
+            AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(playerWW, playerWW1);
             Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
 
             if (playerWW1.isState(StatePlayer.ALIVE) && appearInWereWolfListEvent.isAppear()) {

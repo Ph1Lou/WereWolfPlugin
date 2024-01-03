@@ -18,15 +18,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("unused")
 @RandomEvent(key = EventBase.VACCINATION,
         loreKey = "werewolf.random_events.vaccination.description")
 public class Vaccination extends ListenerWerewolf {
-    private final Map<UUID, IPlayerWW> vaccinatedPlayers = new HashMap<>();
+    private final List<IPlayerWW> vaccinatedPlayers = new ArrayList<>();
 
     public Vaccination(WereWolfAPI game) {
         super(game);
@@ -64,7 +63,7 @@ public class Vaccination extends ListenerWerewolf {
         NewWereWolfEvent newWereWolfEvent = new NewWereWolfEvent(infectedPlayerWW);
         Bukkit.getPluginManager().callEvent(newWereWolfEvent);
 
-        this.vaccinatedPlayers.put(infectedPlayerWW.getUUID(), infectedPlayerWW);
+        this.vaccinatedPlayers.add(infectedPlayerWW);
 
         UpdateNameTagEvent nameTagEvent = new UpdateNameTagEvent(infectedPlayerWW);
         Bukkit.getPluginManager().callEvent(nameTagEvent);
@@ -72,8 +71,8 @@ public class Vaccination extends ListenerWerewolf {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onAppearInWereWolfList(AppearInWereWolfListEvent e) {
-        IPlayerWW playerWW = this.vaccinatedPlayers.get(e.getPlayerUUID());
-        if (playerWW != null && !playerWW.isState(StatePlayer.DEATH)) {
+
+        if (this.vaccinatedPlayers.contains(e.getTargetWW()) && !e.getTargetWW().isState(StatePlayer.DEATH)) {
             e.setAppear(true); //affiche les joueurs vaccinés dans la liste
         }
     }

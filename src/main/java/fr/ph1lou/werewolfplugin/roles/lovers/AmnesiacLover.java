@@ -135,7 +135,6 @@ public class AmnesiacLover implements ILover, Listener {
             this.find = true;
             announceAmnesiacLoversOnJoin(this.amnesiacLover1);
             announceAmnesiacLoversOnJoin(this.amnesiacLover2);
-            game.getConfig().addOneLover(LoverBase.AMNESIAC_LOVER);
             game.checkVictory();
 
         }

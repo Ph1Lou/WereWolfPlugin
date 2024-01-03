@@ -42,7 +42,7 @@ public class IncompleteList extends ListenerWerewolf {
 
         for (IPlayerWW playerWW1 : this.getGame().getPlayersWW()) {
 
-            RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(playerWW1.getUUID());
+            RequestSeeWereWolfListEvent requestSeeWereWolfListEvent = new RequestSeeWereWolfListEvent(playerWW1);
             Bukkit.getPluginManager().callEvent(requestSeeWereWolfListEvent);
 
             if (requestSeeWereWolfListEvent.isAccept()) {
@@ -52,7 +52,7 @@ public class IncompleteList extends ListenerWerewolf {
                 for (IPlayerWW playerWW2 : this.getGame().getPlayersWW()) {
 
                     AppearInWereWolfListEvent appearInWereWolfListEvent =
-                            new AppearInWereWolfListEvent(playerWW2.getUUID(), playerWW1.getUUID());
+                            new AppearInWereWolfListEvent(playerWW1, playerWW2);
                     Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
 
                     if (appearInWereWolfListEvent.isAppear()) {
@@ -75,13 +75,9 @@ public class IncompleteList extends ListenerWerewolf {
     @EventHandler(priority = EventPriority.HIGH)
     public void onAppearInWerewolfListEvent(AppearInWereWolfListEvent event) {
 
-        this.getGame().getPlayerWW(event.getRequesterUUID())
-                .ifPresent(playerWW1 -> this.getGame().getPlayerWW(event.getPlayerUUID())
-                        .ifPresent(playerWW2 -> {
-                            if (this.forgetWerewolves.containsKey(playerWW1) &&
-                                    this.forgetWerewolves.get(playerWW1).contains(playerWW2)) {
-                                event.setAppear(false);
-                            }
-                        }));
+        if (this.forgetWerewolves.containsKey(event.getPlayerWW()) &&
+            this.forgetWerewolves.get(event.getPlayerWW()).contains(event.getTargetWW())) {
+            event.setAppear(false);
+        }
     }
 }

@@ -155,10 +155,7 @@ public class Illusionist extends RoleVillage implements IPower, IAffectedPlayers
     @EventHandler
     public void onWerewolfListRequest(AppearInWereWolfListEvent event) {
 
-        if (this.playerWW == null) {
-            return;
-        }
-        if (event.getPlayerUUID().equals(this.playerWW.getUUID())) {
+        if (event.getTargetWW().equals(this.playerWW)) {
             event.setAppear(true);
         }
     }

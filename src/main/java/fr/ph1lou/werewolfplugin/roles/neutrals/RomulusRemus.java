@@ -335,7 +335,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
     @EventHandler
     public void onDetectVictoryWithFamily(WinConditionsCheckEvent event) {
 
-        if (event.isCancelled()) return;
+        if (event.isWin()) return;
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
@@ -352,7 +352,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
         if (game.getPlayersWW()
                     .stream()
                     .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE)).count() == 3) {
-            event.setCancelled(true);
+            event.setWin();
             event.setVictoryTeam(RoleBase.ROMULUS_REMUS);
         }
     }
@@ -360,8 +360,8 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
     @EventHandler
     public void onAppearInWerewolfList(AppearInWereWolfListEvent event) {
 
-        if(!event.getPlayerUUID().equals(this.getPlayerUUID()) &&
-           !event.getRequesterUUID().equals(this.getPlayerUUID())){
+        if(!event.getTargetWW().equals(this.getPlayerWW()) &&
+           !event.getPlayerWW().equals(this.getPlayerWW())){
             return;
         }
 
