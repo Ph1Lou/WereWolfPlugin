@@ -47,7 +47,12 @@ public class CommandStuffRole implements ICommand {
             player.getInventory().setItem(i, items[i]);
         }
 
-        player.setGameMode(GameMode.ADVENTURE);
+        if(game.isState(StateGame.LOBBY)){
+            player.setGameMode(GameMode.ADVENTURE);
+        }
+        else{
+            player.setGameMode(GameMode.SURVIVAL);
+        }
 
         Bukkit.getPluginManager().callEvent(new UpdateStuffEvent());
     }

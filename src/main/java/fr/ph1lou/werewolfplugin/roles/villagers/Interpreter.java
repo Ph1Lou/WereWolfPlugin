@@ -20,10 +20,9 @@ import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.Register;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -266,13 +265,14 @@ public class Interpreter extends RoleVillage implements IPower {
     }
 
     private TextComponent changeRole(String roleKey) {
-        TextComponent textComponent = new TextComponent(this.game.translate(Prefix.GREEN, "werewolf.roles.interpreter.click",
-                Formatter.role(game.translate(roleKey))));
-        textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s",
-                this.game.translate("werewolf.roles.interpreter.command"), roleKey)));
-        textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                new ComponentBuilder(this.game.translate(roleKey)).create()));
-        return textComponent;
+        return VersionUtils.getVersionUtils().createClickableText(
+                this.game.translate(Prefix.GREEN, "werewolf.roles.interpreter.click",
+                Formatter.role(game.translate(roleKey))),
+                String.format("/ww %s %s",
+                        this.game.translate("werewolf.roles.interpreter.command"), roleKey),
+                ClickEvent.Action.RUN_COMMAND,
+                this.game.translate(roleKey)
+                );
     }
 
     @Override

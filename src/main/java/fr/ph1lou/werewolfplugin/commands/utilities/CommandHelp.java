@@ -6,10 +6,9 @@ import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.registers.IRegisterManager;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.Register;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
@@ -27,18 +26,14 @@ public class CommandHelp implements ICommand {
         for (Wrapper<ICommand, PlayerCommand> command : registerManager.getPlayerCommandsRegister()) {
             if (!command.getMetaDatas().descriptionKey().isEmpty()) {
 
-                TextComponent textComponent = new TextComponent(
+                TextComponent textComponent = VersionUtils.getVersionUtils().createClickableText(
                         String.format("/ww §b%s ",
-                                game.translate(command.getMetaDatas().key())));
-
-                textComponent.setHoverEvent(
-                        new HoverEvent(
-                                HoverEvent.Action.SHOW_TEXT,
-                                new ComponentBuilder(
-                                        game.translate(command.getMetaDatas().descriptionKey()))
-                                        .create()));
-                textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/ww %s ",
-                        game.translate(command.getMetaDatas().key()))));
+                                game.translate(command.getMetaDatas().key())),
+                        String.format("/ww %s ",
+                                game.translate(command.getMetaDatas().key())),
+                        ClickEvent.Action.SUGGEST_COMMAND,
+                        game.translate(command.getMetaDatas().descriptionKey())
+                );
                 textComponent1.addExtra(textComponent);
             }
 

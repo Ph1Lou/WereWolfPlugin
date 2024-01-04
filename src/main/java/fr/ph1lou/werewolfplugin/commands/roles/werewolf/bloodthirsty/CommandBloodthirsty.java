@@ -36,7 +36,7 @@ public class CommandBloodthirsty implements ICommandRole {
         UUID playerUUID = player.getUniqueId();
         IPlayerWW selectedPlayerWW = game.getPlayerWW(playerUUID).orElse(null);
 
-        if (selectedPlayerWW == null | !(selectedPlayerWW.isState(StatePlayer.ALIVE))){
+        if (selectedPlayerWW == null || !(selectedPlayerWW.isState(StatePlayer.ALIVE))){
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }

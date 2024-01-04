@@ -91,6 +91,10 @@ public class DoubleJump extends ListenerWerewolf {
         if (isActive) return;
 
         Bukkit.getOnlinePlayers()
-                .forEach(player -> player.setAllowFlight(false));
+                .forEach(player -> {
+                    if(!player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)){
+                        player.setAllowFlight(false);
+                    }
+                });
     }
 }

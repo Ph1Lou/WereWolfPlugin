@@ -91,7 +91,7 @@ public class InvisibleListener implements Listener {
             return;
         }
 
-        event.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY, event.getPlayerWW().getRole().getKey()));
+        event.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY, event.getPlayerWW().getRole().getKey(), 0));
 
         ((IInvisible) event.getPlayerWW().getRole()).setInvisible(false);
     }

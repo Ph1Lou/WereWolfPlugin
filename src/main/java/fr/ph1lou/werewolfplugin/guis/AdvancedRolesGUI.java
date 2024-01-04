@@ -12,6 +12,7 @@ import fr.ph1lou.werewolfapi.game.IStuffManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.utils.InventoryUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -129,10 +130,12 @@ public class AdvancedRolesGUI implements InventoryProvider {
         for (ItemStack item : game.getStuffs().getStuffRole(this.register.key())) {
             player.getInventory().addItem(item);
         }
-        TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW, "werewolf.commands.admin.loot_role.valid",
-                Formatter.role(game.translate(register.key()))));
-        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s %s",
-                game.translate("werewolf.commands.admin.loot_role.command"), this.register.key())));
+        TextComponent msg = VersionUtils.getVersionUtils().createClickableText(game.translate(Prefix.YELLOW, "werewolf.commands.admin.loot_role.valid",
+                        Formatter.role(game.translate(register.key()))),
+                String.format("/a %s %s",
+                        game.translate("werewolf.commands.admin.loot_role.command"), this.register.key()),
+                ClickEvent.Action.RUN_COMMAND
+        );
         player.spigot().sendMessage(msg);
         player.closeInventory();
     }

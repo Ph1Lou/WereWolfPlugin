@@ -23,10 +23,10 @@ import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.game.PlayerWW;
-import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
@@ -250,11 +250,7 @@ public class DeathListener implements Listener {
         if (player != null) {
 
             player.setGameMode(GameMode.SPECTATOR);
-            TextComponent msg = new TextComponent(game.translate("werewolf.utils.bar") + "\n" +
-                    game.translate(Prefix.YELLOW, "werewolf.bug") + "\n" +
-                    game.translate("werewolf.utils.bar"));
-            msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-                    "https://discord.gg/GXXCVUA"));
+            TextComponent msg = Utils.getDiscord(game);
             player.spigot().sendMessage(msg);
             if (game.getConfig().getSpectatorMode() == 0 &&
                     !player.isOp() &&

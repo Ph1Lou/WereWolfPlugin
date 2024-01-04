@@ -26,10 +26,9 @@ import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.Register;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -157,10 +156,12 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
 
     private TextComponent changeVote(IPlayerWW playerWW) {
 
-        TextComponent cancelVote = new TextComponent(this.game.translate("werewolf.roles.citizen.click"));
-        cancelVote.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s", this.game.translate("werewolf.roles.citizen.command_change"))));
-        cancelVote.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(this.game.translate("werewolf.roles.citizen.change",
-                Formatter.player(playerWW.getName()))).create()));
+        TextComponent cancelVote = VersionUtils.getVersionUtils().createClickableText(this.game.translate("werewolf.roles.citizen.click"),
+                String.format("/ww %s", this.game.translate("werewolf.roles.citizen.command_change")),
+                ClickEvent.Action.RUN_COMMAND,
+                this.game.translate("werewolf.roles.citizen.change",
+                        Formatter.player(playerWW.getName())));
+
         TextComponent cancel = new TextComponent(this.game.translate(Prefix.YELLOW, "werewolf.roles.citizen.change_vote_message", Formatter.number(this.hasPower() ? 1 : 0)));
         cancel.addExtra(cancelVote);
         cancel.addExtra(new TextComponent(this.game.translate("werewolf.roles.citizen.time_left", Formatter.timer(game, TimerBase.VOTE_WAITING))));
@@ -168,9 +169,10 @@ public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayer
     }
 
     private TextComponent seeVote() {
-        TextComponent seeVote = new TextComponent(this.game.translate("werewolf.roles.citizen.click"));
-        seeVote.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s", this.game.translate("werewolf.roles.citizen.command_1"))));
-        seeVote.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(this.game.translate("werewolf.roles.citizen.see")).create()));
+        TextComponent seeVote = VersionUtils.getVersionUtils().createClickableText(this.game.translate("werewolf.roles.citizen.click"),
+                String.format("/ww %s", this.game.translate("werewolf.roles.citizen.command_1")),
+                ClickEvent.Action.RUN_COMMAND,
+                        this.game.translate("werewolf.roles.citizen.see"));
         TextComponent see = new TextComponent(this.game.translate(Prefix.YELLOW, "werewolf.roles.citizen.see_vote_message", Formatter.number(game.getConfig().getValue(IntValueBase.CITIZEN_SEE_VOTE_NUMBER) - this.getUse())));
         see.addExtra(seeVote);
         see.addExtra(new TextComponent(this.game.translate("werewolf.roles.citizen.time_left", Formatter.timer(game, TimerBase.VOTE_WAITING))));

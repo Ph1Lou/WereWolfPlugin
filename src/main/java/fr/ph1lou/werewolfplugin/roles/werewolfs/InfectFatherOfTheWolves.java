@@ -19,6 +19,7 @@ import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -120,15 +121,16 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
-        TextComponent infectMessage = new TextComponent(
+        TextComponent infectMessage = VersionUtils.getVersionUtils().createClickableText(
                 game.translate(
                         Prefix.YELLOW, "werewolf.roles.infect_father_of_the_wolves.infection_message",
-                        Formatter.player(playerWW.getName())));
-        infectMessage.setClickEvent(
-                new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-                        String.format("/ww %s %s",
-                                game.translate("werewolf.roles.infect_father_of_the_wolves.command"),
-                                playerWW.getUUID())));
+                        Formatter.player(playerWW.getName())),
+                String.format("/ww %s %s",
+                        game.translate("werewolf.roles.infect_father_of_the_wolves.command"),
+                        playerWW.getUUID()),
+                ClickEvent.Action.RUN_COMMAND
+                );
+
         getPlayerWW().sendMessage(infectMessage);
     }
 

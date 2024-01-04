@@ -2,26 +2,21 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.trouble_maker.TroubleMakerDeathEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfplugin.configs.WerewolfChat;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -110,21 +105,6 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
     @Override
     public Aura getDefaultAura() {
         return Aura.NEUTRAL;
-    }
-
-    @EventHandler
-    public void onNightAnnounceWereWOlfChat(NightEvent event) {
-
-        if (this.isWereWolf()) {
-            return;
-        }
-
-        if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT)) return;
-
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.commands.player.ww_chat.announce",
-                Formatter.timer(game, TimerBase.WEREWOLF_CHAT_DURATION),
-                Formatter.number(game.getConfig().getValue(WerewolfChat.CONFIG)));
-
     }
 
     @EventHandler

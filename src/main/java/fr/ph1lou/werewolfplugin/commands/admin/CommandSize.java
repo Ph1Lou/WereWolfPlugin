@@ -32,8 +32,9 @@ public class CommandSize implements ICommand {
         player.sendMessage(game.translate(Prefix.GREEN, "werewolf.commands.admin.size.result",
                 Formatter.number(size)));
 
-        TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW, "werewolf.commands.admin.size.change"));
-        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s", game.translate("werewolf.commands.admin.change.command"))));
+        TextComponent msg = VersionUtils.getVersionUtils().createClickableText(game.translate(Prefix.YELLOW, "werewolf.commands.admin.size.change"),
+                String.format("/a %s", game.translate("werewolf.commands.admin.change.command")),
+                ClickEvent.Action.RUN_COMMAND);
         player.spigot().sendMessage(msg);
     }
 }

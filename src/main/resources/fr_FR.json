@@ -42,12 +42,15 @@
         "effect": "Speed quand toutes les chambres sont fermées",
         "available": "Votre pouvoir est de nouveau disponible",
         "description": "Le jour, vous pouvez clic-droit sur un joueur pour l’héberger.\nLe jour suivant, vous pouvez à nouveau clic-droit sur le client pour savoir le nombre de joueurs croisés pendant la nuit et le nom de l’un d’eux.\nSi un client a fait un kill, vous le savez mais tous les clients sont expulsés.\nSi un client meurt, vous obtenez le rôle du tueur et la chambre ferme.\nQuand vous n'avez plus de chambre, vous obtenez Speed 0.5.",
+        "available_room": "Vous avez &number& chambre(s) disponible(s)",
         "dead": "Un de vos clients est mort, son tueur était &role&",
         "kill": "Un de vos clients a tué quelqu'un, tous vos clients sont éjectés",
-        "seen_players": "Ce client a vu &number& personne(s) dont &player&",
+        "seen_players": "Ce client (&player1&) a vu &number& personne(s) dont &player&",
         "no_seen_players": "Ce client n'a vu personne",
+        "already_seen": "Vous avez déjà reçu les informations de ce client",
         "add_client": "Vous allez héberger §b&player&§f",
         "no_more_room": "Vous n'avez plus de chambre, vous ne pouvez pas héberger ce client",
+        "list": "§bJoueur(s) hébergé(s)§f : &list&\n §bJoueur(s) hébergé(s)§f précedemment : &list2&\n",
         "speed": "Vous n'avez plus de chambre, vous avez maintenant la vitesse 0.5",
         "already": "Vous hébergez déjà ce client",
         "configurations": {
@@ -330,7 +333,7 @@
       },
       "assassin": {
         "display": "Assassin",
-        "effect": "Force le Jour",
+        "effect": "Force le Jour, 1 minute de Vitesse et 2 coeur d'absorption après chaque kill",
         "items": "Un livre Sharpness III, un livre Protection III et un livre Puissance III",
         "limit": "limite d'armure, d'arc et d'épée (+1)"
       },
@@ -447,6 +450,7 @@
         "items": "Une Potion Splash de Force",
         "command": "proteger",
         "perform": "Vous venez de protéger §b&player&",
+        "protected": "Le garde vient de vous protéger, si vous vous faites tuer par un §aLoup Garou§f vous ressusciterez",
         "protect": "Le garde vous avait protégé, de ce fait vous ressuscitez",
         "resurrection": "La personne que vous avez protégé vient de ressusciter. Vous n'avez plus de pouvoirs",
         "message": "Protégez un joueur pour la journée §b/ww proteger§r vous avez §b&timer&"

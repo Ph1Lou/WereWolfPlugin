@@ -23,9 +23,8 @@ import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -155,37 +154,26 @@ public class Sister extends RoleVillage implements IAffectedPlayers {
         IPlayerWW killerWW = event.getKiller();
         TextComponent textComponent = new TextComponent(game.translate(Prefix.YELLOW, "werewolf.roles.sister.choice"));
 
-        TextComponent name = new TextComponent(
-                game.translate("werewolf.roles.sister.name"));
-        name.setClickEvent(
-                new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-                        String.format("/ww %s %s",
-                                game.translate("werewolf.roles.sister.command_name"),
-                                killerWW == null ? "pve" : killerWW.getUUID().toString())));
-        name.setHoverEvent(
-                new HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT,
-                        new ComponentBuilder(game.translate("werewolf.roles.sister.see_name"))
-                                .create()));
+        TextComponent name = VersionUtils.getVersionUtils().createClickableText(
+                game.translate("werewolf.roles.sister.name"),
+                String.format("/ww %s %s",
+                        game.translate("werewolf.roles.sister.command_name"),
+                        killerWW == null ? "pve" : killerWW.getUUID().toString()),
+                ClickEvent.Action.RUN_COMMAND,
+                game.translate("werewolf.roles.sister.see_name")
+        );
 
         textComponent.addExtra(name);
 
         textComponent.addExtra(game.translate("werewolf.roles.sister.or"));
 
-        TextComponent role =
-                new TextComponent(game.translate("werewolf.roles.sister.role"));
-
-        role.setClickEvent(
-                new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-                        String.format("/ww %s %s",
-                                game.translate("werewolf.roles.sister.command_role"),
-                                killerWW == null ? "pve" : killerWW.getUUID().toString())));
-
-        role.setHoverEvent(
-                new HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT,
-                        new ComponentBuilder(game.translate("werewolf.roles.sister.see_role"))
-                                .create()));
+        TextComponent role = VersionUtils.getVersionUtils().createClickableText(game.translate("werewolf.roles.sister.role"),
+                String.format("/ww %s %s",
+                        game.translate("werewolf.roles.sister.command_role"),
+                        killerWW == null ? "pve" : killerWW.getUUID().toString()),
+                ClickEvent.Action.RUN_COMMAND,
+                game.translate("werewolf.roles.sister.see_role")
+        );
 
         textComponent.addExtra(role);
 

@@ -10,6 +10,7 @@ import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IStuffManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.save.StuffLoader;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -90,8 +91,10 @@ public class StuffsGUI implements InventoryProvider {
 
             game.getStuffs().getStartLoot().forEach(inventory::addItem);
 
-            TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW, "werewolf.commands.admin.stuff_start.valid"));
-            msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s", game.translate("werewolf.commands.admin.stuff_start.command"))));
+            TextComponent msg = VersionUtils.getVersionUtils().createClickableText(game.translate(Prefix.YELLOW, "werewolf.commands.admin.stuff_start.valid"),
+                    String.format("/a %s", game.translate("werewolf.commands.admin.stuff_start.command")),
+                    ClickEvent.Action.RUN_COMMAND);
+
             player.spigot().sendMessage(msg);
             player.closeInventory();
         }));
@@ -123,8 +126,9 @@ public class StuffsGUI implements InventoryProvider {
 
             stuffManager.getDeathLoot().forEach(inventory::addItem);
 
-            TextComponent msg = new TextComponent(game.translate(Prefix.YELLOW, "werewolf.commands.admin.loot_death.valid"));
-            msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/a %s", game.translate("werewolf.commands.admin.loot_death.command"))));
+            TextComponent msg = VersionUtils.getVersionUtils().createClickableText(game.translate(Prefix.YELLOW, "werewolf.commands.admin.loot_death.valid"),
+                    String.format("/a %s", game.translate("werewolf.commands.admin.loot_death.command")),
+                    ClickEvent.Action.RUN_COMMAND);
             player.spigot().sendMessage(msg);
             player.closeInventory();
         }));

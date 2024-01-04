@@ -40,6 +40,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Role(key = RoleBase.INNKEEPER, category = Category.VILLAGER, attributes = {RoleAttribute.VILLAGER,
         RoleAttribute.MINOR_INFORMATION}, configValues = @IntValue(key = IntValueBase.INNKEEPER_DETECTION_RADIUS,
@@ -60,6 +61,15 @@ public class Innkeeper extends RoleVillage implements IPower {
         return new DescriptionBuilder(game, this).setDescription(
                         game.translate("werewolf.roles.innkeeper" + ".description"))
                 .setEffects(game.translate("werewolf.roles.innkeeper.effect"))
+                .setPower(game.translate("werewolf.roles.innkeeper.available_room", Formatter.number(this.availableRooms)))
+                .addExtraLines(game.translate("werewolf.roles.innkeeper.list",
+                        Formatter.format("&list&", clientDatas
+                                .stream()
+                                .map(clientData -> clientData.playerWW.getName())
+                                .collect(Collectors.joining(", "))),
+                        Formatter.format("&list2&", previousClientDatas.stream()
+                                .map(clientData -> clientData.playerWW.getName())
+                                .collect(Collectors.joining(", ")))))
                 .build();
     }
 
@@ -120,6 +130,7 @@ public class Innkeeper extends RoleVillage implements IPower {
                         if (!clientKillEvent.isCancelled()) {
                             getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.kill");
                             clientDatas.forEach(clientData -> clientData.watching = false);
+                            clientDatas.clear();
                         }
                     }
                 });
@@ -190,7 +201,12 @@ public class Innkeeper extends RoleVillage implements IPower {
             return;
         }
 
-        if (availableRooms == 0 || !power) {
+        if (availableRooms == 0) {
+            getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.innkeeper.no_more_room");
+            return;
+        }
+
+        if(!power){
             return;
         }
 
@@ -208,22 +224,25 @@ public class Innkeeper extends RoleVillage implements IPower {
                 .filter(clientData -> clientData.playerWW.equals(playerWW))
                 .findFirst();
         if (clientDataOptional.isPresent()) {
+
             ClientData clientData = clientDataOptional.get();
-            if (!clientData.seenPlayers.isEmpty()) {
+
+            if(!clientData.watching){
+                getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.innkeeper.already_seen");
+            }
+            else if (!clientData.seenPlayers.isEmpty()) {
                 List<IPlayerWW> playerWWS = new ArrayList<>(clientData.seenPlayers);
                 Collections.shuffle(playerWWS, game.getRandom());
                 InnkeeperInfoMeetEvent innkeeperInfoMeetEvent = new InnkeeperInfoMeetEvent(getPlayerWW(),
                         playerWWS.get(0),
                         playerWWS.size());
-
-                this.setPower(false);
-
+                clientData.watching = false;
                 Bukkit.getPluginManager()
                         .callEvent(innkeeperInfoMeetEvent);
                 if (!innkeeperInfoMeetEvent.isCancelled()) {
                     getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.seen_players",
                             Formatter.number(playerWWS.size()), Formatter.player(playerWWS.get(0)
-                                    .getName()));
+                                    .getName()), Formatter.format("&player1&", playerWW.getName()));
                 }
             } else {
                 getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.innkeeper.no_seen_players");

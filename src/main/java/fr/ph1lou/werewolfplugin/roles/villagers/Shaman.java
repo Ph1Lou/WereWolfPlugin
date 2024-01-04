@@ -14,6 +14,7 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.event.EventHandler;
@@ -64,10 +65,12 @@ public class Shaman extends RoleVillage implements IAffectedPlayers {
         IPlayerWW playerWW = event.getPlayerWW();
         int nTimesAffected = (int) affectedPlayers.stream().filter(player -> player.equals(playerWW)).count();
 
-        TextComponent textComponent = new TextComponent(
-                game.translate(Prefix.YELLOW, "werewolf.roles.shaman.choice_message"));
-        textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/ww %s %s %s",
-                game.translate("werewolf.roles.shaman.command"), playerWW.getUUID(), nTimesAffected)));
+        TextComponent textComponent = VersionUtils.getVersionUtils().createClickableText(
+                game.translate(Prefix.YELLOW, "werewolf.roles.shaman.choice_message"),
+                String.format("/ww %s %s %s",
+                        game.translate("werewolf.roles.shaman.command"), playerWW.getUUID(), nTimesAffected),
+                ClickEvent.Action.RUN_COMMAND
+        );
 
         this.getPlayerWW().sendMessage(textComponent);
     }

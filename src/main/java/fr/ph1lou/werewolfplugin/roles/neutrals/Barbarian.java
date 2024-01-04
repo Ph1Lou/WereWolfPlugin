@@ -21,6 +21,7 @@ import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Arrow;
@@ -94,15 +95,15 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
             return;
         }
 
-        TextComponent hideMessage = new TextComponent(
+        TextComponent hideMessage = VersionUtils.getVersionUtils().createClickableText(
                 game.translate(
                         Prefix.YELLOW, "werewolf.roles.barbarian.click_message",
-                        Formatter.player(event.getPlayerWW().getName())));
-        hideMessage.setClickEvent(
-                new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-                        String.format("/ww %s %s",
-                                game.translate("werewolf.roles.barbarian.command"),
-                                event.getPlayerWW().getUUID())));
+                        Formatter.player(event.getPlayerWW().getName())),
+                String.format("/ww %s %s",
+                        game.translate("werewolf.roles.barbarian.command"),
+                        event.getPlayerWW().getUUID()),
+                ClickEvent.Action.RUN_COMMAND
+        );
         getPlayerWW().sendMessage(hideMessage);
     }
 

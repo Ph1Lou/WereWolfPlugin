@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.statistics.impl.GameReview;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.save.FileUtils_;
@@ -144,9 +145,9 @@ public class StatistiksUtils {
             try (BufferedReader ignored1 = new BufferedReader(
                     new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
 
-                TextComponent msg = new TextComponent(main.getWereWolfAPI().translate(Prefix.ORANGE, "werewolf.statistics"));
-                msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-                        String.format("https://werewolf.ph1lou.fr/game-view/%s", gameReview.getGameUUID().toString())));
+                TextComponent msg = VersionUtils.getVersionUtils().createClickableText(main.getWereWolfAPI().translate(Prefix.ORANGE, "werewolf.statistics"),
+                        String.format("https://werewolf.ph1lou.fr/game-view/%s", gameReview.getGameUUID().toString()),
+                        ClickEvent.Action.OPEN_URL);
                 Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(msg));
             } catch (Exception ignored) {
             }

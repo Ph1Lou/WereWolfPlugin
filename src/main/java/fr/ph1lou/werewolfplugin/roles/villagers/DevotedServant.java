@@ -24,6 +24,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -131,14 +132,15 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
             return;
         }
 
-        TextComponent resurrectionMessage = new TextComponent(
+        TextComponent resurrectionMessage = VersionUtils.getVersionUtils().createClickableText(
                 game.translate(
-                        Prefix.YELLOW, "werewolf.roles.devoted_servant.click"));
-        resurrectionMessage.setClickEvent(
-                new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-                        String.format("/ww %s %s",
-                                game.translate("werewolf.roles.devoted_servant.command"),
-                                event.getPlayerWW().getUUID())));
+                        Prefix.YELLOW, "werewolf.roles.devoted_servant.click"),
+                String.format("/ww %s %s",
+                        game.translate("werewolf.roles.devoted_servant.command"),
+                        event.getPlayerWW().getUUID()),
+                ClickEvent.Action.RUN_COMMAND
+        );
+
         getPlayerWW().sendMessage(resurrectionMessage);
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {

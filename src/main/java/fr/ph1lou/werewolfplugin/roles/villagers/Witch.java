@@ -20,6 +20,7 @@ import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -117,15 +118,16 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         TextComponent textComponent =
-                new TextComponent(
+                VersionUtils.getVersionUtils().createClickableText(
                         game.translate(
                                 Prefix.YELLOW, "werewolf.roles.witch.resuscitation_message",
-                                Formatter.player(playerWW.getName())));
-        textComponent.setClickEvent(new ClickEvent(
-                ClickEvent.Action.RUN_COMMAND,
-                String.format("/ww %s %s",
-                        game.translate("werewolf.roles.witch.command"),
-                        playerWW.getUUID())));
+                                Formatter.player(playerWW.getName())),
+                        String.format("/ww %s %s",
+                                game.translate("werewolf.roles.witch.command"),
+                                playerWW.getUUID()),
+                        ClickEvent.Action.RUN_COMMAND
+                );
+
         this.getPlayerWW().sendMessage(textComponent);
     }
 

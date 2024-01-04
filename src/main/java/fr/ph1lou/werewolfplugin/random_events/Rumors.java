@@ -11,6 +11,7 @@ import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -50,13 +51,13 @@ public class Rumors extends ListenerWerewolf {
 
                 active = true;
 
-                TextComponent textComponent = new TextComponent(
+                TextComponent textComponent = VersionUtils.getVersionUtils().createClickableText(
                         game.translate(
-                                "werewolf.random_events.rumors.message"));
-                textComponent.setClickEvent(
-                        new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
-                                String.format("/ww %s",
-                                        game.translate("werewolf.random_events.rumors.command"))));
+                                "werewolf.random_events.rumors.message"),
+                        String.format("/ww %s ",
+                                game.translate("werewolf.random_events.rumors.command")),
+                        ClickEvent.Action.SUGGEST_COMMAND);
+
                 Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(textComponent));
 
                 BukkitUtils.scheduleSyncDelayedTask(game, () -> {

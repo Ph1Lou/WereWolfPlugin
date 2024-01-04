@@ -12,6 +12,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -73,14 +74,14 @@ public class CommandLibrarian implements ICommandRole {
 
         ((IAffectedPlayers) librarian).addAffectedPlayer(playerWW1);
 
-        TextComponent contributionMessage = new TextComponent(game.translate(
-                Prefix.YELLOW, "werewolf.roles.librarian.message"));
-        contributionMessage
-                .setClickEvent(new ClickEvent(
-                        ClickEvent.Action.SUGGEST_COMMAND,
-                        String.format(
-                                "/ww %s",
-                                game.translate("werewolf.roles.librarian.request_command"))));
+        TextComponent contributionMessage = VersionUtils.getVersionUtils().createClickableText(game.translate(
+                Prefix.YELLOW, "werewolf.roles.librarian.message"),
+                String.format(
+                        "/ww %s",
+                        game.translate("werewolf.roles.librarian.request_command")),
+                ClickEvent.Action.SUGGEST_COMMAND
+                );
+
         selectionPlayer.spigot().sendMessage(contributionMessage);
 
         playerWW.sendMessageWithKey(

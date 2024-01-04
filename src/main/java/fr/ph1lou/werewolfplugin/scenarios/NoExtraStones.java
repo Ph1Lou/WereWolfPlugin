@@ -5,6 +5,7 @@ import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -25,6 +26,16 @@ public class NoExtraStones extends ListenerWerewolf {
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onBlockBreak(BlockBreakEvent event) {
+
+        Material currentItemType = VersionUtils.getVersionUtils().getItemInHand(event.getPlayer()).getType();
+
+        if (!currentItemType.equals(Material.DIAMOND_PICKAXE) &&
+            !currentItemType.equals(Material.IRON_PICKAXE) &&
+            !currentItemType.equals(Material.STONE_PICKAXE) &&
+            !currentItemType.equals(UniversalMaterial.GOLDEN_PICKAXE.getType())
+            && !currentItemType.equals(UniversalMaterial.WOODEN_PICKAXE.getType())) {
+            return;
+        }
 
         Block block = event.getBlock();
         List<ItemStack> itemStacks = Arrays.asList(UniversalMaterial.ANDESITE.getStack(),

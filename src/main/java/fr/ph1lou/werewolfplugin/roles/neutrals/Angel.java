@@ -36,9 +36,8 @@ import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -231,35 +230,23 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
     public TextComponent choiceAngel() {
 
 
-        TextComponent guardian = new TextComponent(
-                ChatColor.AQUA + game.translate(RoleBase.GUARDIAN_ANGEL));
-        guardian.setClickEvent(new ClickEvent(
-                ClickEvent.Action.RUN_COMMAND,
+        TextComponent guardian = VersionUtils.getVersionUtils().createClickableText(
+                ChatColor.AQUA + game.translate(RoleBase.GUARDIAN_ANGEL),
                 String.format("/ww %s",
-                        game.translate("werewolf.roles.angel.command_1"))));
-        guardian.setHoverEvent(
-                new HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT,
-                        new ComponentBuilder(
-                                game.translate(
-                                        game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL)
-                                                ? "werewolf.roles.angel.guardian_choice" :
-                                                "werewolf.roles.angel.guardian_choice_patch"))
-                                .create()));
+                        game.translate("werewolf.roles.angel.command_1")),
+                ClickEvent.Action.RUN_COMMAND,
+                game.translate(
+                        game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL)
+                                ? "werewolf.roles.angel.guardian_choice" :
+                                "werewolf.roles.angel.guardian_choice_patch"));
 
-        TextComponent fallen = new TextComponent(
-                ChatColor.AQUA + game.translate(RoleBase.FALLEN_ANGEL));
-        fallen.setClickEvent(new ClickEvent(
-                ClickEvent.Action.RUN_COMMAND,
+        TextComponent fallen = VersionUtils.getVersionUtils().createClickableText(
+                ChatColor.AQUA + game.translate(RoleBase.FALLEN_ANGEL),
                 String.format("/ww %s",
-                        game.translate("werewolf.roles.angel.command_2"))));
-        fallen.setHoverEvent(
-                new HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT,
-                        new ComponentBuilder(
-                                game.translate(
-                                        "werewolf.roles.angel.fallen_choice"))
-                                .create()));
+                        game.translate("werewolf.roles.angel.command_2")),
+                ClickEvent.Action.RUN_COMMAND,
+                game.translate("werewolf.roles.angel.fallen_choice")
+                );
 
         TextComponent choice = new TextComponent(
                 game.translate(Prefix.YELLOW, "werewolf.roles.angel.angel_choice"));
