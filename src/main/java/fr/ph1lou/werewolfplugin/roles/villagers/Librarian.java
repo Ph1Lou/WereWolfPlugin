@@ -10,7 +10,7 @@ import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianDeathEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
@@ -25,7 +25,7 @@ import java.util.List;
         category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER,
                 RoleAttribute.MINOR_INFORMATION})
-public class Librarian extends RoleVillage implements ILimitedUse, IAffectedPlayers {
+public class Librarian extends RoleImpl implements ILimitedUse, IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private final List<String> storage = new ArrayList<>();

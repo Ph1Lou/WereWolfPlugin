@@ -26,8 +26,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Role(key = RoleBase.TENEBROUS_WEREWOLF,
+        auraDescriptionSpecialUseCase = "werewolf.roles.tenebrous_werewolf.aura",
         category = Category.WEREWOLF,
         attributes = {RoleAttribute.WEREWOLF},
         timers = {@Timer(key = TimerBase.WEREWOLF_TENEBROUS_DURATION, defaultValue = 30, meetUpValue = 20)},
@@ -62,11 +64,6 @@ public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffected
                 .setCommand(game.translate("werewolf.roles.tenebrous_werewolf.description_command"))
                 .setPower(game.translate(power ? "werewolf.roles.tenebrous_werewolf.power_available" : "werewolf.roles.tenebrous_werewolf.power_not_available"))
                 .build();
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.LIGHT;
     }
 
     @Override

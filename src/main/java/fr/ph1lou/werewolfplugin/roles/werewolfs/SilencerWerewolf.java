@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.roles.werewolfs;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 @Role(key = RoleBase.SILENCER_WEREWOLF,
+        defaultAura = Aura.DARK,
         category = Category.WEREWOLF,
         attributes = RoleAttribute.WEREWOLF)
 public class SilencerWerewolf extends RoleWereWolf implements IPower, IGuesser, IAffectedPlayers {

@@ -6,7 +6,7 @@ import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ import java.util.List;
 @Role(key = RoleBase.BENEFACTOR,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER)
-public class Benefactor extends RoleVillage implements IAffectedPlayers {
+public class Benefactor extends RoleImpl implements IAffectedPlayers {
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
 
     public Benefactor(WereWolfAPI game, IPlayerWW playerWW) {

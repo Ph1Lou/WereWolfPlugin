@@ -21,7 +21,7 @@ import fr.ph1lou.werewolfapi.events.random_events.RumorsWriteEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
                 item = UniversalMaterial.ANVIL
         )
     )
-public class Citizen extends RoleVillage implements ILimitedUse, IAffectedPlayers, IPower {
+public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, IPower {
     private final List<IPlayerWW> affectedPlayer;
     private int use;
     private boolean power;

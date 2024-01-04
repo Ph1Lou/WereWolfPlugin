@@ -13,7 +13,7 @@ import fr.ph1lou.werewolfapi.events.roles.elder.ElderResurrectionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
@@ -26,8 +26,8 @@ import java.util.Optional;
 
 
 @Role(key = RoleBase.ELDER, category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER)
-public class Elder extends RoleVillage implements IPower {
+        attributes = RoleAttribute.VILLAGER, defaultAura = Aura.NEUTRAL)
+public class Elder extends RoleImpl implements IPower {
 
     private boolean power = true;
 
@@ -72,11 +72,6 @@ public class Elder extends RoleVillage implements IPower {
 
         this.getPlayerWW().addPotionModifier(PotionModifier
                 .add(PotionEffectType.DAMAGE_RESISTANCE, this.getKey()));
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)

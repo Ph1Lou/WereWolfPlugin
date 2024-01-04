@@ -222,7 +222,8 @@
         },
         "configurations": {
           "sweet_angel": "L'Ange Gardien gagne Village quand son protégé meurt"
-        }
+        },
+        "aura": "L'§aAnge§f garde TOUJOURS une aura Lumineuse"
       },
       "fallen_angel": {
         "display": "Ange Déchu",
@@ -291,7 +292,8 @@
         "configurations": {
           "fox_smell_number": "Nombre de Flairs du Renard §b&number&",
           "distance": "Champ d'action du Renard §b&number&"
-        }
+        },
+        "aura": "Quand le §bRenard§f renifle un Loup-Garou, son aura devient Obscure"
       },
       "raven": {
         "display": "Corbeau",
@@ -303,7 +305,8 @@
         "raven_player_voted": "Vous obtenez une minutes de Force et de Vitesse car le joueur le plus voté est celui que vous aviez voté",
         "get_curse": "Vous venez d'être maudit par le corbeau. Vous obtenez Jump Boost jusqu'au matin",
         "no_longer_curse": "Vous n'êtes plus maudit",
-        "command": "maudire"
+        "command": "maudire",
+        "aura": "Se faire maudire par le §bCorbeau§f donne une aura Obscure"
       },
       "village_idiot": {
         "display": "Idiot du Village",
@@ -341,7 +344,8 @@
         "display": "Loup Garou Feutré",
         "description": "§fVous avez un rôle d’affichage différent chaque jour parmi ceux encore en vie pour tromper le Village.",
         "role": "§fRole d'affichage Actuel : §b&role&\n",
-        "display_role_message": "Votre Rôle d'affichage aujourd'hui est §b&role&"
+        "display_role_message": "Votre Rôle d'affichage aujourd'hui est §b&role&",
+        "aura": "Le §cLoup-Garou Feutré§f obtient l'aura par défaut de son rôle de façade"
       },
       "thief": {
         "display": "Voleur",
@@ -349,12 +353,14 @@
         "details": "Pour voir les détails de votre rôle §b/ww role",
         "description": "Vous récupérez le rôle de la première personne que vous tuez et devez gagner avec son camp.",
         "effect": "Résistance jusqu’à son premier meurtre",
-        "realized_theft": "Vous devenez §b&role&"
+        "realized_theft": "Vous devenez §b&role&",
+        "aura": "Le §6Voleur§f obtient l'aura du joueur qu'il vole"
       },
       "imitator": {
         "display": "Imitateur",
         "effect": "Force jusqu’à son premier meurtre",
-        "description": "Vous récupérez le rôle de la première personne que vous tuez."
+        "description": "Vous récupérez le rôle de la première personne que vous tuez.",
+        "aura": "L'§6Imitateur§f obtient l'aura du joueur qu'il vole"
       },
       "detective": {
         "display": "Détective",
@@ -418,7 +424,8 @@
         "distance": "Vous devez être à moins de &number& blocs du joueur",
         "configurations": {
           "distance": "Champ d'action de la Prêtresse §b&number&"
-        }
+        },
+        "aura": "La §bPrêtresse§f garde TOUJOURS une aura Lumineuse"
       },
       "oracle": {
         "display": "Oracle",
@@ -442,7 +449,8 @@
         "protection_perform": "Vous venez de protéger §b&player&",
         "get_protection": "Le Salvateur vous protège pour la journée, vous avez Résistance et Nofall",
         "no_longer_protected": "Vous n'avez plus la salvation",
-        "command": "proteger"
+        "command": "proteger",
+        "aura": "Se faire protéger par le §bSalvateur§f donne une aura §bLumineuse"
       },
       "guard": {
         "display": "Garde",
@@ -453,7 +461,8 @@
         "protected": "Le garde vient de vous protéger, si vous vous faites tuer par un §aLoup Garou§f vous ressusciterez",
         "protect": "Le garde vous avait protégé, de ce fait vous ressuscitez",
         "resurrection": "La personne que vous avez protégé vient de ressusciter. Vous n'avez plus de pouvoirs",
-        "message": "Protégez un joueur pour la journée §b/ww proteger§r vous avez §b&timer&"
+        "message": "Protégez un joueur pour la journée §b/ww proteger§r vous avez §b&timer&",
+        "aura": "Se faire protéger par le §bGarde§f donne une aura §bLumineuse"
       },
       "bear_trainer": {
         "display": "Montreur d'Ours",
@@ -462,7 +471,8 @@
         "growling": "Grrrr ",
         "configurations": {
           "distance": "Champ d'action du Montreur d'Ours §b&number&"
-        }
+        },
+        "aura": "Le §bMontreur d’Ours§f change d’aura en fonction du nombre de “Grrrrr” (§b0§f / §71§f / §c2+§f)"
       },
       "avenger_werewolf": {
         "display": "Loup Garou Vengeur",
@@ -472,7 +482,8 @@
         "remove": "§b&player&§f était dans votre liste d'enregistrement, vous récupérez un coeur permanent supplémentaire",
         "configurations": {
           "distance": "Champ d'action du Loup Garou Vengeur §b&number&"
-        }
+        },
+        "aura": "Quand le §cLoup-Garou Vengeur§f atteint 10 ♥, son aura devient Obscure"
       },
       "white_werewolf": {
         "display": "Loup Garou Blanc",
@@ -613,7 +624,8 @@
         "choice_message": "Un joueur est mort. §bCliquez ici§r pour obtenir une information sur lui en échange d'un coeur permanent. Vous avez §b30§r secondes.",
         "victim_name": "§b&player&§r est mort",
         "victim_role": "Un §b&role&§r est mort",
-        "command": "command_shaman"
+        "command": "command_shaman",
+        "aura": "Quand le §bChaman§f utilisent son pouvoir, son aura devient Obscure"
       },
       "charmer": {
         "display": "Charmeuse",
@@ -651,7 +663,8 @@
       "big_bad_werewolf": {
         "display": "Grand Méchant Loup",
         "effects": "Force le Jour tant qu'un membre des Loups-Garous n'est pas mort",
-        "werewolf_death": "Un Loup Garou vient de mourir, vous perdez votre force le jour"
+        "werewolf_death": "Un Loup Garou vient de mourir, vous perdez votre force le jour",
+        "aura": "Le §cGrand Méchant Loup§f garde TOUJOURS une aura Obscure"
       },
       "will_o_the_wisp": {
         "display": "Feu Follet",
@@ -712,7 +725,8 @@
         "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé précedemment via §b/ww oberver§f",
         "timers": {
           "analyse_duration": "Début du pouvoir Analyste (§b&timer&§r)"
-        }
+        },
+        "aura": "Quand l’§bAnalyste§f utilise son pouvoir d’analyse, son aura devient Obscure"
       },
       "servitor": {
         "display": "Serviteur",
@@ -787,7 +801,8 @@
         },
         "configurations": {
           "darkness_distance": "Champ d'action des ténèbres : §b&number&§r blocs"
-        }
+        },
+        "aura": "Quand le §cLoup-Garou Ténébreux§f utilise son pouvoir, son aura devient Obscure"
       },
       "gravedigger": {
         "display": "Fossoyeur",
@@ -1016,7 +1031,6 @@
         "passive_light": "§bPassif§r: Les joueurs proches à l'aura &light&§r disposent de 0.5 de force.\n",
         "passive_neutral": "§bPassif§r: Lorsque un joueur est tué proche de vous (50 blocs), vous apprenez quelles sont les auras du mort et du tueur\n",
         "passive_dark": "§bPassif§r: Vous devez gagner §cseul§r. Vous infligez des dégâts de force aux joueurs avec une aura &light&§r. Vous disposez du pseudo d'un joueur à l'aura &light&. S'il ne reste plus de joueurs à l'aura &light&§r, votre aura ne change plus et vous obtenez speed permanent.\n",
-        "aura_status": "Votre aura est &aura&§r\n",
         "aura_sense": "Un joueur proche avec une aura &auraVictim&§r a été tué par un joueur avec une aura &auraKiller&",
         "aura_kill": "Vous avez tué un joueur avec une aura &aura_dead&§r. Votre aura est désormais &aura_new&",
         "aura_change": "Votre aura a changé. Elle est désormais &aura&",
@@ -1334,35 +1348,13 @@
         "aura": {
           "command": "aura",
           "description": "Explication sur les auras",
-          "messages": [
-            "Rôles à aura Lumineuse :",
-            "§cChien-Loup (Loup), Loup-Garou Mystique, Loup-Garou Grimeur",
-            "§bVoyante, Renard, Montreur d'Ours, Tombeur, Bibliothécaire, Trappeur, Prêtresse, Jumeaux, Analyste, Soeurs, Salvateur, Citoyen, Idiot du Village, Simple Villageois, Vieux Sage, Serviteur, Marchande de Fruit, Conteuse",
-            "§aAnge, Charmeuse, Feu Follet, Joueur de Flûte, §6Cupidon",
-            "Rôles à aura Neutre :",
-            "§cLoup-Garou Perfide, Loup-Garou Amnésique, Loup-Garou Craintif, Loup-Garou Vengeur",
-            "§bChaman, Comédien, Frère Siamois, Chasseur, Ancien, Oracle, Ermite, Garde, Détective, Petite Fille, Servante Dévouée, Mire, Braconnier",
-            "§aImitateur, Barbare, §6Enfant Sauvage, Voleur, Trublion, Escroc, Voyou",
-            "Rôles à aura Obscure :",
-            "§cTous les autres Loups-Garous",
-            "§bSorcière, Corbeau, Chien-Loup (Chien), Druide",
-            "§aAssassin, Rival, Succube, Tueur en Série, Nécromancien, §6Loup-Garou Blanc§f",
-            "Cas particuliers :",
+          "specific_use_cases": [
+            "§6Cas particuliers§f :",
             "Tuer un joueur (qui ne se fait pas ressusciter) donne une aura §bObscure",
-            "Se faire protéger par le §bSalvateur§f ou le §bGarde§f donne une aura §bLumineuse",
-            "Se faire maudire par le §bCorbeau§f donne une aura Obscure",
-            "Se faire ressusciter donne une aura §bNeutre",
-            "Le §cLoup-Garou Feutré§f obtient l'aura par défaut de son rôle de façade",
-            "Le §6Voleur§f et l'§6Imitateur§f obtiennent l'aura du joueur qu'ils volent",
-            "Le §bMontreur d’Ours§f change d’aura en fonction du nombre de “Grrrrr” (§b0§f / §71§f / §c2+§f)",
-            "Quand le §bRenard§f renifle un Loup-Garou, son aura devient Obscure",
-            "Quand le §bChaman§f et le §cLoup-Garou Ténébreux§f utilisent leur pouvoir, leur aura devient Obscure",
-            "Quand l’§bAnalyste§f utilise son pouvoir d’analyse, son aura devient Obscure",
-            "Quand le §cLoup-Garou Vengeur§f atteint 10 ♥, son aura devient Obscure",
-            "La §bPrêtresse§f et l'§aAnge§f gardent TOUJOURS une aura Lumineuse",
-            "Le §cGrand Méchant Loup§f garde TOUJOURS une aura Obscure"
+            "Se faire ressusciter donne une aura §bNeutre"
           ],
-          "prefix": "Descriptif des Auras :"
+          "prefix": "Descriptif des Auras :",
+          "menu_role": "Aura : &aura&"
         },
         "doc": {
           "command": "doc",

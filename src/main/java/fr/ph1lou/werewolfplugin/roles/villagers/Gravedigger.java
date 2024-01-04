@@ -18,7 +18,7 @@ import fr.ph1lou.werewolfapi.events.roles.gravedigger.TriggerGravediggerClueEven
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
@@ -42,11 +42,12 @@ import java.util.stream.Collectors;
  * @author havwila
  */
 @Role(key = RoleBase.GRAVEDIGGER,
+        defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
         configValues = {@IntValue(key = IntValueBase.GRAVEDIGGER_DISTANCE,
                 defaultValue = 70, meetUpValue = 30, step = 5, item = UniversalMaterial.BIRCH_LEAVES)})
-public class Gravedigger extends RoleVillage implements IAffectedPlayers {
+public class Gravedigger extends RoleImpl implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
     private final List<GravediggerClue> clues = new ArrayList<>();
@@ -86,11 +87,6 @@ public class Gravedigger extends RoleVillage implements IAffectedPlayers {
     @Override
     public List<? extends IPlayerWW> getAffectedPlayers() {
         return affectedPlayers;
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
     }
 
     @EventHandler

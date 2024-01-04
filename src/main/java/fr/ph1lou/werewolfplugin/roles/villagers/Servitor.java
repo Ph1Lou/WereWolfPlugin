@@ -17,7 +17,7 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
@@ -42,7 +42,7 @@ import java.util.Optional;
                 meetUpValue = 25,
                 step = 5,
                 item = UniversalMaterial.BROWN_WOOL)})
-public class Servitor extends RoleVillage implements IPower {
+public class Servitor extends RoleImpl implements IPower {
 
     private boolean power = true;
     private IPlayerWW master;

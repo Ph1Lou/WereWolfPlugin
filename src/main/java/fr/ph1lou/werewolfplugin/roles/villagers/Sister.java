@@ -18,7 +18,7 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
@@ -47,7 +47,7 @@ import java.util.Objects;
                 step = 2,
                 item = UniversalMaterial.GRAY_WOOL)},
         requireDouble = true)
-public class Sister extends RoleVillage implements IAffectedPlayers {
+public class Sister extends RoleImpl implements IAffectedPlayers {
 
     final List<IPlayerWW> killerWWS = new ArrayList<>();
 

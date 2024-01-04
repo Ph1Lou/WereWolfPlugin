@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Set;
 
 @Role(key = RoleBase.BARBARIAN,
+        defaultAura = Aura.NEUTRAL,
         category = Category.NEUTRAL,
         attributes = RoleAttribute.NEUTRAL,
         configValues = @IntValue(key = IntValueBase.BARBARIAN_DISTANCE,
@@ -105,11 +106,6 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
                 ClickEvent.Action.RUN_COMMAND
         );
         getPlayerWW().sendMessage(hideMessage);
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
     }
 
     @EventHandler(priority = EventPriority.HIGH)

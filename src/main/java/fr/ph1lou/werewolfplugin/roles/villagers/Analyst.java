@@ -23,9 +23,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Role(key = RoleBase.ANALYST,
         category = Category.VILLAGER,
+        auraDescriptionSpecialUseCase = "werewolf.roles.analyst.aura",
         attributes = {RoleAttribute.VILLAGER,
                 RoleAttribute.MINOR_INFORMATION},
         timers = {@Timer(key = TimerBase.ANALYSE_DURATION, defaultValue = 1800,
@@ -120,4 +122,5 @@ public class Analyst extends RoleWithLimitedSelectionDuration implements ILimite
     public void setPower2(boolean power2) {
         this.power2 = power2;
     }
+
 }

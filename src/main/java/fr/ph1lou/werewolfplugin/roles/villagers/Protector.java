@@ -25,9 +25,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Role(key = RoleBase.PROTECTOR,
+        auraDescriptionSpecialUseCase = "werewolf.roles.protector.aura",
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER)
 public class Protector extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {

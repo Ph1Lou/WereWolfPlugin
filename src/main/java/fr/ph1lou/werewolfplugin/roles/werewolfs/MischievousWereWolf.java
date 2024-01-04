@@ -37,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 @Role(key = RoleBase.MISCHIEVOUS_WEREWOLF,
+        defaultAura = Aura.NEUTRAL,
         category = Category.WEREWOLF,
         attributes = RoleAttribute.WEREWOLF)
 public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
@@ -223,10 +224,5 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
                     new InvisibleEvent(this.getPlayerWW(), false));
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
         }
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
     }
 }

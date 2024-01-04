@@ -30,6 +30,7 @@ import java.util.List;
  */
 
 @Role(key = RoleBase.OCCULTIST,
+        defaultAura = Aura.DARK,
         category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION})
 public class Occultist extends Villager {
@@ -88,11 +89,6 @@ public class Occultist extends Villager {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.occultist.description"))
                 .build();
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.DARK;
     }
 
     @EventHandler

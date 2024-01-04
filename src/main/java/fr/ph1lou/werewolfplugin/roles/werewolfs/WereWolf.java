@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -12,6 +13,7 @@ import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.WEREWOLF,
+        defaultAura = Aura.DARK,
         category = Category.WEREWOLF,
         attributes = RoleAttribute.WEREWOLF)
 public class WereWolf extends RoleWereWolf {

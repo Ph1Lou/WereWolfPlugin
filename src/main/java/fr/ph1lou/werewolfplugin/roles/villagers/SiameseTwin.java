@@ -14,7 +14,7 @@ import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
@@ -26,10 +26,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 @Role(key = RoleBase.SIAMESE_TWIN,
+        defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER,
         requireDouble = true)
-public class SiameseTwin extends RoleVillage {
+public class SiameseTwin extends RoleImpl {
 
     public SiameseTwin(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -82,12 +83,6 @@ public class SiameseTwin extends RoleVillage {
     public void recoverPower() {
         this.getPlayerWW().addPlayerMaxHealth(4);
     }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
-    }
-
 
     @Override
     public void second() {

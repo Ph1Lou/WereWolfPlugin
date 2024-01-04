@@ -19,7 +19,7 @@ import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IInvisible;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
@@ -37,9 +37,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 @Role(key = RoleBase.LITTLE_GIRL,
+        defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER)
-public class LittleGirl extends RoleVillage implements IInvisible {
+public class LittleGirl extends RoleImpl implements IInvisible {
 
     private boolean invisible = false;
 
@@ -240,10 +241,5 @@ public class LittleGirl extends RoleVillage implements IInvisible {
                     new InvisibleEvent(this.getPlayerWW(), false));
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
         }
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
     }
 }

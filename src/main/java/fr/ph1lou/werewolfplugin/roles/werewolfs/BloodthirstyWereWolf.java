@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Role(key = RoleBase.BLOODTHIRSTY_WEREWOLF,
+        defaultAura = Aura.DARK,
         category = Category.WEREWOLF,
         attributes = {RoleAttribute.WEREWOLF},
         configValues = {

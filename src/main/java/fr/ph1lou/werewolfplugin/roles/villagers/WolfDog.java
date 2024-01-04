@@ -16,10 +16,11 @@ import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.interfaces.ITransformed;
@@ -30,9 +31,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.WOLF_DOG,
+        defaultAura = Aura.DARK,
         category = Category.VILLAGER,
         attributes = RoleAttribute.HYBRID)
-public class WolfDog extends RoleVillage implements ITransformed, IPower {
+public class WolfDog extends RoleImpl implements ITransformed, IPower {
 
     private boolean transformed = false;
     private boolean power = true;
@@ -73,9 +75,10 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
         return super.isWereWolf() || this.transformed;
     }
 
+
     @Override
-    public Aura getDefaultAura() {
-        return this.transformed ? Aura.LIGHT : Aura.DARK;
+    public Aura getAura() {
+        return super.getAura();
     }
 
     @EventHandler
@@ -168,6 +171,9 @@ public class WolfDog extends RoleVillage implements ITransformed, IPower {
 
     @Override
     public void setTransformed(boolean transformed) {
+        if(transformed){
+            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.LIGHT, 1, false));
+        }
         this.transformed = transformed;
     }
 

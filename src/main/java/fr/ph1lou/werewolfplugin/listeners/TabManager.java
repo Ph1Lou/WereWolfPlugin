@@ -178,6 +178,29 @@ public class TabManager implements Listener {
     }
 
     @EventHandler
+    public final void onModeratorScoreBoard(UpdateModeratorNameTagEvent event) {
+
+        StringBuilder sb = new StringBuilder(event.getPrefix());
+
+        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID()).orElse(null);
+
+        if(playerWW == null) {
+            return;
+        }
+
+        if (playerWW.isState(StatePlayer.DEATH)) return;
+
+        if (playerWW.getRole().isNeutral()) {
+            sb.append(ChatColor.GOLD);
+        } else if (playerWW.getRole().isWereWolf()) {
+            sb.append(ChatColor.DARK_RED);
+        } else sb.append(ChatColor.GREEN);
+
+        event.setPrefix(sb.toString());
+        event.setSuffix(sb.toString());
+    }
+
+    @EventHandler
     public void onNameTagUpdate(UpdateNameTagEvent event) {
         Player player = Bukkit.getPlayer(event.getUUID());
 

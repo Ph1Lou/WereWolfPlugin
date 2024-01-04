@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -43,6 +44,7 @@ import java.util.Optional;
  */
 
 @Role(key = RoleBase.SCAMMER,
+        defaultAura = Aura.NEUTRAL,
         category = Category.NEUTRAL,
         attributes = RoleAttribute.HYBRID,
         incompatibleRoles = {RoleBase.CHARMER},

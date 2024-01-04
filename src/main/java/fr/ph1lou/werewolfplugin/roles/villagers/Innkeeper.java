@@ -22,7 +22,7 @@ import fr.ph1lou.werewolfapi.events.roles.innkeeper.InnkeeperSpeedEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfplugin.Main;
@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.INNKEEPER, category = Category.VILLAGER, attributes = {RoleAttribute.VILLAGER,
         RoleAttribute.MINOR_INFORMATION}, configValues = @IntValue(key = IntValueBase.INNKEEPER_DETECTION_RADIUS,
         defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.IRON_DOOR))
-public class Innkeeper extends RoleVillage implements IPower {
+public class Innkeeper extends RoleImpl implements IPower {
     private static final float defaultWalkSpeed = 0.2f;
     private final List<ClientData> clientDatas = new ArrayList<>();
     private final List<ClientData> previousClientDatas = new ArrayList<>();

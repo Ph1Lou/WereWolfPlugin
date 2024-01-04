@@ -17,7 +17,7 @@ import fr.ph1lou.werewolfapi.events.roles.fruitmerchant.GoldenCount;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
@@ -43,7 +43,7 @@ import java.util.Map;
                 defaultValue = 1200, meetUpValue = 5 * 60)},
         configValues = {@IntValue(key = IntValueBase.FRUIT_MERCHANT_DISTANCE,
                 defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.ORANGE_WOOL)})
-public class FruitMerchant extends RoleVillage implements IAffectedPlayers, IPower {
+public class FruitMerchant extends RoleImpl implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
     private final Map<IPlayerWW, Integer> goldenAppleNumber = new HashMap<>();

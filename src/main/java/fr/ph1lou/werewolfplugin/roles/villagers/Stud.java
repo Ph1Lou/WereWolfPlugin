@@ -14,7 +14,7 @@ import fr.ph1lou.werewolfapi.events.roles.stud.StudLoverEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -31,7 +31,7 @@ import java.util.Optional;
 @Role(key = RoleBase.STUD,
         category = Category.VILLAGER,
         attributes = RoleAttribute.HYBRID)
-public class Stud extends RoleVillage implements IPower {
+public class Stud extends RoleImpl implements IPower {
     private boolean power = true;
 
     public Stud(WereWolfAPI api, IPlayerWW playerWW) {

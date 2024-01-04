@@ -16,7 +16,7 @@ import fr.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
@@ -30,10 +30,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Role(key = RoleBase.WITCH, category = Category.VILLAGER,
+@Role(key = RoleBase.WITCH,defaultAura = Aura.DARK, category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER,
         configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.WITCH_AUTO_RESURRECTION, defaultValue = true))})
-public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
+public class Witch extends RoleImpl implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
@@ -94,12 +94,6 @@ public class Witch extends RoleVillage implements IAffectedPlayers, IPower {
     public void recoverPower() {
 
     }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.DARK;
-    }
-
 
     @EventHandler(ignoreCancelled = true)
     public void onThirdDeathEvent(ThirdDeathEvent event) {

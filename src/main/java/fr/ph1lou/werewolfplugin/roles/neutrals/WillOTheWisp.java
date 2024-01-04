@@ -429,9 +429,4 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
     public boolean hasPower() {
         return this.power;
     }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.LIGHT;
-    }
 }

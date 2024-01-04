@@ -9,6 +9,7 @@ import fr.minuskube.inv.content.Pagination;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.StateGame;
@@ -214,7 +215,9 @@ public class RolesGUI implements InventoryProvider {
                         String key = roleRegister.getMetaDatas().key();
                         AtomicBoolean unRemovable = new AtomicBoolean(false);
                         List<String> lore2 = new ArrayList<>(lore);
-
+                        Aura aura = roleRegister.getMetaDatas().defaultAura();
+                        lore2.add(game.translate("werewolf.commands.player.aura.menu_role",
+                                Formatter.format("&aura&",aura.getChatColor() + game.translate(aura.getKey()))));
 
                         if (game.getConfig().getRoleCount(key) > 0) {
                             lore2.addAll(AdvancedConfigurationUtils.getLore(game,

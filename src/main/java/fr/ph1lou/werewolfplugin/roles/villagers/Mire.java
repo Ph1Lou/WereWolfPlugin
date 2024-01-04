@@ -16,7 +16,7 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
                 item = UniversalMaterial.SKELETON_SKULL
         )
 )
-public class Mire extends RoleVillage {
+public class Mire extends RoleImpl {
 
     public Mire(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);

@@ -11,6 +11,7 @@ import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.SelectionEndEvent;
 import fr.ph1lou.werewolfapi.events.roles.falsifier_werewolf.NewDisplayRole;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
@@ -25,17 +26,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Role(key = RoleBase.FALSIFIER_WEREWOLF, category = Category.WEREWOLF,
+@Role(key = RoleBase.FALSIFIER_WEREWOLF,
+        auraDescriptionSpecialUseCase = "werewolf.roles.falsifier_werewolf.aura",
+        defaultAura = Aura.LIGHT,
+        category = Category.WEREWOLF,
         attributes = RoleAttribute.WEREWOLF)
 public class FalsifierWereWolf extends RoleWereWolf {
 
-    private Aura displayAura;
 
     public FalsifierWereWolf(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
         this.setDisplayCamp(Camp.VILLAGER.getKey());
         this.setDisplayRole(RoleBase.VILLAGER);
-        this.displayAura = Aura.LIGHT;
     }
 
     @EventHandler
@@ -49,7 +51,7 @@ public class FalsifierWereWolf extends RoleWereWolf {
         if (!isAbilityEnabled()) {
             this.setDisplayCamp(Camp.WEREWOLF.getKey());
             this.setDisplayRole(this.getKey());
-            this.displayAura = Aura.DARK;
+            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK, 1, false));
             return;
         }
 
@@ -73,11 +75,11 @@ public class FalsifierWereWolf extends RoleWereWolf {
             this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             setDisplayCamp(Camp.WEREWOLF.getKey());
             setDisplayRole(RoleBase.FALSIFIER_WEREWOLF);
-            displayAura = Aura.DARK;
+            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK, 1, false));
         } else {
             setDisplayRole(roles.getKey());
             setDisplayCamp(newDisplayRole.getNewDisplayCamp());
-            displayAura = roles.getDefaultAura();
+            this.addAuraModifier(new AuraModifier(this.getKey(), roles.getDefaultAura(), 1, false));
         }
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.falsifier_werewolf.display_role_message",
                 Formatter.role(game.translate(getDisplayRole())));
@@ -99,15 +101,5 @@ public class FalsifierWereWolf extends RoleWereWolf {
     @Override
     public void recoverPower() {
 
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return this.displayAura;
-    }
-
-    @Override
-    public Aura getAura() {
-        return this.displayAura;
     }
 }

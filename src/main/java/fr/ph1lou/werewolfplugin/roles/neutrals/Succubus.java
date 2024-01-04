@@ -42,6 +42,7 @@ import java.util.List;
 
 @Role(key = RoleBase.SUCCUBUS,
         category = Category.NEUTRAL,
+        defaultAura = Aura.DARK,
         attributes = RoleAttribute.NEUTRAL,
         timers = @Timer(key = TimerBase.SUCCUBUS_DURATION, defaultValue = 180, meetUpValue = 120),
         configValues = @IntValue(key = IntValueBase.SUCCUBUS_DISTANCE,
@@ -118,11 +119,6 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
     @Override
     public void recoverPower() {
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.succubus.charming_message");
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.DARK;
     }
 
     @Override

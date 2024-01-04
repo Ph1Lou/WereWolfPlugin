@@ -14,7 +14,7 @@ import fr.ph1lou.werewolfapi.events.roles.wise_elder.WiseElderRevealAuraAmountEv
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
@@ -42,7 +42,7 @@ import java.util.Optional;
                         meetUpValue = 3,
                         step = 1,
                         item = UniversalMaterial.BED)})
-public class WiseElder extends RoleVillage {
+public class WiseElder extends RoleImpl {
 
     private int neutralCounter;
     private int darkCounter;

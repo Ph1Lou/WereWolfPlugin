@@ -15,6 +15,7 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.auramancer.AuramancerChangeAuraEvent;
 import fr.ph1lou.werewolfapi.events.roles.auramancer.AuramancerEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IAuraModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -35,6 +36,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Role(key = RoleBase.AURAMANCER,
+        defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
         attributes = RoleAttribute.HYBRID,
 configValues = @IntValue(key = IntValueBase.AURAMANCER_DISTANCE,
@@ -44,7 +46,6 @@ configValues = @IntValue(key = IntValueBase.AURAMANCER_DISTANCE,
         item = UniversalMaterial.BED))
 public class Auramancer extends RoleImpl {
 
-    private Aura currentAura = Aura.NEUTRAL;
     private boolean auraLocked = false;
     private IPlayerWW knownPlayer = null;
 
@@ -57,10 +58,8 @@ public class Auramancer extends RoleImpl {
 
         DescriptionBuilder builder = new DescriptionBuilder(game, this).setDescription(game.translate("werewolf.roles.auramancer.description",
                 Formatter.format("&light&", Aura.LIGHT.getChatColor() + game.translate(Aura.LIGHT.getKey())),
-                        Formatter.format("&dark&", Aura.DARK.getChatColor() + game.translate(Aura.DARK.getKey()))))
-                .addExtraLines(game.translate("werewolf.roles.auramancer.aura_status",
-                        Formatter.format("&aura&", currentAura.getChatColor() + game.translate(currentAura.getKey()))));
-        switch (currentAura) {
+                        Formatter.format("&dark&", Aura.DARK.getChatColor() + game.translate(Aura.DARK.getKey()))));
+        switch (this.getAura()) {
             case LIGHT:
                 builder.addExtraLines(game.translate("werewolf.roles.auramancer.passive_light",
                         Formatter.format("&light&", Aura.LIGHT.getChatColor() + game.translate(Aura.LIGHT.getKey()))));
@@ -72,7 +71,7 @@ public class Auramancer extends RoleImpl {
                 builder.addExtraLines(game.translate("werewolf.roles.auramancer.passive_dark",
                         Formatter.format("&light&", Aura.LIGHT.getChatColor() + game.translate(Aura.LIGHT.getKey()))));
         }
-        if (currentAura.equals(Aura.DARK)) {
+        if (this.getAura().equals(Aura.DARK)) {
             if (auraLocked) {
                 builder.addExtraLines(game.translate("werewolf.roles.auramancer.no_light",
                         Formatter.format("&light&", Aura.LIGHT.getChatColor() + game.translate(Aura.LIGHT.getKey()))));
@@ -96,7 +95,7 @@ public class Auramancer extends RoleImpl {
                 if (lightPlayers.isEmpty()) {
                     auraLocked = true;
                     getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.auramancer.aura_locked",
-                            Formatter.format("&aura&", currentAura.getChatColor() + game.translate(currentAura.getKey())),
+                            Formatter.format("&aura&", this.getAura().getChatColor() + game.translate(this.getAura().getKey())),
                             Formatter.format("&aura_light&", Aura.LIGHT.getChatColor() + game.translate(Aura.LIGHT.getKey())));
                     if (isAbilityEnabled()) {
                         getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, this.getKey()));
@@ -119,31 +118,23 @@ public class Auramancer extends RoleImpl {
         }
     }
 
-    @Override
-    public Aura getDefaultAura() {
-        return currentAura;
-    }
 
-    @Override
-    public Aura getAura() {
-        return currentAura;
-    }
 
     @Override
     public void addAuraModifier(IAuraModifier auraModifier) {
 
         if (auraLocked) return;
 
-        if(currentAura == auraModifier.getAura()) return;
+        if(this.getAura() == auraModifier.getAura()) return;
 
         if (auraModifier.getName().equals(DeathListener.KILLER)) return;
 
-        currentAura = auraModifier.getAura();
+        super.addAuraModifier(new AuraModifier(this.getKey(), auraModifier.getAura(), 1, false));
 
-        Bukkit.getPluginManager().callEvent(new AuramancerChangeAuraEvent(this.getPlayerWW(), currentAura));
+        Bukkit.getPluginManager().callEvent(new AuramancerChangeAuraEvent(this.getPlayerWW(), this.getAura()));
 
         getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.auramancer.aura_change",
-                Formatter.format("&aura&", currentAura.getChatColor() + game.translate(currentAura.getKey())));
+                Formatter.format("&aura&", this.getAura().getChatColor() + game.translate(this.getAura().getKey())));
     }
 
     @Override
@@ -165,7 +156,7 @@ public class Auramancer extends RoleImpl {
 
     @Override
     public boolean isNeutral() {
-        return super.isNeutral() || (currentAura == Aura.DARK && !super.isWereWolf());
+        return super.isNeutral() || (this.getAura() == Aura.DARK && !super.isWereWolf());
     }
 
     @EventHandler
@@ -178,9 +169,31 @@ public class Auramancer extends RoleImpl {
         IPlayerWW playerWW = event.getPlayerWW();
         playerWW.getLastKiller().ifPresent(killerWW -> {
 
-            if (currentAura == Aura.NEUTRAL &&
-                killerWW.getLocation().distance(this.getPlayerWW().getLocation()) <
-                game.getConfig().getValue(IntValueBase.AURAMANCER_DISTANCE)) {
+            if (this.getPlayerWW().equals(killerWW)) {
+                if (auraLocked) return;
+
+                Aura auraDead = playerWW.getRole().getAura();
+
+                if (auraDead == Aura.DARK) {
+                    if (this.getAura() == Aura.DARK) {
+                        this.addAuraModifier(new AuraModifier(this.getKey(), Aura.NEUTRAL, 1, false));
+                    }
+                    else if (this.getAura() == Aura.NEUTRAL) {
+                        this.addAuraModifier(new AuraModifier(this.getKey(), Aura.LIGHT, 1, false));
+                    }
+                } else {
+                    this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK, 1, false));
+                }
+
+                Bukkit.getPluginManager().callEvent(new AuramancerChangeAuraEvent(this.getPlayerWW(), this.getAura()));
+                getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.auramancer.aura_kill",
+                        Formatter.format("&aura_dead&", auraDead.getChatColor() + game.translate(auraDead.getKey())),
+                        Formatter.format("&aura_new&", this.getAura().getChatColor() + game.translate(this.getAura().getKey())));
+
+            }
+            else if (this.getAura() == Aura.NEUTRAL &&
+                    killerWW.getLocation().distance(this.getPlayerWW().getLocation()) <
+                    game.getConfig().getValue(IntValueBase.AURAMANCER_DISTANCE)) {
 
                 //Compute the Aura the killer had before the kill
                 Aura auraKiller = killerWW.getRole().getAura();
@@ -201,28 +214,6 @@ public class Auramancer extends RoleImpl {
                         Formatter.format("&auraVictim&", auraVictim.getChatColor() + game.translate(auraVictim.getKey())),
                         Formatter.format("&auraKiller&", auraKiller.getChatColor() + game.translate(auraKiller.getKey())));
             }
-            if (this.getPlayerWW().equals(killerWW)) {
-                if (auraLocked) return;
-
-                Aura auraDead = playerWW.getRole().getAura();
-
-                if (auraDead == Aura.DARK) {
-                    if (currentAura == Aura.DARK) {
-                        currentAura = Aura.NEUTRAL;
-                    }
-                    else if (currentAura == Aura.NEUTRAL) {
-                        currentAura = Aura.LIGHT;
-                    }
-                } else {
-                    currentAura = Aura.DARK;
-                }
-
-                Bukkit.getPluginManager().callEvent(new AuramancerChangeAuraEvent(this.getPlayerWW(), currentAura));
-                getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.auramancer.aura_kill",
-                        Formatter.format("&aura_dead&", auraDead.getChatColor() + game.translate(auraDead.getKey())),
-                        Formatter.format("&aura_new&", currentAura.getChatColor() + game.translate(currentAura.getKey())));
-
-            }
         });
     }
 
@@ -236,7 +227,7 @@ public class Auramancer extends RoleImpl {
         Player damager = (Player) event.getDamager();
         IPlayerWW damagerWW = game.getPlayerWW(damager.getUniqueId()).orElse(null);
 
-        if (currentAura == Aura.DARK) {
+        if (this.getAura() == Aura.DARK) {
 
             if (damagerWW == null || !damagerWW.equals(getPlayerWW())) return;
 
@@ -247,7 +238,7 @@ public class Auramancer extends RoleImpl {
             if (targetWW.getRole().getAura() == Aura.LIGHT) {
                 event.setDamage(event.getDamage() * (1 + game.getConfig().getStrengthRate() / 100f));
             }
-        } else if (currentAura == Aura.LIGHT) {
+        } else if (this.getAura() == Aura.LIGHT) {
 
             if (!isAbilityEnabled()) return;
 
@@ -274,7 +265,7 @@ public class Auramancer extends RoleImpl {
 
         if (auraLocked) return;
 
-        if (!currentAura.equals(Aura.DARK)) return;
+        if (!this.getAura().equals(Aura.DARK)) return;
 
         long lightAuras = game.getPlayersWW()
                 .stream()
@@ -286,7 +277,7 @@ public class Auramancer extends RoleImpl {
         if (lightAuras == 0) {
             auraLocked = true;
             getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.auramancer.aura_locked",
-                    Formatter.format("&aura&", currentAura.getChatColor() + game.translate(currentAura.getKey())),
+                    Formatter.format("&aura&", this.getAura().getChatColor() + game.translate(this.getAura().getKey())),
                             Formatter.format("&aura_light&", Aura.LIGHT.getChatColor() + game.translate(Aura.LIGHT.getKey())));
             if (isAbilityEnabled()) {
                 getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, this.getKey()));

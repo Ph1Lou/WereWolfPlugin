@@ -4,6 +4,7 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -34,9 +35,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Role(key = RoleBase.THIEF,
+        defaultAura = Aura.NEUTRAL,
+        auraDescriptionSpecialUseCase = "werewolf.roles.thief.aura",
         category = Category.NEUTRAL,
         attributes = RoleAttribute.HYBRID)
 public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {

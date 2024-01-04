@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -421,6 +422,7 @@ public class PlayerWW implements IPlayerWW {
     public void setRole(IRole role) {
         this.role = role;
         this.role.setPlayerWW(this);
+        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this));
     }
 
     @Override

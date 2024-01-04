@@ -33,6 +33,7 @@ import java.util.Optional;
 
 
 @Role(key = RoleBase.ASSASSIN,
+        defaultAura = Aura.DARK,
         category = Category.NEUTRAL,
         attributes = RoleAttribute.NEUTRAL)
 public class Assassin extends RoleNeutral {
@@ -130,11 +131,6 @@ public class Assassin extends RoleNeutral {
         if (!isAbilityEnabled()) return;
 
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, this.getKey()));
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.DARK;
     }
 
     @Override

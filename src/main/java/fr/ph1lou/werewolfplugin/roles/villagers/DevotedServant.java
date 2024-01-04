@@ -18,7 +18,7 @@ import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
@@ -39,9 +39,10 @@ import java.util.List;
 
 
 @Role(key = RoleBase.DEVOTED_SERVANT,
+        defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER)
-public class DevotedServant extends RoleVillage implements IPower, IAffectedPlayers {
+public class DevotedServant extends RoleImpl implements IPower, IAffectedPlayers {
 
     @Nullable
     private IPlayerWW playerWW;
@@ -208,11 +209,6 @@ public class DevotedServant extends RoleVillage implements IPower, IAffectedPlay
     @Override
     public void recoverPower() {
 
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
     }
 
     @Override

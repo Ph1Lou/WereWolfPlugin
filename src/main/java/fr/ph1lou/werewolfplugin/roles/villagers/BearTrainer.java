@@ -18,7 +18,7 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 
 
 @Role(key = RoleBase.BEAR_TRAINER,
+        auraDescriptionSpecialUseCase = "werewolf.roles.bear_trainer.aura",
         category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER,
                 RoleAttribute.INFORMATION},
@@ -43,7 +44,7 @@ import java.util.stream.Collectors;
                 meetUpValue = 50,
                 step = 5,
                 item = UniversalMaterial.BROWN_WOOL)})
-public class BearTrainer extends RoleVillage {
+public class BearTrainer extends RoleImpl {
 
     public BearTrainer(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);

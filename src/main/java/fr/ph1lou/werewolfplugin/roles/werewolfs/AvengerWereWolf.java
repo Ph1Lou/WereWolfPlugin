@@ -14,6 +14,7 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.avenger_werewolf.DeathAvengerListEvent;
 import fr.ph1lou.werewolfapi.events.roles.avenger_werewolf.RegisterAvengerListEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
@@ -29,6 +30,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Role(key = RoleBase.AVENGER_WEREWOLF,
+        defaultAura = Aura.NEUTRAL,
+        auraDescriptionSpecialUseCase = "werewolf.roles.avenger_werewolf.aura",
         category = Category.WEREWOLF,
         attributes = RoleAttribute.WEREWOLF,
         configValues = {@IntValue(key = IntValueBase.AVENGER_WEREWOLF_DISTANCE,
@@ -79,6 +82,11 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.avenger_werewolf.remove",
                 Formatter.player(event.getPlayerWW().getName()));
         this.getPlayerWW().addPlayerMaxHealth(2);
+
+        if(this.getPlayerWW().getMaxHealth() >= 20){
+            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK, 1, false));
+        }
+
     }
 
     @Override
@@ -145,11 +153,5 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
     @Override
     public List<IPlayerWW> getAffectedPlayers() {
         return new ArrayList<>(this.affectedPlayers);
-    }
-
-
-    @Override
-    public Aura getDefaultAura() {
-        return this.getPlayerWW().getMaxHealth() >= 20 ? Aura.DARK : Aura.NEUTRAL;
     }
 }

@@ -15,7 +15,7 @@ import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.CUPID, category = Category.VILLAGER,
         attributes = RoleAttribute.HYBRID,
         configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.RANDOM_CUPID)))
-public class Cupid extends RoleVillage implements IAffectedPlayers, IPower {
+public class Cupid extends RoleImpl implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;

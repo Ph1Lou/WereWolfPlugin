@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Role(key = RoleBase.CROUPIER,
+            defaultAura = Aura.NEUTRAL,
             category = Category.VILLAGER,
             attributes = {RoleAttribute.INFORMATION, RoleAttribute.VILLAGER},
             configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.CROUPIER_EVERY_OTHER_DAY))})
@@ -48,11 +49,6 @@ public class Croupier extends RoleWithLimitedSelectionDuration implements IAffec
     @Override
     public void recoverPower() {
 
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
     }
 
     @Override

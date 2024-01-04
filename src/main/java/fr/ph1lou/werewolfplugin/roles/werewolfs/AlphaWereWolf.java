@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
@@ -18,6 +19,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.ALPHA_WEREWOLF,
+        defaultAura = Aura.DARK,
         category = Category.WEREWOLF,
         attributes = {RoleAttribute.WEREWOLF})
 public class AlphaWereWolf extends RoleWereWolf {

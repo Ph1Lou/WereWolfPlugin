@@ -43,6 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Role(key = RoleBase.THUG,
+        defaultAura = Aura.NEUTRAL,
         category = Category.NEUTRAL,
         attributes = RoleAttribute.NEUTRAL,
         configValues = {@IntValue(key = IntValueBase.THUG_DISTANCE,
@@ -111,11 +112,6 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
         if (this.playerWW != null) {
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.playerWW));
         }
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
     }
 
     @EventHandler

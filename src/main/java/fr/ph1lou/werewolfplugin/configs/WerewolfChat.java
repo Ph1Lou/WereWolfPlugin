@@ -53,13 +53,8 @@ public class WerewolfChat extends ListenerWerewolf {
         if(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST) > 0){
             return;
         }
+        
         game.getWerewolfChatHandler().enableWereWolfChat();
-        BukkitUtils.scheduleSyncDelayedTask(game, () -> game.getWerewolfChatHandler().disableWereWolfChat(),
-                game.getConfig().getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION) * 20L);
-    }
-
-    @EventHandler
-    public void onNightForWereWolf(NightEvent event) {
 
         getGame().getPlayersWW()
                 .stream()
@@ -70,6 +65,9 @@ public class WerewolfChat extends ListenerWerewolf {
                     return wereWolfCanSpeakInChatEvent.canSpeak();
                 })
                 .forEach(this::openWereWolfChat);
+
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> game.getWerewolfChatHandler().disableWereWolfChat(),
+                game.getConfig().getTimerValue(TimerBase.WEREWOLF_CHAT_DURATION) * 20L);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)

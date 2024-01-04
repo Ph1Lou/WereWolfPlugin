@@ -22,7 +22,7 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
         configValues = {@IntValue(key = IntValueBase.TWIN_DISTANCE,
                 defaultValue = 50,
                 meetUpValue = 50, step = 5, item = UniversalMaterial.GREEN_WOOL)})
-public class Twin extends RoleVillage {
+public class Twin extends RoleImpl {
 
     @Nullable
     private List<IPlayerWW> twinInformationList;

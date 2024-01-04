@@ -15,7 +15,7 @@ import fr.ph1lou.werewolfapi.events.werewolf.WereWolfKillEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -30,10 +30,11 @@ import org.jetbrains.annotations.NotNull;
  * @author havwila
  */
 @Role(key = RoleBase.HUNTER,
+        defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER,
         configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.HUNTER_CAN_SHOOT, meetUpValue = true)))
-public class Hunter extends RoleVillage implements IPower {
+public class Hunter extends RoleImpl implements IPower {
 
     private boolean power = false;
     private double damageBonus = 0;
@@ -59,11 +60,6 @@ public class Hunter extends RoleVillage implements IPower {
     @Override
     public void recoverPower() {
 
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
     }
 
     @EventHandler

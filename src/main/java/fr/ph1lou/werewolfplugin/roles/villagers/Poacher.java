@@ -20,7 +20,7 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.Register;
@@ -38,12 +38,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Role(key = RoleBase.POACHER, category = Category.VILLAGER,
+        defaultAura = Aura.NEUTRAL,
         attributes = RoleAttribute.VILLAGER,
         timers = {@Timer(key = TimerBase.POACHER_PROGRESS, defaultValue = 10, meetUpValue = 10)},
         configValues = {
                 @IntValue(key = IntValueBase.POACHER_DISTANCE, defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.ARROW)
         })
-public class Poacher extends RoleVillage {
+public class Poacher extends RoleImpl {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private int furNumbers = 0;
@@ -69,11 +70,6 @@ public class Poacher extends RoleVillage {
                 this.affectedPlayer.add(event.getPlayerWW());
             }
         });
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
     }
 
     @Override

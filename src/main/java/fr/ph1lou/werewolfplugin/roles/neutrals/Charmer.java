@@ -216,9 +216,4 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
     public List<? extends IPlayerWW> getAffectedPlayers() {
         return Collections.singletonList(this.playerWW);
     }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.LIGHT;
-    }
 }

@@ -40,18 +40,25 @@ public class InventoryUtils {
             contents.set(4, 5, null);
             contents.set(4, 7, null);
             contents.set(4, 8, null);
-            contents.set(4, 2, ClickableItem.of(new ItemBuilder(Material.ARROW)
-                            .setDisplayName(game.translate("werewolf.menus.pagination.previous",
-                                    Formatter.format("&current&", page),
-                                    Formatter.format("&previous&", pagination.isFirst() ? page : page - 1)))
-                            .build(),
-                    e -> currentInventory.get().open((Player) e.getWhoClicked(), pagination.previous().getPage())));
-            contents.set(4, 6, ClickableItem.of(new ItemBuilder(Material.ARROW)
-                            .setDisplayName(game.translate("werewolf.menus.pagination.next",
-                                    Formatter.format("&current&", page),
-                                    Formatter.format("&next&", pagination.isLast() ? page : page + 1)))
-                            .build(),
-                    e -> currentInventory.get().open((Player) e.getWhoClicked(), pagination.next().getPage())));
+
+            if(!pagination.isFirst()){
+                contents.set(4, 2, ClickableItem.of(new ItemBuilder(Material.ARROW)
+                                .setDisplayName(game.translate("werewolf.menus.pagination.previous",
+                                        Formatter.format("&current&", page),
+                                        Formatter.format("&previous&", page - 1)))
+                                .build(),
+                        e -> currentInventory.get().open((Player) e.getWhoClicked(), pagination.previous().getPage())));
+            }
+
+            if(!pagination.isLast()){
+                contents.set(4, 6, ClickableItem.of(new ItemBuilder(Material.ARROW)
+                                .setDisplayName(game.translate("werewolf.menus.pagination.next",
+                                        Formatter.format("&current&", page),
+                                        Formatter.format("&next&", page + 1)))
+                                .build(),
+                        e -> currentInventory.get().open((Player) e.getWhoClicked(), pagination.next().getPage())));
+            }
+
             contents.set(4, 4, ClickableItem.empty(new ItemBuilder(UniversalMaterial.SIGN.getType())
                     .setDisplayName(game.translate("werewolf.menus.pagination.current",
                             Formatter.format("&current&", page),

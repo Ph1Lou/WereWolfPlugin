@@ -15,7 +15,7 @@ import fr.ph1lou.werewolfapi.events.roles.StealEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
@@ -33,7 +33,7 @@ import java.util.Random;
     @Role(key = RoleBase.WITNESS,
             category = Category.VILLAGER,
             attributes = {RoleAttribute.MINOR_INFORMATION, RoleAttribute.VILLAGER})
-public class Witness extends RoleVillage implements IAffectedPlayers, IPower {
+public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
 
     public Witness(WereWolfAPI main, IPlayerWW playerWW) {
         super(main,playerWW);
@@ -62,11 +62,6 @@ public class Witness extends RoleVillage implements IAffectedPlayers, IPower {
     @Override
     public void recoverPower() {
 
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.LIGHT;
     }
 
     @Override

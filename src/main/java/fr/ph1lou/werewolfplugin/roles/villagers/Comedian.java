@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Role(key = RoleBase.COMEDIAN,
+        defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER)
 public class Comedian extends RoleWithLimitedSelectionDuration {
@@ -95,10 +96,4 @@ public class Comedian extends RoleWithLimitedSelectionDuration {
     public void recoverPower() {
 
     }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
-    }
-
 }

@@ -14,7 +14,7 @@ import fr.ph1lou.werewolfapi.events.roles.village_idiot.VillageIdiotEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
@@ -28,7 +28,7 @@ import java.util.Optional;
 @Role(key = RoleBase.VILLAGE_IDIOT,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER)
-public class VillageIdiot extends RoleVillage implements IPower {
+public class VillageIdiot extends RoleImpl implements IPower {
 
     private boolean power = true;
 

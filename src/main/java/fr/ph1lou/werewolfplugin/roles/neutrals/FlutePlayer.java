@@ -424,11 +424,6 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         }
     }
 
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.LIGHT;
-    }
-
     private void checkStrength() {
 
         if (!this.all && this.affectedPlayer

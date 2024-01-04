@@ -14,7 +14,7 @@ import fr.ph1lou.werewolfapi.events.roles.villager.VillagerKitEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 @Role(key = RoleBase.VILLAGER,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER)
-public class Villager extends RoleVillage {
+public class Villager extends RoleImpl {
 
     private VillagerKit villagerKit;
 

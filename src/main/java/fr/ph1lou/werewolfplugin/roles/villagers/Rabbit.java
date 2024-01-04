@@ -11,7 +11,7 @@ import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 @Role(key = RoleBase.RABBIT,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER)
-public class Rabbit extends RoleVillage {
+public class Rabbit extends RoleImpl {
 
     private static final float defaultWalkSpeed = 0.2f;
     private boolean belowHearts = false;//pr éviter de reset la speed quand ya pas de changement de vie

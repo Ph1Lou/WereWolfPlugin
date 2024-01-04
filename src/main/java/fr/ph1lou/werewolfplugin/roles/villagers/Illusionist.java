@@ -15,7 +15,7 @@ import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.ILLUSIONIST,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER)
-public class Illusionist extends RoleVillage implements IPower, IAffectedPlayers {
+public class Illusionist extends RoleImpl implements IPower, IAffectedPlayers {
 
     private boolean power = true;
 

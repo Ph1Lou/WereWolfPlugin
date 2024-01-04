@@ -33,6 +33,7 @@ import java.util.Optional;
 
 
 @Role(key = RoleBase.NECROMANCER,
+        defaultAura = Aura.DARK,
         category = Category.NEUTRAL,
         attributes = RoleAttribute.NEUTRAL,
         configValues = {@IntValue(key = IntValueBase.NECROMANCER_DISTANCE,
@@ -146,11 +147,6 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
             this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.necromancer.new_victim",
                     Formatter.player(this.playerWW.getName()));
         }
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.DARK;
     }
 
     @EventHandler

@@ -12,7 +12,7 @@ import fr.ph1lou.werewolfapi.events.roles.bonesetter.BonesetterHealEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
@@ -29,9 +29,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Role(key = RoleBase.BONESETTER,
+        defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER)
-public class Bonesetter extends RoleVillage implements IAffectedPlayers, ILimitedUse {
+public class Bonesetter extends RoleImpl implements IAffectedPlayers, ILimitedUse {
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
     private final List<IPlayerWW> alreadyUsed = new ArrayList<>();
     private int use = 0;
@@ -95,10 +96,6 @@ public class Bonesetter extends RoleVillage implements IAffectedPlayers, ILimite
         }
     }
 
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
-    }
 
     @Override
     public void addAffectedPlayer(IPlayerWW iPlayerWW) {

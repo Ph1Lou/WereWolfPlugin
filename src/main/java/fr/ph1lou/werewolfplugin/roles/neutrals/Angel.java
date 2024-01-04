@@ -51,10 +51,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 @Role(key = RoleBase.ANGEL,
         category = Category.NEUTRAL,
+        auraDescriptionSpecialUseCase = "werewolf.roles.angel.aura",
         attributes = RoleAttribute.NEUTRAL,
         timers = @Timer(
                 key = TimerBase.ANGEL_DURATION,
@@ -419,11 +421,6 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                         || !choice.equals(AngelForm.GUARDIAN_ANGEL)
                         || affectedPlayer.isEmpty()
                         || !affectedPlayer.get(0).isState(StatePlayer.DEATH));
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.LIGHT;
     }
 
     @Override

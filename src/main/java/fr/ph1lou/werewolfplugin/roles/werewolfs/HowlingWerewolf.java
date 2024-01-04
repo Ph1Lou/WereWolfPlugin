@@ -6,6 +6,7 @@ import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.Sound;
@@ -31,7 +32,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
-@Role(key = RoleBase.HOWLING_WEREWOLF, category = Category.WEREWOLF,
+@Role(key = RoleBase.HOWLING_WEREWOLF, defaultAura = Aura.DARK, category = Category.WEREWOLF,
         attributes = RoleAttribute.WEREWOLF,
         configValues = @IntValue(key = IntValueBase.HOWLING_WEREWOLF_DISTANCE,
                 defaultValue = 80, meetUpValue = 80, step = 5, item = UniversalMaterial.LIGHT_GRAY_WOOL))

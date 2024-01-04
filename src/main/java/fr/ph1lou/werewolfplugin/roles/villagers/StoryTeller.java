@@ -16,7 +16,7 @@ import fr.ph1lou.werewolfapi.events.roles.storyteller.StoryTellerEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
         category = Category.VILLAGER, attributes = {RoleAttribute.VILLAGER,
         RoleAttribute.INFORMATION},
         configValues = @IntValue(key = IntValueBase.STORY_TELLER_DAY, defaultValue = 5, meetUpValue = 3, step = 1, item = UniversalMaterial.BED))
-public class StoryTeller extends RoleVillage {
+public class StoryTeller extends RoleImpl {
 
     private final Set<IPlayerWW> players = new HashSet<>();
 
@@ -84,11 +84,6 @@ public class StoryTeller extends RoleVillage {
                         Formatter.number(game.getConfig().getValue(IntValueBase.STORY_TELLER_DAY))))
                 .setItems(game.translate("werewolf.roles.story_teller.items"))
                 .build();
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.LIGHT;
     }
 
     @Override

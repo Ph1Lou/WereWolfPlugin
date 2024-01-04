@@ -29,11 +29,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Role(key = RoleBase.RAVEN,
+        auraDescriptionSpecialUseCase = "werewolf.roles.raven.aura",
+        defaultAura = Aura.DARK,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER)
 public class Raven extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
@@ -103,11 +106,6 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
 
     @Override
     public void recoverPower() {
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.DARK;
     }
 
     @Override

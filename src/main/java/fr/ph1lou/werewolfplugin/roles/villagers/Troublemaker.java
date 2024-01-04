@@ -13,7 +13,7 @@ import fr.ph1lou.werewolfapi.events.roles.trouble_maker.TroubleMakerDeathEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
@@ -26,9 +26,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Role(key = RoleBase.TROUBLEMAKER,
+        defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER)
-public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPower {
+public class Troublemaker extends RoleImpl implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
@@ -100,11 +101,6 @@ public class Troublemaker extends RoleVillage implements IAffectedPlayers, IPowe
 
     @Override
     public void recoverPower() {
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
     }
 
     @EventHandler

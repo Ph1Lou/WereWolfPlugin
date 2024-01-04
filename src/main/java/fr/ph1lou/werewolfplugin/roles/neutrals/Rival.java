@@ -50,6 +50,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Role(key = RoleBase.RIVAL,
+        defaultAura = Aura.DARK,
         category = Category.NEUTRAL,
         attributes = RoleAttribute.NEUTRAL,
         timers = {@Timer(key = TimerBase.RIVAL_DURATION,
@@ -241,11 +242,6 @@ public class Rival extends RoleNeutral implements IPower {
     @Override
     public void recoverPower() {
 
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.DARK;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

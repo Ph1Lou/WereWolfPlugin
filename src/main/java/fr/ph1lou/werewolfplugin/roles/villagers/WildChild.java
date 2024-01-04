@@ -20,7 +20,7 @@ import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.ITransformed;
@@ -35,13 +35,14 @@ import java.util.List;
 
 
 @Role(key = RoleBase.WILD_CHILD,
+        defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
         timers = {@Timer(key = TimerBase.MODEL_DURATION,
                 defaultValue = 240, meetUpValue = 240,
                 decrementAfterRole = true,
                 onZero = AutoModelEvent.class)},
         attributes = RoleAttribute.HYBRID)
-public class WildChild extends RoleVillage implements IAffectedPlayers, ITransformed, IPower {
+public class WildChild extends RoleImpl implements IAffectedPlayers, ITransformed, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     boolean transformed = false;
@@ -144,11 +145,6 @@ public class WildChild extends RoleVillage implements IAffectedPlayers, ITransfo
     @Override
     public boolean isWereWolf() {
         return this.transformed || super.isWereWolf();
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
     }
 
 

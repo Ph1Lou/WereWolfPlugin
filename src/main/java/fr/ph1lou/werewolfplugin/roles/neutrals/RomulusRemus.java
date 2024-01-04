@@ -45,6 +45,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Role(key = RoleBase.ROMULUS_REMUS,
+        defaultAura = Aura.NEUTRAL,
         category = Category.NEUTRAL,
         attributes = RoleAttribute.HYBRID,
         requireDouble = true,
@@ -107,11 +108,6 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
     @Override
     public void recoverPower() {
 
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
     }
 
     @Override

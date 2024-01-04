@@ -16,7 +16,7 @@ import fr.ph1lou.werewolfapi.events.roles.druid.DruidUsePowerEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
@@ -36,11 +36,12 @@ import java.util.stream.Collectors;
 
 
 @Role(key = RoleBase.DRUID,
+        defaultAura = Aura.DARK,
         category = Category.VILLAGER,
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
         configValues = {@IntValue(key = IntValueBase.DRUID_DISTANCE,
                 defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.CYAN_WOOL)})
-public class Druid extends RoleVillage implements IPower {
+public class Druid extends RoleImpl implements IPower {
 
     private boolean power = true;
 
@@ -141,11 +142,5 @@ public class Druid extends RoleVillage implements IPower {
     @Override
     public boolean hasPower() {
         return this.power;
-    }
-
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.DARK;
     }
 }

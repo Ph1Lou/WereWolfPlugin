@@ -196,9 +196,4 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
     public boolean hasPower() {
         return this.power;
     }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.LIGHT;
-    }
 }

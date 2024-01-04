@@ -14,7 +14,7 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleVillage;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.INTERPRETER,
         category = Category.VILLAGER,
         attributes = RoleAttribute.VILLAGER)
-public class Interpreter extends RoleVillage implements IPower {
+public class Interpreter extends RoleImpl implements IPower {
 
     private final Set<Wrapper<IRole, Role>> roles = new HashSet<>();
     private boolean power = false;

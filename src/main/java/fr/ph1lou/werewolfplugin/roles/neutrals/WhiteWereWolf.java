@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 @Role(key = RoleBase.WHITE_WEREWOLF,
+        defaultAura = Aura.DARK,
         category = Category.NEUTRAL,
         attributes = RoleAttribute.HYBRID)
 public class WhiteWereWolf extends RoleNeutral {
@@ -46,10 +47,5 @@ public class WhiteWereWolf extends RoleNeutral {
     @Override
     public boolean isNeutral() {
         return true;
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.DARK;
     }
 }

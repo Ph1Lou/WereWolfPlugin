@@ -23,6 +23,7 @@ import java.util.List;
 
 @Role(key = "werewolf.roles.inquisitor.display",
         category = Category.VILLAGER,
+        defaultAura = Aura.NEUTRAL,
         attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION})
 public class Inquisitor extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
@@ -42,11 +43,6 @@ public class Inquisitor extends RoleWithLimitedSelectionDuration implements IAff
     @Override
     public void recoverPower() {
 
-    }
-
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.NEUTRAL;
     }
 
     @Override

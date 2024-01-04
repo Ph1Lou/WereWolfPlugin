@@ -25,6 +25,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.SERIAL_KILLER,
+        defaultAura = Aura.DARK,
         category = Category.NEUTRAL,
         attributes = RoleAttribute.NEUTRAL)
 public class SerialKiller extends RoleNeutral implements IPower {
@@ -114,10 +115,6 @@ public class SerialKiller extends RoleNeutral implements IPower {
         this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, this.getKey()));
     }
 
-    @Override
-    public Aura getDefaultAura() {
-        return Aura.DARK;
-    }
 
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
