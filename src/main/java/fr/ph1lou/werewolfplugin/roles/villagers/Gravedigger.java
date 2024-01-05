@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.GRAVEDIGGER,
         defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
+        attribute = RoleAttribute.MINOR_INFORMATION,
         configValues = {@IntValue(key = IntValueBase.GRAVEDIGGER_DISTANCE,
                 defaultValue = 70, meetUpValue = 30, step = 5, item = UniversalMaterial.BIRCH_LEAVES)})
 public class Gravedigger extends RoleImpl implements IAffectedPlayers {

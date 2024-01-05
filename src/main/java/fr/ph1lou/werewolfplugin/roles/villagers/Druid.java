@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.DRUID,
         defaultAura = Aura.DARK,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
+        attribute = RoleAttribute.MINOR_INFORMATION,
         configValues = {@IntValue(key = IntValueBase.DRUID_DISTANCE,
                 defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.CYAN_WOOL)})
 public class Druid extends RoleImpl implements IPower {

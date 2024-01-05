@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 @Role(key = RoleBase.NAUGHTY_LITTLE_WOLF,
         defaultAura = Aura.DARK,
         category = Category.WEREWOLF,
-        attributes = RoleAttribute.WEREWOLF)
+        attribute = RoleAttribute.WEREWOLF)
 public class NaughtyLittleWolf extends RoleWereWolf {
 
     public NaughtyLittleWolf(WereWolfAPI api, IPlayerWW playerWW) {

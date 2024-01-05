@@ -42,7 +42,7 @@ import java.util.Optional;
         defaultAura = Aura.NEUTRAL,
         auraDescriptionSpecialUseCase = "werewolf.roles.thief.aura",
         category = Category.NEUTRAL,
-        attributes = RoleAttribute.HYBRID)
+        attribute = RoleAttribute.HYBRID)
 public class Thief extends RoleNeutral implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

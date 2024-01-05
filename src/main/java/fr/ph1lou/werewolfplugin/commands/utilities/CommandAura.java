@@ -35,7 +35,7 @@ public class CommandAura implements ICommand {
 
     public String getAura(WereWolfAPI game, Aura aura, List<String> extraUseCaseAura) {
 
-        StringBuilder sb = new StringBuilder(aura.getChatColor() + game.translate(aura.getKey()));
+        StringBuilder sb = new StringBuilder(game.translate(aura.getKey()));
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
         sb.append("§f : ");
 

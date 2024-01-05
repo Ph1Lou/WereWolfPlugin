@@ -35,7 +35,7 @@ import java.util.Optional;
 @Role(key = RoleBase.ASSASSIN,
         defaultAura = Aura.DARK,
         category = Category.NEUTRAL,
-        attributes = RoleAttribute.NEUTRAL)
+        attribute = RoleAttribute.NEUTRAL)
 public class Assassin extends RoleNeutral {
 
     public Assassin(WereWolfAPI api, IPlayerWW playerWW) {

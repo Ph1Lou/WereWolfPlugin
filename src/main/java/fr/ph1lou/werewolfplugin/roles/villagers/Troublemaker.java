@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Role(key = RoleBase.TROUBLEMAKER,
         defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER)
 public class Troublemaker extends RoleImpl implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

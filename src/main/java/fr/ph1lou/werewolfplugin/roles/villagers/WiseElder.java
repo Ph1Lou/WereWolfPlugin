@@ -31,7 +31,7 @@ import java.util.Optional;
 
 @Role(key = RoleBase.WISE_ELDER,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
+        attribute = RoleAttribute.MINOR_INFORMATION,
         configValues = {@IntValue(key = IntValueBase.WISE_ELDER_DISTANCE,
                 defaultValue = 15,
                 meetUpValue = 15,

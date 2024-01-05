@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.RABBIT,
         category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER)
 public class Rabbit extends RoleImpl {
 
     private static final float defaultWalkSpeed = 0.2f;

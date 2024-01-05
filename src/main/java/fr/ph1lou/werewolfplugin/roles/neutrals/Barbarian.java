@@ -41,7 +41,7 @@ import java.util.Set;
 @Role(key = RoleBase.BARBARIAN,
         defaultAura = Aura.NEUTRAL,
         category = Category.NEUTRAL,
-        attributes = RoleAttribute.NEUTRAL,
+        attribute = RoleAttribute.NEUTRAL,
         configValues = @IntValue(key = IntValueBase.BARBARIAN_DISTANCE,
                 defaultValue = 25,
                 meetUpValue = 25,

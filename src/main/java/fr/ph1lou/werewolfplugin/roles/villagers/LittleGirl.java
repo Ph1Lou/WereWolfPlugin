@@ -39,7 +39,7 @@ import java.util.UUID;
 @Role(key = RoleBase.LITTLE_GIRL,
         defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER)
 public class LittleGirl extends RoleImpl implements IInvisible {
 
     private boolean invisible = false;

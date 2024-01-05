@@ -5,6 +5,7 @@
     "lovers": {
       "lover": {
         "display": "Couple",
+        "color": "§d",
         "random": " Aléatoire",
         "description": "§6LOUP-GAROU §7➽§d Vous tombez éperdument amoureux de §b&player&§d.\n§dSi l'un meurt, l'autre le rejoindra par amour.\n§dVous pouvez envoyer de la vie à votre âme soeur avec §b/ww don §d[% de vie à envoyer] [facultatif:joueur à qui l'envoyer]",
         "not_in_pairs": "Vous n'êtes pas en couple",
@@ -21,12 +22,14 @@
       },
       "cursed_lover": {
         "display": "Couple Maudit",
+        "color": "§0",
         "description": "§6LOUP-GAROU §7➽§c Une liaison destructive entre §6&player&§c et vous vient de naître, même si vous êtes dans le même camp, vous ne pouvez gagner ensemble.\n§c Vous possédez un coeur supplémentaire permanent et chute Amortie tant que vous êtes les deux en vie.",
         "death_cursed_lover": "Votre Couple Maudit est Mort, vous perdez vos Bonus associés",
         "not_enough_players": "Il n'y a pas assez de personnes pour former un couple maudit"
       },
       "amnesiac_lover": {
         "display": "Couple Amnésique",
+        "color": "§5",
         "not_enough_players": "Il n'y a pas assez de personnes pour former un couple amnésique",
         "configurations": {
           "distance": "Champ d'action du couple amnésique §b&number&"
@@ -434,9 +437,9 @@
         "command": "oracle",
         "perform": "Découvrez l'aura d'un joueur avec §b/ww oracle§r vous avez §b&timer&",
         "message": "L'aura de §b&player&§r est §b&aura&",
-        "light": "Lumineuse",
-        "neutral": "Neutre",
-        "dark": "Obscure",
+        "light": "§aLumineuse",
+        "neutral": "§7Neutre",
+        "dark": "§4Obscure",
         "configurations": {
           "oracle_every_other_day": "Oracle tous les deux jours"
         }
@@ -468,9 +471,11 @@
         "display": "Montreur d'Ours",
         "description": "Vous avez la particularité de grogner au début du jour si un Loup-Garou se trouve dans votre voisinage de §b&number&§f blocs. Un message sera envoyé dans le chat global.",
         "growling_message": "&growling&",
+        "no_growl": "Il n'y a pas de Loups Garous autour de vous",
         "growling": "Grrrr ",
         "configurations": {
-          "distance": "Champ d'action du Montreur d'Ours §b&number&"
+          "distance": "Champ d'action du Montreur d'Ours §b&number&",
+          "bear_trainer_every_other_day": "Grognement tous les deux jours"
         },
         "aura": "Le §bMontreur d’Ours§f change d’aura en fonction du nombre de “Grrrrr” (§b0§f / §71§f / §c2+§f)"
       },
@@ -1067,7 +1072,7 @@
         "display": "Loup Sanguinaire",
         "description_command": "/ww traquer",
         "command": "traquer",
-        "description": "Vous pouvez traquer des joueurs avec §c/ww traquer§f. Vous obtenez §b&speed&%§f de speed supplémentaire lorsque vous vous dirigez vers le joueur traqué. Vous pouvez traquer un nouveau joueur §b&time&§r après la mort de votre cible précédente. \nA partir du jour &damage_day& et tout les deux jours, vous perdez 4 coeurs si vous n'avez pas infligé de dégat à un joueur non loup durant les 2 jours précédents. \nA partir du jour &list_day& et tout les deux jours, vous recevez une liste contenant tous les joueurs ayant moins de §b&number&%§f de leur vie maximale.",
+        "description": "Vous pouvez traquer des joueurs avec §c/ww traquer§f. Vous obtenez §b&speed&%§f de speed supplémentaire lorsque vous vous dirigez vers le joueur traqué. Vous pouvez traquer un nouveau joueur §b&time&§r après la mort de votre cible précédente. \nA partir du jour &damage_day& et tous les deux jours, vous perdez 4 coeurs si vous n'avez pas infligé de dégat à un joueur non loup durant les 2 jours précédents. \nA partir du jour &list_day& et tous les deux jours, vous recevez une liste contenant tous les joueurs ayant moins de §b&number&%§f de leur vie maximale.",
         "power_enable": "Vous pouvez traquer un joueur",
         "power_disable": "Vous ne pouvez pas traquer de joueur pour le moment",
         "power_already_used": "Vous traquez déjà le joueur §b&player&§f",
@@ -1211,7 +1216,7 @@
         },
         "final_heal": {
           "command": "fh",
-          "description": "Pour soigner tout les joueurs",
+          "description": "Pour soigner tous les joueurs",
           "send": "Final Heal !"
         },
         "change": {
@@ -1448,7 +1453,7 @@
         "current": "Page §b&current&§r/§b&sum&"
       },
       "main": {
-        "name": "Option §bLG"
+        "name": "Options §bLG"
       },
       "addon": {
         "name": "Réglages Addons"
@@ -1482,7 +1487,12 @@
         "dependant_load": "§cRôle dépendant chargé (§f&role&§c)",
         "name": "Configuration §bRôles",
         "zero": "Tout mettre à zéro",
-        "incompatible": "§cRôle incompatible chargé : §b&role&"
+        "incompatible": "§cRôle incompatible chargé : §b&role&",
+        "filters": {
+          "aura": "Filtre par aura",
+          "category": "Filtre par catégorie",
+          "attribute": "Filtre par caractéristique"
+        }
       },
       "whitelist": {
         "name": "Configuration §bWhiteList",
@@ -1514,7 +1524,7 @@
         "name": "Configuration §bTimers"
       },
       "random_events": {
-        "name": "Configuration §bEvents",
+        "name": "Configuration §bEvents aléatoires",
         "probability": "§fProbabilité : §b&number&§f%"
       },
       "save": {
@@ -1725,7 +1735,7 @@
       "lone_wolf": {
         "name": "Loup Solitaire",
         "message": "Vous devenez Solitaire. A partir de maintenant,vous devez gagner seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)",
-        "timer": "Durée de déclenchement du Loup Solitaire (§b&timer&§f)"
+        "timer": "Période de déclenchement du Loup Solitaire (§b&timer&§f)"
       },
       "new_vote": {
         "name": "Nouveau Vote"
@@ -2008,7 +2018,21 @@
       "villager": "Villageois",
       "werewolf": "Loups Garous",
       "neutral": "Neutres",
-      "addons": "Rôles Addons"
+      "addons": "Rôles Addons",
+      "colors": {
+        "villager": "§a",
+        "werewolf": "§c",
+        "neutral": "§7"
+      }
+    },
+    "attributes": {
+      "menu": "Attribut : &attribute&",
+      "villager": "§aVillageois",
+      "minor_information": "§eInformations mineures",
+      "information": "§6Informations majeures",
+      "werewolf": "§cLoup Garou",
+      "hybrid": "§1Hybride",
+      "neutral": "§7Neutre"
     },
     "description": {
       "_": "§b================================",

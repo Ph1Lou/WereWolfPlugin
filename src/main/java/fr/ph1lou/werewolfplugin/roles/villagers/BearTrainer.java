@@ -1,7 +1,10 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -37,14 +40,16 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.BEAR_TRAINER,
         auraDescriptionSpecialUseCase = "werewolf.roles.bear_trainer.aura",
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER,
-                RoleAttribute.INFORMATION},
+        attribute = RoleAttribute.INFORMATION,
+        configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.BEAR_TRAINER_EVERY_OTHER_DAY)),
         configValues = {@IntValue(key = IntValueBase.BEAR_TRAINER_DISTANCE,
                 defaultValue = 50,
                 meetUpValue = 50,
                 step = 5,
                 item = UniversalMaterial.BROWN_WOOL)})
 public class BearTrainer extends RoleImpl {
+
+    private int dayNumber = -8;
 
     public BearTrainer(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -58,6 +63,14 @@ public class BearTrainer extends RoleImpl {
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
+
+        if (game.getConfig().isConfigActive(ConfigBase.BEAR_TRAINER_EVERY_OTHER_DAY) &&
+            event.getNumber() == dayNumber + 1) {
+            return;
+        }
+
+        dayNumber = event.getNumber();
+
         if (player == null) return;
 
         if (!isAbilityEnabled()) return;
@@ -85,12 +98,13 @@ public class BearTrainer extends RoleImpl {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onGrowl(GrowlEvent event) {
 
+        if (!event.getPlayerWW().equals(getPlayerWW())) return;
+
         if (event.getPlayerWWS().isEmpty()) {
             event.setCancelled(true);
+            getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.bear_trainer.no_growl");
             return;
         }
-
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         Player player = Bukkit.getPlayer(getPlayerUUID());
 

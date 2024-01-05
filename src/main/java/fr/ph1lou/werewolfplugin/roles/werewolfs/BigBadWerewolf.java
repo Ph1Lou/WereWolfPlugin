@@ -25,7 +25,7 @@ import java.util.Optional;
         defaultAura = Aura.DARK,
         auraDescriptionSpecialUseCase = "werewolf.roles.big_bad_werewolf.aura",
         category = Category.WEREWOLF,
-        attributes = {RoleAttribute.WEREWOLF})
+        attribute = RoleAttribute.WEREWOLF)
 public class BigBadWerewolf extends RoleWereWolf implements IPower {
 
     private boolean power = true;

@@ -32,7 +32,7 @@ import java.util.List;
 @Role(key = RoleBase.OCCULTIST,
         defaultAura = Aura.DARK,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION})
+        attribute = RoleAttribute.MINOR_INFORMATION)
 public class Occultist extends Villager {
 
     private final List<IPlayerWW> deaths = new ArrayList<>();

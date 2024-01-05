@@ -56,7 +56,6 @@ public class CommandGuess implements ICommandRole {
             categories.add(Category.VILLAGER);
             categories.add(Category.NEUTRAL);
             categories.add(Category.WEREWOLF);
-            categories.add(Category.ADDONS);
         }
 
         Player player = Bukkit.getPlayer(playerWW.getUUID());

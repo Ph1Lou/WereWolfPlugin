@@ -34,7 +34,7 @@ import java.util.Optional;
 @Role(key = RoleBase.PRIESTESS,
         category = Category.VILLAGER,
         auraDescriptionSpecialUseCase = "werewolf.roles.priestess.aura",
-        attributes = {RoleAttribute.VILLAGER, RoleAttribute.INFORMATION},
+        attribute = RoleAttribute.INFORMATION,
         configValues = {@IntValue(key = IntValueBase.PRIESTESS_DISTANCE, defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.BLUE_WOOL)})
 public class Priestess extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 

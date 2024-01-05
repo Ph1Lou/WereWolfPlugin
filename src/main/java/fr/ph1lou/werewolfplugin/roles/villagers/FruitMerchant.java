@@ -38,7 +38,7 @@ import java.util.Map;
 
 @Role(key = RoleBase.FRUIT_MERCHANT,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
+        attribute = RoleAttribute.MINOR_INFORMATION,
         timers = {@Timer(key = TimerBase.FRUIT_MERCHANT_COOL_DOWN,
                 defaultValue = 1200, meetUpValue = 5 * 60)},
         configValues = {@IntValue(key = IntValueBase.FRUIT_MERCHANT_DISTANCE,

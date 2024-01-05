@@ -40,7 +40,7 @@ import java.util.Objects;
 
 @Role(key = RoleBase.SISTER,
         category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER,
+        attribute = RoleAttribute.VILLAGER,
         configValues = {@IntValue(key = IntValueBase.SISTER_DISTANCE,
                 defaultValue = 20,
                 meetUpValue = 20,

@@ -63,7 +63,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Role(key = RoleBase.FLUTE_PLAYER,
         category = Category.NEUTRAL,
-        attributes = RoleAttribute.NEUTRAL,
+        attribute = RoleAttribute.NEUTRAL,
         timers = @Timer(key = TimerBase.FLUTE_PLAYER_PROGRESS, defaultValue = 6, meetUpValue = 3, step = 1),
         configValues = @IntValue(key = IntValueBase.FLUTE_PLAYER_DISTANCE,
                 defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.LIGHT_BLUE_WOOL))

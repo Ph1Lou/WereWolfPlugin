@@ -59,6 +59,6 @@ public class CommandOracle implements ICommandRole {
 
         playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.oracle.message",
                 Formatter.player(playerWW1.getName()),
-                Formatter.format("&aura&", aura.getChatColor() + game.translate(aura.getKey())));
+                Formatter.format("&aura&", game.translate(aura.getKey())));
     }
 }

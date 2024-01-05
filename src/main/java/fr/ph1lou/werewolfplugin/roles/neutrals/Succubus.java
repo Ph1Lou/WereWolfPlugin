@@ -43,7 +43,7 @@ import java.util.List;
 @Role(key = RoleBase.SUCCUBUS,
         category = Category.NEUTRAL,
         defaultAura = Aura.DARK,
-        attributes = RoleAttribute.NEUTRAL,
+        attribute = RoleAttribute.NEUTRAL,
         timers = @Timer(key = TimerBase.SUCCUBUS_DURATION, defaultValue = 180, meetUpValue = 120),
         configValues = @IntValue(key = IntValueBase.SUCCUBUS_DISTANCE,
                 defaultValue = 20,

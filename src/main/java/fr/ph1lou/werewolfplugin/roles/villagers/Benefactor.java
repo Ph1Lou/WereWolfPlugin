@@ -17,7 +17,7 @@ import java.util.List;
 
 @Role(key = RoleBase.BENEFACTOR,
         category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER)
 public class Benefactor extends RoleImpl implements IAffectedPlayers {
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
 

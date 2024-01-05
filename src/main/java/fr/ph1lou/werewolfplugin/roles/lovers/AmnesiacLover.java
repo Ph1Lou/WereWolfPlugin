@@ -12,7 +12,6 @@ import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import fr.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AmnesiacLoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
@@ -20,11 +19,11 @@ import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import fr.ph1lou.werewolfapi.events.lovers.RevealAmnesiacLoversEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.lovers.impl.LoverBaseImpl;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,15 +36,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-@Lover(key = LoverBase.AMNESIAC_LOVER,
-        configValues = @IntValue(key = IntValueBase.AMNESIAC_LOVER_DISTANCE,
-                defaultValue = 15,
-                meetUpValue = 15,
-                step = 2,
-                item = UniversalMaterial.PINK_WOOL
-        )
-)
-public class AmnesiacLover implements ILover, Listener {
+@Lover(
+        key = LoverBase.AMNESIAC_LOVER, color = AmnesiacLover.COLOR, configValues = @IntValue(key = IntValueBase.AMNESIAC_LOVER_DISTANCE,
+        defaultValue = 15,
+        meetUpValue = 15,
+        step = 2,
+        item = UniversalMaterial.PINK_WOOL
+))
+public class AmnesiacLover extends LoverBaseImpl implements ILover, Listener {
+
+    public static final String COLOR = "werewolf.lovers.amnesiac_lover.color";
 
     private final WereWolfAPI game;
     private IPlayerWW amnesiacLover1;
@@ -156,26 +156,6 @@ public class AmnesiacLover implements ILover, Listener {
     }
 
 
-    @EventHandler
-    public void onModeratorScoreBoard(UpdateModeratorNameTagEvent event) {
-
-        StringBuilder sb = new StringBuilder(event.getSuffix());
-
-        IPlayerWW playerWW = this.game.getPlayerWW(event.getPlayerUUID()).orElse(null);
-
-        if (playerWW == null) return;
-
-        if (!getLovers().contains(playerWW)) return;
-
-        if (playerWW.isState(StatePlayer.DEATH)) {
-            return;
-        }
-
-        sb.append(ChatColor.DARK_PURPLE).append(" ♥");
-
-        event.setSuffix(sb.toString());
-    }
-
     private void buildActionbarLover(Player player, StringBuilder sb, List<IPlayerWW> list) {
 
         list
@@ -241,19 +221,10 @@ public class AmnesiacLover implements ILover, Listener {
     }
 
     @Override
-    public String getKey() {
-        return LoverBase.AMNESIAC_LOVER;
-    }
-
-    @Override
     public boolean isAlive() {
         return !death;
     }
 
-    @Override
-    public boolean isKey(String key) {
-        return getKey().equals(key);
-    }
 
     public boolean isRevealed() {
         return find;

@@ -26,7 +26,7 @@ import java.util.Optional;
 
 
 @Role(key = RoleBase.ELDER, category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER, defaultAura = Aura.NEUTRAL)
+        attribute = RoleAttribute.VILLAGER, defaultAura = Aura.NEUTRAL)
 public class Elder extends RoleImpl implements IPower {
 
     private boolean power = true;

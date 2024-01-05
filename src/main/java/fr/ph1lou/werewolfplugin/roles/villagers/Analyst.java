@@ -28,8 +28,7 @@ import java.util.Optional;
 @Role(key = RoleBase.ANALYST,
         category = Category.VILLAGER,
         auraDescriptionSpecialUseCase = "werewolf.roles.analyst.aura",
-        attributes = {RoleAttribute.VILLAGER,
-                RoleAttribute.MINOR_INFORMATION},
+        attribute = RoleAttribute.MINOR_INFORMATION,
         timers = {@Timer(key = TimerBase.ANALYSE_DURATION, defaultValue = 1800,
                 meetUpValue = 6 * 60,
                 decrementAfterRole = true)})

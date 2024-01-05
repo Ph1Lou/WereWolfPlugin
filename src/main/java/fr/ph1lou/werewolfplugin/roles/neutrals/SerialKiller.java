@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 @Role(key = RoleBase.SERIAL_KILLER,
         defaultAura = Aura.DARK,
         category = Category.NEUTRAL,
-        attributes = RoleAttribute.NEUTRAL)
+        attribute = RoleAttribute.NEUTRAL)
 public class SerialKiller extends RoleNeutral implements IPower {
 
     private boolean power = true;

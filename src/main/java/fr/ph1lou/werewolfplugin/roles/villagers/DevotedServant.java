@@ -41,7 +41,7 @@ import java.util.List;
 @Role(key = RoleBase.DEVOTED_SERVANT,
         defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER)
 public class DevotedServant extends RoleImpl implements IPower, IAffectedPlayers {
 
     @Nullable

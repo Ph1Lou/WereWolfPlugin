@@ -41,7 +41,7 @@ import java.util.List;
                 defaultValue = 240, meetUpValue = 240,
                 decrementAfterRole = true,
                 onZero = AutoModelEvent.class)},
-        attributes = RoleAttribute.HYBRID)
+        attribute = RoleAttribute.HYBRID)
 public class WildChild extends RoleImpl implements IAffectedPlayers, ITransformed, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

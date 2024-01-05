@@ -4,10 +4,7 @@ import fr.ph1lou.werewolfapi.annotations.Lover;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.LoverType;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import fr.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
@@ -24,18 +21,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Lover(key = LoverBase.LOVER)
+@Lover(key = LoverBase.LOVER, color = LoverImpl.COLOR)
 public class LoverImpl extends AbstractLover {
 
+    public static final String COLOR = "werewolf.lovers.lover.color";
 
     public LoverImpl(WereWolfAPI game, List<IPlayerWW> lovers) {
         super(game, lovers);
     }
 
-    @Override
-    public LoverType getLoverType() {
-        return LoverType.LOVER;
-    }
+
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onFinalDeath(FinalDeathEvent event) {
@@ -115,27 +110,6 @@ public class LoverImpl extends AbstractLover {
 
         return true;
     }
-
-    @EventHandler
-    public void onModeratorScoreBoard(UpdateModeratorNameTagEvent event) {
-
-        StringBuilder sb = new StringBuilder(event.getSuffix());
-
-        IPlayerWW playerWW = this.game.getPlayerWW(event.getPlayerUUID()).orElse(null);
-
-        if (playerWW == null) return;
-
-        if (!this.lovers.contains(playerWW)) return;
-
-        if (playerWW.isState(StatePlayer.DEATH)) {
-            return;
-        }
-
-        sb.append(this.getLoverType().getChatColor()).append(" ♥");
-
-        event.setSuffix(sb.toString());
-    }
-
 
     @EventHandler
     public void onAroundLoverEvent(AroundLoverEvent event) {

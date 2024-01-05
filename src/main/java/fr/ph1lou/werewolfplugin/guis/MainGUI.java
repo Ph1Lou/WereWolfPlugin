@@ -14,6 +14,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
+import fr.ph1lou.werewolfplugin.guis.utils.Filter;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -52,7 +53,7 @@ public class MainGUI implements InventoryProvider {
 
         contents.set(1, 4, ClickableItem.of((new ItemBuilder(Material.BEACON)
                 .setDisplayName(game.translate("werewolf.menus.roles.name"))
-                .build()), e -> RolesGUI.getInventory(player, Category.WEREWOLF).open(player)));
+                .build()), e -> RolesGUI.getInventory(player, Filter.getCategoryFilter(Category.WEREWOLF)).open(player)));
 
         contents.set(2, 4, ClickableItem.of((new ItemBuilder(UniversalMaterial.CLOCK.getType())
                 .setDisplayName(game.translate("werewolf.menus.timers.name"))

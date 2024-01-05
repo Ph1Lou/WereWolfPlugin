@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 @Role(key = RoleBase.HUNTER,
         defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER,
+        attribute = RoleAttribute.VILLAGER,
         configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.HUNTER_CAN_SHOOT, meetUpValue = true)))
 public class Hunter extends RoleImpl implements IPower {
 

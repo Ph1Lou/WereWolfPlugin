@@ -38,7 +38,6 @@ public class SaveGUI implements InventoryProvider {
 
     private int j = 0;
 
-
     @Override
     public void init(Player player, InventoryContents contents) {
         Main main = JavaPlugin.getPlugin(Main.class);

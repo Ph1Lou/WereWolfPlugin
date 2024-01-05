@@ -23,8 +23,7 @@ import java.util.List;
 
 @Role(key = RoleBase.LIBRARIAN,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER,
-                RoleAttribute.MINOR_INFORMATION})
+        attribute = RoleAttribute.MINOR_INFORMATION)
 public class Librarian extends RoleImpl implements ILimitedUse, IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

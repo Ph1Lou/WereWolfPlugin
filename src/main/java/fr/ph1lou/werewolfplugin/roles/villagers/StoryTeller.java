@@ -28,8 +28,7 @@ import java.util.stream.Collectors;
 
 
 @Role(key = RoleBase.STORY_TELLER,
-        category = Category.VILLAGER, attributes = {RoleAttribute.VILLAGER,
-        RoleAttribute.INFORMATION},
+        category = Category.VILLAGER, attribute = RoleAttribute.INFORMATION,
         configValues = @IntValue(key = IntValueBase.STORY_TELLER_DAY, defaultValue = 5, meetUpValue = 3, step = 1, item = UniversalMaterial.BED))
 public class StoryTeller extends RoleImpl {
 

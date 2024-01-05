@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Role(key = RoleBase.INFECT, defaultAura = Aura.DARK, category = Category.WEREWOLF,
-        attributes = {RoleAttribute.WEREWOLF},
+        attribute = RoleAttribute.WEREWOLF,
         weight = 1.5f,
         configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.INFECT_AUTO_RESURRECTION)))
 public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPlayers, IPower {

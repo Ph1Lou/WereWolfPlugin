@@ -6,7 +6,6 @@ import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfplugin.Register;
 import org.bukkit.ChatColor;
@@ -34,7 +33,7 @@ public class CommandComposition implements ICommand {
         sb.append('\n');
         sb.append(ChatColor.WHITE);
         if (game.getConfig().getLoverCount(LoverBase.LOVER) > 0) {
-            sb.append(LoverType.LOVER.getChatColor()).append(game.translate(LoverBase.LOVER)).append(ChatColor.WHITE);
+            sb.append(game.translate(LoverBase.LOVER)).append(ChatColor.WHITE);
             if (game.getConfig().getLoverCount(LoverBase.LOVER) == 1) {
                 sb.append(", ");
             } else {
@@ -42,7 +41,7 @@ public class CommandComposition implements ICommand {
             }
         }
         if (game.getConfig().getLoverCount(LoverBase.AMNESIAC_LOVER) > 0) {
-            sb.append(LoverType.AMNESIAC_LOVER.getChatColor()).append(game.translate(LoverBase.AMNESIAC_LOVER)).append(ChatColor.WHITE);
+            sb.append(game.translate(LoverBase.AMNESIAC_LOVER)).append(ChatColor.WHITE);
             if (game.getConfig().getLoverCount(LoverBase.AMNESIAC_LOVER) == 1) {
                 sb.append(", ");
             } else {
@@ -51,7 +50,7 @@ public class CommandComposition implements ICommand {
         }
 
         if (game.getConfig().getLoverCount(LoverBase.CURSED_LOVER) > 0) {
-            sb.append(LoverType.CURSED_LOVER.getChatColor()).append(game.translate(LoverBase.CURSED_LOVER)).append(ChatColor.WHITE);
+            sb.append(game.translate(LoverBase.CURSED_LOVER)).append(ChatColor.WHITE);
             if (game.getConfig().getLoverCount(LoverBase.CURSED_LOVER) != 1) {
                 sb.append(" (§b").append(game.getConfig().getLoverCount(LoverBase.CURSED_LOVER)).append("§f)");
             }
@@ -70,7 +69,7 @@ public class CommandComposition implements ICommand {
 
     public String getCompo(WereWolfAPI game, Category category) {
 
-        StringBuilder sb = new StringBuilder(category.getChatColor() + game.translate(category.getKey()));
+        StringBuilder sb = new StringBuilder(game.translate(category.getChatColor()) + game.translate(category.getKey()));
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
         sb.append("§f : ");
 

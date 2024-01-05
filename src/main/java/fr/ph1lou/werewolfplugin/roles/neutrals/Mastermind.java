@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Role(key = RoleBase.MASTERMIND, defaultAura = Aura.NEUTRAL, category = Category.NEUTRAL, attributes = RoleAttribute.NEUTRAL)
+@Role(key = RoleBase.MASTERMIND, defaultAura = Aura.NEUTRAL, category = Category.NEUTRAL, attribute = RoleAttribute.NEUTRAL)
 public class Mastermind extends RoleNeutral implements IGuesser, IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> guessedPlayers = new ArrayList<>();

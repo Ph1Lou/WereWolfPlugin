@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.MIRE,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
+        attribute = RoleAttribute.MINOR_INFORMATION,
         configValues = @IntValue(
                 key = IntValueBase.MIRE_DISTANCE,
                 defaultValue = 60,

@@ -28,7 +28,7 @@ import java.util.Objects;
 @Role(key = RoleBase.SIAMESE_TWIN,
         defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER,
+        attribute = RoleAttribute.VILLAGER,
         requireDouble = true)
 public class SiameseTwin extends RoleImpl {
 

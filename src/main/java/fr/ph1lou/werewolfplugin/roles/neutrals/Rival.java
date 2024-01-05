@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.RIVAL,
         defaultAura = Aura.DARK,
         category = Category.NEUTRAL,
-        attributes = RoleAttribute.NEUTRAL,
+        attribute = RoleAttribute.NEUTRAL,
         timers = {@Timer(key = TimerBase.RIVAL_DURATION,
                 defaultValue = 2400, meetUpValue = 5 * 60,
                 decrementAfterRole = true,

@@ -33,7 +33,7 @@ import java.util.Optional;
 
 
 @Role(key = RoleBase.HERMIT,
-        category = Category.VILLAGER, attributes = RoleAttribute.VILLAGER,
+        category = Category.VILLAGER, attribute = RoleAttribute.VILLAGER,
         configValues = @IntValue(key = IntValueBase.HERMIT_DISTANCE, defaultValue = 20,
                 meetUpValue = 20, step = 4, item = UniversalMaterial.WHITE_WOOL))
 public class Hermit extends RoleImpl {

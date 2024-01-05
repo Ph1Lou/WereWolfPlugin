@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Role(key = RoleBase.CUPID, category = Category.VILLAGER,
-        attributes = RoleAttribute.HYBRID,
+        attribute = RoleAttribute.HYBRID,
         configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.RANDOM_CUPID)))
 public class Cupid extends RoleImpl implements IAffectedPlayers, IPower {
 

@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 @Role(key = RoleBase.AMNESIAC_WEREWOLF,
         defaultAura = Aura.NEUTRAL,
         category = Category.NEUTRAL,
-        attributes = RoleAttribute.HYBRID)
+        attribute = RoleAttribute.HYBRID)
 public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
 
     private boolean transformed = false;

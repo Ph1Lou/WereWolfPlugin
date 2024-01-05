@@ -32,7 +32,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -42,7 +41,7 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.INTERPRETER,
         category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER)
 public class Interpreter extends RoleImpl implements IPower {
 
     private final Set<Wrapper<IRole, Role>> roles = new HashSet<>();
@@ -54,13 +53,11 @@ public class Interpreter extends RoleImpl implements IPower {
         super(game, playerWW);
         List<Wrapper<IRole, Role>> roles = Register.get().getRolesRegister()
                 .stream()
-                .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())
-                        .anyMatch(roleAttribute -> roleAttribute == RoleAttribute.VILLAGER))
+                .filter(roleRegister -> roleRegister.getMetaDatas().category() == Category.VILLAGER)
                 .filter(roleRegister -> !roleRegister.getMetaDatas().requireDouble())
                 .filter(roleRegister -> !roleRegister.getMetaDatas().key().equals(RoleBase.INTERPRETER))
                 .filter(roleRegister -> game.getConfig().getRoleCount(roleRegister.getMetaDatas().key()) == 0)
-                .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())
-                        .anyMatch(roleAttribute -> roleAttribute == RoleAttribute.INFORMATION))
+                .filter(roleRegister -> roleRegister.getMetaDatas().attribute() == RoleAttribute.INFORMATION)
                 .collect(Collectors.toList());
 
         if (roles.size() == 0) {
@@ -76,13 +73,8 @@ public class Interpreter extends RoleImpl implements IPower {
                 .filter(roleRegister -> !this.roles.contains(roleRegister))
                 .filter(roleRegister -> !roleRegister.getMetaDatas().requireDouble())
                 .filter(roleRegister -> !roleRegister.getMetaDatas().key().equals(RoleBase.INTERPRETER))
-                .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())
-                        .anyMatch(roleAttribute -> roleAttribute == RoleAttribute.VILLAGER))
+                .filter(roleRegister -> roleRegister.getMetaDatas().attribute() == RoleAttribute.VILLAGER)
                 .filter(roleRegister -> game.getConfig().getRoleCount(roleRegister.getMetaDatas().key()) == 0)
-                .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())
-                        .noneMatch(roleAttribute -> roleAttribute == RoleAttribute.MINOR_INFORMATION))
-                .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())
-                        .noneMatch(roleAttribute -> roleAttribute == RoleAttribute.INFORMATION))
                 .collect(Collectors.toList());
 
         if (roles.size() == 0) {
@@ -98,11 +90,9 @@ public class Interpreter extends RoleImpl implements IPower {
                 .filter(roleRegister -> !this.roles.contains(roleRegister))
                 .filter(roleRegister -> !roleRegister.getMetaDatas().requireDouble())
                 .filter(roleRegister -> !roleRegister.getMetaDatas().key().equals(RoleBase.INTERPRETER))
-                .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())
-                        .anyMatch(roleAttribute -> roleAttribute == RoleAttribute.VILLAGER))
+                .filter(roleRegister -> roleRegister.getMetaDatas().category() == Category.VILLAGER)
                 .filter(roleRegister -> game.getConfig().getRoleCount(roleRegister.getMetaDatas().key()) == 0)
-                .filter(roleRegister -> Arrays.stream(roleRegister.getMetaDatas().attributes())
-                        .noneMatch(roleAttribute -> roleAttribute == RoleAttribute.INFORMATION))
+                .filter(roleRegister -> roleRegister.getMetaDatas().attribute() != RoleAttribute.INFORMATION)
                 .collect(Collectors.toList());
 
         if (roles.size() == 0) {

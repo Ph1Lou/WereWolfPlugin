@@ -30,7 +30,7 @@ import java.util.Optional;
         auraDescriptionSpecialUseCase = "werewolf.roles.shaman.aura",
         defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION})
+        attribute = RoleAttribute.MINOR_INFORMATION)
 public class Shaman extends RoleImpl implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();

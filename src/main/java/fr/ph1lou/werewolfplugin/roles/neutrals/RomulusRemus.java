@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.ROMULUS_REMUS,
         defaultAura = Aura.NEUTRAL,
         category = Category.NEUTRAL,
-        attributes = RoleAttribute.HYBRID,
+        attribute = RoleAttribute.HYBRID,
         requireDouble = true,
 configValues = @IntValue(key = IntValueBase.ROMULUS_REMUS_DISTANCE_BROTHER, defaultValue = 50, meetUpValue = 40, step = 5, item = UniversalMaterial.BOOK))
 public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransformed {

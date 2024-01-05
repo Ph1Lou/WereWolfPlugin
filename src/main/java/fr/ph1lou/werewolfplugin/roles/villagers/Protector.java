@@ -31,7 +31,7 @@ import java.util.UUID;
 @Role(key = RoleBase.PROTECTOR,
         auraDescriptionSpecialUseCase = "werewolf.roles.protector.aura",
         category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER)
 public class Protector extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

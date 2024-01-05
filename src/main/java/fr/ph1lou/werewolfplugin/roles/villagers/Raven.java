@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
         auraDescriptionSpecialUseCase = "werewolf.roles.raven.aura",
         defaultAura = Aura.DARK,
         category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER)
 public class Raven extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

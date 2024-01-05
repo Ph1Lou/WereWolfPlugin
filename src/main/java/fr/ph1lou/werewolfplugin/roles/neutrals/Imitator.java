@@ -40,7 +40,7 @@ import java.util.List;
         auraDescriptionSpecialUseCase = "werewolf.roles.imitator.aura",
         defaultAura = Aura.NEUTRAL,
         category = Category.NEUTRAL,
-        attributes = RoleAttribute.NEUTRAL)
+        attribute = RoleAttribute.NEUTRAL)
 public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

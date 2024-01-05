@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.CHARMER,
         category = Category.NEUTRAL,
-        attributes = RoleAttribute.NEUTRAL,
+        attribute = RoleAttribute.NEUTRAL,
         timers = @Timer(key = TimerBase.CHARMER_COUNTDOWN,
                 defaultValue = 6000, meetUpValue = 1200,
                 decrementAfterRole = true),

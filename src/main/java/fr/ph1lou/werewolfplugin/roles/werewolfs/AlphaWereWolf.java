@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 @Role(key = RoleBase.ALPHA_WEREWOLF,
         defaultAura = Aura.DARK,
         category = Category.WEREWOLF,
-        attributes = {RoleAttribute.WEREWOLF})
+        attribute = RoleAttribute.WEREWOLF)
 public class AlphaWereWolf extends RoleWereWolf {
 
     public AlphaWereWolf(WereWolfAPI game, IPlayerWW playerWW) {

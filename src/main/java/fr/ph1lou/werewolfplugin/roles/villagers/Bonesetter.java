@@ -31,7 +31,7 @@ import java.util.List;
 @Role(key = RoleBase.BONESETTER,
         defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER)
 public class Bonesetter extends RoleImpl implements IAffectedPlayers, ILimitedUse {
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
     private final List<IPlayerWW> alreadyUsed = new ArrayList<>();

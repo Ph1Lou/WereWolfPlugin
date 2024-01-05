@@ -28,7 +28,7 @@ import java.util.Set;
 @Role(key = RoleBase.SILENCER_WEREWOLF,
         defaultAura = Aura.DARK,
         category = Category.WEREWOLF,
-        attributes = RoleAttribute.WEREWOLF)
+        attribute = RoleAttribute.WEREWOLF)
 public class SilencerWerewolf extends RoleWereWolf implements IPower, IGuesser, IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();

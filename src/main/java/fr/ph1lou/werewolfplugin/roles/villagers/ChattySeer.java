@@ -12,8 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.CHATTY_SEER,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER,
-                RoleAttribute.INFORMATION})
+        attribute = RoleAttribute.INFORMATION)
 public class ChattySeer extends Seer {
 
     public ChattySeer(WereWolfAPI api, IPlayerWW playerWW) {

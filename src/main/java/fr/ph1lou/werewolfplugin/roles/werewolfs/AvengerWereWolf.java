@@ -33,7 +33,7 @@ import java.util.Optional;
         defaultAura = Aura.NEUTRAL,
         auraDescriptionSpecialUseCase = "werewolf.roles.avenger_werewolf.aura",
         category = Category.WEREWOLF,
-        attributes = RoleAttribute.WEREWOLF,
+        attribute = RoleAttribute.WEREWOLF,
         configValues = {@IntValue(key = IntValueBase.AVENGER_WEREWOLF_DISTANCE,
                 defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.RED_WOOL)})
 public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {

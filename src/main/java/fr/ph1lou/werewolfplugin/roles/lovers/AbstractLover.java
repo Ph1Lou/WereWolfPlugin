@@ -1,12 +1,12 @@
 package fr.ph1lou.werewolfplugin.roles.lovers;
 
-import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.lovers.impl.LoverBaseImpl;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.Utils;
@@ -17,7 +17,7 @@ import org.bukkit.event.EventHandler;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class AbstractLover implements ILover {
+public abstract class AbstractLover extends LoverBaseImpl implements ILover {
 
 
     protected final List<IPlayerWW> lovers;
@@ -96,23 +96,11 @@ public abstract class AbstractLover implements ILover {
     }
 
     @Override
-    public boolean isKey(String key) {
-        return getKey().equals(key);
-    }
-
-    public abstract LoverType getLoverType();
-
-    @Override
     public void second() {
     }
 
     @Override
     public boolean isAlive() {
         return !this.death;
-    }
-
-    @Override
-    public String getKey() {
-        return this.getLoverType().getKey();
     }
 }

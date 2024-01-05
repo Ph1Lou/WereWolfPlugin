@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.VILLAGER,
         category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER)
 public class Villager extends RoleImpl {
 
     private VillagerKit villagerKit;

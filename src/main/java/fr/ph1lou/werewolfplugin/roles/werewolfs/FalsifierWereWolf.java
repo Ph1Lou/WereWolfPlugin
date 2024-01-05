@@ -30,7 +30,7 @@ import java.util.UUID;
         auraDescriptionSpecialUseCase = "werewolf.roles.falsifier_werewolf.aura",
         defaultAura = Aura.LIGHT,
         category = Category.WEREWOLF,
-        attributes = RoleAttribute.WEREWOLF)
+        attribute = RoleAttribute.WEREWOLF)
 public class FalsifierWereWolf extends RoleWereWolf {
 
 

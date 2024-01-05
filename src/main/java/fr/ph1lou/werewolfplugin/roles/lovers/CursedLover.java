@@ -4,18 +4,16 @@ import fr.ph1lou.werewolfapi.annotations.Lover;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import fr.ph1lou.werewolfapi.events.game.permissions.UpdateModeratorNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
 import fr.ph1lou.werewolfapi.events.lovers.CursedLoverDeathEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.lovers.impl.LoverBaseImpl;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,8 +25,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-@Lover(key = LoverBase.CURSED_LOVER)
-public class CursedLover implements ILover, Listener {
+@Lover(key = LoverBase.CURSED_LOVER, color = CursedLover.COLOR)
+public class CursedLover extends LoverBaseImpl implements ILover, Listener {
+    public static final String COLOR = "werewolf.lovers.cursed_lover.color";
 
     private final WereWolfAPI game;
     private IPlayerWW cursedLover1;
@@ -111,27 +110,6 @@ public class CursedLover implements ILover, Listener {
         }
     }
 
-
-    @EventHandler
-    public void onModeratorScoreBoard(UpdateModeratorNameTagEvent event) {
-
-        StringBuilder sb = new StringBuilder(event.getSuffix());
-
-        IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID()).orElse(null);
-
-        if (playerWW == null) return;
-
-        if (!getLovers().contains(playerWW)) return;
-
-        if (playerWW.isState(StatePlayer.DEATH)) {
-            return;
-        }
-
-        sb.append(ChatColor.BLACK).append(" ♥");
-
-        event.setSuffix(sb.toString());
-    }
-
     @EventHandler
     public void onEndPlayerMessage(EndPlayerMessageEvent event) {
 
@@ -158,18 +136,8 @@ public class CursedLover implements ILover, Listener {
     }
 
     @Override
-    public String getKey() {
-        return LoverBase.CURSED_LOVER;
-    }
-
-    @Override
     public boolean isAlive() {
         return !this.death;
-    }
-
-    @Override
-    public boolean isKey(String key) {
-        return getKey().equals(key);
     }
 
     @Override

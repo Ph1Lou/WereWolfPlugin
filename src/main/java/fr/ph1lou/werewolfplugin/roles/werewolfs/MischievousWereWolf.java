@@ -39,7 +39,7 @@ import java.util.UUID;
 @Role(key = RoleBase.MISCHIEVOUS_WEREWOLF,
         defaultAura = Aura.NEUTRAL,
         category = Category.WEREWOLF,
-        attributes = RoleAttribute.WEREWOLF)
+        attribute = RoleAttribute.WEREWOLF)
 public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
 
     private boolean invisible = false;

@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Role(key = RoleBase.WITCH,defaultAura = Aura.DARK, category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER,
+        attribute = RoleAttribute.VILLAGER,
         configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.WITCH_AUTO_RESURRECTION, defaultValue = true))})
 public class Witch extends RoleImpl implements IAffectedPlayers, IPower {
 

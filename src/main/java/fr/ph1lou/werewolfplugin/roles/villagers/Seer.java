@@ -29,8 +29,7 @@ import java.util.List;
 
 @Role(key = RoleBase.SEER,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER,
-                RoleAttribute.INFORMATION},
+        attribute = RoleAttribute.INFORMATION,
         configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.SEER_EVERY_OTHER_DAY))})
 public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 

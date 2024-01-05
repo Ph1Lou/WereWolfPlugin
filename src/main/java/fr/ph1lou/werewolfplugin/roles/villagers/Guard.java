@@ -28,7 +28,7 @@ import java.util.Optional;
 
 @Role(key = RoleBase.GUARD, category = Category.VILLAGER,
         auraDescriptionSpecialUseCase = "werewolf.roles.guard.aura",
-        attributes = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER)
 public class Guard extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

@@ -35,7 +35,7 @@ import java.util.Optional;
 @Role(key = RoleBase.FEARFUL_WEREWOLF,
         defaultAura = Aura.DARK,
         category = Category.WEREWOLF,
-        attributes = RoleAttribute.WEREWOLF,
+        attribute = RoleAttribute.WEREWOLF,
         configValues = @IntValue(key = IntValueBase.FEARFUL_WEREWOLF_DISTANCE,
                 defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.MAGENTA_WOOL))
 public class FearFulWerewolf extends RoleWereWolf {

@@ -33,7 +33,7 @@ import java.util.List;
 
 @Role(key = RoleBase.GRIMY_WEREWOLF,
         category = Category.WEREWOLF,
-        attributes = {RoleAttribute.WEREWOLF})
+        attribute = RoleAttribute.WEREWOLF)
 public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();

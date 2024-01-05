@@ -180,7 +180,14 @@ public class TabManager implements Listener {
     @EventHandler
     public final void onModeratorScoreBoard(UpdateModeratorNameTagEvent event) {
 
-        StringBuilder sb = new StringBuilder(event.getPrefix());
+        if(!game.isState(StateGame.GAME)){
+            return;
+        }
+
+        StringBuilder prefix = new StringBuilder(event.getPrefix());
+
+        StringBuilder suffix = new StringBuilder(event.getSuffix());
+
 
         IPlayerWW playerWW = game.getPlayerWW(event.getPlayerUUID()).orElse(null);
 
@@ -191,13 +198,16 @@ public class TabManager implements Listener {
         if (playerWW.isState(StatePlayer.DEATH)) return;
 
         if (playerWW.getRole().isNeutral()) {
-            sb.append(ChatColor.GOLD);
+            prefix.append(ChatColor.GOLD);
         } else if (playerWW.getRole().isWereWolf()) {
-            sb.append(ChatColor.DARK_RED);
-        } else sb.append(ChatColor.GREEN);
+            prefix.append(ChatColor.DARK_RED);
+        } else prefix.append(ChatColor.GREEN);
 
-        event.setPrefix(sb.toString());
-        event.setSuffix(sb.toString());
+
+        playerWW.getLovers().forEach(iLover -> suffix.append(game.translate(iLover.getColor())).append(" ♥"));
+
+        event.setPrefix(prefix.toString());
+        event.setSuffix(suffix.toString());
     }
 
     @EventHandler

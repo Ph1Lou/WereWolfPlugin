@@ -47,8 +47,7 @@ import java.util.Optional;
 
 @Role(key = RoleBase.FOX, category = Category.VILLAGER,
         auraDescriptionSpecialUseCase = "werewolf.roles.fox.aura",
-        attributes = {RoleAttribute.VILLAGER,
-                RoleAttribute.INFORMATION},
+        attribute = RoleAttribute.INFORMATION,
         timers = {@Timer(key = TimerBase.FOX_SMELL_DURATION, defaultValue = 90, meetUpValue = 30)},
         configValues = {
                 @IntValue(key = IntValueBase.FOX_SMELL_NUMBER, defaultValue = 3, meetUpValue = 3, step = 1, item = UniversalMaterial.CARROT),

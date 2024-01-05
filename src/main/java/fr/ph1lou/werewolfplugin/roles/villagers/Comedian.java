@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.COMEDIAN,
         defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
-        attributes = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER)
 public class Comedian extends RoleWithLimitedSelectionDuration {
 
     private final List<ComedianMask> comedianMasks = new ArrayList<>();

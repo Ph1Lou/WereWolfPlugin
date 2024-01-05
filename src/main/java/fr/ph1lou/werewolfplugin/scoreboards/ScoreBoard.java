@@ -5,7 +5,6 @@ import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.enums.LoverType;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
@@ -17,6 +16,9 @@ import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.game.GameManager;
+import fr.ph1lou.werewolfplugin.roles.lovers.AmnesiacLover;
+import fr.ph1lou.werewolfplugin.roles.lovers.CursedLover;
+import fr.ph1lou.werewolfplugin.roles.lovers.LoverImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
@@ -148,7 +150,7 @@ public class ScoreBoard implements IScoreboard {
 
         if (game.getConfig().getLoverCount(LoverBase.LOVER) > 0) {
             StringBuilder sb = new StringBuilder();
-            sb.append(LoverType.LOVER.getChatColor())
+            sb.append(game.translate(LoverImpl.COLOR))
                     .append(game.getConfig().getLoverCount(LoverBase.LOVER))
                     .append("§f ")
                     .append(game.translate(LoverBase.LOVER));
@@ -156,14 +158,14 @@ public class ScoreBoard implements IScoreboard {
         }
         if (game.getConfig().getLoverCount(LoverBase.AMNESIAC_LOVER) > 0) {
             StringBuilder sb = new StringBuilder();
-            sb.append(LoverType.AMNESIAC_LOVER.getChatColor()).append(game.getConfig().getLoverCount(LoverBase.AMNESIAC_LOVER))
+            sb.append(game.translate(AmnesiacLover.COLOR)).append(game.getConfig().getLoverCount(LoverBase.AMNESIAC_LOVER))
                     .append("§f ")
                     .append(game.translate(LoverBase.AMNESIAC_LOVER));
             composition.add(sb.substring(0, Math.min(30, sb.length())));
         }
         if (game.getConfig().getLoverCount(LoverBase.CURSED_LOVER) > 0) {
             StringBuilder sb = new StringBuilder();
-            sb.append(LoverType.CURSED_LOVER.getChatColor()).append(game.getConfig().getLoverCount(LoverBase.CURSED_LOVER))
+            sb.append(game.translate(CursedLover.COLOR)).append(game.getConfig().getLoverCount(LoverBase.CURSED_LOVER))
                     .append("§f ")
                     .append(game.translate(LoverBase.CURSED_LOVER));
             composition.add(sb.substring(0, Math.min(30, sb.length())));
@@ -180,7 +182,7 @@ public class ScoreBoard implements IScoreboard {
 
                     StringBuilder sb = new StringBuilder();
                     sb
-                            .append(iRoleRoleWrapper.getMetaDatas().category().getChatColor())
+                            .append(game.translate(iRoleRoleWrapper.getMetaDatas().category().getChatColor()))
                             .append(game.getConfig().getRoleCount(key))
                             .append("§f ")
                             .append(game.translate(key));

@@ -31,7 +31,7 @@ import java.util.Optional;
 @Role(key = RoleBase.TENEBROUS_WEREWOLF,
         auraDescriptionSpecialUseCase = "werewolf.roles.tenebrous_werewolf.aura",
         category = Category.WEREWOLF,
-        attributes = {RoleAttribute.WEREWOLF},
+        attribute = RoleAttribute.WEREWOLF,
         timers = {@Timer(key = TimerBase.WEREWOLF_TENEBROUS_DURATION, defaultValue = 30, meetUpValue = 20)},
         configValues = {@IntValue(key = IntValueBase.TENEBROUS_WEREWOLF_DISTANCE,
                 defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.BLACK_WOOL)})

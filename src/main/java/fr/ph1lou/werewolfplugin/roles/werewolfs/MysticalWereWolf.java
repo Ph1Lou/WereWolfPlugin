@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.MYSTICAL_WEREWOLF,
         defaultAura = Aura.LIGHT,
         category = Category.WEREWOLF,
-        attributes = RoleAttribute.WEREWOLF)
+        attribute = RoleAttribute.WEREWOLF)
 public class MysticalWereWolf extends RoleWereWolf {
 
     public MysticalWereWolf(WereWolfAPI api, IPlayerWW playerWW) {

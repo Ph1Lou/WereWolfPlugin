@@ -24,7 +24,7 @@ import java.util.List;
 @Role(key = "werewolf.roles.inquisitor.display",
         category = Category.VILLAGER,
         defaultAura = Aura.NEUTRAL,
-        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION})
+        attribute = RoleAttribute.MINOR_INFORMATION)
 public class Inquisitor extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();

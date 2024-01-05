@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 
 @Role(key = RoleBase.HOWLING_WEREWOLF, defaultAura = Aura.DARK, category = Category.WEREWOLF,
-        attributes = RoleAttribute.WEREWOLF,
+        attribute = RoleAttribute.WEREWOLF,
         configValues = @IntValue(key = IntValueBase.HOWLING_WEREWOLF_DISTANCE,
                 defaultValue = 80, meetUpValue = 80, step = 5, item = UniversalMaterial.LIGHT_GRAY_WOOL))
 public class HowlingWerewolf extends RoleWereWolf {

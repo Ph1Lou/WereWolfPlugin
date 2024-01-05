@@ -42,8 +42,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Role(key = RoleBase.INNKEEPER, category = Category.VILLAGER, attributes = {RoleAttribute.VILLAGER,
-        RoleAttribute.MINOR_INFORMATION}, configValues = @IntValue(key = IntValueBase.INNKEEPER_DETECTION_RADIUS,
+@Role(key = RoleBase.INNKEEPER, category = Category.VILLAGER, attribute = RoleAttribute.MINOR_INFORMATION, configValues = @IntValue(key = IntValueBase.INNKEEPER_DETECTION_RADIUS,
         defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.IRON_DOOR))
 public class Innkeeper extends RoleImpl implements IPower {
     private static final float defaultWalkSpeed = 0.2f;

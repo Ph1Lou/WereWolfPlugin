@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.BLOODTHIRSTY_WEREWOLF,
         defaultAura = Aura.DARK,
         category = Category.WEREWOLF,
-        attributes = {RoleAttribute.WEREWOLF},
+        attribute = RoleAttribute.WEREWOLF,
         configValues = {
                 @IntValue(key = IntValueBase.BLOODTHIRSTY_SPEED,
                         defaultValue = 15,

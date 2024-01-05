@@ -39,7 +39,7 @@ import java.util.UUID;
 
 @Role(key = RoleBase.POACHER, category = Category.VILLAGER,
         defaultAura = Aura.NEUTRAL,
-        attributes = RoleAttribute.VILLAGER,
+        attribute = RoleAttribute.VILLAGER,
         timers = {@Timer(key = TimerBase.POACHER_PROGRESS, defaultValue = 10, meetUpValue = 10)},
         configValues = {
                 @IntValue(key = IntValueBase.POACHER_DISTANCE, defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.ARROW)

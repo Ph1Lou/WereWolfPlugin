@@ -60,7 +60,7 @@ import java.util.stream.Collectors;
 
 
 @Role(key = RoleBase.WILL_O_THE_WISP,
-        category = Category.NEUTRAL, attributes = RoleAttribute.NEUTRAL,
+        category = Category.NEUTRAL, attribute = RoleAttribute.NEUTRAL,
         configValues = {@IntValue(key = IntValueBase.WILL_O_THE_WISP_DISTANCE,
                 defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.YELLOW_WOOL)},
         timers = {@Timer (key = TimerBase.WILL_O_THE_WISP_DURATION_INCENDIARY_MADNESS, defaultValue = 45, meetUpValue = 45),

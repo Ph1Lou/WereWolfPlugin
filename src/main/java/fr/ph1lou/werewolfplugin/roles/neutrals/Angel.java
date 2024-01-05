@@ -57,7 +57,7 @@ import java.util.Optional;
 @Role(key = RoleBase.ANGEL,
         category = Category.NEUTRAL,
         auraDescriptionSpecialUseCase = "werewolf.roles.angel.aura",
-        attributes = RoleAttribute.NEUTRAL,
+        attribute = RoleAttribute.NEUTRAL,
         timers = @Timer(
                 key = TimerBase.ANGEL_DURATION,
                 defaultValue = 240,

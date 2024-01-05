@@ -7,6 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IStuffManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -14,6 +15,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.guis.utils.Filter;
 import fr.ph1lou.werewolfplugin.utils.InventoryUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -64,7 +66,7 @@ public class AdvancedRolesGUI implements InventoryProvider {
 
         contents.set(0, 0, ClickableItem.of(new ItemBuilder(UniversalMaterial.COMPASS.getType())
                         .setDisplayName(game.translate("werewolf.menus.return")).build(),
-                e -> RolesGUI.getInventory(player, register.category()).open(player, page)));
+                e -> RolesGUI.getInventory(player, Filter.getCategoryFilter(register.category())).open(player, page)));
 
         contents.set(0, 2, ClickableItem.of(new ItemBuilder(UniversalMaterial.CHEST.getType()).setDisplayName(game.translate("werewolf.menus.advanced_tool_role.config",
                         Formatter.role(game.translate(register.key())))).build(),

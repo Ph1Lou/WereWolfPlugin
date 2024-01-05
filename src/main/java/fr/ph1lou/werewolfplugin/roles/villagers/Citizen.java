@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.CITIZEN,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
+        attribute = RoleAttribute.MINOR_INFORMATION,
         configValues = @IntValue(key = IntValueBase.CITIZEN_SEE_VOTE_NUMBER,
                 defaultValue = 3,
                 meetUpValue = 3,

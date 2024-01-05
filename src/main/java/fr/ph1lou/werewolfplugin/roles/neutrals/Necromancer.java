@@ -35,7 +35,7 @@ import java.util.Optional;
 @Role(key = RoleBase.NECROMANCER,
         defaultAura = Aura.DARK,
         category = Category.NEUTRAL,
-        attributes = RoleAttribute.NEUTRAL,
+        attribute = RoleAttribute.NEUTRAL,
         configValues = {@IntValue(key = IntValueBase.NECROMANCER_DISTANCE,
                 defaultValue = 70, meetUpValue = 70, step = 5, item = UniversalMaterial.BLACK_WOOL)})
 public class Necromancer extends RoleNeutral implements IPower, IProgress {

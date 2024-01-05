@@ -29,7 +29,7 @@ import java.util.List;
 
 @Role(key = RoleBase.SPY,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER, RoleAttribute.MINOR_INFORMATION},
+        attribute = RoleAttribute.MINOR_INFORMATION,
         configValues = @IntValue(key = IntValueBase.SPY_DAY, defaultValue = 5, meetUpValue = 2, step = 1, item = UniversalMaterial.ANVIL))
 public class Spy extends RoleImpl implements IAffectedPlayers, IPower {
 

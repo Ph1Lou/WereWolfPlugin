@@ -27,8 +27,7 @@ import java.util.List;
 
 @Role(key = RoleBase.DETECTIVE,
         category = Category.VILLAGER,
-        attributes = {RoleAttribute.VILLAGER,
-                RoleAttribute.INFORMATION},
+        attribute = RoleAttribute.INFORMATION,
         configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.DETECTIVE_EVERY_OTHER_DAY))})
 public class Detective extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 

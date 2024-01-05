@@ -10,21 +10,18 @@ import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Camp;
-import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
-import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.game.GameManager;
+import fr.ph1lou.werewolfplugin.guis.utils.Filter;
 import fr.ph1lou.werewolfplugin.utils.InventoryUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -36,19 +33,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RolesGUI implements InventoryProvider {
 
-    private Category category;
+    private Filter<?> currentFilter;
 
-    public RolesGUI(Player player, Category category) {
-        this.category = category;
+    public RolesGUI(Player player, Filter<?> currentFilter) {
+        this.currentFilter = currentFilter;
     }
 
-    public static SmartInventory getInventory(Player player, Category category) {
+    public static SmartInventory getInventory(Player player, Filter<?> filter) {
 
         Main main = JavaPlugin.getPlugin(Main.class);
         return SmartInventory.builder()
                 .id("roles")
                 .manager(main.getInvManager())
-                .provider(new RolesGUI(player, category))
+                .provider(new RolesGUI(player, filter))
                 .size(6, 9)
                 .title(main.getWereWolfAPI().translate("werewolf.menus.roles.name"))
                 .closeable(true)
@@ -89,6 +86,25 @@ public class RolesGUI implements InventoryProvider {
 
         List<String> lore = new ArrayList<>(Arrays.asList(game.translate("werewolf.menus.lore.left"),
                 game.translate("werewolf.menus.lore.right")));
+
+        contents.set(0, 1,
+                ClickableItem.of((
+                        new ItemBuilder(
+                                UniversalMaterial.MAP
+                                        .getStack())
+                                .setDisplayName(game.translate(this.currentFilter.getKey()))
+                                .setLore(lore).build()), e -> {
+                    if (e.isLeftClick()) {
+                        this.currentFilter = Filter.getNextFilter(this.currentFilter.getKey(), true);
+                    } else if (e.isRightClick()) {
+                        this.currentFilter = Filter.getNextFilter(this.currentFilter.getKey(), false);
+                    }
+                    e.setCurrentItem(new ItemBuilder(
+                            UniversalMaterial.MAP
+                                    .getStack())
+                            .setDisplayName(game.translate(this.currentFilter.getKey()))
+                            .setLore(lore).build());
+                }));
 
         if (config.getLoverCount(LoverBase.LOVER) > 0) {
             contents.set(0, 2,
@@ -185,18 +201,7 @@ public class RolesGUI implements InventoryProvider {
                         }
                     }));
 
-
-        contents.set(5, 1, ClickableItem.of((new ItemBuilder(Category.WEREWOLF == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
-                .setDisplayName(game.translate(Camp.WEREWOLF.getKey())).setAmount(Math.max(1, count(game, Category.WEREWOLF))).build()), e -> this.category = Category.WEREWOLF));
-        contents.set(5, 3, ClickableItem.of((new ItemBuilder(Category.VILLAGER == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
-                .setDisplayName(game.translate(Camp.VILLAGER.getKey())).setAmount(Math.max(1, count(game, Category.VILLAGER))).build()), e -> this.category = Category.VILLAGER));
-        contents.set(5, 5, ClickableItem.of((new ItemBuilder(Category.NEUTRAL == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
-                .setDisplayName(game.translate(Camp.NEUTRAL.getKey())).setAmount(Math.max(1, count(game, Category.NEUTRAL))).build()), e -> this.category = Category.NEUTRAL));
-        contents.set(5, 7, ClickableItem.of((new ItemBuilder(Category.ADDONS == this.category ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK)
-                .setDisplayName(game.translate("werewolf.categories.addons")).setAmount(Math.max(1, count(game, Category.ADDONS))).build()), e -> this.category = Category.ADDONS));
-
-
-        lore.add(game.translate("werewolf.menus.lore.shift"));
+        this.currentFilter.setColumnFilter(contents, game);
 
         List<ClickableItem> items = new ArrayList<>();
 
@@ -206,18 +211,19 @@ public class RolesGUI implements InventoryProvider {
                         .compareToIgnoreCase(game.translate(o2.getMetaDatas().key())))
                 .forEach(roleRegister -> {
 
-                    Optional<String> addonKey = Register.get().getModuleKey(roleRegister.getMetaDatas().key());
-                    if (roleRegister.getMetaDatas().category() == this.category ||
-                            (addonKey.isPresent() &&
-                                    !addonKey.get().equals(Main.KEY) &&
-                                    this.category == Category.ADDONS)) {
+                    if (this.currentFilter.filter(roleRegister.getMetaDatas())) {
 
                         String key = roleRegister.getMetaDatas().key();
                         AtomicBoolean unRemovable = new AtomicBoolean(false);
                         List<String> lore2 = new ArrayList<>(lore);
+                        lore2.add(game.translate("werewolf.menus.lore.shift"));
+
                         Aura aura = roleRegister.getMetaDatas().defaultAura();
                         lore2.add(game.translate("werewolf.commands.player.aura.menu_role",
-                                Formatter.format("&aura&",aura.getChatColor() + game.translate(aura.getKey()))));
+                                Formatter.format("&aura&", game.translate(aura.getKey()))));
+                        RoleAttribute roleAttribute = roleRegister.getMetaDatas().attribute();
+                        lore2.add(game.translate("werewolf.attributes.menu",
+                                Formatter.format("&attribute&", game.translate(roleAttribute.getKey()))));
 
                         if (game.getConfig().getRoleCount(key) > 0) {
                             lore2.addAll(AdvancedConfigurationUtils.getLore(game,
@@ -300,7 +306,7 @@ public class RolesGUI implements InventoryProvider {
                     }
                 });
 
-        InventoryUtils.fillInventory(game, items, pagination, contents, () -> getInventory(player, this.category), 36);
+        InventoryUtils.fillInventory(game, items, pagination, contents, () -> getInventory(player, this.currentFilter), 36);
     }
 
     public void selectMinus(GameManager game, String key) {
@@ -323,15 +329,8 @@ public class RolesGUI implements InventoryProvider {
         game.setRoleInitialSize(game.getRoleInitialSize() + 1);
     }
 
-    private int count(WereWolfAPI game, Category category) {
-        int i = 0;
-        for (Wrapper<IRole, Role> roleRegister : Register.get().getRolesRegister()) {
-            if (roleRegister.getMetaDatas().category() == category) {
-                i += game.getConfig().getRoleCount(roleRegister.getMetaDatas().key());
-            }
 
-        }
-        return i;
-    }
+
+
 }
 

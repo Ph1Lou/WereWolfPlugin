@@ -32,7 +32,7 @@ import java.util.Random;
 
     @Role(key = RoleBase.WITNESS,
             category = Category.VILLAGER,
-            attributes = {RoleAttribute.MINOR_INFORMATION, RoleAttribute.VILLAGER})
+            attribute = RoleAttribute.MINOR_INFORMATION)
 public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
 
     public Witness(WereWolfAPI main, IPlayerWW playerWW) {
