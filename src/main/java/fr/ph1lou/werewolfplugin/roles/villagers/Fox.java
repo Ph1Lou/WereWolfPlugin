@@ -43,7 +43,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Role(key = RoleBase.FOX, category = Category.VILLAGER,
         auraDescriptionSpecialUseCase = "werewolf.roles.fox.aura",

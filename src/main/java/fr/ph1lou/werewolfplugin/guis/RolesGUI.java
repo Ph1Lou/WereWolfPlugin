@@ -72,7 +72,7 @@ public class RolesGUI implements InventoryProvider {
             config.setLoverCount(LoverBase.LOVER, 0);
             config.setLoverCount(LoverBase.AMNESIAC_LOVER, 0);
             config.setLoverCount(LoverBase.CURSED_LOVER, 0);
-            game.setRoleInitialSize(0);
+            game.setTotalRoles(0);
         }));
     }
 
@@ -315,7 +315,7 @@ public class RolesGUI implements InventoryProvider {
 
         IConfiguration config = game.getConfig();
         if (config.getRoleCount(key) > 0) {
-            game.setRoleInitialSize(game.getRoleInitialSize() - 1);
+            game.setTotalRoles(game.getTotalRoles() - 1);
             config.removeOneRole(key);
         }
     }
@@ -326,7 +326,7 @@ public class RolesGUI implements InventoryProvider {
 
         IConfiguration config = game.getConfig();
         config.addOneRole(key);
-        game.setRoleInitialSize(game.getRoleInitialSize() + 1);
+        game.setTotalRoles(game.getTotalRoles() + 1);
     }
 
 

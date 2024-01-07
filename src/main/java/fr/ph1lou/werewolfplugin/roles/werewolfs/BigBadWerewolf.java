@@ -18,8 +18,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
-
 
 @Role(key = RoleBase.BIG_BAD_WEREWOLF,
         defaultAura = Aura.DARK,

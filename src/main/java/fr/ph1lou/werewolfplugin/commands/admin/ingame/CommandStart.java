@@ -26,7 +26,7 @@ public class CommandStart implements ICommand {
     @Override
     public void execute(WereWolfAPI game, Player player, String[] args) {
 
-        if (game.getRoleInitialSize() - game.getPlayersCount() > 0) {
+        if (game.getTotalRoles() - game.getPlayersCount() > 0) {
             player.sendMessage(
                     game.translate(Prefix.RED, "werewolf.commands.admin.start.too_much_role"));
             return;

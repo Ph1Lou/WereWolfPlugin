@@ -35,7 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-
+//todo configurer la distance dans le gui
 @Lover(
         key = LoverBase.AMNESIAC_LOVER, color = AmnesiacLover.COLOR, configValues = @IntValue(key = IntValueBase.AMNESIAC_LOVER_DISTANCE,
         defaultValue = 15,

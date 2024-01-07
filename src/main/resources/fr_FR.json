@@ -1491,7 +1491,7 @@
         "filters": {
           "aura": "Filtre par aura",
           "category": "Filtre par catégorie",
-          "attribute": "Filtre par caractéristique"
+          "attribute": "Filtre par attribut"
         }
       },
       "whitelist": {

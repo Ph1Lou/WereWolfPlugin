@@ -45,7 +45,7 @@ public class ScoreBoard implements IScoreboard {
         this.game = game;
 
         this.formatters.add(Formatter.format("&players&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getPlayersCount())));
-        this.formatters.add(Formatter.format("&roles_total&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getRoleInitialSize())));
+        this.formatters.add(Formatter.format("&roles_total&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getTotalRoles())));
         this.formatters.add(Formatter.format("&max&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getConfig().getPlayerMax())));
         this.formatters.add(Formatter.format("&name&", WereWolfAPI::getGameName));
 

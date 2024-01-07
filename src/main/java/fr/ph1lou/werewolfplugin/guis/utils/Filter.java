@@ -100,9 +100,9 @@ public abstract class Filter<T>{
             @Override
             public void setColumnFilterOverride(InventoryContents contents, WereWolfAPI game) {
 
-                contents.set(5, 1, getItemBuilder(Aura.LIGHT, game.translate(Aura.LIGHT.getKey()), game));
-                contents.set(5, 3, getItemBuilder(Aura.DARK, game.translate(Aura.DARK.getKey()), game));
-                contents.set(5, 5, getItemBuilder(Aura.NEUTRAL, game.translate(Aura.NEUTRAL.getKey()), game));
+                contents.set(5, 2, getItemBuilder(Aura.LIGHT, game.translate(Aura.LIGHT.getKey()), game));
+                contents.set(5, 4, getItemBuilder(Aura.DARK, game.translate(Aura.DARK.getKey()), game));
+                contents.set(5, 6, getItemBuilder(Aura.NEUTRAL, game.translate(Aura.NEUTRAL.getKey()), game));
             }
 
             @Override
@@ -135,9 +135,9 @@ public abstract class Filter<T>{
                 contents.set(5, 1, getItemBuilder(RoleAttribute.HYBRID, game.translate(RoleAttribute.HYBRID.getKey()), game));
                 contents.set(5, 2, getItemBuilder(RoleAttribute.INFORMATION, game.translate(RoleAttribute.INFORMATION.getKey()), game));
                 contents.set(5, 3, getItemBuilder(RoleAttribute.MINOR_INFORMATION, game.translate(RoleAttribute.MINOR_INFORMATION.getKey()), game));
-                contents.set(5, 4, getItemBuilder(RoleAttribute.NEUTRAL, game.translate(RoleAttribute.NEUTRAL.getKey()), game));
+                contents.set(5, 4, getItemBuilder(RoleAttribute.VILLAGER, game.translate(RoleAttribute.VILLAGER.getKey()), game));
                 contents.set(5, 5, getItemBuilder(RoleAttribute.WEREWOLF, game.translate(RoleAttribute.WEREWOLF.getKey()), game));
-                contents.set(5, 6, getItemBuilder(RoleAttribute.VILLAGER, game.translate(RoleAttribute.VILLAGER.getKey()), game));
+                contents.set(5, 6, getItemBuilder(RoleAttribute.NEUTRAL, game.translate(RoleAttribute.NEUTRAL.getKey()), game));
             }
 
             @Override
@@ -180,7 +180,7 @@ public abstract class Filter<T>{
         inventoryContents.set(5, 7, null);
 
         this.setColumnFilterOverride(inventoryContents, game);
-    };
+    }
 
     public abstract void setColumnFilterOverride(InventoryContents inventoryContents, WereWolfAPI game);
 

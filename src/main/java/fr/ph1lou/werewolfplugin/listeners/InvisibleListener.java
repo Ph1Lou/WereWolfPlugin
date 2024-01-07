@@ -24,8 +24,6 @@ public class InvisibleListener implements Listener {
 
     private final WereWolfAPI game;
 
-    //todo à tester
-
     public InvisibleListener(WereWolfAPI game) {
         this.game = game;
     }

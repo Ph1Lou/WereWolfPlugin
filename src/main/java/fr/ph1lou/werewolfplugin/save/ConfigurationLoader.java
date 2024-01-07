@@ -94,13 +94,13 @@ public class ConfigurationLoader {
                     .setConfigurations(configurationMap);
         }
         game.setConfig(config);
-        game.setRoleInitialSize(0);
+        game.setTotalRoles(0);
         game.getModerationManager().checkQueue();
         game.getListenersManager().updateListeners();
 
         for (Wrapper<IRole, Role> roleRegister : main.getRegisterManager().getRolesRegister()) {
             String key = roleRegister.getMetaDatas().key();
-            game.setRoleInitialSize(game.getRoleInitialSize() + config.getRoleCount(key));
+            game.setTotalRoles(game.getTotalRoles() + config.getRoleCount(key));
         }
     }
 

@@ -233,7 +233,7 @@ public class PlayerListener implements Listener {
                 game.getModerationManager().checkQueue();
                 event.setQuitMessage(game.translate("werewolf.announcement.leave",
                         Formatter.number(game.getPlayersCount()),
-                        Formatter.format("&sum&", game.getRoleInitialSize()),
+                        Formatter.format("&sum&", game.getTotalRoles()),
                         Formatter.player(player.getName())));
                 playerWW.clearPlayer();
             } else if (game.isState(StateGame.END) || !playerWW.isState(StatePlayer.ALIVE)) {

@@ -82,7 +82,7 @@ public class RoleDuration extends ListenerWerewolf {
                         game.getConfig()
                                 .getRoleCount(RoleBase.VILLAGER) +
                                 playerWWS.size() -
-                                game.getRoleInitialSize()));
+                                game.getTotalRoles()));
 
         Register.get().getRolesRegister()
                 .forEach(roleRegister -> {

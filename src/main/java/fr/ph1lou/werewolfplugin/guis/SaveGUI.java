@@ -59,12 +59,12 @@ public class SaveGUI implements InventoryProvider {
                 (new ItemBuilder(Material.EMERALD_BLOCK).setDisplayName(game.translate("werewolf.menus.save.new")).build())
                 , e -> new AnvilGUI.Builder()
                         .text(game.translate("werewolf.menus.save.save_name"))
-                        .onComplete((completion) -> {
-                            save(main, completion.getText(), player);
+                        .onClick((integer, stateSnapshot) -> {
+                            save(main, stateSnapshot.getText(), player);
                             return Collections.singletonList(AnvilGUI.ResponseAction.close());
                         })
                         .itemLeft(UniversalMaterial.FEATHER.getStack())
-                        .onClose((player2) -> BukkitUtils.scheduleSyncDelayedTask(game, () -> SaveGUI.INVENTORY.open(player2)))
+                        .onClose((player2) -> BukkitUtils.scheduleSyncDelayedTask(game, () -> SaveGUI.INVENTORY.open(player2.getPlayer())))
                         .title(game.translate("werewolf.menus.save.save_menu"))
                         .plugin(main)
                         .open(player)));

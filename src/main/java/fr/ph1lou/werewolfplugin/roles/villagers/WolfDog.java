@@ -75,12 +75,6 @@ public class WolfDog extends RoleImpl implements ITransformed, IPower {
         return super.isWereWolf() || this.transformed;
     }
 
-
-    @Override
-    public Aura getAura() {
-        return super.getAura();
-    }
-
     @EventHandler
     public void onWereWolfList(WereWolfListEvent event) {
 

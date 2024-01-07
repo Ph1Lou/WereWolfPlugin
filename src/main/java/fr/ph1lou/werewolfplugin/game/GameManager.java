@@ -77,7 +77,7 @@ public class GameManager implements WereWolfAPI {
     private int playerSize = 0;
     private int timer = 0;
     private boolean crack = false;
-    private int roleInitialSize = 0;
+    private int totalRoles = 0;
     private final List<Integer> scheduleId = new ArrayList<>();
 
     private GameManager(Main main) {
@@ -131,7 +131,7 @@ public class GameManager implements WereWolfAPI {
         this.playerSize++;
         Bukkit.broadcastMessage(translate("werewolf.announcement.join",
                 Formatter.number(this.getPlayersCount()),
-                Formatter.format("&sum&", this.getRoleInitialSize()),
+                Formatter.format("&sum&", this.getTotalRoles()),
                 Formatter.player(player.getName())));
         player.setGameMode(GameMode.ADVENTURE);
         IPlayerWW playerWW = new PlayerWW(this, player);
@@ -354,12 +354,13 @@ public class GameManager implements WereWolfAPI {
     }
 
     @Override
-    public int getRoleInitialSize() {
-        return this.roleInitialSize;
+    public int getTotalRoles() {
+        return this.totalRoles;
     }
 
-    public void setRoleInitialSize(int roleInitialSize) {
-        this.roleInitialSize = roleInitialSize;
+    @Override
+    public void setTotalRoles(int roleInitialSize) {
+        this.totalRoles = roleInitialSize;
     }
 
     @Override
