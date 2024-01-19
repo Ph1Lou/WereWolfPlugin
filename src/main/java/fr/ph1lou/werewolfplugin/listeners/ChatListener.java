@@ -4,7 +4,7 @@ import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
-import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
+import fr.ph1lou.werewolfapi.events.werewolf.WereWolfSiteChatEvent;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -203,7 +203,7 @@ public class ChatListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onChatWW(WereWolfChatEvent event) {
+    public void onChatWW(WereWolfSiteChatEvent event) {
 
         game.getModerationManager().getModerators().stream()
                 .map(Bukkit::getPlayer)

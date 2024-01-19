@@ -45,6 +45,7 @@ public class Discord extends ListenerWerewolf {
                         .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                         .map(IPlayerWW::getRole)
                         .filter(ICamp::isWereWolf)
+                        .filter(iRole -> !iRole.isNeutral())
                         .map(IRole::getPlayerWW)
                         .collect(Collectors.toList());
 
