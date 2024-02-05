@@ -8,7 +8,7 @@ This project is a minecraft spigot plugin to play UHC Werewolf.
 
 <https://github.com/Ph1Lou/WereWolfAPI>
 
-# Librairies use
+# Librairies used
 
 <https://github.com/MrMicky-FR/FastBoard>  
 <https://github.com/MinusKube/SmartInvs>  
