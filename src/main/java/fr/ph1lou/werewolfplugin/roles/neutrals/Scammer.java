@@ -82,7 +82,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
             return;
         }
 
-        this.count = this.count++ % game.getConfig().getTimerValue(TimerBase.SCAMMER_DELAY);
+        this.count = (this.count + 1) % game.getConfig().getTimerValue(TimerBase.SCAMMER_DELAY);
 
         if (count != 0) {
             return;
@@ -94,7 +94,8 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
 
         Location location = getPlayerWW().getLocation();
 
-        Bukkit.getOnlinePlayers().stream()
+        Bukkit.getOnlinePlayers()
+                .stream()
                 .map(Entity::getUniqueId)
                 .filter(uniqueId -> !getPlayerUUID().equals(uniqueId))
                 .map(game::getPlayerWW)
