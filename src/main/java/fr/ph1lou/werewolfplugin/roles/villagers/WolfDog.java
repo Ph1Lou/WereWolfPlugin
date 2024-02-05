@@ -13,6 +13,7 @@ import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
+import fr.ph1lou.werewolfapi.events.werewolf.RequestSeeWereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -124,6 +125,16 @@ public class WolfDog extends RoleImpl implements ITransformed, IPower {
         if (this.getPlayerWW().isState(StatePlayer.DEATH)) return;
 
         event.setAppear(!this.transformed || super.isWereWolf());
+    }
+
+    @EventHandler
+    public void onRequestSeeWereWolfListEvent(RequestSeeWereWolfListEvent event) {
+
+        if (!getPlayerWW().equals(event.getPlayerWW())) return;
+
+        if (this.getPlayerWW().isState(StatePlayer.DEATH)) return;
+
+        event.setAccept(this.transformed || super.isWereWolf());
     }
 
     @Override

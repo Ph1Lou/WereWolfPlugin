@@ -250,6 +250,8 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
 
         if (event.isWin()) return;
 
+        if (hasPower()) return;
+
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (affectedPlayer.isEmpty()) return;
@@ -288,6 +290,8 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
 
     @EventHandler
     public void onLover(AroundLoverEvent event) {
+
+        if (hasPower()) return;
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 

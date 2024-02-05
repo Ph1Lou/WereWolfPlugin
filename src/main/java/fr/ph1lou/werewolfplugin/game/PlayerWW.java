@@ -92,7 +92,11 @@ public class PlayerWW implements IPlayerWW {
         this.clearPlayer();
     }
 
-    private static UUID getUUID(String name) throws IOException {
+    private UUID getUUID(String name) throws IOException {
+
+        if(this.uuid.version() == 4){
+            return this.uuid;
+        }
         String uuid;
         BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://api.mojang.com/users/profiles/minecraft/" + name).openStream()));
         uuid = (((JsonObject)new JsonParser().parse(in)).get("id")).toString().replaceAll("\"", "");
