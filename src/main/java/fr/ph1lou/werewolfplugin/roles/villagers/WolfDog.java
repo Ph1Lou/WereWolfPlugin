@@ -86,7 +86,7 @@ public class WolfDog extends RoleImpl implements ITransformed, IPower {
     }
 
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onWerewolfWHat(WereWolfChatEvent event){
 
         if(!event.getTargetWW().equals(this.getPlayerWW())){

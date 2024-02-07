@@ -77,7 +77,7 @@ public class WerewolfChat extends ListenerWerewolf {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onWWChat(WereWolfChatEvent event) {
 
         if (!event.getTargetWW().getRole().isAbilityEnabled()) return;

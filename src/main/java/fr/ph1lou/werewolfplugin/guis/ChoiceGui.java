@@ -50,8 +50,8 @@ public class ChoiceGui implements InventoryProvider {
         game.getPlayerWW(player.getUniqueId())
                 .ifPresent(playerWW -> game.getPlayersWW()
                         .stream()
-                        .filter(playerWW1 -> !playerWW1.equals(playerWW))
-                        .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+                        .sorted((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()))
+                        .filter(playerWW1 -> !playerWW1.isState(StatePlayer.DEATH))
                         .forEach(targetWW -> items.add(ClickableItem.of((
                                 new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
                                         .setHead(targetWW.getName(),
