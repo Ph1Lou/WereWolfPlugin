@@ -62,8 +62,6 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
 
         if (!this.last.getLastKiller().get().getRole().isWereWolf()) return;
 
-        if (!this.last.equals(this.getPlayerWW())) return;
-
         GuardResurrectionEvent guardResurrectionEvent = new GuardResurrectionEvent(this.getPlayerWW(), this.last);
 
         Bukkit.getPluginManager().callEvent(guardResurrectionEvent);

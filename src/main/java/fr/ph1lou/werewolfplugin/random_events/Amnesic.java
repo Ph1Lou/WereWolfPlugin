@@ -100,7 +100,9 @@ public class Amnesic extends ListenerWerewolf {
             return;
         }
 
-        if (!playerWW.getRole().isWereWolf()) {
+        AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(temp, playerWW);
+
+        if (!appearInWereWolfListEvent.isAppear()) {
             return;
         }
 
@@ -130,7 +132,10 @@ public class Amnesic extends ListenerWerewolf {
 
         List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .filter(playerWW -> playerWW.getRole().isWereWolf())
+                .filter(playerWW -> {
+                    AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(temp, playerWW);
+                    return appearInWereWolfListEvent.isAppear();
+                })
                 .filter(playerWW -> !this.list.contains(playerWW))
                 .collect(Collectors.toList());
 

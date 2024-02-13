@@ -93,9 +93,7 @@ public class WolfDog extends RoleImpl implements ITransformed, IPower {
             return;
         }
 
-        if(!this.transformed){
-            event.setCancelled(false);
-        }
+        event.setCancelled(this.transformed && !super.isWereWolf());
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -111,16 +109,14 @@ public class WolfDog extends RoleImpl implements ITransformed, IPower {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        if (this.transformed && !super.isWereWolf()) return;
-
-        event.setCanSpeak(true);
+        event.setCanSpeak(!this.transformed || super.isWereWolf());
     }
 
 
     @EventHandler
     public void onAppearInWereWolfList(AppearInWereWolfListEvent event) {
 
-        if (!getPlayerWW().equals(event.getPlayerWW())) return;
+        if (!getPlayerWW().equals(event.getTargetWW())) return;
 
         if (this.getPlayerWW().isState(StatePlayer.DEATH)) return;
 

@@ -376,7 +376,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
         }
 
         counter++;
-        if (counter % 6 != 0) return;
+        if (counter % 5 != 0) return;
         counter = 0;
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
@@ -391,9 +391,11 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
         if (brother != null &&  brother.isState(StatePlayer.ALIVE) && isAbilityEnabled()) {
             boolean recoverResistance = brother.getLocation().distance(location) > game.getConfig().getValue(IntValueBase.ROMULUS_REMUS_DISTANCE_BROTHER);
 
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE, getKey(), 0));
             if (recoverResistance) {
-                this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, 100, 0, getKey()));
+                this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, 120, 0, getKey()));
+            }
+            else{
+                this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE, getKey(), 0));
             }
         }
 

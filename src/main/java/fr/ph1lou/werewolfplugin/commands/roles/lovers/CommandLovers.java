@@ -56,6 +56,10 @@ public class CommandLovers implements ICommand {
             return;
         }
 
+        if(heart <= 0){
+            return;
+        }
+
         if (args.length == 1) {
 
             List<ILover> lovers = playerWW.getLovers().stream()
@@ -143,12 +147,13 @@ public class CommandLovers implements ICommand {
                     .filter(loverAPI1 -> !loverAPI1.isKey(LoverBase.CURSED_LOVER))
                     .filter(loverAPI1 -> loverAPI1.getLovers().contains(playerWW1))
                     .filter(loverAPI1 -> !loverAPI1.isKey(LoverBase.AMNESIAC_LOVER) || ((AmnesiacLover) loverAPI1).isRevealed())
+                    .filter(iLover1 -> iLover1.getLovers().contains(playerWW1))
                     .findFirst();
 
             if (iLover.isPresent()) {
                 iLover.ifPresent(loverAPI1 -> {
 
-                    if (playerWW1.getMaxHealth() - playerCouple.getHealth() >= heart) {
+                    if (playerWW1.getMaxHealth() - playerCouple.getHealth() >= don) {
 
                         DonEvent donEvent = new DonEvent(playerWW, playerWW1, heart);
                         Bukkit.getPluginManager().callEvent(donEvent);

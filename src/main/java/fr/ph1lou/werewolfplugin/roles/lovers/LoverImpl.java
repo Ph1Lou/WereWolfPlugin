@@ -44,7 +44,7 @@ public class LoverImpl extends AbstractLover {
                 .filter(playerWW1 -> !playerWW1.equals(event.getPlayerWW()))
                 .forEach(playerWW1 -> {
                     game.getPlayersWW().forEach(playerWW -> {
-                        AnnouncementLoverDeathEvent event1 = new AnnouncementLoverDeathEvent(event.getPlayerWW(), playerWW, "werewolf.lovers.lover.lover_death");
+                        AnnouncementLoverDeathEvent event1 = new AnnouncementLoverDeathEvent(this, event.getPlayerWW(), playerWW, "werewolf.lovers.lover.lover_death");
                         Bukkit.getPluginManager().callEvent(event1);
 
                         if (!event1.isCancelled()) {

@@ -105,7 +105,7 @@ public class FearFulWerewolf extends RoleWereWolf {
 
     @EventHandler
     public void onLoverDeathMessage(AnnouncementLoverDeathEvent event) {
-        if (event.getPlayerWW().equals(this.getPlayerWW())) {
+        if (event.getPlayerWW().equals(this.getPlayerWW()) || this.getPlayerWW().getLovers().contains(event.getLover())) {
             event.setCancelled(true);
         }
     }

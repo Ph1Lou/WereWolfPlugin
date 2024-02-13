@@ -84,7 +84,7 @@ public class AmnesiacLover extends LoverBaseImpl implements ILover, Listener {
         IPlayerWW playerWW1 = getOtherLover(event.getPlayerWW());
 
         game.getPlayersWW().forEach(playerWW -> {
-            AnnouncementLoverDeathEvent event1 = new AnnouncementLoverDeathEvent(event.getPlayerWW(), playerWW, "werewolf.lovers.lover.lover_death");
+            AnnouncementLoverDeathEvent event1 = new AnnouncementLoverDeathEvent(this, event.getPlayerWW(), playerWW, "werewolf.lovers.lover.lover_death");
             Bukkit.getPluginManager().callEvent(event1);
 
             if (!event1.isCancelled()) {
