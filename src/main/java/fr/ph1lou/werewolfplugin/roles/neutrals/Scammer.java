@@ -158,6 +158,11 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         if (this.isSolitary()) {
             targetRole.setSolitary(true);
         }
+        else if(targetRole.isSolitary()){
+            if (this.getPlayerWW().getMaxHealth() < 30) {
+                this.getPlayerWW().addPlayerMaxHealth(Math.max(0, Math.min(8, 30 - this.getPlayerWW().getMaxHealth())));
+            }
+        }
         target.addDeathRole(targetRole.getKey());
         this.getPlayerWW().addDeathRole(this.getKey());
         targetRole.removeTemporaryAuras();
