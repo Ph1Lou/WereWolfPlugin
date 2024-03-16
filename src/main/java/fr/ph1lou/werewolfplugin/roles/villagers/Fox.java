@@ -259,6 +259,8 @@ public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPl
 
         if (this.lastPlayerSmell == null) return;
 
+        if (!this.lastPlayerSmell.isState(StatePlayer.ALIVE)) return;
+
         StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
 
         Player player = Bukkit.getPlayer(event.getPlayerUUID());

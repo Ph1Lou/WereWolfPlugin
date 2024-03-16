@@ -153,9 +153,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
         } else if (roleClone.isWereWolf()) {
             Bukkit.getPluginManager().callEvent(new NewWereWolfEvent(getPlayerWW()));
         }
-        if (this.isSolitary()) {
-            roleClone.setSolitary(true);
-        }
+
         roleClone.setTransformedToNeutral(true);
         this.getPlayerWW().addDeathRole(this.getKey());
 
@@ -176,6 +174,15 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         roleClone.recoverPower();
         roleClone.recoverPotionEffects();
+
+        if (this.isSolitary()) {
+            roleClone.setSolitary(true);
+        }
+        else if (roleClone.isSolitary()){
+            if (this.getPlayerWW().getMaxHealth() < 30) {
+                this.getPlayerWW().addPlayerMaxHealth(Math.max(0, Math.min(8, 30 - this.getPlayerWW().getMaxHealth())));
+            }
+        }
 
         for (int i = 0; i < playerWW.getLovers().size(); i++) {
             ILover lover = playerWW.getLovers().get(i);

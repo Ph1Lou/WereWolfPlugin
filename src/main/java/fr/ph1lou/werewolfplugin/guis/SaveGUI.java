@@ -60,7 +60,7 @@ public class SaveGUI implements InventoryProvider {
                 , e -> new AnvilGUI.Builder()
                         .text(game.translate("werewolf.menus.save.save_name"))
                         .onClick((integer, stateSnapshot) -> {
-                            save(main, stateSnapshot.getText(), player);
+                            save(main, stateSnapshot.getText().replace("/", "-"), player);
                             return Collections.singletonList(AnvilGUI.ResponseAction.close());
                         })
                         .itemLeft(UniversalMaterial.FEATHER.getStack())
