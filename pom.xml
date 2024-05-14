@@ -6,7 +6,7 @@
 
     <groupId>fr.ph1lou</groupId>
     <artifactId>werewolfplugin</artifactId>
-    <version>1.11.2-SNAPSHOT</version>
+    <version>1.12-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <plugin.folder>./target</plugin.folder>
@@ -108,7 +108,7 @@
         <dependency>
             <groupId>fr.ph1lou</groupId>
             <artifactId>werewolfapi</artifactId>
-            <version>1.10</version>
+            <version>1.12</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

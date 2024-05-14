@@ -73,6 +73,8 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
 
         if (!playerWW.getLastKiller().get().equals(getPlayerWW())) return;
 
+        if(playerWW.getLastKiller().get().getRole().isWereWolf()) return;
+
         if (this.isTransformed()) return;
 
         AmnesiacTransformationEvent amnesiacTransformationEvent =

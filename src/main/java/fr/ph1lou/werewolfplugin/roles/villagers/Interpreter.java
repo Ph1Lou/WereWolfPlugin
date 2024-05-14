@@ -147,7 +147,13 @@ public class Interpreter extends RoleImpl implements IPower {
             return;
         }
 
-        HandlerList.unregisterAll(this.getPlayerWW().getRole());
+        if(this.role == null){
+            return;
+        }
+
+        HandlerList.unregisterAll(this.role);
+
+        this.role = null;
         this.getPlayerWW().setRole(this);
     }
 

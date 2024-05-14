@@ -82,7 +82,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
             return;
         }
 
-        this.count = this.count++ % game.getConfig().getTimerValue(TimerBase.SCAMMER_DELAY);
+        this.count = (this.count + 1) % game.getConfig().getTimerValue(TimerBase.SCAMMER_DELAY);
 
         if (count != 0) {
             return;
@@ -94,7 +94,8 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
 
         Location location = getPlayerWW().getLocation();
 
-        Bukkit.getOnlinePlayers().stream()
+        Bukkit.getOnlinePlayers()
+                .stream()
                 .map(Entity::getUniqueId)
                 .filter(uniqueId -> !getPlayerUUID().equals(uniqueId))
                 .map(game::getPlayerWW)
@@ -156,6 +157,11 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         }
         if (this.isSolitary()) {
             targetRole.setSolitary(true);
+        }
+        else if(targetRole.isSolitary()){
+            if (this.getPlayerWW().getMaxHealth() < 30) {
+                this.getPlayerWW().addPlayerMaxHealth(Math.max(0, Math.min(8, 30 - this.getPlayerWW().getMaxHealth())));
+            }
         }
         target.addDeathRole(targetRole.getKey());
         this.getPlayerWW().addDeathRole(this.getKey());

@@ -19,6 +19,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfapi.utils.Wrapper;
 import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.guis.utils.Filter;
 import fr.ph1lou.werewolfplugin.utils.InventoryUtils;
@@ -317,6 +318,17 @@ public class RolesGUI implements InventoryProvider {
         if (config.getRoleCount(key) > 0) {
             game.setTotalRoles(game.getTotalRoles() - 1);
             config.removeOneRole(key);
+            if(config.getRoleCount(key) == 0){
+                Register.get().getRolesRegister()
+                        .stream()
+                        .map(Wrapper::getMetaDatas)
+                        .filter(role -> Arrays.asList(role.requireRoles()).contains(key))
+                        .filter(role -> config.getRoleCount(role.key()) > 0)
+                        .forEach(role -> {
+                            game.setTotalRoles(game.getTotalRoles() - config.getRoleCount(role.key()));
+                            config.setRole(role.key(), 0);
+                        });
+            }
         }
     }
 

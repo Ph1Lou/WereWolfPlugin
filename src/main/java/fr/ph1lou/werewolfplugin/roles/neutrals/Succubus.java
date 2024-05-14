@@ -171,6 +171,9 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
                     , charmedWW);
             Bukkit.getPluginManager().callEvent(charmEvent);
 
+            setProgress(0f);
+            setPower(false);
+
             if (!charmEvent.isCancelled()) {
                 charmedWW.sendMessageWithKey(
                         Prefix.YELLOW, "werewolf.roles.succubus.get_charmed",
@@ -179,13 +182,10 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
                 this.getPlayerWW().sendMessageWithKey(
                         Prefix.GREEN, "werewolf.roles.succubus.charming_perform",
                         Formatter.player(charmedWW.getName()));
-                game.checkVictory(); //todo pose soucis quand que 2 joueurs
+                game.checkVictory();
             } else {
                 this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             }
-
-            setProgress(0f);
-            setPower(false);
         }
 
     }
@@ -250,6 +250,8 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
 
         if (event.isWin()) return;
 
+        if (hasPower()) return;
+
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (affectedPlayer.isEmpty()) return;
@@ -288,6 +290,8 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
 
     @EventHandler
     public void onLover(AroundLoverEvent event) {
+
+        if (hasPower()) return;
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 

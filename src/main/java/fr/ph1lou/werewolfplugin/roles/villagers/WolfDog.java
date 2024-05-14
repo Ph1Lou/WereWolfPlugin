@@ -13,6 +13,7 @@ import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
+import fr.ph1lou.werewolfapi.events.werewolf.RequestSeeWereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -85,16 +86,14 @@ public class WolfDog extends RoleImpl implements ITransformed, IPower {
     }
 
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onWerewolfWHat(WereWolfChatEvent event){
 
         if(!event.getTargetWW().equals(this.getPlayerWW())){
             return;
         }
 
-        if(!this.transformed){
-            event.setCancelled(false);
-        }
+        event.setCancelled(this.transformed && !super.isWereWolf());
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -110,20 +109,28 @@ public class WolfDog extends RoleImpl implements ITransformed, IPower {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        if (this.transformed && !super.isWereWolf()) return;
-
-        event.setCanSpeak(true);
+        event.setCanSpeak(!this.transformed || super.isWereWolf());
     }
 
 
     @EventHandler
     public void onAppearInWereWolfList(AppearInWereWolfListEvent event) {
 
-        if (!getPlayerWW().equals(event.getPlayerWW())) return;
+        if (!getPlayerWW().equals(event.getTargetWW())) return;
 
         if (this.getPlayerWW().isState(StatePlayer.DEATH)) return;
 
         event.setAppear(!this.transformed || super.isWereWolf());
+    }
+
+    @EventHandler
+    public void onRequestSeeWereWolfListEvent(RequestSeeWereWolfListEvent event) {
+
+        if (!getPlayerWW().equals(event.getPlayerWW())) return;
+
+        if (this.getPlayerWW().isState(StatePlayer.DEATH)) return;
+
+        event.setAccept(this.transformed || super.isWereWolf());
     }
 
     @Override
