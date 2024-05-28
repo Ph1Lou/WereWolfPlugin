@@ -69,6 +69,11 @@ public class AdvancedScenariosGUI implements InventoryProvider {
             contents.set(i.get() / 9, i.get() % 9, clickableItem);
             i.set(i.get() + 2);
         });
+
+        AdvancedConfigurationUtils.getTimers(game, this.register.timers()).forEach(clickableItem -> {
+            contents.set(i.get() / 9, i.get() % 9, clickableItem);
+            i.set(i.get() + 2);
+        });
     }
 
 }
