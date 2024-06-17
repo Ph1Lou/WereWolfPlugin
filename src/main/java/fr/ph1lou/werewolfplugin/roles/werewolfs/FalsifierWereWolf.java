@@ -55,16 +55,6 @@ public class FalsifierWereWolf extends RoleWereWolf {
             return;
         }
 
-        List<UUID> players = new ArrayList<>();
-        for (IPlayerWW playerWW1 : game.getPlayersWW()) {
-            if (playerWW1.isState(StatePlayer.ALIVE) && !playerWW1.equals(getPlayerWW())) {
-                players.add(playerWW1.getUUID());
-            }
-        }
-        if (players.isEmpty()) {
-            return;
-        }
-
         IPlayerWW displayWW = Utils.autoSelect(game, getPlayerWW());
 
         IRole roles = displayWW.getRole();
