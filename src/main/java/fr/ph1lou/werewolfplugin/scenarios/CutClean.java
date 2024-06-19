@@ -35,44 +35,26 @@ public class CutClean extends ListenerWerewolf {
 
         Material currentItemType = VersionUtils.getVersionUtils().getItemInHand(event.getPlayer()).getType();
 
-        switch (block.getType()) {
+        Material blockType = block.getType();
 
-            case COAL_ORE:
+        if (!UniversalMaterial.isCorrectTool(blockType, currentItemType)) {
+            return;
+        }
 
-                if (!currentItemType.equals(Material.DIAMOND_PICKAXE) &&
-                        !currentItemType.equals(Material.IRON_PICKAXE) &&
-                        !currentItemType.equals(Material.STONE_PICKAXE) &&
-                        !currentItemType.equals(UniversalMaterial.GOLDEN_PICKAXE.getType())
-                        && !currentItemType.equals(UniversalMaterial.WOODEN_PICKAXE.getType())) {
-                    return;
-                }
-                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
-                block.setType(Material.AIR);
-                block.getWorld().dropItem(loc, new ItemStack(Material.TORCH, 4));
-                break;
-
-
-            case IRON_ORE:
-
-                if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE) && !currentItemType.equals(Material.STONE_PICKAXE)) {
-                    return;
-                }
-                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().isScenarioActive(ScenarioBase.XP_BOOST) ? (int) (game.getConfig().getValue(IntValueBase.XP_BOOST) / 100f) : 1);
-                block.setType(Material.AIR);
-                block.getWorld().dropItem(loc, new ItemStack(Material.IRON_INGOT, 1));
-                break;
-
-            case GOLD_ORE:
-                if (!currentItemType.equals(Material.DIAMOND_PICKAXE) && !currentItemType.equals(Material.IRON_PICKAXE)) {
-                    return;
-                }
-                block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().isScenarioActive(ScenarioBase.XP_BOOST) ? (int) (game.getConfig().getValue(IntValueBase.XP_BOOST) / 100f) : 1);
-                block.setType(Material.AIR);
-                block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT, 1));
-                break;
-
-            default:
-                break;
+        if(UniversalMaterial.isCoalOre(blockType)){
+            block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
+            block.setType(Material.AIR);
+            block.getWorld().dropItem(loc, new ItemStack(Material.TORCH, 4));
+        }
+        else if(UniversalMaterial.isIronOre(blockType)){
+            block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().isScenarioActive(ScenarioBase.XP_BOOST) ? (int) (game.getConfig().getValue(IntValueBase.XP_BOOST) / 100f) : 1);
+            block.setType(Material.AIR);
+            block.getWorld().dropItem(loc, new ItemStack(Material.IRON_INGOT, 1));
+        }
+        else if (UniversalMaterial.isGoldOre(blockType)){
+            block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(game.getConfig().isScenarioActive(ScenarioBase.XP_BOOST) ? (int) (game.getConfig().getValue(IntValueBase.XP_BOOST) / 100f) : 1);
+            block.setType(Material.AIR);
+            block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT, 1));
         }
     }
 

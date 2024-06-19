@@ -42,7 +42,7 @@ public class DiamondLimit extends ListenerWerewolf {
         String playerName = event.getPlayer().getName();
         Block block = event.getBlock();
 
-        if (!block.getType().equals(Material.DIAMOND_ORE)) return;
+        if (!UniversalMaterial.isDiamondOre(block.getType())) return;
 
         Location loc = new Location(block.getWorld(),
                 block.getLocation().getBlockX() + 0.5,
