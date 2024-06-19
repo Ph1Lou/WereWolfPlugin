@@ -4,6 +4,7 @@ import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.timers.DiggingEndEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
@@ -47,20 +48,23 @@ public class DiggingEnd extends ListenerWerewolf {
         }
 
         Block block = event.getBlock();
-        List<Material> m = Arrays.asList(Material.REDSTONE_ORE,
-                Material.EMERALD_ORE,
-                Material.LAPIS_ORE,
-                Material.COAL_ORE,
-                Material.IRON_ORE,
-                Material.GOLD_ORE,
-                Material.DIAMOND_ORE);
+
 
         Location loc = new Location(block.getWorld(),
                 block.getLocation().getBlockX() + 0.5,
                 block.getLocation().getBlockY() + 0.5,
                 block.getLocation().getBlockZ() + 0.5);
 
-        if (m.contains(block.getType())) {
+        Material blockType = block.getType();
+
+        if (UniversalMaterial.isDiamondOre(blockType) ||
+            UniversalMaterial.isGoldOre(blockType) ||
+            UniversalMaterial.isIronOre(blockType) ||
+            UniversalMaterial.isRedstoneOre(blockType) ||
+            UniversalMaterial.isEmeraldOre(blockType) ||
+            UniversalMaterial.isLapisOre(blockType) ||
+            UniversalMaterial.isCoalOre(blockType)) {
+
             block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
             block.setType(Material.AIR);
         }
