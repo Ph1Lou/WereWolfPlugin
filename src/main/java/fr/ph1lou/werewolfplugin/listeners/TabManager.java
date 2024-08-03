@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TabManager implements Listener {
 
@@ -127,6 +128,7 @@ public class TabManager implements Listener {
         Scoreboard scoreboard = target.getScoreboard();
         Team team = scoreboard.getTeam(player.getName());
         StringBuilder sb = new StringBuilder(updatePlayerNameTagEvent.getPrefix());
+        AtomicReference<ChatColor> chatColor = new AtomicReference<>(updatePlayerNameTagEvent.getChatColor());
 
         if (updatePlayerNameTagEvent.isTabVisibility()) {
             VersionUtils.getVersionUtils().showPlayer(target, player);
@@ -148,32 +150,29 @@ public class TabManager implements Listener {
                                 Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
                                 if (appearInWereWolfListEvent.isAppear()) {
                                     if (game.getConfig().isConfigActive(ConfigBase.RED_NAME_TAG)) {
-                                        sb.append(ChatColor.DARK_RED);
+                                        chatColor.set(ChatColor.DARK_RED);
                                     }
                                 }
                             }
                             if(playerWW.isState(StatePlayer.ALIVE)){
-                                sb.append(targetWW.getColor(playerWW));
+                                chatColor.set(targetWW.getColor(playerWW));
                             }
                         });
 
             });
 
+            String suffix = updatePlayerNameTagEvent.getSuffix();
+            String prefix2 = sb.toString();
+            boolean visibility = updatePlayerNameTagEvent.isVisibility();
+
             if (game.getModerationManager().getModerators().contains(target.getUniqueId())) {
-                String string1 = updateModeratorNameTagEvent.getSuffix() + updatePlayerNameTagEvent.getSuffix();
-                team.setSuffix(string1.substring(0, Math.min(16, string1.length())));
-                String string2 = sb + updateModeratorNameTagEvent.getPrefix();
-                team.setPrefix(string2.substring(0, Math.min(16, string2.length())));
-                VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, true);
-
-            } else {
-                String string1 = updatePlayerNameTagEvent.getSuffix();
-                team.setSuffix(string1.substring(0, Math.min(16, string1.length())));
-                String string2 = sb.toString();
-                team.setPrefix(string2.substring(Math.max(string2.length() - 16, 0)));
-                VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, updatePlayerNameTagEvent.isVisibility());
-
+                suffix = updateModeratorNameTagEvent.getSuffix() + suffix;
+                chatColor.set(updateModeratorNameTagEvent.getPrefix());
+                visibility = true;
             }
+            team.setSuffix(suffix.substring(0, Math.min(16, suffix.length())));
+            VersionUtils.getVersionUtils().setPrefixAndColor(team, prefix2, chatColor.get());
+            VersionUtils.getVersionUtils().setTeamNameTagVisibility(team, visibility);
         }
     }
 
@@ -184,7 +183,7 @@ public class TabManager implements Listener {
             return;
         }
 
-        StringBuilder prefix = new StringBuilder(event.getPrefix());
+        ChatColor prefix = event.getPrefix();
 
         StringBuilder suffix = new StringBuilder(event.getSuffix());
 
@@ -198,15 +197,16 @@ public class TabManager implements Listener {
         if (playerWW.isState(StatePlayer.DEATH)) return;
 
         if (playerWW.getRole().isNeutral()) {
-            prefix.append(ChatColor.GOLD);
+            prefix = ChatColor.GOLD;
         } else if (playerWW.getRole().isWereWolf()) {
-            prefix.append(ChatColor.DARK_RED);
-        } else prefix.append(ChatColor.GREEN);
-
+            prefix = ChatColor.DARK_RED;
+        } else {
+            prefix = ChatColor.GREEN;
+        }
 
         playerWW.getLovers().forEach(iLover -> suffix.append(game.translate(iLover.getColor())).append(" ♥"));
 
-        event.setPrefix(prefix.toString());
+        event.setPrefix(prefix);
         event.setSuffix(suffix.toString());
     }
 

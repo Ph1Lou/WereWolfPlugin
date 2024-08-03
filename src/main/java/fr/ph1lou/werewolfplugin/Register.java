@@ -53,7 +53,6 @@ public class Register implements IRegisterManager {
 
     public Register(Main main) {
         INSTANCE = this;
-
         this.scanPlugins(main);
     }
 

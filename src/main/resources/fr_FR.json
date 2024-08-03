@@ -208,7 +208,7 @@
       "angel": {
         "display": "Ange",
         "angel_choice": "Vous pouvez décider d'être soit ",
-        "angle_choice_click": "Vous venez de choisir §b&form&§b§f. Vous obtiendrez votre cible dans §b&timer&",
+        "angle_choice_click": "Vous venez de choisir §b&form&§b§f. Vous obtiendrez votre cible ou protégé dans §b&timer&",
         "or": " soit ",
         "target": "Cible : §b&target&\n",
         "time": ", vous avez §b&timer& §f(Cliquez pour choisir)",
