@@ -36,7 +36,8 @@
         }
       },
       "fake_lover": {
-        "display": "Couple"
+        "display": "Couple",
+        "color": "§7"
       }
     },
     "roles": {
@@ -382,8 +383,7 @@
         "effect": "Force et Speed (la nuit), Vision Nocturne. 2 coeurs d'absorption après chaque kill"
       },
       "chatty_seer": {
-        "display": "Voyante Bavarde",
-        "description": "Le Matin, Vous pouvez connaître le camp d'un joueur. Cependant si c'est un Villageois, vous perdrez 3 coeurs et ne pourrez pas utiliser votre pouvoir le tour suivant. Le message sera affiché dans le chat global.",
+        "extra_description": " Le message sera affiché dans le chat global.",
         "see_perform": "Une Voyante Bavarde vient d'espionner un membre du camp des §b&camp&"
       },
       "infect_father_of_the_wolves": {
@@ -412,7 +412,8 @@
         "see_villager": "Vous venez d'espionner un membre du Village, vous perdez 3 coeurs et vous ne pourrez pas utiliser votre pouvoir pour la prochaine fois",
         "command": "voir",
         "configurations": {
-          "seer_every_other_day": "Voyante tous les deux jours"
+          "seer_every_other_day": "Voyante tous les deux jours",
+          "chatty_seer": "Voyante bavarde"
         }
       },
       "priestess": {

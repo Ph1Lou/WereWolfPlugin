@@ -30,7 +30,10 @@ import java.util.List;
 @Role(key = RoleBase.SEER,
         category = Category.VILLAGER,
         attribute = RoleAttribute.INFORMATION,
-        configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.SEER_EVERY_OTHER_DAY))})
+        configurations = {
+        @Configuration(config = @ConfigurationBasic(key = ConfigBase.SEER_EVERY_OTHER_DAY)),
+        @Configuration(config = @ConfigurationBasic(key = ConfigBase.CHATTY_SEER))
+})
 public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -93,7 +96,9 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.roles.seer.description"))
+                .setDescription(game.translate("werewolf.roles.seer.description") +
+                                (this.game.getConfig().isConfigActive(ConfigBase.CHATTY_SEER) ?
+                game.translate("werewolf.roles.chatty_seer.extra_description") : ""))
                 .setItems(game.translate("werewolf.roles.seer.items"))
                 .setEffects(game.translate("werewolf.roles.seer.effect"))
                 .build();

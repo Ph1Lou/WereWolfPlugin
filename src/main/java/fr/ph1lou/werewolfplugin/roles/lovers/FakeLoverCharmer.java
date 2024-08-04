@@ -9,8 +9,10 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 
 import java.util.List;
 
-@Lover(key = LoverBase.FAKE_LOVER, color = LoverImpl.COLOR)
+@Lover(key = LoverBase.FAKE_LOVER, color = FakeLoverCharmer.COLOR)
 public class FakeLoverCharmer extends FakeLover {
+
+    public static final String COLOR = "werewolf.lovers.fake_lover.color";
 
     private IPlayerWW charmer;
 
