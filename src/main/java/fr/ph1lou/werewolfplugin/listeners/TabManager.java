@@ -144,7 +144,9 @@ public class TabManager implements Listener {
 
                 game.getPlayerWW(player.getUniqueId())
                         .ifPresent(playerWW -> {
-
+                            if(playerWW.isState(StatePlayer.ALIVE)){
+                                chatColor.set(targetWW.getColor(playerWW));
+                            }
                             if (requestSeeWereWolfListEvent.isAccept()) {
                                 AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(targetWW, playerWW);
                                 Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
@@ -153,9 +155,6 @@ public class TabManager implements Listener {
                                         chatColor.set(ChatColor.DARK_RED);
                                     }
                                 }
-                            }
-                            if(playerWW.isState(StatePlayer.ALIVE)){
-                                chatColor.set(targetWW.getColor(playerWW));
                             }
                         });
 
@@ -183,7 +182,7 @@ public class TabManager implements Listener {
             return;
         }
 
-        ChatColor prefix = event.getPrefix();
+        ChatColor prefix;
 
         StringBuilder suffix = new StringBuilder(event.getSuffix());
 

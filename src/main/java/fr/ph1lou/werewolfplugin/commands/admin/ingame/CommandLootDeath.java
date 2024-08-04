@@ -12,7 +12,8 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -30,7 +31,12 @@ public class CommandLootDeath implements ICommand {
 
         stuffManager.clearDeathLoot();
 
-        Arrays.stream(player.getInventory().getContents())
+        List<ItemStack> items = new ArrayList<>();
+        for (int i = 0; i < 36; i++) {
+            items.add(player.getInventory().getItem(i));
+        }
+
+        items.stream()
                 .filter(Objects::nonNull)
                 .forEach(stuffManager::addDeathLoot);
 
@@ -45,9 +51,9 @@ public class CommandLootDeath implements ICommand {
         if (!stuffManager.isInTempStuff(uuid)) {
             return;
         }
-        ItemStack[] items = stuffManager.recoverTempStuff(uuid);
+        ItemStack[] oldItems = stuffManager.recoverTempStuff(uuid);
         for (int i = 0; i < 40; i++) {
-            player.getInventory().setItem(i, items[i]);
+            player.getInventory().setItem(i, oldItems[i]);
         }
 
         Bukkit.getPluginManager().callEvent(new UpdateStuffEvent());

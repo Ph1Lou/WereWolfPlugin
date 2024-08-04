@@ -16,7 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -38,7 +38,7 @@ public class SmallFeaturesListener implements Listener {
     }
 
     @EventHandler
-    public void onBarrierEditionInventoryMode(InventoryClickEvent event) {
+    public void onBarrierEditionInventoryMode(InventoryCreativeEvent event) {
 
         if (event.getClickedInventory() == null) {
             return;
@@ -52,18 +52,27 @@ public class SmallFeaturesListener implements Listener {
             return;
         }
 
-        if (event.getCurrentItem().getType() != Material.BARRIER) {
-            return;
+        if (event.getCurrentItem().getType() == Material.BARRIER) {
+
+            if(event.getSlotType() != InventoryType.SlotType.ARMOR){
+                return;
+            }
+            event.setCancelled(true);
+            ((Player) event.getWhoClicked()).updateInventory();
         }
 
-        if (event.getSlotType() != InventoryType.SlotType.ARMOR) {
-            return;
+        if (event.getCursor().getType() == Material.BARRIER) {
+
+            if(event.getSlotType() != InventoryType.SlotType.CONTAINER){
+                return;
+            }
+            event.setCancelled(true);
+            ((Player) event.getWhoClicked()).updateInventory();
         }
 
-        event.setCancelled(true);
-
-        BukkitUtils.scheduleSyncDelayedTask(game, () -> ((Player) event.getView().getPlayer()).updateInventory());
     }
+
+
 
     @EventHandler
     public void onDrinkMilk(PlayerInteractEvent event) {

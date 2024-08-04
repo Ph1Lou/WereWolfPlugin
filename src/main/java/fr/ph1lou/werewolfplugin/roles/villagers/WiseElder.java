@@ -59,7 +59,7 @@ public class WiseElder extends RoleImpl {
                 .setDescription(game.translate("werewolf.roles.wise_elder.description",
                         Formatter.number(game.getConfig().getValue(IntValueBase.WISE_ELDER_DISTANCE)),
                         Formatter.format("&day&",
-                                game.getConfig().getValue(IntValueBase.WISE_ELDER_DISTANCE))))
+                                game.getConfig().getValue(IntValueBase.WISE_ELDER_BEGIN_DAY))))
                 .build();
     }
 

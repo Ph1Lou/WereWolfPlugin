@@ -19,12 +19,15 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +44,11 @@ import java.util.stream.Collectors;
 public class Raven extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
+    @Nullable
     private IPlayerWW last;
+
+    @Nullable
+    private IPlayerWW vote;
 
     public Raven(WereWolfAPI api, IPlayerWW playerWW) {
 
@@ -76,7 +83,6 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
 
         if (this.last != null) {
             this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.JUMP, this.getKey(), 0));
-
             this.last.getRole().removeAuraModifier(this.getKey());
             this.last.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.raven.no_longer_curse");
             this.last = null;
@@ -120,6 +126,26 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         game.getVoteManager().setVotes(event.getTargetWW(), 1 + game.getVoteManager().getVotes(event.getTargetWW()));
+
+        vote = event.getTargetWW();
+    }
+
+    @EventHandler
+    public void onVoteEvent(VoteResultEvent event) {
+
+        if(this.vote == null){
+            return;
+        }
+
+        if (!event.getPlayerWW().equals(this.vote)) return;
+
+        Player player = Bukkit.getPlayer(this.getPlayerUUID());
+
+        if(player == null){
+            return;
+        }
+
+        Utils.sendParticleArrow(player, Utils.getAngle(this.getPlayerWW().getLocation(), this.vote.getLocation()));
     }
 
     @EventHandler

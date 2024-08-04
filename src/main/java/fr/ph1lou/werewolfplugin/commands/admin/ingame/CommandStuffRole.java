@@ -13,7 +13,8 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -35,16 +36,21 @@ public class CommandStuffRole implements ICommand {
             return;
         }
 
-        stuffManager.setStuffRole(args[0], Arrays.stream(player.getInventory().getContents())
+        List<ItemStack> items = new ArrayList<>();
+        for (int i = 0; i < 36; i++) {
+            items.add(player.getInventory().getItem(i));
+        }
+
+        stuffManager.setStuffRole(args[0], items.stream()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList()));
         player.sendMessage(game.translate(Prefix.GREEN, "werewolf.commands.admin.loot_role.perform",
                 Formatter.role(game.translate(args[0]))));
 
 
-        ItemStack[] items = stuffManager.recoverTempStuff(uuid);
+        ItemStack[] oldItems = stuffManager.recoverTempStuff(uuid);
         for (int i = 0; i < 40; i++) {
-            player.getInventory().setItem(i, items[i]);
+            player.getInventory().setItem(i, oldItems[i]);
         }
 
         if(game.isState(StateGame.LOBBY)){

@@ -116,18 +116,20 @@ public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
 
     @EventHandler
     public void onFinalDeathEvent(FinalDeathEvent event) {
+
         IPlayerWW playerWW = event.getPlayerWW();
+
         if (!getAffectedPlayers().contains(playerWW)) return;
+
         if (getPlayerWW().isState(StatePlayer.DEATH)){
             if (!power) {
                 return;
             }
         }
 
-        removeAffectedPlayer(playerWW);
         this.power = false;
 
-        getPlayerWW().removePlayerMaxHealth(8);
+        getPlayerWW().removePlayerMaxHealth(4);
         getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.witness.culprit_death");
     }
 
@@ -155,7 +157,7 @@ public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
             getPlayerWW().sendMessageWithKey(Prefix.BLUE, "werewolf.roles.witness.reveal_culprit", Formatter.format("&player&", getAffectedPlayers().get(0).getName()));
         }
         else {
-            getPlayerWW().removePlayerMaxHealth(8);
+            getPlayerWW().removePlayerMaxHealth(4);
         }
     }
 

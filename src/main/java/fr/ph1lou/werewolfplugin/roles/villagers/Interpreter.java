@@ -93,6 +93,7 @@ public class Interpreter extends RoleImpl implements IPower {
                 .filter(roleRegister -> roleRegister.getMetaDatas().category() == Category.VILLAGER)
                 .filter(roleRegister -> game.getConfig().getRoleCount(roleRegister.getMetaDatas().key()) == 0)
                 .filter(roleRegister -> roleRegister.getMetaDatas().attribute() != RoleAttribute.INFORMATION)
+                .filter(roleRegister -> roleRegister.getMetaDatas().attribute() != RoleAttribute.HYBRID)
                 .collect(Collectors.toList());
 
         if (roles.size() == 0) {

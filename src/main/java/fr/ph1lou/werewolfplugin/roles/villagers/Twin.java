@@ -31,8 +31,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -52,9 +50,6 @@ import java.util.stream.Collectors;
 public class Twin extends RoleImpl {
 
     @Nullable
-    private List<IPlayerWW> twinInformationList;
-
-    @Nullable
     private List<IPlayerWW> twinList;
 
     public Twin(WereWolfAPI api, IPlayerWW playerWW) {
@@ -69,9 +64,9 @@ public class Twin extends RoleImpl {
                         Formatter.number(game.getConfig().getValue(IntValueBase.TWIN_DISTANCE)),
                         Formatter.format("&number2&", game.getConfig().getValue(IntValueBase.TWIN_DISTANCE) * 2)))
                 .setEffects(game.translate("werewolf.roles.twin.effects", Formatter.number(game.getConfig().getValue(IntValueBase.TWIN_DISTANCE))))
-                .setPower(this.twinInformationList == null ?
+                .setPower(this.twinList == null ?
                         game.translate("werewolf.roles.twin.timer", Formatter.timer(game, TimerBase.TWIN_DURATION))
-                        : game.translate("werewolf.roles.twin.twin_list", Formatter.format("&list&", this.twinInformationList
+                        : game.translate("werewolf.roles.twin.twin_list", Formatter.format("&list&", this.twinList
                         .stream()
                         .map(IPlayerWW::getName)
                         .collect(Collectors.joining(", "))))
@@ -82,29 +77,13 @@ public class Twin extends RoleImpl {
     @EventHandler
     public void onTwinReveal(AutoTwinEvent event) {
 
-        List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .filter(playerWW -> !playerWW.getRole().isKey(RoleBase.TWIN))
-                .collect(Collectors.toList());
-        Collections.shuffle(playerWWS, game.getRandom());
-
-        if (playerWWS.size() < 2) {
-            return;
-        }
-
         this.twinList = game.getPlayersWW()
                 .stream()
                 .filter(playerWW -> playerWW.getRole().isKey(RoleBase.TWIN))
                 .filter(playerWW -> !playerWW.equals(this.getPlayerWW()))
                 .collect(Collectors.toList());
 
-        this.twinInformationList = new ArrayList<>(Arrays.asList(playerWWS.get(0), playerWWS.get(1)));
-
-        this.twinInformationList.addAll(this.twinList);
-
-        Collections.shuffle(this.twinInformationList, game.getRandom());
-
-        TwinRevealEvent twinRevealEvent = new TwinRevealEvent(this.getPlayerWW(), new HashSet<>(this.twinInformationList));
+        TwinRevealEvent twinRevealEvent = new TwinRevealEvent(this.getPlayerWW(), new HashSet<>(this.twinList));
 
         Bukkit.getPluginManager().callEvent(twinRevealEvent);
 
@@ -114,7 +93,7 @@ public class Twin extends RoleImpl {
         }
 
         this.getPlayerWW().sendMessageWithKey(Prefix.BLUE, "werewolf.roles.twin.twin_list",
-                Formatter.format("&list&", this.twinInformationList
+                Formatter.format("&list&", this.twinList
                         .stream()
                         .map(IPlayerWW::getName)
                         .collect(Collectors.joining(", "))));
