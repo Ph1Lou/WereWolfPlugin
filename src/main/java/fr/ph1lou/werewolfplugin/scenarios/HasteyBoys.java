@@ -2,11 +2,11 @@ package fr.ph1lou.werewolfplugin.scenarios;
 
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
+import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
@@ -45,8 +45,8 @@ public class HasteyBoys extends ListenerWerewolf {
             return;
         }
         ItemStack item = new ItemStack(itemType);
-        item.addUnsafeEnchantment(Enchantment.DIG_SPEED, 3);
-        item.addUnsafeEnchantment(Enchantment.DURABILITY, 2);
+        item.addUnsafeEnchantment(UniversalEnchantment.EFFICIENCY.getEnchantment(), 3);
+        item.addUnsafeEnchantment(UniversalEnchantment.UNBREAKING.getEnchantment(), 2);
         event.getInventory().setResult(item);
     }
 }

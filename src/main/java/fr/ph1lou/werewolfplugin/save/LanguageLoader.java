@@ -54,11 +54,11 @@ public class LanguageLoader {
             // For each child
             for (JsonObject.Member member : jsonValue.asObject()) {
 
-                if (currentPath.equals("") && !plugin.equals(main) && member.getName().equals("werewolf")) { //Nom de domaine réservé au plugin lg
+                if (currentPath.isEmpty() && !plugin.equals(main) && member.getName().equals("werewolf")) { //Nom de domaine réservé au plugin lg
                     Bukkit.getLogger().warning(String.format("Plugin %s try to load text file with werewolf.* key", plugin.getName()));
                     continue;
                 }
-                String newPath = String.format("%s%s%s", currentPath, currentPath.equals("") ? "" : ".", member.getName());
+                String newPath = String.format("%s%s%s", currentPath, currentPath.isEmpty() ? "" : ".", member.getName());
 
                 loadTranslationsRec(plugin, newPath, member.getValue(), keys);
             }

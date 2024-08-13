@@ -10,6 +10,7 @@ import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
@@ -36,7 +37,6 @@ import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.roles.lovers.LoverImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -139,9 +139,9 @@ public class Rival extends RoleNeutral implements IPower {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        if (event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)) {
-            event.getFinalEnchants().put(Enchantment.ARROW_DAMAGE,
-                    Math.min(event.getEnchants().get(Enchantment.ARROW_DAMAGE),
+        if (event.getEnchants().containsKey(UniversalEnchantment.POWER)) {
+            event.getFinalEnchants().put(UniversalEnchantment.POWER,
+                    Math.min(event.getEnchants().get(UniversalEnchantment.POWER),
                             game.getConfig().getLimitPowerBow() + 1));
         }
     }

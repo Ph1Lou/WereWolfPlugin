@@ -25,7 +25,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -147,8 +147,8 @@ public class Servitor extends RoleImpl implements IPower {
         if (master == null) return;
 
         if (!master.isState(StatePlayer.ALIVE)) {
-            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS, this.getKey(), 0));
-            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(), 0));
+            getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.WEAKNESS, this.getKey(), 0));
+            getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, this.getKey(), 0));
             return;
         }
 
@@ -160,13 +160,13 @@ public class Servitor extends RoleImpl implements IPower {
 
         if (checkDistance(master, location)) {
             if (power) {
-                getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, this.getKey())); //TODO patch potions
+                getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, this.getKey())); //TODO patch potions
             } else {
-                getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS, this.getKey()));
+                getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.WEAKNESS, this.getKey()));
             }
         } else {
-            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS, this.getKey(), 0));
-            getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(), 0));
+            getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.WEAKNESS, this.getKey(), 0));
+            getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, this.getKey(), 0));
         }
     }
 

@@ -16,7 +16,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfplugin.roles.villagers.Analyst;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -75,7 +75,7 @@ public class CommandAnalystAnalyse implements ICommandRole {
                 Formatter.player(playerWW1.getName()),
                 Formatter.format("&list&", analystEvent.getPotions()
                         .stream()
-                        .map(PotionEffectType::getName)
+                        .map(UniversalPotionEffectType::name)
                         .collect(Collectors.joining(", "))));
 
         if (playerWW1.getRole().isCamp(Camp.VILLAGER)) {

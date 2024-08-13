@@ -17,7 +17,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.UUID;
 
@@ -66,7 +66,7 @@ public class CommandProtector implements ICommandRole {
         ((IAffectedPlayers) protector).clearAffectedPlayer();
         ((IAffectedPlayers) protector).addAffectedPlayer(playerWW1);
 
-        playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, playerWW.getRole().getKey()));
+        playerWW1.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.RESISTANCE, playerWW.getRole().getKey()));
         playerWW1.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.LIGHT, 40, true));
         playerWW1.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.protector.get_protection");
         playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.protector.protection_perform",

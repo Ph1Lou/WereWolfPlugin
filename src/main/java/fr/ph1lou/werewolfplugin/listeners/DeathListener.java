@@ -41,7 +41,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -307,7 +307,7 @@ public class DeathListener implements Listener {
             if (game.isState(StateGame.LOBBY)) {
                 BukkitUtils.scheduleSyncDelayedTask(game, () ->
                                 event.getPlayer().addPotionEffect(new PotionEffect(
-                                        PotionEffectType.SATURATION,
+                                        UniversalPotionEffectType.SATURATION.getPotionEffectType(),
                                         Integer.MAX_VALUE,
                                         0,
                                         false,
@@ -321,7 +321,7 @@ public class DeathListener implements Listener {
                 event.setRespawnLocation(
                         playerWW.getSpawn());
                 BukkitUtils.scheduleSyncDelayedTask(game, () -> playerWW.addPotionModifier(PotionModifier.add(
-                                PotionEffectType.WITHER,
+                                UniversalPotionEffectType.WITHER,
                                 400,
                                 0,
                                 "respawn"

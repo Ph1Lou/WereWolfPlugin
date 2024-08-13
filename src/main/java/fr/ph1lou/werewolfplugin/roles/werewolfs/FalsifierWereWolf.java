@@ -22,10 +22,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 @Role(key = RoleBase.FALSIFIER_WEREWOLF,
         auraDescriptionSpecialUseCase = "werewolf.roles.falsifier_werewolf.aura",
         defaultAura = Aura.LIGHT,

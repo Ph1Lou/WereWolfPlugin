@@ -29,7 +29,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -184,7 +184,7 @@ public class Poacher extends RoleImpl {
     public void recoverPotionEffect() {
 
         if (this.furNumbers > 0) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.RESISTANCE,
                     this.getKey()));
         }
     }
@@ -200,7 +200,7 @@ public class Poacher extends RoleImpl {
 
         Player player = (Player) event.getEntity();
 
-        if (player.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {
+        if (player.hasPotionEffect(UniversalPotionEffectType.RESISTANCE.getPotionEffectType())) {
             event.setDamage(event.getDamage() * (1 - 0.03d * (this.furNumbers - 1)));
         }
     }

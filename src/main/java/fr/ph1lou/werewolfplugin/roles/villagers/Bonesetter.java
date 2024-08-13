@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -80,7 +80,7 @@ public class Bonesetter extends RoleImpl implements IAffectedPlayers, ILimitedUs
         Bukkit.getPluginManager().callEvent(bonesetterHealEvent);
         if (!bonesetterHealEvent.isCancelled()) {
             //25 ticks = 1/2 heart
-            playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.REGENERATION, 6 * 25, 1, getKey()));
+            playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.REGENERATION, 6 * 25, 1, getKey()));
             playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.bonesetter.receive_heal");
             getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.bonesetter.activate");
             affectedPlayers.remove(playerWW);

@@ -26,7 +26,7 @@ import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 public class SmallFeaturesListener implements Listener {
 
@@ -153,20 +153,20 @@ public class SmallFeaturesListener implements Listener {
     }
 
     private void addGoldenPotionEffectsWithParticles(Player player) {
-        player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 2400, 0));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 1));
+        player.addPotionEffect(new PotionEffect(UniversalPotionEffectType.ABSORPTION.getPotionEffectType(), 2400, 0));
+        player.addPotionEffect(new PotionEffect(UniversalPotionEffectType.REGENERATION.getPotionEffectType(), 100, 1));
 
     }
 
     private void setGoldenAppleEffects(IPlayerWW playerWW) {
         playerWW.addPotionModifier(PotionModifier.add(
-                PotionEffectType.ABSORPTION,
+                UniversalPotionEffectType.ABSORPTION,
                 2400,
                 0,
                 GOLDEN_APPLE));
 
         playerWW.addPotionModifier(PotionModifier.add(
-                PotionEffectType.REGENERATION,
+                UniversalPotionEffectType.REGENERATION,
                 100,
                 1,
                 GOLDEN_APPLE));
@@ -178,7 +178,6 @@ public class SmallFeaturesListener implements Listener {
         event.getWorld().setWeatherDuration(0);
         event.getWorld().setThundering(false);
     }
-
 
     @EventHandler
     public void initWorld(WorldInitEvent event) {

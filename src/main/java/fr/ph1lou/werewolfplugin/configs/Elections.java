@@ -37,7 +37,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -160,7 +160,7 @@ public class Elections extends ListenerWerewolf {
         Bukkit.getPluginManager().callEvent(new MayorSelectionEvent(mayor.get(), this.mayorState, max.get()));
 
         if (this.mayorState == MayorState.FARMER) {
-            mayor.get().addPotionModifier(PotionModifier.add(PotionEffectType.SATURATION, MAYOR));
+            mayor.get().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SATURATION, MAYOR));
         }
 
         Bukkit.broadcastMessage(getGame().translate(Prefix.BLUE, "werewolf.elections.election.result",

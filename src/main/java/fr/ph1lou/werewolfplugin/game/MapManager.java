@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.game;
 
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.StateGame;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.game.IMapManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -21,7 +22,6 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
@@ -203,7 +203,7 @@ public class MapManager implements IMapManager {
             int z = (int) (Math.round(radius * Math.sin(d) + world.getSpawnLocation().getZ()));
             playerWW.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z));
         }
-        playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER, 400, 0, NO_FALL));
+        playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.WITHER, 400, 0, NO_FALL));
     }
 
     @Override

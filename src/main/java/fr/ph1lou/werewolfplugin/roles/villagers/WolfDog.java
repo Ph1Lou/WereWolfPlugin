@@ -28,7 +28,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.ITransformed;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.WOLF_DOG,
@@ -100,7 +100,7 @@ public class WolfDog extends RoleImpl implements ITransformed, IPower {
     public void onNightForWereWolf(NightEvent event) {
 
         if (!super.isWereWolf()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, RoleBase.WEREWOLF, 0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, RoleBase.WEREWOLF, 0));
         }
     }
 

@@ -15,7 +15,7 @@ import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.event.EventHandler;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -48,7 +48,7 @@ public class BigBadWerewolf extends RoleWereWolf implements IPower {
     @Override
     public void disableAbilitiesRole() {
         this.getPlayerWW()
-                .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
+                .addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH,
                         this.getKey(), 0));
 
     }
@@ -61,7 +61,7 @@ public class BigBadWerewolf extends RoleWereWolf implements IPower {
         }
 
         if (event.getPlayerWW().getRole().isWereWolf()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH,
                     this.getKey(), 0));
             if (!this.getPlayerWW().isState(StatePlayer.DEATH)) {
                 this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE,
@@ -74,7 +74,7 @@ public class BigBadWerewolf extends RoleWereWolf implements IPower {
     @Override
     public void recoverPotionEffect() {
         if (this.isAbilityEnabled() && this.hasPower()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, this.getKey()));
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, this.getKey()));
         }
     }
 

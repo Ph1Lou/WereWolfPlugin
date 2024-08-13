@@ -26,7 +26,7 @@ import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfplugin.roles.lovers.FakeLoverCharmer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -130,9 +130,9 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
             return;
         }
         this.getPlayerWW().addPotionModifier(PotionModifier
-                .add(PotionEffectType.ABSORPTION, Integer.MAX_VALUE, 4, this.getKey()));
+                .add(UniversalPotionEffectType.ABSORPTION, Integer.MAX_VALUE, 4, this.getKey()));
         this.getPlayerWW().addPotionModifier(PotionModifier
-                .add(PotionEffectType.SPEED, this.getKey()));
+                .add(UniversalPotionEffectType.SPEED, this.getKey()));
         this.getPlayerWW().sendMessageWithKey(Prefix.LIGHT_BLUE,
                 "werewolf.roles.charmer.lover_death");
     }

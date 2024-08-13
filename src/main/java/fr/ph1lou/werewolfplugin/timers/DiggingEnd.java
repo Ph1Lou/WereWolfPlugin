@@ -17,9 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Timer(key = TimerBase.DIGGING,
         defaultValue = 70 * 60,
         meetUpValue = 0,

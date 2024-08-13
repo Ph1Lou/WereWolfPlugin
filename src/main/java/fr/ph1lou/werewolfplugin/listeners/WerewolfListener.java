@@ -22,7 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.Optional;
 
@@ -62,8 +62,8 @@ public class WerewolfListener implements Listener {
                 return;
             }
         }
-        playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, 1200, 0, RoleBase.WEREWOLF));
-        playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 1200, 0, RoleBase.WEREWOLF));
+        playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED, 1200, 0, RoleBase.WEREWOLF));
+        playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.ABSORPTION, 1200, 0, RoleBase.WEREWOLF));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -114,7 +114,7 @@ public class WerewolfListener implements Listener {
         game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
                 .filter(playerWW -> playerWW.getRole().isAbilityEnabled())
-                .forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, RoleBase.WEREWOLF)));
+                .forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, RoleBase.WEREWOLF)));
     }
 
 
@@ -123,7 +123,7 @@ public class WerewolfListener implements Listener {
     public void onDayForWereWolf(DayEvent event) {
         game.getPlayersWW().stream()
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
-                .forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, RoleBase.WEREWOLF, 0)));
+                .forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, RoleBase.WEREWOLF, 0)));
     }
 
 }

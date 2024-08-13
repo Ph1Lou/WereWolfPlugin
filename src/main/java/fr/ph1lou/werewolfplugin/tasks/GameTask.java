@@ -156,7 +156,7 @@ public class GameTask extends BukkitRunnable {
                             (timerRegister.decrementAfterRole() &&
                                     !game.getConfig().isConfigActive(ConfigBase.TROLL_ROLE) &&
                                     game.getConfig().getTimerValue(TimerBase.ROLE_DURATION) < 0) ||
-                            (!timerRegister.decrementAfterTimer().equals("") &&
+                            (!timerRegister.decrementAfterTimer().isEmpty() &&
                                     game.getConfig().getTimerValue(timerRegister.decrementAfterTimer()) < 0)) {
                         if (game.getConfig().getTimerValue(timerRegister.key()) == 0) {
                             try {

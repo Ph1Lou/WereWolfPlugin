@@ -16,7 +16,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,8 +47,8 @@ public class CommandAnalystSee implements ICommandRole {
             return;
         }
 
-        List<PotionEffectType> effects = Arrays.asList(PotionEffectType.INCREASE_DAMAGE,
-                PotionEffectType.DAMAGE_RESISTANCE, PotionEffectType.WEAKNESS, PotionEffectType.SPEED, PotionEffectType.INVISIBILITY);
+        List<UniversalPotionEffectType> effects = Arrays.asList(UniversalPotionEffectType.STRENGTH,
+                UniversalPotionEffectType.RESISTANCE, UniversalPotionEffectType.WEAKNESS, UniversalPotionEffectType.SPEED, UniversalPotionEffectType.INVISIBILITY);
 
         if (analyst instanceof ILimitedUse) {
             if (((ILimitedUse) analyst).getUse() >= 5) {

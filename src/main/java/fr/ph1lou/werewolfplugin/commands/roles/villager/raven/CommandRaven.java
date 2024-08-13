@@ -17,7 +17,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.UUID;
 
@@ -61,7 +61,7 @@ public class CommandRaven implements ICommandRole {
 
         ((IAffectedPlayers) raven).clearAffectedPlayer();
         ((IAffectedPlayers) raven).addAffectedPlayer(playerWW1);
-        playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.JUMP, playerWW.getRole().getKey()));
+        playerWW1.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.JUMP_BOOST, playerWW.getRole().getKey()));
         playerWW1.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.DARK, 20, true));
         playerWW1.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.raven.get_curse");
         playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.raven.curse_perform",

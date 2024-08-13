@@ -9,6 +9,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -68,12 +69,12 @@ public class EnchantmentListener implements Listener {
 
             result.removeEnchantment(e);
 
-            if (Enchantment.KNOCKBACK.equals(e)) {
+            if (UniversalEnchantment.KNOCKBACK.getEnchantment().equals(e)) {
                 if (!game.getConfig().isKnockBackForInvisibleRoleOnly()) {
                     tempEnchant.put(e, Math.min(enchant.get(e),
                             game.getConfig().getLimitKnockBack()));
                 }
-            } else if (Enchantment.PROTECTION_ENVIRONMENTAL.equals(e)) {
+            } else if (UniversalEnchantment.PROTECTION.getEnchantment().equals(e)) {
 
                 if (item.getType().equals(Material.DIAMOND_BOOTS) ||
                         item.getType().equals(Material.DIAMOND_LEGGINGS) ||
@@ -85,7 +86,7 @@ public class EnchantmentListener implements Listener {
                     tempEnchant.put(e, Math.min(enchant.get(e),
                             game.getConfig().getLimitProtectionIron()));
                 }
-            } else if (Enchantment.DAMAGE_ALL.equals(e)) {
+            } else if (UniversalEnchantment.SHARPNESS.getEnchantment().equals(e)) {
                 if (item.getType().equals(Material.DIAMOND_SWORD)) {
                     tempEnchant.put(e, Math.min(enchant.get(e),
                             game.getConfig().getLimitSharpnessDiamond()));
@@ -93,17 +94,17 @@ public class EnchantmentListener implements Listener {
                     tempEnchant.put(e, Math.min(enchant.get(e),
                             Math.min(enchant.get(e), game.getConfig().getLimitSharpnessIron())));
                 }
-            } else if (Enchantment.ARROW_KNOCKBACK.equals(e)) {
+            } else if (UniversalEnchantment.PUNCH.getEnchantment().equals(e)) {
                 tempEnchant.put(e, Math.min(enchant.get(e), game.getConfig().getLimitPunch()));
 
-            } else if (Enchantment.ARROW_DAMAGE.equals(e)) {
+            } else if (UniversalEnchantment.POWER.getEnchantment().equals(e)) {
                 tempEnchant.put(e, Math.min(enchant.get(e), game.getConfig().getLimitPowerBow()));
-            } else if (Enchantment.DEPTH_STRIDER.equals(e)) {
+            } else if (UniversalEnchantment.DEPTH_STRIDER.getEnchantment().equals(e)) {
                 tempEnchant.put(e, Math.min(enchant.get(e), game.getConfig().getLimitDepthStrider()));
             } else tempEnchant.put(e, enchant.get(e));
         }
 
-        EnchantmentEvent enchantEvent = new EnchantmentEvent(playerWW, result, enchant, tempEnchant);
+        EnchantmentEvent enchantEvent = new EnchantmentEvent(playerWW, result, UniversalEnchantment.getUniversalEnchantment(enchant), UniversalEnchantment.getUniversalEnchantment(tempEnchant));
         Bukkit.getPluginManager().callEvent(enchantEvent);
 
         if (!result.getType().equals(Material.ENCHANTED_BOOK) && !result.getType().equals(Material.BOOK)) {

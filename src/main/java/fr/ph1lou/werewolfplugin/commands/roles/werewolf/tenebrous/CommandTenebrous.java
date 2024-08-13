@@ -17,7 +17,7 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.TenebrousWerewolf;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,7 +61,7 @@ public class CommandTenebrous implements ICommandRole {
 
         for (IPlayerWW p : affectedPlayers) {
             role.addAffectedPlayer(p);
-            p.addPotionModifier(PotionModifier.add(PotionEffectType.BLINDNESS, game.getConfig()
+            p.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.BLINDNESS, game.getConfig()
                     .getTimerValue(TimerBase.WEREWOLF_TENEBROUS_DURATION) * 20, 1, playerWW.getRole().getKey()));
             p.sendMessageWithKey(Prefix.RED, "werewolf.roles.tenebrous_werewolf.darkness");
         }

@@ -15,7 +15,7 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -37,15 +37,16 @@ public class PatchPotions implements Listener {
         Player damager = (Player) event.getDamager();
         Player player = (Player) event.getEntity();
 
-        if (damager.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) {
+        if (damager.hasPotionEffect(UniversalPotionEffectType.STRENGTH.getPotionEffectType())) {
 
-            if (damager.getActivePotionEffects().stream().filter(potionEffect -> potionEffect.getType().equals(PotionEffectType.INCREASE_DAMAGE)).map(PotionEffect::getAmplifier).findFirst().orElse(-1) == 0) {
+            if (damager.getActivePotionEffects().stream()
+                        .filter(potionEffect -> potionEffect.getType().equals(UniversalPotionEffectType.STRENGTH.getPotionEffectType())).map(PotionEffect::getAmplifier).findFirst().orElse(-1) == 0) {
                 event.setDamage(event.getDamage() / 2.3f *
                         (1 + game.getConfig().getStrengthRate() / 100f));
             } else event.setDamage(event.getDamage() *
                     (1 + game.getConfig().getStrengthRate() / 100f));
         }
-        if (player.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {
+        if (player.hasPotionEffect(UniversalPotionEffectType.RESISTANCE.getPotionEffectType())) {
             if (game.getConfig().getResistanceRate() >= 100) {
                 event.setCancelled(true);
             }
@@ -65,7 +66,7 @@ public class PatchPotions implements Listener {
                     if (potionEffect.getDuration() != 1) { // !Instant splash potion
                         event.setCancelled(true);
                         playerWW.addPotionModifier(PotionModifier.add(
-                                potionEffect.getType(),
+                                UniversalPotionEffectType.getUniversalPotionEffectType(potionEffect.getType()),
                                 potionEffect.getDuration(),
                                 potionEffect.getAmplifier(),
                                 "splash_potion"));
@@ -85,7 +86,6 @@ public class PatchPotions implements Listener {
         if (!potionEffectList.isEmpty()) {
 
             event.setCancelled(true);
-
             BukkitUtils.scheduleSyncDelayedTask(game, () ->
             {
                 ItemStack itemStack1 = VersionUtils.getVersionUtils().getItemInHand(player);
@@ -103,7 +103,7 @@ public class PatchPotions implements Listener {
                     .ifPresent(playerWW -> potionEffectList
                             .forEach(potionEffect -> playerWW.addPotionModifier(
                                     PotionModifier.add(
-                                            potionEffect.getType(),
+                                            UniversalPotionEffectType.getUniversalPotionEffectType(potionEffect.getType()),
                                             potionEffect.getDuration(),
                                             potionEffect.getAmplifier(),
                                             "potion_drink"))));

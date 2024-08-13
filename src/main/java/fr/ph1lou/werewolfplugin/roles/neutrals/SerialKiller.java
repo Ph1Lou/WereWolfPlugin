@@ -6,6 +6,7 @@ import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import fr.ph1lou.werewolfapi.events.roles.serial_killer.SerialKillerEvent;
@@ -18,10 +19,9 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.SERIAL_KILLER,
@@ -71,37 +71,37 @@ public class SerialKiller extends RoleNeutral implements IPower {
 
         ItemStack item = event.getItem();
 
-        if (event.getEnchants().containsKey(Enchantment.PROTECTION_ENVIRONMENTAL)) {
+        if (event.getEnchants().containsKey(UniversalEnchantment.PROTECTION)) {
 
             if (item.getType().equals(Material.DIAMOND_BOOTS) ||
                     item.getType().equals(Material.DIAMOND_LEGGINGS) ||
                     item.getType().equals(Material.DIAMOND_HELMET) ||
                     item.getType().equals(Material.DIAMOND_CHESTPLATE)) {
-                event.getFinalEnchants().put(Enchantment.PROTECTION_ENVIRONMENTAL,
+                event.getFinalEnchants().put(UniversalEnchantment.PROTECTION,
                         Math.min(event.getEnchants().get(
-                                        Enchantment.PROTECTION_ENVIRONMENTAL),
+                                        UniversalEnchantment.PROTECTION),
                                 game.getConfig().getLimitProtectionDiamond() + 1));
             } else {
-                event.getFinalEnchants().put(Enchantment.PROTECTION_ENVIRONMENTAL,
+                event.getFinalEnchants().put(UniversalEnchantment.PROTECTION,
                         Math.min(event.getEnchants().get(
-                                        Enchantment.PROTECTION_ENVIRONMENTAL),
+                                        UniversalEnchantment.PROTECTION),
                                 game.getConfig().getLimitProtectionIron() + 1));
             }
         }
-        if (event.getEnchants().containsKey(Enchantment.DAMAGE_ALL)) {
+        if (event.getEnchants().containsKey(UniversalEnchantment.SHARPNESS)) {
             if (item.getType().equals(Material.DIAMOND_SWORD)) {
-                event.getFinalEnchants().put(Enchantment.DAMAGE_ALL,
-                        Math.min(event.getEnchants().get(Enchantment.DAMAGE_ALL),
+                event.getFinalEnchants().put(UniversalEnchantment.SHARPNESS,
+                        Math.min(event.getEnchants().get(UniversalEnchantment.SHARPNESS),
                                 game.getConfig().getLimitSharpnessDiamond() + 1));
             } else {
-                event.getFinalEnchants().put(Enchantment.DAMAGE_ALL,
-                        Math.min(event.getEnchants().get(Enchantment.DAMAGE_ALL),
+                event.getFinalEnchants().put(UniversalEnchantment.SHARPNESS,
+                        Math.min(event.getEnchants().get(UniversalEnchantment.SHARPNESS),
                                 game.getConfig().getLimitSharpnessIron() + 1));
             }
         }
-        if (event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)) {
-            event.getFinalEnchants().put(Enchantment.ARROW_DAMAGE,
-                    Math.min(event.getEnchants().get(Enchantment.ARROW_DAMAGE),
+        if (event.getEnchants().containsKey(UniversalEnchantment.POWER)) {
+            event.getFinalEnchants().put(UniversalEnchantment.POWER,
+                    Math.min(event.getEnchants().get(UniversalEnchantment.POWER),
                             game.getConfig().getLimitPowerBow() + 1));
         }
     }
@@ -112,7 +112,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
 
         if (!hasPower()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, this.getKey()));
     }
 
 
@@ -130,7 +130,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
                 this.getPlayerWW(),
                 playerWW));
         if (hasPower()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(), 0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, this.getKey(), 0));
             setPower(false);
         }
         if (!isAbilityEnabled()) return;
@@ -144,7 +144,7 @@ public class SerialKiller extends RoleNeutral implements IPower {
     public void disableAbilitiesRole() {
 
         if (this.hasPower()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(), 0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, this.getKey(), 0));
         }
 
     }

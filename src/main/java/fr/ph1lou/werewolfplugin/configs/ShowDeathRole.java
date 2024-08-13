@@ -26,7 +26,6 @@ public class ShowDeathRole extends ListenerWerewolf {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onAnnounceDeath(AnnouncementDeathEvent event) {
-
         event.setFormat("werewolf.announcement.death_message_with_role");
     }
 

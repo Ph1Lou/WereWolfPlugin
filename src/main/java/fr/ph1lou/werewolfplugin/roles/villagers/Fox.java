@@ -37,7 +37,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -124,7 +124,7 @@ public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPl
         if (!getPlayerUUID().equals(killer.getUniqueId())) return;
 
         this.getPlayerWW().addPotionModifier(PotionModifier.add(
-                PotionEffectType.SPEED,
+                UniversalPotionEffectType.SPEED,
                 3600,
                 0,
                 this.getKey()));

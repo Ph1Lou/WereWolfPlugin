@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -82,7 +82,7 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
     public void onDay(DayEvent event) {
 
         if (this.last != null) {
-            this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.JUMP, this.getKey(), 0));
+            this.last.addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.JUMP_BOOST, this.getKey(), 0));
             this.last.getRole().removeAuraModifier(this.getKey());
             this.last.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.raven.no_longer_curse");
             this.last = null;
@@ -164,8 +164,8 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
         }
 
         this.getPlayerWW().sendMessageWithKey(Prefix.BLUE, "werewolf.roles.raven.raven_player_voted");
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, 60 * 20, -1, this.getKey()));
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, 60 * 20, -1, this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, 60 * 20, -1, this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED, 60 * 20, -1, this.getKey()));
     }
 
     @EventHandler

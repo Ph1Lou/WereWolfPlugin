@@ -27,7 +27,7 @@ import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -120,9 +120,9 @@ public class Twin extends RoleImpl {
 
         this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.twin.death", Formatter.player(event.getPlayerWW().getName()));
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, 6000, 0, this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, 6000, 0, this.getKey()));
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, 6000, 0, this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED, 6000, 0, this.getKey()));
 
     }
 

@@ -31,7 +31,7 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -100,14 +100,14 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
     @Override
     public void recoverPotionEffect() {
         if (this.hasPower2()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, this.getKey()));
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.RESISTANCE, this.getKey()));
         }
     }
 
     @Override
     public void disableAbilitiesRole() {
         if (this.hasPower2()) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE, this.getKey(), 0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE, this.getKey(), 0));
         }
         if (this.playerWW != null) {
             Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.playerWW));
@@ -135,7 +135,7 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
                     if (!this.hasPower2()) {
                         this.setPower2(true);
                         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.thug.resistance");
-                        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, this.getKey()));
+                        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.RESISTANCE, this.getKey()));
                     }
 
                     if (!event.getPlayerWW().getPlayersKills().isEmpty()) {

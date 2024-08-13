@@ -19,7 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -166,7 +166,7 @@ public class VoteManager implements Listener, IVoteManager {
             return;
         }
 
-        playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.POISON, POISON_SECONDS * 20, 1, "werewolf.vote"));
+        playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.POISON, POISON_SECONDS * 20, 1, "werewolf.vote"));
         Bukkit.broadcastMessage(game.translate(Prefix.YELLOW, "werewolf.configurations.vote.vote_result",
                 Formatter.player(playerWW.getName()),
                 Formatter.number(getVotes(playerWW))));

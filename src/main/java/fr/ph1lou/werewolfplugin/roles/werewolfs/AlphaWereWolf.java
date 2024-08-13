@@ -15,7 +15,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.event.EventHandler;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.ALPHA_WEREWOLF,
@@ -48,7 +48,7 @@ public class AlphaWereWolf extends RoleWereWolf {
             if (!this.isAbilityEnabled()) {
                 return;
             }
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0, this.getKey()));
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.ABSORPTION, 6000, 0, this.getKey()));
         }
     }
 
@@ -58,7 +58,7 @@ public class AlphaWereWolf extends RoleWereWolf {
         if (!this.isAbilityEnabled()) {
             return;
         }
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.ABSORPTION, 6000, 0, this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.ABSORPTION, 6000, 0, this.getKey()));
     }
 
     @EventHandler

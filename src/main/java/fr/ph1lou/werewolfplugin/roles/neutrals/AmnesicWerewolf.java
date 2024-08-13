@@ -22,7 +22,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.ITransformed;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.AMNESIAC_WEREWOLF,
@@ -46,7 +46,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
 
         if (!isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, RoleBase.WEREWOLF));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, RoleBase.WEREWOLF));
 
     }
 
@@ -60,7 +60,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
 
         this.getPlayerWW()
                 .addPotionModifier(
-                        PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, RoleBase.WEREWOLF, 0));
+                        PotionModifier.remove(UniversalPotionEffectType.STRENGTH, RoleBase.WEREWOLF, 0));
 
     }
 
@@ -99,14 +99,14 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
     @Override
     public void recoverPotionEffect() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION, this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.NIGHT_VISION, this.getKey()));
 
 
         if (game.isDay(Day.DAY)) return;
 
         if (!isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, RoleBase.WEREWOLF));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, RoleBase.WEREWOLF));
 
     }
 
@@ -156,7 +156,7 @@ public class AmnesicWerewolf extends RoleNeutral implements ITransformed {
             return;
         }
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, RoleBase.WEREWOLF, 0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, RoleBase.WEREWOLF, 0));
     }
 
 }

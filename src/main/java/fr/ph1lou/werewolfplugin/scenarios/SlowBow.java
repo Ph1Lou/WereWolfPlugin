@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
 @Scenario(key = ScenarioBase.SLOW_BOW)
@@ -31,14 +31,14 @@ public class SlowBow extends ListenerWerewolf {
         Player player = (Player) event.getEntity();
 
         ((Player) damager).addPotionEffect(new PotionEffect(
-                PotionEffectType.SPEED,
+                UniversalPotionEffectType.SPEED.getPotionEffectType(),
                 160,
                 0,
                 false,
                 false));
-        player.removePotionEffect(PotionEffectType.SLOW);
+        player.removePotionEffect(UniversalPotionEffectType.SLOWNESS.getPotionEffectType());
         player.addPotionEffect(new PotionEffect(
-                PotionEffectType.SLOW,
+                UniversalPotionEffectType.SLOWNESS.getPotionEffectType(),
                 160,
                 0,
                 false,

@@ -36,7 +36,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -162,7 +162,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
                     killedBrother = true;
                     if (transformed) {
                         if (isAbilityEnabled()) {
-                            getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, "romulus_remus_strength"));
+                            getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, "romulus_remus_strength"));
                         }
                         getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.romulus_remus.killed_brother_strength");
                         if (!romulus) {
@@ -177,7 +177,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
         }
         if (playerWW.equals(getMother().orElse(null))) {
             setTransformed(true);
-            this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE, getKey(), 0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE, getKey(), 0));
             getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.romulus_remus.mother_dead");
 
             Bukkit.getPluginManager().callEvent(new MotherDeathEvent(getMother().orElse(null), playerWW.getLastKiller().orElse(null)));
@@ -270,7 +270,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
     public void recoverPotionEffect() {
 
         if (transformed && killedBrother && isAbilityEnabled()) {
-            getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, this.getKey()));
+            getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, this.getKey()));
         }
     }
 
@@ -285,7 +285,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
             return;
         }
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, RoleBase.WEREWOLF, 0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, RoleBase.WEREWOLF, 0));
     }
 
 
@@ -392,10 +392,10 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
             boolean recoverResistance = brother.getLocation().distance(location) > game.getConfig().getValue(IntValueBase.ROMULUS_REMUS_DISTANCE_BROTHER);
 
             if (recoverResistance) {
-                this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, 120, 0, getKey()));
+                this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.RESISTANCE, 120, 0, getKey()));
             }
             else{
-                this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE, getKey(), 0));
+                this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE, getKey(), 0));
             }
         }
 
@@ -416,7 +416,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
             return;
         }
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE, getKey(), 0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE, getKey(), 0));
     }
 
     @EventHandler

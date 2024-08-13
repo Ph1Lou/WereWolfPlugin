@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -94,7 +94,7 @@ public class Rabbit extends RoleImpl {
 
         if (victimWW.getPotionModifiers()
                 .stream()
-                .anyMatch(p -> p.getPotionEffectType() == PotionEffectType.DAMAGE_RESISTANCE)) {
+                .anyMatch(p -> p.getPotionEffectType() == UniversalPotionEffectType.RESISTANCE)) {
             return;
         }
 
@@ -106,12 +106,12 @@ public class Rabbit extends RoleImpl {
 
         if (!this.isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS, this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.WEAKNESS, this.getKey()));
     }
 
     @EventHandler
     public void onDay(DayEvent event) {
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS, this.getKey(), 0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.WEAKNESS, this.getKey(), 0));
     }
 
     @Override
@@ -128,6 +128,6 @@ public class Rabbit extends RoleImpl {
             return;
         }
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS, this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.WEAKNESS, this.getKey()));
     }
 }

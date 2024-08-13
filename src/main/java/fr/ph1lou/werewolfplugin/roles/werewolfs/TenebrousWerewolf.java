@@ -20,7 +20,7 @@ import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -107,7 +107,7 @@ public class TenebrousWerewolf extends RoleWereWolf implements IPower, IAffected
         if (damagerWW == null) return;
 
         if (damagerWW.getRole().isWereWolf()) {
-            targetWW.addPotionModifier(PotionModifier.remove(PotionEffectType.BLINDNESS, this.getKey(), 1));
+            targetWW.addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.BLINDNESS, this.getKey(), 1));
             affectedPlayers.remove(targetWW);
         }
     }

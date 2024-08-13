@@ -20,7 +20,7 @@ import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.event.EventHandler;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -114,7 +114,7 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
     @Override
     public void recoverPotionEffect() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION, this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.NIGHT_VISION, this.getKey()));
     }
 
     public void setDisablePower() {

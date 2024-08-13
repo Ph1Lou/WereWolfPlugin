@@ -12,6 +12,7 @@ import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -33,7 +34,6 @@ import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -48,7 +48,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -95,7 +95,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         flute = new ItemBuilder(Material.STICK)
                 .addItemFlag(ItemFlag.HIDE_ENCHANTS)
                 .setDisplayName(game.translate("werewolf.roles.flute_player.item"))
-                .addEnchant(Enchantment.ARROW_FIRE, 1).build();
+                .addEnchant(UniversalEnchantment.FLAME.getEnchantment(), 1).build();
 
         ShapedRecipe recipe = VersionUtils.getVersionUtils().registerCraft(flute, "recipe_flute_player");
 
@@ -285,7 +285,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             this.getPlayerWW()
                     .addPotionModifier(
                             PotionModifier
-                                    .add(PotionEffectType.DAMAGE_RESISTANCE,
+                                    .add(UniversalPotionEffectType.RESISTANCE,
                                             240,
                                             0,
                                             this.getKey()));
@@ -293,7 +293,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             this.getPlayerWW()
                     .addPotionModifier(
                             PotionModifier
-                                    .remove(PotionEffectType.DAMAGE_RESISTANCE,
+                                    .remove(UniversalPotionEffectType.RESISTANCE,
                                             this.getKey(),
                                             0));
         }
@@ -419,7 +419,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     @Override
     public void recoverPotionEffect() {
         if (this.all) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, this.getKey()));
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, this.getKey()));
         }
     }
 

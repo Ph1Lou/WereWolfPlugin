@@ -38,7 +38,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -138,7 +138,7 @@ public class GameManager implements WereWolfAPI {
         this.playersWW.put(uuid, playerWW);
         Bukkit.getPluginManager().callEvent(new FinalJoinEvent(playerWW));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0, false, false));
+        player.addPotionEffect(new PotionEffect(UniversalPotionEffectType.SATURATION.getPotionEffectType(), Integer.MAX_VALUE, 0, false, false));
         player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
 
         new UpdateChecker(main, 73113).getVersion(version -> {

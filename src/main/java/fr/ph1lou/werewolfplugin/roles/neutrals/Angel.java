@@ -44,7 +44,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -292,7 +292,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                         Formatter.format("&form&", game.translate(RoleBase.FALLEN_ANGEL)));
                 setChoice(AngelForm.FALLEN_ANGEL);
                 if (game.isDay(Day.NIGHT)) {
-                    this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, this.getKey()));
+                    this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.RESISTANCE, this.getKey()));
                 }
             } else {
                 this.getPlayerWW().sendMessageWithKey(
@@ -502,7 +502,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
         if (!choice.equals(AngelForm.FALLEN_ANGEL)) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE, this.getKey(), 0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE, this.getKey(), 0));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -512,12 +512,12 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
         if (!this.isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE, this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.RESISTANCE, this.getKey()));
     }
 
 
     @Override
     public void disableAbilitiesRole() {
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE, this.getKey(), 0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE, this.getKey(), 0));
     }
 }

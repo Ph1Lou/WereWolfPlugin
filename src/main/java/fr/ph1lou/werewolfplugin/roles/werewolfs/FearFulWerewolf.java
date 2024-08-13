@@ -27,7 +27,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -140,46 +140,46 @@ public class FearFulWerewolf extends RoleWereWolf {
 
         if (number == 0) {
             this.getPlayerWW()
-                    .addPotionModifier(PotionModifier.add(PotionEffectType.SPEED,
+                    .addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED,
                             this.getKey()));
         } else {
             this.getPlayerWW()
-                    .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
+                    .addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.SPEED,
                             this.getKey(), 0));
         }
 
         if (number >= 4) {
             this.getPlayerWW()
-                    .addPotionModifier(PotionModifier.add(PotionEffectType.WEAKNESS,
+                    .addPotionModifier(PotionModifier.add(UniversalPotionEffectType.WEAKNESS,
                             this.getKey()));
         } else {
             this.getPlayerWW()
-                    .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
+                    .addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.WEAKNESS,
                             this.getKey(), 0));
         }
 
         if (number <= 2) {
             if (game.isDay(Day.DAY)) {
                 this.getPlayerWW()
-                        .addPotionModifier(PotionModifier.add(PotionEffectType.DAMAGE_RESISTANCE,
+                        .addPotionModifier(PotionModifier.add(UniversalPotionEffectType.RESISTANCE,
                                 this.getKey()));
                 this.getPlayerWW()
-                        .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
+                        .addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH,
                                 RoleBase.WEREWOLF, 0));
             } else {
                 this.getPlayerWW()
-                        .addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE,
+                        .addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH,
                                 RoleBase.WEREWOLF));
                 this.getPlayerWW()
-                        .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
+                        .addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE,
                                 this.getKey(), 0));
             }
         } else {
             this.getPlayerWW()
-                    .addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE,
+                    .addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH,
                             RoleBase.WEREWOLF, 0));
             this.getPlayerWW()
-                    .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
+                    .addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE,
                             this.getKey(), 0));
         }
     }
@@ -188,13 +188,13 @@ public class FearFulWerewolf extends RoleWereWolf {
     public void disableAbilitiesRole() {
 
         this.getPlayerWW()
-                .addPotionModifier(PotionModifier.remove(PotionEffectType.SPEED,
+                .addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.SPEED,
                         this.getKey(), 0));
         this.getPlayerWW()
-                .addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
+                .addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE,
                         this.getKey(), 0));
         this.getPlayerWW()
-                .addPotionModifier(PotionModifier.remove(PotionEffectType.WEAKNESS,
+                .addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.WEAKNESS,
                         this.getKey(), 0));
     }
 }

@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StateGame;
+import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.enums.VillagerKit;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
@@ -18,7 +19,6 @@ import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -61,7 +61,7 @@ public class Villager extends RoleImpl {
         switch (villagerKit) {
             case GOLEM:
                 ItemStack book = new ItemBuilder(UniversalMaterial.ENCHANTED_BOOK.getStack())
-                        .addEnchant(Enchantment.DURABILITY, 3).build();
+                        .addEnchant(UniversalEnchantment.UNBREAKING.getEnchantment(), 3).build();
                 this.getPlayerWW().addItem(UniversalMaterial.IRON_INGOT.getStack(15));
                 this.getPlayerWW().addItem(book);
                 this.getPlayerWW().addItem(book);
@@ -69,7 +69,7 @@ public class Villager extends RoleImpl {
                 break;
             case MINER:
                 this.getPlayerWW().addItem(new ItemBuilder(UniversalMaterial.DIAMOND_PICKAXE.getStack())
-                        .addEnchant(Enchantment.DIG_SPEED, 2).build());
+                        .addEnchant(UniversalEnchantment.EFFICIENCY.getEnchantment(), 2).build());
                 break;
             case ARCHER:
                 this.getPlayerWW().addItem(UniversalMaterial.ARROW.getStack(64));

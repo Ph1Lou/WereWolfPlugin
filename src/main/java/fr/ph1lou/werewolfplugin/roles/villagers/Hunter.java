@@ -9,6 +9,7 @@ import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfKillEvent;
@@ -19,11 +20,10 @@ import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -101,7 +101,7 @@ public class Hunter extends RoleImpl implements IPower {
         //also handles case damagerWW == null
         if (!getPlayerWW().equals(damagerWW)) return;
 
-        if (damager.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) return;
+        if (damager.hasPotionEffect(UniversalPotionEffectType.STRENGTH.getPotionEffectType())) return;
 
         Player target = (Player) event.getEntity();
         IPlayerWW targetWW = game.getPlayerWW(target.getUniqueId()).orElse(null);
@@ -131,9 +131,9 @@ public class Hunter extends RoleImpl implements IPower {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        if (event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)) {
-            event.getFinalEnchants().put(Enchantment.ARROW_DAMAGE,
-                    Math.min(event.getEnchants().get(Enchantment.ARROW_DAMAGE),
+        if (event.getEnchants().containsKey(UniversalEnchantment.POWER)) {
+            event.getFinalEnchants().put(UniversalEnchantment.POWER,
+                    Math.min(event.getEnchants().get(UniversalEnchantment.POWER),
                             game.getConfig().getLimitPowerBow() + 1));
         }
     }

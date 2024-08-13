@@ -10,6 +10,7 @@ import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
 import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -19,7 +20,6 @@ import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -120,9 +120,9 @@ public class Cupid extends RoleImpl implements IAffectedPlayers, IPower {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        if (event.getEnchants().containsKey(Enchantment.ARROW_DAMAGE)) {
-            event.getFinalEnchants().put(Enchantment.ARROW_DAMAGE,
-                    Math.min(event.getEnchants().get(Enchantment.ARROW_DAMAGE),
+        if (event.getEnchants().containsKey(UniversalEnchantment.POWER)) {
+            event.getFinalEnchants().put(UniversalEnchantment.POWER,
+                    Math.min(event.getEnchants().get(UniversalEnchantment.POWER),
                             game.getConfig().getLimitPowerBow() + 1));
         }
     }

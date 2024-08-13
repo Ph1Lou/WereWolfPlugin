@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -254,7 +254,7 @@ public class PlayerWW implements IPlayerWW {
                         }
 
                         if (player != null) {
-                            player.removePotionEffect(potionModifier1.getPotionEffectType());
+                            player.removePotionEffect(potionModifier1.getPotionEffectType().getPotionEffectType());
 
                             int maxAmplifier = this.potionModifiers.keySet().stream()
                                     .filter(potionModifier2 -> potionModifier2.getPotionEffectType().equals(potionModifier1.getPotionEffectType()))
@@ -268,7 +268,7 @@ public class PlayerWW implements IPlayerWW {
                                     .max(Comparator.comparing(potionModifier2 -> 20 * (potionModifier2.getTimer() - game.getTimer()) + potionModifier2.getDuration()))
                                     .ifPresent(potionModifier2 -> player.addPotionEffect(
                                             new PotionEffect(
-                                                    potionModifier2.getPotionEffectType(),
+                                                    potionModifier2.getPotionEffectType().getPotionEffectType(),
                                                     20 * (potionModifier2.getTimer() - game.getTimer()) + potionModifier2.getDuration(),
                                                     potionModifier2.getAmplifier(),
                                                     false,
@@ -303,10 +303,10 @@ public class PlayerWW implements IPlayerWW {
                             if (!particle.get()) {
                                 particle.set(player.getActivePotionEffects()
                                         .stream()
-                                        .filter(potionEffect -> potionEffect.getType().equals(potionModifier1.getPotionEffectType()))
+                                        .filter(potionEffect -> potionEffect.getType().equals(potionModifier1.getPotionEffectType().getPotionEffectType()))
                                         .anyMatch(PotionEffect::hasParticles));
                             }
-                            player.removePotionEffect(potionModifier1.getPotionEffectType());
+                            player.removePotionEffect(potionModifier1.getPotionEffectType().getPotionEffectType());
                         }
                     } else if (potionModifier1.getIdentifier().equals(potionModifier.getIdentifier())) {
                         find.set(true);
@@ -327,7 +327,7 @@ public class PlayerWW implements IPlayerWW {
         }
 
         if (player != null) {
-            player.addPotionEffect(new PotionEffect(potionModifier.getPotionEffectType(),
+            player.addPotionEffect(new PotionEffect(potionModifier.getPotionEffectType().getPotionEffectType(),
                     potionModifier.getDuration(),
                     potionModifier.getAmplifier(),
                     particle.get(),
@@ -553,7 +553,7 @@ public class PlayerWW implements IPlayerWW {
         });
         if (this.tpWhenDisconnected) {
             this.tpWhenDisconnected = false;
-            this.addPotionModifier(PotionModifier.add(PotionEffectType.WITHER, 400, 0, MapManager.NO_FALL));
+            this.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.WITHER, 400, 0, MapManager.NO_FALL));
         }
         player.teleport(this.disconnectedLocation);
 
@@ -576,7 +576,7 @@ public class PlayerWW implements IPlayerWW {
                     }
                     player.addPotionEffect(
                             new PotionEffect(
-                                    potionModifier.getPotionEffectType(),
+                                    potionModifier.getPotionEffectType().getPotionEffectType(),
                                     duration,
                                     potionModifier.getAmplifier(),
                                     false,

@@ -15,7 +15,7 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Angel;
 import org.bukkit.Bukkit;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 @RoleCommand(key = "werewolf.roles.angel.command_2",
         roleKeys = RoleBase.ANGEL,
@@ -40,7 +40,7 @@ public class CommandFallenAngel implements ICommandRole {
                 Formatter.timer(game, TimerBase.ANGEL_DURATION));
 
         if (game.isDay(Day.NIGHT)) {
-            playerWW.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE, playerWW.getRole().getKey(), 0));
+            playerWW.addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE, playerWW.getRole().getKey(), 0));
 
         }
     }

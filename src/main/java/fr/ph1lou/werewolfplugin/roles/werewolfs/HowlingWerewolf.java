@@ -86,7 +86,7 @@ public class HowlingWerewolf extends RoleWereWolf {
 
         HowlEvent howlEvent = new HowlEvent(this.getPlayerWW(), playerWWS, (int) playerWWS
                 .stream()
-                .map(playerWW -> !playerWW.getRole().isWereWolf())
+                .filter(playerWW -> !playerWW.getRole().isWereWolf())
                 .count());
 
         Bukkit.getPluginManager().callEvent(howlEvent);

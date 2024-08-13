@@ -10,7 +10,7 @@ import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 
 @Scenario(key = ScenarioBase.CAT_EYES, meetUpValue = true)
@@ -24,12 +24,12 @@ public class CatEyes extends ListenerWerewolf {
     private void onStartEvent(StartEvent event) {
         this.getGame()
                 .getPlayersWW()
-                .forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION, ScenarioBase.CAT_EYES)));
+                .forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.NIGHT_VISION, ScenarioBase.CAT_EYES)));
     }
 
     @EventHandler
     private void onFinalJoin(FinalJoinEvent event) {
-        event.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION, ScenarioBase.CAT_EYES));
+        event.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.NIGHT_VISION, ScenarioBase.CAT_EYES));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class CatEyes extends ListenerWerewolf {
 
         if (isActive) {
             if (!isRegister()) {
-                this.getGame().getPlayersWW().forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.NIGHT_VISION, ScenarioBase.CAT_EYES)));
+                this.getGame().getPlayersWW().forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.NIGHT_VISION, ScenarioBase.CAT_EYES)));
                 BukkitUtils.registerListener(this);
                 register = true;
             }
@@ -49,7 +49,7 @@ public class CatEyes extends ListenerWerewolf {
             this.getGame().getPlayersWW()
                     .forEach(playerWW -> playerWW
                             .addPotionModifier(
-                                    PotionModifier.remove(PotionEffectType.NIGHT_VISION,
+                                    PotionModifier.remove(UniversalPotionEffectType.NIGHT_VISION,
                                             ScenarioBase.CAT_EYES,
                                             0)));
         }

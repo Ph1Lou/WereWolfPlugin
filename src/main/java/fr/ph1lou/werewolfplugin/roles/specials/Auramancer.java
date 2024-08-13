@@ -27,7 +27,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -98,7 +98,7 @@ public class Auramancer extends RoleImpl {
                             Formatter.format("&aura&", game.translate(this.getAura().getKey())),
                             Formatter.format("&aura_light&", game.translate(Aura.LIGHT.getKey())));
                     if (isAbilityEnabled()) {
-                        getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, this.getKey()));
+                        getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED, this.getKey()));
                     }
                 } else {
                     knownPlayer = lightPlayers.get(game.getRandom().nextInt(lightPlayers.size()));
@@ -114,7 +114,7 @@ public class Auramancer extends RoleImpl {
     @Override
     public void recoverPower() {
         if (auraLocked && isAbilityEnabled()) {
-            getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, this.getKey()));
+            getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED, this.getKey()));
         }
     }
 
@@ -281,7 +281,7 @@ public class Auramancer extends RoleImpl {
                     Formatter.format("&aura&", game.translate(this.getAura().getKey())),
                             Formatter.format("&aura_light&", game.translate(Aura.LIGHT.getKey())));
             if (isAbilityEnabled()) {
-                getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.SPEED, this.getKey()));
+                getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED, this.getKey()));
             }
         }
     }

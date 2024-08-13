@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
         if (this.last != null) {
 
 
-            this.last.addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE, this.getKey(), 0));
+            this.last.addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE, this.getKey(), 0));
             this.last.getRole().removeAuraModifier(this.getKey());
             this.last.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.protector.no_longer_protected");
             this.last = null;

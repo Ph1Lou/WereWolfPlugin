@@ -19,7 +19,7 @@ import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -71,7 +71,7 @@ public class Elder extends RoleImpl implements IPower {
         }
 
         this.getPlayerWW().addPotionModifier(PotionModifier
-                .add(PotionEffectType.DAMAGE_RESISTANCE, this.getKey()));
+                .add(UniversalPotionEffectType.RESISTANCE, this.getKey()));
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -121,7 +121,7 @@ public class Elder extends RoleImpl implements IPower {
     @Override
     public void disableAbilitiesRole() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.DAMAGE_RESISTANCE,
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE,
                 this.getKey(), 0));
     }
 }

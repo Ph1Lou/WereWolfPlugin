@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
@@ -87,7 +87,7 @@ public class Mire extends RoleImpl {
             if (!event1.isCancelled()) {
                 playerWW.addPotionModifier(
                         //TODO : FAIRE CONFIG POUR AJOUTER QU'UN COEUR
-                        PotionModifier.add(PotionEffectType.ABSORPTION, 600, 0, this.getKey()));
+                        PotionModifier.add(UniversalPotionEffectType.ABSORPTION, 600, 0, this.getKey()));
             } else {
                 this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             }

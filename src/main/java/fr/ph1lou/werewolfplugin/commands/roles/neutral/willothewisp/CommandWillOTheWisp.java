@@ -15,7 +15,7 @@ import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.roles.neutrals.WillOTheWisp;
 import org.bukkit.Bukkit;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 @RoleCommand(key = "werewolf.roles.will_o_the_wisp.command_incendiary",
         roleKeys = RoleBase.WILL_O_THE_WISP,
@@ -48,7 +48,7 @@ public class CommandWillOTheWisp implements ICommandRole {
 
         playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.will_o_the_wisp.perform_madness",
                 Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.WILL_O_THE_WISP_DURATION_INCENDIARY_MADNESS))));
-        playerWW.addPotionModifier(PotionModifier.add(PotionEffectType.SPEED,
+        playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED,
                 game.getConfig().getTimerValue(TimerBase.WILL_O_THE_WISP_DURATION_INCENDIARY_MADNESS) * 20,
                 0, WillOTheWisp.INCENDIARY_MADNESS));
     }

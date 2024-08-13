@@ -24,7 +24,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.UUID;
 
@@ -65,8 +65,8 @@ public class PlayerListener implements Listener {
 
         if (player.getWorld().equals(Bukkit.getWorlds().get(0))) {
 
-            if (!player.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE) ||
-                    !damager.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
+            if (!player.hasPotionEffect(UniversalPotionEffectType.FIRE_RESISTANCE.getPotionEffectType()) ||
+                    !damager.hasPotionEffect(UniversalPotionEffectType.FIRE_RESISTANCE.getPotionEffectType())) {
                 event.setCancelled(true);
             }
         }
@@ -106,7 +106,7 @@ public class PlayerListener implements Listener {
 
         if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
 
-            if (player.hasPotionEffect(PotionEffectType.WITHER)) {
+            if (player.hasPotionEffect(UniversalPotionEffectType.WITHER.getPotionEffectType())) {
                 event.setCancelled(true);
             }
         }

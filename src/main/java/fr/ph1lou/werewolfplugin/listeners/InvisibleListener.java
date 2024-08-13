@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
+import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.DeathItemsEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
@@ -10,14 +11,13 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.role.interfaces.IInvisible;
 import org.bukkit.Bukkit;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 public class InvisibleListener implements Listener {
 
@@ -35,9 +35,9 @@ public class InvisibleListener implements Listener {
             return;
         }
 
-        if (event.getEnchants().containsKey(Enchantment.KNOCKBACK)) {
-            event.getFinalEnchants().put(Enchantment.KNOCKBACK,
-                    Math.min(event.getEnchants().get(Enchantment.KNOCKBACK),
+        if (event.getEnchants().containsKey(UniversalEnchantment.KNOCKBACK)) {
+            event.getFinalEnchants().put(UniversalEnchantment.KNOCKBACK,
+                    Math.min(event.getEnchants().get(UniversalEnchantment.KNOCKBACK),
                             game.getConfig().getLimitKnockBack()));
         }
     }
@@ -58,15 +58,15 @@ public class InvisibleListener implements Listener {
 
         event.getPlayerWW().getPotionModifiers()
                 .forEach(potionModifier -> {
-                    if (potionModifier.getPotionEffectType() == PotionEffectType.ABSORPTION) {
+                    if (potionModifier.getPotionEffectType() == UniversalPotionEffectType.ABSORPTION) {
                         if (event.isInvisible()) {
-                            player.removePotionEffect(PotionEffectType.ABSORPTION);
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,
+                            player.removePotionEffect(UniversalPotionEffectType.ABSORPTION.getPotionEffectType());
+                            player.addPotionEffect(new PotionEffect(UniversalPotionEffectType.ABSORPTION.getPotionEffectType(),
                                     potionModifier.getDuration() - (game.getTimer() - potionModifier.getTimer()) * 20,
                                     potionModifier.getAmplifier(), false, false));
                         } else {
-                            player.removePotionEffect(PotionEffectType.ABSORPTION);
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,
+                            player.removePotionEffect(UniversalPotionEffectType.ABSORPTION.getPotionEffectType());
+                            player.addPotionEffect(new PotionEffect(UniversalPotionEffectType.ABSORPTION.getPotionEffectType(),
                                     potionModifier.getDuration() - (game.getTimer() - potionModifier.getTimer()) * 20,
                                     potionModifier.getAmplifier()));
                         }
@@ -85,11 +85,11 @@ public class InvisibleListener implements Listener {
 
         if (event.getPlayerWW().getPotionModifiers()
                 .stream()
-                .noneMatch(potionModifier -> potionModifier.getPotionEffectType() == PotionEffectType.INVISIBILITY)) {
+                .noneMatch(potionModifier -> potionModifier.getPotionEffectType() == UniversalPotionEffectType.INVISIBILITY)) {
             return;
         }
 
-        event.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INVISIBILITY, event.getPlayerWW().getRole().getKey(), 0));
+        event.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.INVISIBILITY, event.getPlayerWW().getRole().getKey(), 0));
 
         ((IInvisible) event.getPlayerWW().getRole()).setInvisible(false);
     }
@@ -107,7 +107,7 @@ public class InvisibleListener implements Listener {
 
         for (ItemStack i : event.getItems()) {
             if (i != null) {
-                i.removeEnchantment(Enchantment.KNOCKBACK);
+                i.removeEnchantment(UniversalEnchantment.KNOCKBACK.getEnchantment());
             }
         }
     }

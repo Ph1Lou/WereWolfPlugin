@@ -30,7 +30,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -132,7 +132,7 @@ public class Sister extends RoleImpl implements IAffectedPlayers {
         if (recoverResistance) {
 
             this.getPlayerWW().addPotionModifier(PotionModifier.add(
-                    PotionEffectType.DAMAGE_RESISTANCE,
+                    UniversalPotionEffectType.RESISTANCE,
                     100,
                     0,
                     this.getKey()));

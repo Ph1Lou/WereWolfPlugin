@@ -29,7 +29,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -100,7 +100,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
         if (!killer.getUniqueId().equals(getPlayerUUID())) return;
 
         this.getPlayerWW().addPotionModifier(PotionModifier.add(
-                PotionEffectType.SPEED,
+                UniversalPotionEffectType.SPEED,
                 1200,
                 0,
                 this.getKey()));
@@ -208,13 +208,13 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         if (!isAbilityEnabled()) return;
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(PotionEffectType.INCREASE_DAMAGE, this.getKey()));
+        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, this.getKey()));
 
     }
 
     @Override
     public void disableAbilitiesRole() {
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.remove(PotionEffectType.INCREASE_DAMAGE, this.getKey(), 0));
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, this.getKey(), 0));
     }
 }

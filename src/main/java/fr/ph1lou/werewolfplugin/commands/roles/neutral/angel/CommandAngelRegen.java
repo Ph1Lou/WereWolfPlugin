@@ -15,7 +15,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Angel;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 @RoleCommand(key = "werewolf.roles.guardian_angel.command",
         roleKeys = {RoleBase.ANGEL, RoleBase.GUARDIAN_ANGEL},
@@ -68,7 +68,7 @@ public class CommandAngelRegen implements ICommandRole {
             return;
         }
 
-        playerWW1.addPotionModifier(PotionModifier.add(PotionEffectType.REGENERATION,
+        playerWW1.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.REGENERATION,
                 400,
                 0,
                 playerWW.getRole().getKey()));
