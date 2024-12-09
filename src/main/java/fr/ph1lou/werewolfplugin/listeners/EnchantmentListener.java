@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.listeners;
 import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -51,8 +52,9 @@ public class EnchantmentListener implements Listener {
 
     @EventHandler
     public void onItemEnchant(EnchantItemEvent event) {
-        event.getInventory().setItem(0, checkEnchant(event.getEnchantsToAdd(),
-                event.getEnchanter(), event.getItem()));
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> event.getInventory().setItem(0, checkEnchant(event.getEnchantsToAdd(),
+                event.getEnchanter(), event.getItem())));
+
     }
 
 
@@ -68,7 +70,6 @@ public class EnchantmentListener implements Listener {
         for (Enchantment e : enchant.keySet()) {
 
             result.removeEnchantment(e);
-
             if (UniversalEnchantment.KNOCKBACK.getEnchantment().equals(e)) {
                 if (!game.getConfig().isKnockBackForInvisibleRoleOnly()) {
                     tempEnchant.put(e, Math.min(enchant.get(e),
@@ -110,8 +111,9 @@ public class EnchantmentListener implements Listener {
         if (!result.getType().equals(Material.ENCHANTED_BOOK) && !result.getType().equals(Material.BOOK)) {
             result.addUnsafeEnchantments(tempEnchant);
         } else {
+            tempEnchant.entrySet().removeIf(enchantmentIntegerEntry -> enchantmentIntegerEntry.getValue() == 0);
             if (!tempEnchant.isEmpty()) {
-                result = new ItemStack(Material.ENCHANTED_BOOK);
+                    result = new ItemStack(Material.ENCHANTED_BOOK);
                 EnchantmentStorageMeta meta = (EnchantmentStorageMeta) result.getItemMeta();
                 if (meta != null) {
                     for (Enchantment e : tempEnchant.keySet())
