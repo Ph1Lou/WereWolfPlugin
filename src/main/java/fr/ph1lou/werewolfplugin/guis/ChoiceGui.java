@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ChoiceGui implements InventoryProvider {
@@ -56,8 +57,8 @@ public class ChoiceGui implements InventoryProvider {
                                 new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
                                         .setHead(targetWW.getName(),
                                                 Bukkit.getOfflinePlayer(targetWW.getReviewUUID()))
-                                        .setDisplayName(playerWW.getColor(targetWW)+targetWW.getName())
-                                        .build()), e -> ColorsGUI.getInventory(targetWW).open(player)))));
+                                        .setDisplayName(playerWW.getColor(targetWW) + targetWW.getName())
+                                        .build()), e -> ColorsGUI.getInventory(Collections.singletonList(targetWW)).open(player)))));
 
         InventoryUtils.fillInventory(game, items, pagination, contents, () -> getInventory(player), 36);
     }

@@ -6,24 +6,30 @@ package fr.ph1lou.werewolfplugin.game;
 
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.enums.VoteStatus;
+import fr.ph1lou.werewolfapi.events.game.vote.MultiVoteResultEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.vote.IVoteManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -43,7 +49,8 @@ public class VoteManager implements Listener, IVoteManager {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onVoteResult(VoteResultEvent event) {
-        if (!event.isCancelled()) {
+
+        if (!event.isCancelled() && this.currentStatus == VoteStatus.WAITING) {
             this.showResultVote(event.getPlayerWW());
             IPlayerWW playerWW = event.getPlayerWW();
             if (playerWW != null) {
@@ -107,8 +114,25 @@ public class VoteManager implements Listener, IVoteManager {
         this.voters.put(voterWW, iPlayerWW1);
     }
 
-    public Optional<IPlayerWW> getResult() {
-        return this.getResult(this.votes);
+    public void triggerResult() {
+
+        List<IPlayerWW> results = this.getResult(this.votes);
+
+        if (results.isEmpty()) {
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new VoteResultEvent(null)),
+                    game.getConfig().getTimerValue(TimerBase.VOTE_WAITING) * 20L);
+            return;
+        }
+
+        if (results.size() > 1) {
+            Bukkit.getPluginManager().callEvent(new MultiVoteResultEvent(results));
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new VoteResultEvent(null)),
+                    game.getConfig().getTimerValue(TimerBase.VOTE_WAITING) * 20L);
+            return;
+        }
+
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new VoteResultEvent(results.get(0))),
+                game.getConfig().getTimerValue(TimerBase.VOTE_WAITING) * 20L);
     }
 
 
@@ -128,19 +152,25 @@ public class VoteManager implements Listener, IVoteManager {
         return this.tempPlayers;
     }
 
-    private Optional<IPlayerWW> getResult(Map<IPlayerWW, Integer> votes) {
+    private List<IPlayerWW> getResult(Map<IPlayerWW, Integer> votes) {
+
         int maxVote = 0;
-        IPlayerWW playerVote = null;
+        List<IPlayerWW> playersVote = new ArrayList<>();
         for (IPlayerWW playerWW : votes.keySet()) {
-            if (votes.get(playerWW) > maxVote) {
-                maxVote = votes.get(playerWW);
-                playerVote = playerWW;
+
+            int votesNumber = votes.get(playerWW);
+            if (votesNumber > maxVote) {
+                maxVote = votesNumber;
+                playersVote.clear();
+                playersVote.add(playerWW);
+            } else if (votesNumber == maxVote) {
+                playersVote.add(playerWW);
             }
         }
-        if (playerVote == null || maxVote < MIN_VOTE) {
-            return Optional.empty();
+        if (maxVote < MIN_VOTE) {
+            return Collections.emptyList();
         }
-        return Optional.of(playerVote);
+        return playersVote;
     }
 
     public boolean isStatus(VoteStatus status) {
@@ -152,33 +182,29 @@ public class VoteManager implements Listener, IVoteManager {
     }
 
 
-
     public void showResultVote(@Nullable IPlayerWW playerWW) {
 
 
         if (playerWW == null) {
-            Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.no_result"));
-            return;
-        }
-
-        if (getVotes(playerWW) < MIN_VOTE) {
             Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.no_result_more_one"));
             return;
         }
+        int vote = getVotes(playerWW);
 
         playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.POISON, POISON_SECONDS * 20, 1, "werewolf.vote"));
         Bukkit.broadcastMessage(game.translate(Prefix.YELLOW, "werewolf.configurations.vote.vote_result",
                 Formatter.player(playerWW.getName()),
-                Formatter.number(getVotes(playerWW))));
+                Formatter.number(vote == 0 ? MIN_VOTE : vote)));
 
         game.getPlayersWW()
                 .stream()
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .forEach(playerWW1 -> {
-                    if(playerWW1.getLocation().getWorld() == playerWW.getLocation().getWorld()){
+                    if (playerWW1.getLocation().getWorld() == playerWW.getLocation().getWorld()) {
                         playerWW1.sendMessageWithKey(Prefix.YELLOW,
                                 "werewolf.configurations.vote.distance_voted",
                                 Formatter.number(((int) playerWW1.getLocation().distance(playerWW.getLocation())) / 100 * 100 + 100));
-                    }});
+                    }
+                });
     }
 }

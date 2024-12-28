@@ -9,6 +9,7 @@ import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.servitor.ServitorDefinitiveMasterEvent;
@@ -25,7 +26,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -37,11 +37,11 @@ import java.util.Optional;
 @Role(key = RoleBase.SERVITOR,
         category = Category.VILLAGER,
         attribute = RoleAttribute.VILLAGER,
-        configValues = {@IntValue(key = IntValueBase.SERVITOR_DISTANCE,
+        configValues = { @IntValue(key = IntValueBase.SERVITOR_DISTANCE,
                 defaultValue = 25,
                 meetUpValue = 25,
                 step = 5,
-                item = UniversalMaterial.BROWN_WOOL)})
+                item = UniversalMaterial.BROWN_WOOL) })
 public class Servitor extends RoleImpl implements IPower {
 
     private boolean power = true;
@@ -57,6 +57,8 @@ public class Servitor extends RoleImpl implements IPower {
                 .setDescription(game.translate("werewolf.roles.servitor.description"))
                 .setEffects(game.translate(this.hasPower() ? "werewolf.roles.servitor.effects" : "werewolf.roles.servitor.effects_death",
                         Formatter.number(game.getConfig().getValue(IntValueBase.SERVITOR_DISTANCE))))
+                .addExtraLines(() -> game.translate("werewolf.roles.servitor.message",
+                        Formatter.player(master.getName())), master != null)
                 .build();
     }
 
@@ -179,7 +181,7 @@ public class Servitor extends RoleImpl implements IPower {
      */
     private boolean checkDistance(IPlayerWW player, Location location) {
         return player.getLocation().getWorld() == location.getWorld() &&
-                player.getLocation().distance(location) < game.getConfig().getValue(IntValueBase.SERVITOR_DISTANCE);
+               player.getLocation().distance(location) < game.getConfig().getValue(IntValueBase.SERVITOR_DISTANCE);
     }
 
     @Override

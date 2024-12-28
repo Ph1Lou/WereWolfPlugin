@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.roles.analyst.AnalystExtraDetailsEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
@@ -16,13 +17,13 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfplugin.roles.villagers.Analyst;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RoleCommand(key = "werewolf.roles.analyst.command_analyse",
         roleKeys = RoleBase.ANALYST,
+        requiredPower = true,
         argNumbers = 1)
 public class CommandAnalystAnalyse implements ICommandRole {
 
@@ -50,13 +51,7 @@ public class CommandAnalystAnalyse implements ICommandRole {
             return;
         }
 
-        if (!analyst.isPower2()) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
-            return;
-        }
-
-        analyst.setPower2(false);
-
+        analyst.setPower(false);
 
         AnalystExtraDetailsEvent analystEvent = new AnalystExtraDetailsEvent(playerWW, playerWW1, playerWW1.getPotionModifiers()
                 .stream()

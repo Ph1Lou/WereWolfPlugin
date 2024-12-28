@@ -3,8 +3,10 @@ package fr.ph1lou.werewolfplugin.commands.roles.villager.info.analyst;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.roles.analyst.AnalystEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -12,11 +14,12 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
-import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfapi.utils.Utils;
+import fr.ph1lou.werewolfplugin.roles.villagers.Analyst;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +27,6 @@ import java.util.UUID;
 
 @RoleCommand(key = "werewolf.roles.analyst.command_see",
         roleKeys = RoleBase.ANALYST,
-        requiredPower = true,
         argNumbers = 1)
 public class CommandAnalystSee implements ICommandRole {
 
@@ -39,6 +41,12 @@ public class CommandAnalystSee implements ICommandRole {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
             return;
         }
+
+        if (game.getConfig().getTimerValue(TimerBase.ANALYSE_DURATION) > 0) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.analyst.timers.analyse_duration", Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.ANALYSE_DURATION))));
+            return;
+        }
+
         UUID argUUID = playerArg.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
 
@@ -50,17 +58,22 @@ public class CommandAnalystSee implements ICommandRole {
         List<UniversalPotionEffectType> effects = Arrays.asList(UniversalPotionEffectType.STRENGTH,
                 UniversalPotionEffectType.RESISTANCE, UniversalPotionEffectType.WEAKNESS, UniversalPotionEffectType.SPEED, UniversalPotionEffectType.INVISIBILITY);
 
-        if (analyst instanceof ILimitedUse) {
-            if (((ILimitedUse) analyst).getUse() >= 5) {
-                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
-                return;
-            }
-            ((ILimitedUse) analyst).setUse(((ILimitedUse) analyst).getUse() + 1);
+        if (((Analyst) analyst).isCoolDownDisabledPower()) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.analyst.cooldown", Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.DAY_DURATION))));
+            return;
         }
 
-        if (analyst instanceof IPower) {
-            ((IPower) analyst).setPower(false);
+        ((Analyst) analyst).setCoolDownDisabledPower(true);
+
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> ((Analyst) analyst).setCoolDownDisabledPower(false),
+                game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 20L);
+
+
+        if (((ILimitedUse) analyst).getUse() >= 5) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
+            return;
         }
+        ((ILimitedUse) analyst).setUse(((ILimitedUse) analyst).getUse() + 1);
 
         AnalystEvent analystEvent = new AnalystEvent(playerWW, playerWW1, playerWW1.getPotionModifiers()
                 .stream()

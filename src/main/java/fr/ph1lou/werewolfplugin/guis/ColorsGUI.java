@@ -16,36 +16,36 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ColorsGUI implements InventoryProvider {
 
-    private final IPlayerWW playerWW;
+    private final List<IPlayerWW> iPlayerWWS;
 
-    private final static Map<UniversalMaterial, ChatColor> COLORS = new HashMap<UniversalMaterial, ChatColor>()
-    {{
-            put(UniversalMaterial.WHITE_WOOL, ChatColor.RESET);
-            put(UniversalMaterial.GRAY_WOOL, ChatColor.DARK_GRAY);
-            put(UniversalMaterial.ORANGE_WOOL, ChatColor.GOLD);
-            put(UniversalMaterial.YELLOW_WOOL, ChatColor.YELLOW);
-            put(UniversalMaterial.GREEN_WOOL, ChatColor.DARK_GREEN);
-            put(UniversalMaterial.LIME_WOOL, ChatColor.GREEN);
-            put(UniversalMaterial.CYAN_WOOL, ChatColor.DARK_AQUA);
-            put(UniversalMaterial.BLUE_WOOL, ChatColor.DARK_BLUE);
-            put(UniversalMaterial.LIGHT_BLUE_WOOL, ChatColor.BLUE);
-            put(UniversalMaterial.PINK_WOOL, ChatColor.LIGHT_PURPLE);
-            put(UniversalMaterial.PURPLE_WOOL, ChatColor.DARK_PURPLE);
-            put(UniversalMaterial.LIGHT_GRAY_WOOL, ChatColor.GRAY);
-            put(UniversalMaterial.RED_WOOL, ChatColor.DARK_RED);
-            put(UniversalMaterial.BLACK_WOOL, ChatColor.BLACK);
+    private final static Map<UniversalMaterial, ChatColor> COLORS = new HashMap<UniversalMaterial, ChatColor>() {{
+        put(UniversalMaterial.WHITE_WOOL, ChatColor.RESET);
+        put(UniversalMaterial.GRAY_WOOL, ChatColor.DARK_GRAY);
+        put(UniversalMaterial.ORANGE_WOOL, ChatColor.GOLD);
+        put(UniversalMaterial.YELLOW_WOOL, ChatColor.YELLOW);
+        put(UniversalMaterial.GREEN_WOOL, ChatColor.DARK_GREEN);
+        put(UniversalMaterial.LIME_WOOL, ChatColor.GREEN);
+        put(UniversalMaterial.CYAN_WOOL, ChatColor.DARK_AQUA);
+        put(UniversalMaterial.BLUE_WOOL, ChatColor.DARK_BLUE);
+        put(UniversalMaterial.LIGHT_BLUE_WOOL, ChatColor.AQUA);
+        put(UniversalMaterial.PINK_WOOL, ChatColor.LIGHT_PURPLE);
+        put(UniversalMaterial.PURPLE_WOOL, ChatColor.DARK_PURPLE);
+        put(UniversalMaterial.LIGHT_GRAY_WOOL, ChatColor.GRAY);
+        put(UniversalMaterial.RED_WOOL, ChatColor.DARK_RED);
+        put(UniversalMaterial.BLACK_WOOL, ChatColor.BLACK);
     }};
 
-    public ColorsGUI(IPlayerWW playerWW) {
-        this.playerWW = playerWW;
+    public ColorsGUI(List<IPlayerWW> iPlayerWWS) {
+        this.iPlayerWWS = iPlayerWWS;
     }
 
-    public static SmartInventory getInventory(IPlayerWW playerWW) {
+    public static SmartInventory getInventory(List<IPlayerWW> playerWW) {
         return SmartInventory.builder()
                 .id("color_choice")
                 .manager(JavaPlugin.getPlugin(Main.class).getInvManager())
@@ -64,14 +64,16 @@ public class ColorsGUI implements InventoryProvider {
 
         contents.set(0, 0, ClickableItem.of((new ItemBuilder(UniversalMaterial.COMPASS.getType()).setDisplayName(game.translate("werewolf.menus.return")).build()), e -> ChoiceGui.getInventory(player).open(player)));
 
-        AtomicInteger i= new AtomicInteger();
+        AtomicInteger i = new AtomicInteger();
 
         COLORS.forEach((universalMaterial, chatColor) -> {
             contents.set(i.get() / 9 + 1, i.get() % 9, ClickableItem.of((new ItemBuilder(universalMaterial.getStack()).build()),
                     e -> {
                         game.getPlayerWW(player.getUniqueId()).ifPresent(playerWW1 -> {
-                            playerWW1.setColor(this.playerWW, chatColor);
-                            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
+                            iPlayerWWS.forEach(iPlayerWW -> {
+                                playerWW1.setColor(iPlayerWW, chatColor);
+                                Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));
+                            });
                         });
                         ChoiceGui.getInventory(player).open(player);
                     }));

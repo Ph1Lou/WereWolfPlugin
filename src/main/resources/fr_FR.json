@@ -139,7 +139,7 @@
       "wolf_dog": {
         "display": "Chien Loup",
         "command": "changer",
-        "description": "Forme §aVillageois§f : Les Loups Garous vous voient dans leur liste, cependant, vous ne connaissez pas les Loups Garous. Attention, les rôles à informations vous voient dans le camp des Loups Garous. Vous pouvez lire et envoyer des messages dans le chat des Loups Garous",
+        "description": "Forme §aVillageois§f : Les Loups Garous vous voient dans leur liste, cependant, vous ne connaissez pas les Loups Garous. Attention, les rôles à informations vous voient dans le camp des Loups Garous. Vous pouvez lire et envoyer des messages dans le chat des Loups Garous. Vous avez force la nuit.",
         "transform": "Vous pouvez passer dans votre forme Loup Garou avec la commande §b/ww changer§f (irreversible), vous avez §b&timer&",
         "time_over": "Vous ne pouvez plus choisir votre forme, vous restez donc Villageois",
         "perform": "Vous venez de choisir la forme Loup Garou",
@@ -188,7 +188,7 @@
         "display": "Citoyen",
         "description": "Vous pouvez, §b&number&§f fois dans la partie, décider de voir les Votes, et une fois seulement, les changer.",
         "change_vote_message": "Vous pouvez encore changer le vote §b&number&§r fois",
-        "description_extra": "Lorsque la composition est cachée, vous recevez chaque matin une liste de 3 rôles existants avec le nombre de ces rôles présents dans la partie",
+        "description_extra": "Lorsque la composition est cachée, vous recevez chaque matin une liste de 3 rôles existants avec le nombre de ces rôles présents dans la partie\n",
         "see_vote_message": "Vous pouvez encore dépouiller les votes §b&number&§r fois. ",
         "click": "§bCliquez ici ",
         "change": "Changer le §bVote pour §b&player&",
@@ -719,8 +719,7 @@
       },
       "analyst": {
         "display": "Analyste",
-        "description": "Dans &timer&, vous pourrez observer (5 fois maximum) un joueur le matin pour savoir s’il possède ou non un des effets suivants : Force, Resistance, Faiblesse, Vitesse, Invisibilité. Il peut ensuite analyser le joueur (1x par partie) pour connaître précisément les effets qu’il possède. Le joueur analysé en sera informé et s’il n’est pas membre du Village, il obtiendra le pseudo de l’Analyste.",
-        "message_see": "Vous pouvez observer encore &number& joueur(s) §b/ww observer§r vous avez §b&timer&",
+        "description": "Vous pouvez observer (encore §b&number&§f fois) un joueur avec : \n§b/ww observer§f pour savoir s’il possède ou non un des effets suivants : \nForce, Resistance, Faiblesse, Vitesse, Invisibilité. \nVous pouvez ensuite analyser le joueur (1x par partie) pour connaître précisément les effets qu’il possède. \nLe joueur analysé en sera informé et §cs’il n’est pas membre du Village§f, §cil obtiendra le pseudo de l’Analyste§f.",
         "has_effects": "Le joueur §b&player&§f §aa un des effets suivants§f : Force, Resistance, Faiblesse, Vitesse, Invisibilité",
         "no_effects": "Le joueur §b&player&§f n'a §cpas un des effets suivants§f : Force, Resistance, Faiblesse, Vitesse, Invisibilité",
         "effects": "Le joueur §b&player&§f a les effets suivants : &list&",
@@ -728,6 +727,7 @@
         "call_back_no_villager": "L'§bAnalyste§f &player& vient d'observer vos effets",
         "command_see": "observer",
         "command_analyse": "analyser",
+        "cooldown": "Il y a un cooldown de §b&timer&",
         "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé précedemment via §b/ww oberver§f",
         "timers": {
           "analyse_duration": "Début du pouvoir Analyste (§b&timer&§r)"
@@ -736,7 +736,7 @@
       },
       "servitor": {
         "display": "Serviteur",
-        "message": "Votre maître aujourd'hui est &player&",
+        "message": "Votre maître aujourd'hui est §b&player&§f\n",
         "description": "Vous avez un Maître choisi aléatoirement chaque matin. Si il vous tue, vous ressuscitez.\nLes Maîtres n'ont aucune information",
         "effects": "Force I, si votre maître est à moins de &number& blocs de vous",
         "effects_death": "Faiblesse I, si votre maître est à moins de &number& blocs de vous",
@@ -979,15 +979,15 @@
         "receive_heal": "Vous recevez les soins du §bRebouteux"
       },
       "witness": {
-        "display" : "Témoin",
-        "description" : "A l'annonce de la liste des loups, vous connaitrez le pseudo d'un coupable, membre du camp des loups. Toutefois, si le coupable venait a mourir, vous perdrez 2 coeurs permanents. De plus, vous infligez 30%% de dégats en moins au coupable.",
-        "culprit_name" : "Le coupable est §b&player&",
-        "culprit_unknown" : "Le coupable est dévoilé dans &time&",
+        "display": "Témoin",
+        "description": "A l'annonce de la liste des loups, vous connaitrez le pseudo d'un coupable, membre du camp des loups. Toutefois, si le coupable venait a mourir, vous perdrez 2 coeurs permanents. De plus, vous infligez 30%% de dégats en moins au coupable.",
+        "culprit_name": "Le coupable est §b&player&",
+        "culprit_unknown": "Le coupable est dévoilé dans &time&",
         "culprit_dead": "Le coupable est Mort",
         "item": "Role par havwila",
-        "reveal_culprit" : "Le joueur §b&player&§r appartient au camp des loup-garous",
-        "culprit_death" : "Le coupable est mort, vous perdez donc 2 coeurs permanents",
-        "change" : "L'identité du coupable a changée, il s'agit désormais de §b&player&§r"
+        "reveal_culprit": "Le joueur §b&player&§r appartient au camp des loup-garous",
+        "culprit_death": "Le coupable est mort, vous perdez donc 2 coeurs permanents",
+        "change": "L'identité du coupable a changée, il s'agit désormais de §b&player&§r"
       },
       "croupier": {
         "display": "Croupier",
@@ -1061,7 +1061,7 @@
       },
       "silencer_werewolf": {
         "display": "Loup Muselant",
-        "description":"Une fois par nuit, tant qu'il reste plus de villageois que de loups, vous pouvez tentez de deviner le role d'un villageois. Si vous réussissez, il perdra ses pouvoirs. Si vous vous trompez, vous ne pourrez plus utiliser cette commande jusqu'à la fin de la partie",
+        "description": "Une fois par nuit, tant qu'il reste plus de villageois que de loups, vous pouvez tentez de deviner le role d'un villageois. Si vous réussissez, il perdra ses pouvoirs. Si vous vous trompez, vous ne pourrez plus utiliser cette commande jusqu'à la fin de la partie",
         "desc_command": "/ww deviner joueur",
         "guess_success": "Vous avez deviné le role de &player&. Il perd ses pouvoirs",
         "guess_fail": "Vous vous êtes trompé de rôle. Vous ne pouvez désormais plus utiliser cette commande",
@@ -1093,6 +1093,16 @@
           "life_detect_day": "Vous commencez à détecter les joueurs avec peu de vie dès le jour §b&number&§f",
           "take_damage_day": "Vous prendrez des dégats dès le jour §b&number&§f"
         }
+      },
+      "scape_goat": {
+        "display": "Bouc émissaire",
+        "description": "Vous devez choisir le joueur qui sera désigné lorsqu'une égalité survient sans quoi vous serez désigné à sa place. Dans les cas où il n'y a pas d'égalité, vous recevez §b1§f pomme en or et obtiendrez le rôle d'un joueur en vie aléatoire que n'est §4PAS§f le joueur désigné par les votes.",
+        "select": "§l§bCliquez§f§r ici pour votez pour §b&player&§f",
+        "command_name": "scape_command",
+        "multi_vote_equality": "Des personnes ont le même nombre de votes, c'est à vous de trancher :",
+        "vote_no_equality": "Le vote a été clair, vous n'aurez pas à trancher.\nVous recever §b1§f pomme d'or et l'information suivante : \n le joueur désigné par le vote n'est §cpas§f §b&role&",
+        "vote_no_result": "Aucun joueur n'a été voté plus d'une fois, vous n'aurez pas à trancher. Vous recevez §b1§f pomme d'or.",
+        "perform": "Vous avez tranché pour §b&player&"
       }
     },
     "announcement": {
@@ -1709,8 +1719,7 @@
         "vote_deactivate": "En raison du nombre de joueurs, les Votes sont désactivés",
         "vote_not_yet_activated": "Les Votes ne sont pas encore activés",
         "vote_result": "§b&player&§f est celui qui a recueilli le plus de votes : §b&number&§r. Il a poison pendant 15 secondes",
-        "no_result": "Aucun joueur n'a été voté",
-        "no_result_more_one": "Aucun joueur n'a été voté plus d'une fois",
+        "no_result_more_one": "Aucun joueur n'a été voté plus de deux fois",
         "vote_time": "C'est l'heure de voter §b/ww vote§r Vous avez §b&timer&",
         "not_met": "Vous ne pouvez pas voter un joueur que vous n'avez pas rencontrer à moins de §b&number& blocs",
         "distance_voted": "Le joueur voté est à §b&number&§f blocs +- 100"
@@ -1735,7 +1744,7 @@
       },
       "lone_wolf": {
         "name": "Loup Solitaire",
-        "message": "Vous devenez Solitaire. A partir de maintenant,vous devez gagner seul. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)",
+        "message": "Vous devenez §0Solitaire§f. A partir de maintenant,vous devez gagner §cseul§f. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)",
         "timer": "Période de déclenchement du Loup Solitaire (§b&timer&§f)"
       },
       "new_vote": {

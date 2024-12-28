@@ -10,6 +10,8 @@ import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
+import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
@@ -28,7 +30,6 @@ import fr.ph1lou.werewolfapi.role.interfaces.ITransformed;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.WOLF_DOG,
@@ -50,7 +51,7 @@ public class WolfDog extends RoleImpl implements ITransformed, IPower {
         return new DescriptionBuilder(game, this)
                 .setDescription(power ?
                         game.translate("werewolf.roles.wolf_dog.description")
-                                + '\n' + game.translate("werewolf.roles.wolf_dog.description_2")
+                        + '\n' + '\n' + game.translate("werewolf.roles.wolf_dog.description_2")
                         :
                         game.translate(this.transformed ? "werewolf.roles.wolf_dog.description_2"
                                 :
@@ -87,9 +88,9 @@ public class WolfDog extends RoleImpl implements ITransformed, IPower {
 
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onWerewolfWHat(WereWolfChatEvent event){
+    public void onWerewolfWHat(WereWolfChatEvent event) {
 
-        if(!event.getTargetWW().equals(this.getPlayerWW())){
+        if (!event.getTargetWW().equals(this.getPlayerWW())) {
             return;
         }
 
@@ -99,10 +100,23 @@ public class WolfDog extends RoleImpl implements ITransformed, IPower {
     @EventHandler(priority = EventPriority.HIGH)
     public void onNightForWereWolf(NightEvent event) {
 
-        if (!super.isWereWolf()) {
+        if (!super.isWereWolf() && this.transformed) {
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, RoleBase.WEREWOLF, 0));
+        }
+
+        if (!this.transformed) {
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, RoleBase.WEREWOLF));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onDayForWereWolf(DayEvent event) {
+
+        if (!this.transformed) {
             this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, RoleBase.WEREWOLF, 0));
         }
     }
+
 
     @EventHandler
     public void onChatSpeak(WereWolfCanSpeakInChatEvent event) {
@@ -172,7 +186,7 @@ public class WolfDog extends RoleImpl implements ITransformed, IPower {
 
     @Override
     public void setTransformed(boolean transformed) {
-        if(transformed){
+        if (transformed) {
             this.addAuraModifier(new AuraModifier(this.getKey(), Aura.LIGHT, 1, false));
         }
         this.transformed = transformed;

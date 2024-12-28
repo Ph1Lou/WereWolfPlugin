@@ -15,7 +15,6 @@ import fr.ph1lou.werewolfapi.enums.VoteStatus;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
-import fr.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -53,7 +52,7 @@ import org.bukkit.event.EventPriority;
                         step = 1, item = UniversalMaterial.BLACK_WOOL)
         },
         configurations = {
-                @ConfigurationBasic(key = ConfigBase.VOTE_EVERY_OTHER_DAY)}
+                @ConfigurationBasic(key = ConfigBase.VOTE_EVERY_OTHER_DAY) }
 )
 public class Vote extends ListenerWerewolf {
 
@@ -75,9 +74,7 @@ public class Vote extends ListenerWerewolf {
 
         voteManager.setStatus(VoteStatus.WAITING);
 
-        BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager()
-                        .callEvent(new VoteResultEvent(voteManager.getResult().orElse(null))),
-                game.getConfig().getTimerValue(TimerBase.VOTE_WAITING) * 20L);
+        voteManager.triggerResult();
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -86,10 +83,11 @@ public class Vote extends ListenerWerewolf {
         WereWolfAPI game = this.getGame();
         IVoteManager voteManager = game.getVoteManager();
 
-        if (voteManager.isStatus(VoteStatus.IN_PROGRESS) || voteManager.isStatus(VoteStatus.WAITING)) {
+        if (!voteManager.isStatus(VoteStatus.NOT_IN_PROGRESS)) {
             return;
         }
-        if (game.getPlayersCount() < game.getConfig().getValue(IntValueBase.VOTE_END) && !voteManager.isStatus(VoteStatus.ENDED)) {
+
+        if (game.getPlayersCount() < game.getConfig().getValue(IntValueBase.VOTE_END)) {
             Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.vote_deactivate"));
             voteManager.setStatus(VoteStatus.ENDED);
             return;
@@ -101,14 +99,11 @@ public class Vote extends ListenerWerewolf {
 
         int duration = game.getConfig().getTimerValue(TimerBase.VOTE_DURATION);
 
-        if (!voteManager.isStatus(VoteStatus.NOT_BEGIN) && !voteManager.isStatus(VoteStatus.ENDED)) {
-
-            voteManager.resetVote();
-            Bukkit.getOnlinePlayers().forEach(Sound.CHICKEN_HURT::play);
-            Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.vote_time",
-                    Formatter.timer(Utils.conversion(duration))));
-            voteManager.setStatus(VoteStatus.IN_PROGRESS);
-            BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new VoteEndEvent()), duration * 20L);
-        }
+        voteManager.resetVote();
+        Bukkit.getOnlinePlayers().forEach(Sound.CHICKEN_HURT::play);
+        Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.vote_time",
+                Formatter.timer(Utils.conversion(duration))));
+        voteManager.setStatus(VoteStatus.IN_PROGRESS);
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new VoteEndEvent()), duration * 20L);
     }
 }

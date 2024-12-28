@@ -2,23 +2,19 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
+import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
+import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -28,59 +24,37 @@ import java.util.List;
         category = Category.VILLAGER,
         auraDescriptionSpecialUseCase = "werewolf.roles.analyst.aura",
         attribute = RoleAttribute.MINOR_INFORMATION,
-        timers = {@Timer(key = TimerBase.ANALYSE_DURATION, defaultValue = 1800,
+        timers = { @Timer(key = TimerBase.ANALYSE_DURATION, defaultValue = 1800,
                 meetUpValue = 6 * 60,
-                decrementAfterRole = true)})
-public class Analyst extends RoleWithLimitedSelectionDuration implements ILimitedUse, IAffectedPlayers {
+                decrementAfterRole = true) })
+public class Analyst extends RoleImpl implements ILimitedUse, IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
     private int use = 0;
-    private boolean power2 = true;
+    private boolean power = true;
+    private boolean coolDownDisabledPower = false;
 
     public Analyst(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
-        this.setPower(false);
     }
 
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.analyst.description",
+                        Formatter.number(5 - this.use),
                         Formatter.timer(
                                 Utils.conversion(
                                         Math.max(0,
                                                 Math.max(0,
                                                         game.getConfig().getTimerValue(TimerBase.ROLE_DURATION)) +
-                                                        game.getConfig().getTimerValue(TimerBase.ANALYSE_DURATION))))))
+                                                game.getConfig().getTimerValue(TimerBase.ANALYSE_DURATION))))))
                 .build();
     }
 
     @Override
     public void recoverPower() {
 
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onDay(DayEvent event) {
-
-        if (this.use >= 5) {
-            return;
-        }
-
-        if (game.getConfig().getTimerValue(TimerBase.ANALYSE_DURATION) > 0) {
-            return;
-        }
-
-        setPower(true);
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
-        this.getPlayerWW().sendMessageWithKey(
-                Prefix.YELLOW, "werewolf.roles.analyst.message_see",
-                Formatter.number(5 - this.use),
-                Formatter.timer(game, TimerBase.POWER_DURATION));
     }
 
     @Override
@@ -113,12 +87,22 @@ public class Analyst extends RoleWithLimitedSelectionDuration implements ILimite
         return this.affectedPlayers;
     }
 
-    public boolean isPower2() {
-        return power2;
+    @Override
+    public void setPower(boolean power) {
+        this.power = power;
     }
 
-    public void setPower2(boolean power2) {
-        this.power2 = power2;
+    @Override
+    public boolean hasPower() {
+        return this.power;
+    }
+
+    public boolean isCoolDownDisabledPower() {
+        return coolDownDisabledPower;
+    }
+
+    public void setCoolDownDisabledPower(boolean coolDownDisabledPower) {
+        this.coolDownDisabledPower = coolDownDisabledPower;
     }
 
 }
