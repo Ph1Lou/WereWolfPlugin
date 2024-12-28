@@ -126,8 +126,8 @@ public class VoteManager implements Listener, IVoteManager {
 
         if (results.size() > 1) {
             Bukkit.getPluginManager().callEvent(new MultiVoteResultEvent(results));
-            BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new VoteResultEvent(null)),
-                    game.getConfig().getTimerValue(TimerBase.VOTE_WAITING) * 20L);
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new VoteResultEvent(results.get(game.getRandom().nextInt(results.size())))),
+                    game.getConfig().getTimerValue(TimerBase.VOTE_WAITING) * 20L + 5);
             return;
         }
 
