@@ -7,30 +7,30 @@ import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
-import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.ItemStack;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 
 @Role(key = RoleBase.ASSASSIN,
         defaultAura = Aura.DARK,
         category = Category.NEUTRAL,
-        attribute = RoleAttribute.NEUTRAL)
+        attribute = RoleAttribute.NEUTRAL,
+        sharpnessDiamondModifier = 1,
+        sharpnessIronModifier = 1,
+        protectionDiamondModifier = 1,
+        protectionIronModifier = 1,
+        powerModifier = 1)
 public class Assassin extends RoleNeutral {
 
     public Assassin(WereWolfAPI api, IPlayerWW playerWW) {
@@ -55,57 +55,10 @@ public class Assassin extends RoleNeutral {
 
     }
 
-    @EventHandler
-    public void onEnchantment(EnchantmentEvent event) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
-
-        ItemStack item = event.getItem();
-
-        if (event.getEnchants().containsKey(UniversalEnchantment.PROTECTION)) {
-
-            if (item.getType().equals(Material.DIAMOND_BOOTS) ||
-                    item.getType().equals(Material.DIAMOND_LEGGINGS) ||
-                    item.getType().equals(Material.DIAMOND_HELMET) ||
-                    item.getType().equals(Material.DIAMOND_CHESTPLATE)) {
-                event.getFinalEnchants().put(UniversalEnchantment.PROTECTION,
-                        Math.min(event.getEnchants().get(UniversalEnchantment.PROTECTION),
-                                game.getConfig().getLimitProtectionDiamond() + 1));
-            } else {
-                event.getFinalEnchants().put(
-                        UniversalEnchantment.PROTECTION,
-                        Math.min(event.getEnchants()
-                                        .get(UniversalEnchantment.PROTECTION),
-                                game.getConfig().getLimitProtectionIron() + 1));
-            }
-        }
-        if (event.getEnchants().containsKey(UniversalEnchantment.SHARPNESS)) {
-            if (item.getType().equals(Material.DIAMOND_SWORD)) {
-                event.getFinalEnchants().put(UniversalEnchantment.SHARPNESS,
-                        Math.min(event.getEnchants().get(UniversalEnchantment.SHARPNESS),
-                                game.getConfig().getLimitSharpnessDiamond() + 1));
-            } else {
-                event.getFinalEnchants().put(UniversalEnchantment.SHARPNESS,
-                        Math.min(event.getEnchants().get(UniversalEnchantment.SHARPNESS),
-                                game.getConfig().getLimitSharpnessIron() + 1));
-            }
-        }
-        if (event.getEnchants().containsKey(UniversalEnchantment.POWER)) {
-            event.getFinalEnchants().put(UniversalEnchantment.POWER,
-                    Math.min(event.getEnchants().get(UniversalEnchantment.POWER),
-                            game.getConfig().getLimitPowerBow() + 1));
-        }
-    }
-
     @Override
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setEquipments(game.translate("werewolf.roles.assassin.limit"))
                 .setItems(game.translate("werewolf.roles.assassin.items"))
                 .setEffects(game.translate("werewolf.roles.assassin.effect"))
                 .build();
@@ -141,7 +94,7 @@ public class Assassin extends RoleNeutral {
 
         Player killer = event.getEntity().getKiller();
 
-        if(!killer.getUniqueId().equals(this.getPlayerUUID())){
+        if (!killer.getUniqueId().equals(this.getPlayerUUID())) {
             return;
         }
 

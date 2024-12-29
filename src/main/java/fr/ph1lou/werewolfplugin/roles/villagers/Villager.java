@@ -46,7 +46,7 @@ public class Villager extends RoleImpl {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setEquipments(game.translate(villagerKit.getDescription()))
+                .setPower(game.translate(villagerKit.getDescription()))
                 .build();
     }
 

@@ -10,6 +10,7 @@ import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.roles.mire.MireNearbyPlayerUnderThreeHeartEvent;
 import fr.ph1lou.werewolfapi.events.roles.mire.MireUnderThreeHeartsEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -25,7 +26,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
@@ -92,24 +92,21 @@ public class Mire extends RoleImpl {
                 this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             }
 
-        } else {
+        } else if (getPlayerWW().distance(playerWW) <
+                   game.getConfig().getValue(IntValueBase.MIRE_DISTANCE)) {
 
-            if (getPlayerWW().getLocation().getWorld() == playerWW.getLocation().getWorld() &&
-                    getPlayerWW().getLocation().distance(playerWW.getLocation()) <
-                            game.getConfig().getValue(IntValueBase.MIRE_DISTANCE)) {
+            MireNearbyPlayerUnderThreeHeartEvent event1 = new MireNearbyPlayerUnderThreeHeartEvent(this.getPlayerWW(), playerWW);
 
-                MireNearbyPlayerUnderThreeHeartEvent event1 = new MireNearbyPlayerUnderThreeHeartEvent(this.getPlayerWW(), playerWW);
+            Bukkit.getPluginManager().callEvent(event1);
 
-                Bukkit.getPluginManager().callEvent(event1);
-
-                if (!event1.isCancelled()) {
-                    getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.mire.warning_death",
-                            Formatter.number(game.getConfig().getValue(IntValueBase.MIRE_DISTANCE)));
-                } else {
-                    this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
-                }
+            if (!event1.isCancelled()) {
+                getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.mire.warning_death",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.MIRE_DISTANCE)));
+            } else {
+                this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             }
         }
+
     }
 
     @EventHandler

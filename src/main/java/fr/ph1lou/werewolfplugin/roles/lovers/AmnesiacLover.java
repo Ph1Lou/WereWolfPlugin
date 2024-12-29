@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
 //todo configurer la distance dans le gui
 @Lover(
         key = LoverBase.AMNESIAC_LOVER, color = AmnesiacLover.COLOR, configValues = @IntValue(key = IntValueBase.AMNESIAC_LOVER_DISTANCE,
@@ -115,17 +116,8 @@ public class AmnesiacLover extends LoverBaseImpl implements ILover, Listener {
 
         if (this.death) return;
 
-        Player player1 = Bukkit.getPlayer(this.amnesiacLover1.getUUID());
-        Player player2 = Bukkit.getPlayer(this.amnesiacLover2.getUUID());
-
-        if (player1 == null || player2 == null) return;
-
-        if (!player1.getWorld().equals(player2.getWorld())) {
-            return;
-        }
-
-        if (player1.getLocation().distance(player2.getLocation()) <
-                this.game.getConfig().getValue(IntValueBase.AMNESIAC_LOVER_DISTANCE)) {
+        if (amnesiacLover1.distance(amnesiacLover2) <
+            this.game.getConfig().getValue(IntValueBase.AMNESIAC_LOVER_DISTANCE)) {
 
             Bukkit.getPluginManager().callEvent(new RevealAmnesiacLoversEvent(
                     Sets.newHashSet(this.amnesiacLover1, this.amnesiacLover2)));

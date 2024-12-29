@@ -10,8 +10,6 @@ import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
-import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -29,7 +27,11 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.CUPID, category = Category.VILLAGER,
         attribute = RoleAttribute.HYBRID,
-        configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.RANDOM_CUPID)))
+        powerModifier = 1,
+        configurations = {
+                @Configuration(config = @ConfigurationBasic(key = ConfigBase.RANDOM_CUPID)),
+                @Configuration(config = @ConfigurationBasic(key = ConfigBase.AMNESIAC_LOVERS))
+        })
 public class Cupid extends RoleImpl implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -75,8 +77,6 @@ public class Cupid extends RoleImpl implements IAffectedPlayers, IPower {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.cupid.description"))
                 .setItems(game.translate("werewolf.roles.cupid.items"))
-                .setEquipments(game.translate("werewolf.roles.cupid.extra",
-                        Formatter.number(game.getConfig().getLimitPowerBow() + 1)))
                 .addExtraLines(game.translate("werewolf.roles.cupid.lover",
                         Formatter.format("&lovers&", this.affectedPlayer.isEmpty() ?
                                 this.hasPower() ?
@@ -114,17 +114,4 @@ public class Cupid extends RoleImpl implements IAffectedPlayers, IPower {
             }
         }
     }
-
-    @EventHandler
-    public void onEnchantment(EnchantmentEvent event) {
-
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
-
-        if (event.getEnchants().containsKey(UniversalEnchantment.POWER)) {
-            event.getFinalEnchants().put(UniversalEnchantment.POWER,
-                    Math.min(event.getEnchants().get(UniversalEnchantment.POWER),
-                            game.getConfig().getLimitPowerBow() + 1));
-        }
-    }
-
 }

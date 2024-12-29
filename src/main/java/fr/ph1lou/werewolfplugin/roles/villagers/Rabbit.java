@@ -6,6 +6,7 @@ import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -18,7 +19,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -84,11 +84,7 @@ public class Rabbit extends RoleImpl {
             return;
         }
 
-        if (victimWW.getLocation().getWorld() != this.getPlayerWW().getLocation().getWorld()) {
-            return;
-        }
-
-        if (victimWW.getLocation().distance(this.getPlayerWW().getLocation()) > 20) {
+        if (victimWW.distance(this.getPlayerWW()) > 20) {
             return;
         }
 

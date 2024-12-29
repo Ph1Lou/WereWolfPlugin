@@ -10,6 +10,7 @@ import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.enums.UpdateCompositionReason;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
@@ -23,11 +24,9 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -130,12 +129,7 @@ public class FearFulWerewolf extends RoleWereWolf {
                 .map(Optional::get)
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
-                .filter(iPlayerWW -> {
-                    Location fearful = this.getPlayerWW().getLocation();
-                    Location player = iPlayerWW.getLocation();
-                    return (fearful.getWorld() == player.getWorld() &&
-                            fearful.distance(player) < game.getConfig().getValue(IntValueBase.FEARFUL_WEREWOLF_DISTANCE));
-                })
+                .filter(iPlayerWW -> iPlayerWW.distance(this.getPlayerWW()) < game.getConfig().getValue(IntValueBase.FEARFUL_WEREWOLF_DISTANCE))
                 .count();
 
         if (number == 0) {

@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Role(key = RoleBase.SCAPE_GOAT,
-        defaultAura = Aura.NEUTRAL,
+        defaultAura = Aura.DARK,
         category = Category.VILLAGER,
         attribute = RoleAttribute.MINOR_INFORMATION)
 public class ScapeGoat extends RoleImpl implements IPower, IAffectedPlayers {

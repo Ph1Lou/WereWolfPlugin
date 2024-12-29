@@ -42,6 +42,8 @@ import java.util.Set;
         defaultAura = Aura.NEUTRAL,
         category = Category.NEUTRAL,
         attribute = RoleAttribute.NEUTRAL,
+        sharpnessDiamondModifier = 1,
+        sharpnessIronModifier = 1,
         configValues = @IntValue(key = IntValueBase.BARBARIAN_DISTANCE,
                 defaultValue = 25,
                 meetUpValue = 25,
@@ -87,12 +89,12 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (event.getPlayerWW().getDeathLocation().getWorld() !=
-                this.getPlayerWW().getLocation().getWorld()) {
+            this.getPlayerWW().getLocation().getWorld()) {
             return;
         }
 
         if (event.getPlayerWW().getDeathLocation().distance(this.getPlayerWW().getLocation())
-                > game.getConfig().getValue(IntValueBase.BARBARIAN_DISTANCE)) {
+            > game.getConfig().getValue(IntValueBase.BARBARIAN_DISTANCE)) {
             return;
         }
 

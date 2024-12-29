@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RandomEvent(key = EventBase.DISCORD, loreKey = "werewolf.random_events.discord.description",
-        timers = {@Timer(key = Discord.TIMER_START, defaultValue = 55 * 60, meetUpValue = 20 * 60, step = 30),
-                @Timer(key = Discord.PERIOD, defaultValue = 30 * 60, meetUpValue = 15 * 60, step = 30)})
+        timers = { @Timer(key = Discord.TIMER_START, defaultValue = 55 * 60, meetUpValue = 20 * 60, step = 30),
+                @Timer(key = Discord.PERIOD, defaultValue = 30 * 60, meetUpValue = 15 * 60, step = 30) })
 public class Discord extends ListenerWerewolf {
 
     public static final String TIMER_START = "werewolf.random_events.discord.timer_start";
@@ -91,8 +91,8 @@ public class Discord extends ListenerWerewolf {
                 werewolf.getRole().setSolitary(true);
                 werewolf.sendMessageWithKey(Prefix.RED, "werewolf.configurations.lone_wolf.message");
 
-                if (werewolf.getMaxHealth() < 30) {
-                    werewolf.addPlayerMaxHealth(Math.min(8, 30 - werewolf.getMaxHealth()));
+                if (werewolf.getMaxHealth() < 28) {
+                    werewolf.addPlayerMaxHealth(Math.min(8, 28 - werewolf.getMaxHealth()));
                 }
                 neutral.getRole().setTransformedToVillager(true);
                 if (neutral.getRole().isCamp(Camp.VILLAGER)) {

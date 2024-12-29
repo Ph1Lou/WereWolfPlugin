@@ -47,10 +47,10 @@ import java.util.Optional;
         defaultAura = Aura.NEUTRAL,
         category = Category.NEUTRAL,
         attribute = RoleAttribute.HYBRID,
-        incompatibleRoles = {RoleBase.CHARMER},
-        timers = {@Timer(key = TimerBase.SCAMMER_DELAY, defaultValue = 9, meetUpValue = 3)},
-        configValues = {@IntValue(key = IntValueBase.SCAMMER_DISTANCE,
-                defaultValue = 20, meetUpValue = 20, step = 2, item = UniversalMaterial.BROWN_WOOL)})
+        incompatibleRoles = { RoleBase.CHARMER },
+        timers = { @Timer(key = TimerBase.SCAMMER_DELAY, defaultValue = 9, meetUpValue = 3) },
+        configValues = { @IntValue(key = IntValueBase.SCAMMER_DISTANCE,
+                defaultValue = 20, meetUpValue = 20, step = 2, item = UniversalMaterial.BROWN_WOOL) })
 public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
 
     private final Map<IPlayerWW, Integer> affectedPlayer = new HashMap<>();
@@ -101,7 +101,8 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE) && checkDistance(iPlayerWW, location))
+                .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
+                .filter(playerWW -> playerWW.distance(getPlayerWW()) < game.getConfig().getValue(IntValueBase.SCAMMER_DISTANCE))
                 .forEach(iPlayerWW -> {
                     int value = this.affectedPlayer.getOrDefault(iPlayerWW, 0);
                     if (value == 100) {
@@ -157,8 +158,7 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
         }
         if (this.isSolitary()) {
             targetRole.setSolitary(true);
-        }
-        else if(targetRole.isSolitary()){
+        } else if (targetRole.isSolitary()) {
             if (this.getPlayerWW().getMaxHealth() < 30) {
                 this.getPlayerWW().addPlayerMaxHealth(Math.max(0, Math.min(8, 30 - this.getPlayerWW().getMaxHealth())));
             }
@@ -195,18 +195,6 @@ public class Scammer extends RoleNeutral implements IAffectedPlayers, IPower {
     @Override
     public List<? extends IPlayerWW> getAffectedPlayers() {
         return new ArrayList<>(affectedPlayer.keySet());
-    }
-
-    /**
-     * Check that the given PlayerWW is within 20 blocks of the Location
-     *
-     * @param player   the PlayerWW
-     * @param location the location to compare
-     * @return true if the player is within 20 blocks of the location, false otherwise
-     */
-    private boolean checkDistance(IPlayerWW player, Location location) {
-        return player.getLocation().getWorld() == location.getWorld() &&
-                player.getLocation().distance(location) < game.getConfig().getValue(IntValueBase.SCAMMER_DISTANCE);
     }
 
     @Override

@@ -23,7 +23,6 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
@@ -158,9 +157,7 @@ public class Servitor extends RoleImpl implements IPower {
             return;
         }
 
-        Location location = getPlayerWW().getLocation();
-
-        if (checkDistance(master, location)) {
+        if (master.distance(getPlayerWW()) < game.getConfig().getValue(IntValueBase.SERVITOR_DISTANCE)) {
             if (power) {
                 getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, this.getKey())); //TODO patch potions
             } else {
@@ -170,18 +167,6 @@ public class Servitor extends RoleImpl implements IPower {
             getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.WEAKNESS, this.getKey(), 0));
             getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, this.getKey(), 0));
         }
-    }
-
-    /**
-     * Check that the given PlayerWW is within 25 blocks of the Location
-     *
-     * @param player   the PlayerWW
-     * @param location the location to compare
-     * @return true if the player is within 25 blocks of the location, false otherwise
-     */
-    private boolean checkDistance(IPlayerWW player, Location location) {
-        return player.getLocation().getWorld() == location.getWorld() &&
-               player.getLocation().distance(location) < game.getConfig().getValue(IntValueBase.SERVITOR_DISTANCE);
     }
 
     @Override

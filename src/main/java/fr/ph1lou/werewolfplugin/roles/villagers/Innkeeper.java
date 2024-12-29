@@ -42,8 +42,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Role(key = RoleBase.INNKEEPER, category = Category.VILLAGER, attribute = RoleAttribute.MINOR_INFORMATION, configValues = @IntValue(key = IntValueBase.INNKEEPER_DETECTION_RADIUS,
-        defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.IRON_DOOR))
+@Role(key = RoleBase.INNKEEPER,
+        category = Category.VILLAGER,
+        attribute = RoleAttribute.MINOR_INFORMATION,
+        configValues = @IntValue(key = IntValueBase.INNKEEPER_DETECTION_RADIUS,
+                defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.IRON_DOOR))
 public class Innkeeper extends RoleImpl implements IPower {
     private static final float defaultWalkSpeed = 0.2f;
     private final List<ClientData> clientDatas = new ArrayList<>();
@@ -173,14 +176,9 @@ public class Innkeeper extends RoleImpl implements IPower {
                             .filter(iPlayerWW -> !iPlayerWW.equals(getPlayerWW()))
                             .filter(iPlayerWW -> !iPlayerWW.equals(clientData.playerWW))
                             .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
-                            .filter(iPlayerWW -> {
-                                if(iPlayerWW.getLocation().getWorld() == clientData.playerWW.getLocation().getWorld()){
-                                    return iPlayerWW.getLocation()
-                                                    .distance(clientData.playerWW.getLocation()) <= game.getConfig()
-                                                    .getValue(IntValueBase.INNKEEPER_DETECTION_RADIUS);
-                                }
-                                return false;
-                            })
+                            .filter(iPlayerWW -> iPlayerWW
+                                                         .distance(clientData.playerWW) <= game.getConfig()
+                                                         .getValue(IntValueBase.INNKEEPER_DETECTION_RADIUS))
                             .forEach(clientData.seenPlayers::add);
                 }
             }
@@ -195,7 +193,7 @@ public class Innkeeper extends RoleImpl implements IPower {
         }
 
         if (event.getPlayer()
-                .getUniqueId() != getPlayerUUID() || !this.getPlayerWW()
+                    .getUniqueId() != getPlayerUUID() || !this.getPlayerWW()
                 .isState(StatePlayer.ALIVE)) {
             return;
         }
@@ -205,7 +203,7 @@ public class Innkeeper extends RoleImpl implements IPower {
             return;
         }
 
-        if(!power){
+        if (!power) {
             return;
         }
 
@@ -226,10 +224,9 @@ public class Innkeeper extends RoleImpl implements IPower {
 
             ClientData clientData = clientDataOptional.get();
 
-            if(!clientData.watching){
+            if (!clientData.watching) {
                 getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.innkeeper.already_seen");
-            }
-            else if (!clientData.seenPlayers.isEmpty()) {
+            } else if (!clientData.seenPlayers.isEmpty()) {
                 List<IPlayerWW> playerWWS = new ArrayList<>(clientData.seenPlayers);
                 Collections.shuffle(playerWWS, game.getRandom());
                 InnkeeperInfoMeetEvent innkeeperInfoMeetEvent = new InnkeeperInfoMeetEvent(getPlayerWW(),

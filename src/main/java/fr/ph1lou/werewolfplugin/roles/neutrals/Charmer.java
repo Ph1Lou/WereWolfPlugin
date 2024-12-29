@@ -9,6 +9,7 @@ import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.LoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
@@ -26,7 +27,6 @@ import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfplugin.roles.lovers.FakeLoverCharmer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,6 +40,8 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.CHARMER,
         category = Category.NEUTRAL,
         attribute = RoleAttribute.NEUTRAL,
+        sharpnessIronModifier = 1,
+        sharpnessDiamondModifier = 1,
         timers = @Timer(key = TimerBase.CHARMER_COUNTDOWN,
                 defaultValue = 6000, meetUpValue = 1200,
                 decrementAfterRole = true),
@@ -115,7 +117,7 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
 
 
         if (!event.getLover().getKey().equals(LoverBase.LOVER) &&
-                !event.getLover().getKey().equals(LoverBase.AMNESIAC_LOVER)) {
+            !event.getLover().getKey().equals(LoverBase.AMNESIAC_LOVER)) {
             return;
         }
 

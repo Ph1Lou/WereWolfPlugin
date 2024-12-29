@@ -10,6 +10,7 @@ import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.auramancer.AuramancerChangeAuraEvent;
@@ -27,7 +28,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -39,11 +39,11 @@ import java.util.stream.Collectors;
         defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
         attribute = RoleAttribute.HYBRID,
-configValues = @IntValue(key = IntValueBase.AURAMANCER_DISTANCE,
-        defaultValue = 50,
-        meetUpValue = 25,
-        step = 2,
-        item = UniversalMaterial.BED))
+        configValues = @IntValue(key = IntValueBase.AURAMANCER_DISTANCE,
+                defaultValue = 50,
+                meetUpValue = 25,
+                step = 2,
+                item = UniversalMaterial.BED))
 public class Auramancer extends RoleImpl {
 
     private boolean auraLocked = false;
@@ -58,7 +58,7 @@ public class Auramancer extends RoleImpl {
 
         DescriptionBuilder builder = new DescriptionBuilder(game, this).setDescription(game.translate("werewolf.roles.auramancer.description",
                 Formatter.format("&light&", game.translate(Aura.LIGHT.getKey())),
-                        Formatter.format("&dark&", game.translate(Aura.DARK.getKey()))));
+                Formatter.format("&dark&", game.translate(Aura.DARK.getKey()))));
         switch (this.getAura()) {
             case LIGHT:
                 builder.addExtraLines(game.translate("werewolf.roles.auramancer.passive_light",
@@ -119,13 +119,12 @@ public class Auramancer extends RoleImpl {
     }
 
 
-
     @Override
     public void addAuraModifier(IAuraModifier auraModifier) {
 
         if (auraLocked) return;
 
-        if(this.getAura() == auraModifier.getAura()) return;
+        if (this.getAura() == auraModifier.getAura()) return;
 
         if (auraModifier.getName().equals(DeathListener.KILLER)) return;
 
@@ -177,8 +176,7 @@ public class Auramancer extends RoleImpl {
                 if (auraDead == Aura.DARK) {
                     if (this.getAura() == Aura.DARK) {
                         this.addAuraModifier(new AuraModifier(this.getKey(), Aura.NEUTRAL, 1, false));
-                    }
-                    else if (this.getAura() == Aura.NEUTRAL) {
+                    } else if (this.getAura() == Aura.NEUTRAL) {
                         this.addAuraModifier(new AuraModifier(this.getKey(), Aura.LIGHT, 1, false));
                     }
                 } else {
@@ -191,10 +189,9 @@ public class Auramancer extends RoleImpl {
                         Formatter.format("&aura_dead&", game.translate(auraDead.getKey())),
                         Formatter.format("&aura_new&", game.translate(this.getAura().getKey())));
 
-            }
-            else if (this.getAura() == Aura.NEUTRAL &&
-                    killerWW.getLocation().distance(this.getPlayerWW().getLocation()) <
-                    game.getConfig().getValue(IntValueBase.AURAMANCER_DISTANCE)) {
+            } else if (this.getAura() == Aura.NEUTRAL &&
+                       killerWW.getLocation().distance(this.getPlayerWW().getLocation()) <
+                       game.getConfig().getValue(IntValueBase.AURAMANCER_DISTANCE)) {
 
                 //Compute the Aura the killer had before the kill
                 Aura auraKiller = killerWW.getRole().getAura();
@@ -203,7 +200,7 @@ public class Auramancer extends RoleImpl {
                     modifiers.removeAll(modifiers.stream()
                             .filter(a -> a.getName().equals(DeathListener.KILLER))
                             .collect(Collectors.toList()));
-                    auraKiller = modifiers.size() == 0 ? killerWW.getRole().getDefaultAura() : modifiers.get(modifiers.size()-1).getAura();
+                    auraKiller = modifiers.isEmpty() ? killerWW.getRole().getDefaultAura() : modifiers.get(modifiers.size() - 1).getAura();
                 }
 
                 Aura auraVictim = playerWW.getRole().getAura();
@@ -279,7 +276,7 @@ public class Auramancer extends RoleImpl {
             auraLocked = true;
             getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.auramancer.aura_locked",
                     Formatter.format("&aura&", game.translate(this.getAura().getKey())),
-                            Formatter.format("&aura_light&", game.translate(Aura.LIGHT.getKey())));
+                    Formatter.format("&aura_light&", game.translate(Aura.LIGHT.getKey())));
             if (isAbilityEnabled()) {
                 getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED, this.getKey()));
             }

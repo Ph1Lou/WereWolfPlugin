@@ -16,7 +16,6 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IProgress;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -58,15 +57,8 @@ public class CommandFox implements ICommandRole {
             return;
         }
 
-        Location location = playerWW.getLocation();
-        Location locationTarget = playerArg.getLocation();
-
-        if (location.getWorld() == playerArg.getWorld()) {
-            if (location.distance(locationTarget) > game.getConfig().getValue(IntValueBase.FOX_DISTANCE)) {
-                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.fox.not_enough_near");
-                return;
-            }
-        } else {
+        if (playerWW.distance(playerWW1) > game.getConfig().getValue(IntValueBase.FOX_DISTANCE)) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.fox.not_enough_near");
             return;
         }
 

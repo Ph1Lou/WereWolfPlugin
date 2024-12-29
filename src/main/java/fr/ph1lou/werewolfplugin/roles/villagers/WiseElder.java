@@ -32,7 +32,7 @@ import java.util.Optional;
 @Role(key = RoleBase.WISE_ELDER,
         category = Category.VILLAGER,
         attribute = RoleAttribute.MINOR_INFORMATION,
-        configValues = {@IntValue(key = IntValueBase.WISE_ELDER_DISTANCE,
+        configValues = { @IntValue(key = IntValueBase.WISE_ELDER_DISTANCE,
                 defaultValue = 15,
                 meetUpValue = 15,
                 step = 3,
@@ -41,7 +41,7 @@ import java.util.Optional;
                         defaultValue = 6,
                         meetUpValue = 3,
                         step = 1,
-                        item = UniversalMaterial.BED)})
+                        item = UniversalMaterial.BED) })
 public class WiseElder extends RoleImpl {
 
     private int neutralCounter;
@@ -122,7 +122,8 @@ public class WiseElder extends RoleImpl {
                 .map(game::getPlayerWW)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE) && checkDistance(iPlayerWW, location))
+                .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
+                .filter(playerWW -> playerWW.distance(getPlayerWW()) < game.getConfig().getValue(IntValueBase.WISE_ELDER_DISTANCE))
                 .map(IPlayerWW::getRole)
                 .map(IRole::getAura)
                 .forEach(aura -> {
@@ -149,15 +150,4 @@ public class WiseElder extends RoleImpl {
         lightCounter = 0;
     }
 
-    /**
-     * Check that the given PlayerWW is within 15 blocks of the Location
-     *
-     * @param player   the PlayerWW
-     * @param location the location to compare
-     * @return true if the player is within 15 blocks of the location, false otherwise
-     */
-    private boolean checkDistance(IPlayerWW player, Location location) {
-        return player.getLocation().getWorld() == location.getWorld() &&
-                player.getLocation().distance(location) < game.getConfig().getValue(IntValueBase.WISE_ELDER_DISTANCE);
-    }
 }

@@ -15,6 +15,7 @@ import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.roles.fox.SniffEvent;
@@ -32,12 +33,10 @@ import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,10 +46,10 @@ import java.util.List;
 @Role(key = RoleBase.FOX, category = Category.VILLAGER,
         auraDescriptionSpecialUseCase = "werewolf.roles.fox.aura",
         attribute = RoleAttribute.INFORMATION,
-        timers = {@Timer(key = TimerBase.FOX_SMELL_DURATION, defaultValue = 90, meetUpValue = 30)},
+        timers = { @Timer(key = TimerBase.FOX_SMELL_DURATION, defaultValue = 90, meetUpValue = 30) },
         configValues = {
                 @IntValue(key = IntValueBase.FOX_SMELL_NUMBER, defaultValue = 3, meetUpValue = 3, step = 1, item = UniversalMaterial.CARROT),
-                @IntValue(key = IntValueBase.FOX_DISTANCE, defaultValue = 20, meetUpValue = 20, step = 5, item = UniversalMaterial.ORANGE_WOOL)})
+                @IntValue(key = IntValueBase.FOX_DISTANCE, defaultValue = 20, meetUpValue = 20, step = 5, item = UniversalMaterial.ORANGE_WOOL) })
 public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -184,25 +183,18 @@ public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPl
             return;
         }
 
-        Location renardLocation = this.getPlayerWW().getLocation();
-        Location playerLocation = playerWW.getLocation();
-
-        if (renardLocation.getWorld() != playerLocation.getWorld()) {
-            return;
-        }
-
-        if (renardLocation.distance(playerLocation) >
-                game.getConfig().getValue(IntValueBase.FOX_DISTANCE)) {
+        if (playerWW.distance(getPlayerWW()) >
+            game.getConfig().getValue(IntValueBase.FOX_DISTANCE)) {
             return;
         }
 
         float temp = getProgress() + 100f /
-                (game.getConfig().getTimerValue(TimerBase.FOX_SMELL_DURATION) + 1);
+                                     (game.getConfig().getTimerValue(TimerBase.FOX_SMELL_DURATION) + 1);
 
         this.setProgress(temp);
 
         if (temp % 10 > 0 && temp % 10 <= 100f /
-                (game.getConfig().getTimerValue(TimerBase.FOX_SMELL_DURATION) + 1)) {
+                                          (game.getConfig().getTimerValue(TimerBase.FOX_SMELL_DURATION) + 1)) {
             this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fox.progress",
                     Formatter.format("&progress&", Math.min(100, Math.floor(temp))));
         }
@@ -210,8 +202,8 @@ public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPl
         if (temp >= 100) {
 
             boolean isWereWolf = playerWW.getRole().isDisplayCamp(Camp.WEREWOLF.getKey()) ||
-                    (playerWW.getRole().getDisplayCamp().equals(playerWW.getRole().getCamp().getKey()) &&
-                            playerWW.getRole().isWereWolf());
+                                 (playerWW.getRole().getDisplayCamp().equals(playerWW.getRole().getCamp().getKey()) &&
+                                  playerWW.getRole().isWereWolf());
 
             SniffEvent sniffEvent = new SniffEvent(this.getPlayerWW(),
                     playerWW, isWereWolf);

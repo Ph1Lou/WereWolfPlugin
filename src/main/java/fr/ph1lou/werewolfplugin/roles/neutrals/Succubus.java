@@ -29,7 +29,6 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IProgress;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -141,25 +140,17 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
             return;
         }
 
-        Location succubusLocation = this.getPlayerWW().getLocation();
-        Location playerLocation = charmedWW.getLocation();
-
-        if (succubusLocation.getWorld() == playerLocation.getWorld()) {
-            if (succubusLocation.distance(playerLocation) >
-                    game.getConfig().getValue(IntValueBase.SUCCUBUS_DISTANCE)) {
-                return;
-            }
-        } else {
+        if (this.getPlayerWW().distance(charmedWW) > game.getConfig().getValue(IntValueBase.SUCCUBUS_DISTANCE)) {
             return;
         }
 
         float temp = getProgress() + 100f /
-                (game.getConfig().getTimerValue(TimerBase.SUCCUBUS_DURATION) + 1);
+                                     (game.getConfig().getTimerValue(TimerBase.SUCCUBUS_DURATION) + 1);
 
         setProgress(temp);
 
         if (temp % 10 > 0 && temp % 10 <= 100f /
-                (game.getConfig().getTimerValue(TimerBase.SUCCUBUS_DURATION) + 1)) {
+                                          (game.getConfig().getTimerValue(TimerBase.SUCCUBUS_DURATION) + 1)) {
             this.getPlayerWW().sendMessageWithKey(
                     Prefix.YELLOW, "werewolf.roles.succubus.progress_charm",
                     Formatter.format("&progress&", Math.min(100, Math.floor(temp))));

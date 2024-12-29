@@ -21,7 +21,6 @@ import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,8 +33,8 @@ import java.util.Optional;
         auraDescriptionSpecialUseCase = "werewolf.roles.avenger_werewolf.aura",
         category = Category.WEREWOLF,
         attribute = RoleAttribute.WEREWOLF,
-        configValues = {@IntValue(key = IntValueBase.AVENGER_WEREWOLF_DISTANCE,
-                defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.RED_WOOL)})
+        configValues = { @IntValue(key = IntValueBase.AVENGER_WEREWOLF_DISTANCE,
+                defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.RED_WOOL) })
 public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
@@ -81,9 +80,14 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
 
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.avenger_werewolf.remove",
                 Formatter.player(event.getPlayerWW().getName()));
-        this.getPlayerWW().addPlayerMaxHealth(2);
 
-        if(this.getPlayerWW().getMaxHealth() >= 20){
+        if (this.getPlayerWW().getMaxHealth() >= 24) {
+            this.getPlayerWW().addPlayerMaxHealth(1);
+        } else {
+            this.getPlayerWW().addPlayerMaxHealth(2);
+        }
+
+        if (this.getPlayerWW().getMaxHealth() >= 20) {
             this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK, 1, false));
         }
 
@@ -104,14 +108,8 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
                 .filter(playerWW -> !playerWW.getRole().equals(this))
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
-                .filter(playerWW -> {
-                    Location playerLocation = this.getPlayerWW().getLocation();
-                    if (playerLocation.getWorld() == playerWW.getLocation().getWorld()) {
-                        return playerLocation.distance(playerWW.getLocation()) < game.getConfig()
-                                .getValue(IntValueBase.AVENGER_WEREWOLF_DISTANCE);
-                    }
-                    return false;
-                })
+                .filter(playerWW -> playerWW.distance(getPlayerWW()) < game.getConfig()
+                        .getValue(IntValueBase.AVENGER_WEREWOLF_DISTANCE))
                 .forEach(playerWW -> {
                     if (!this.affectedPlayers.contains(playerWW)) {
                         RegisterAvengerListEvent event1 = new RegisterAvengerListEvent(this.getPlayerWW(), playerWW);

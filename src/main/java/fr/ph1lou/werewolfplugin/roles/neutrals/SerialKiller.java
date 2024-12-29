@@ -6,9 +6,8 @@ import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import fr.ph1lou.werewolfapi.events.roles.serial_killer.SerialKillerEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -21,17 +20,22 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.SERIAL_KILLER,
         defaultAura = Aura.DARK,
         category = Category.NEUTRAL,
-        attribute = RoleAttribute.NEUTRAL)
+        attribute = RoleAttribute.NEUTRAL,
+        sharpnessDiamondModifier = 1,
+        sharpnessIronModifier = 1,
+        protectionDiamondModifier = 1,
+        protectionIronModifier = 1,
+        powerModifier = 1)
 public class SerialKiller extends RoleNeutral implements IPower {
 
     private boolean power = true;
     private int extraHeart = 0;
+
     public SerialKiller(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
     }
@@ -51,7 +55,6 @@ public class SerialKiller extends RoleNeutral implements IPower {
 
         return new DescriptionBuilder(game, this)
                 .setPower(game.translate("werewolf.roles.serial_killer.power"))
-                .setEquipments(game.translate("werewolf.roles.serial_killer.limit"))
                 .setItems(game.translate("werewolf.roles.serial_killer.items"))
                 .setEffects(game.translate("werewolf.roles.serial_killer.effect"))
                 .addExtraLines(game.translate("werewolf.roles.serial_killer.hearts", Formatter.format("&heart&", extraHeart / 2)))
@@ -62,48 +65,6 @@ public class SerialKiller extends RoleNeutral implements IPower {
     @Override
     public void recoverPower() {
         this.getPlayerWW().addPlayerMaxHealth(extraHeart);
-    }
-
-    @EventHandler
-    public void onEnchantment(EnchantmentEvent event) {
-
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
-
-        ItemStack item = event.getItem();
-
-        if (event.getEnchants().containsKey(UniversalEnchantment.PROTECTION)) {
-
-            if (item.getType().equals(Material.DIAMOND_BOOTS) ||
-                    item.getType().equals(Material.DIAMOND_LEGGINGS) ||
-                    item.getType().equals(Material.DIAMOND_HELMET) ||
-                    item.getType().equals(Material.DIAMOND_CHESTPLATE)) {
-                event.getFinalEnchants().put(UniversalEnchantment.PROTECTION,
-                        Math.min(event.getEnchants().get(
-                                        UniversalEnchantment.PROTECTION),
-                                game.getConfig().getLimitProtectionDiamond() + 1));
-            } else {
-                event.getFinalEnchants().put(UniversalEnchantment.PROTECTION,
-                        Math.min(event.getEnchants().get(
-                                        UniversalEnchantment.PROTECTION),
-                                game.getConfig().getLimitProtectionIron() + 1));
-            }
-        }
-        if (event.getEnchants().containsKey(UniversalEnchantment.SHARPNESS)) {
-            if (item.getType().equals(Material.DIAMOND_SWORD)) {
-                event.getFinalEnchants().put(UniversalEnchantment.SHARPNESS,
-                        Math.min(event.getEnchants().get(UniversalEnchantment.SHARPNESS),
-                                game.getConfig().getLimitSharpnessDiamond() + 1));
-            } else {
-                event.getFinalEnchants().put(UniversalEnchantment.SHARPNESS,
-                        Math.min(event.getEnchants().get(UniversalEnchantment.SHARPNESS),
-                                game.getConfig().getLimitSharpnessIron() + 1));
-            }
-        }
-        if (event.getEnchants().containsKey(UniversalEnchantment.POWER)) {
-            event.getFinalEnchants().put(UniversalEnchantment.POWER,
-                    Math.min(event.getEnchants().get(UniversalEnchantment.POWER),
-                            game.getConfig().getLimitPowerBow() + 1));
-        }
     }
 
 

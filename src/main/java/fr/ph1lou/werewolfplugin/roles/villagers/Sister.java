@@ -11,6 +11,7 @@ import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.roles.sister.SisterDeathEvent;
@@ -20,32 +21,28 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
-import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 
 @Role(key = RoleBase.SISTER,
         category = Category.VILLAGER,
         attribute = RoleAttribute.VILLAGER,
-        configValues = {@IntValue(key = IntValueBase.SISTER_DISTANCE,
+        configValues = { @IntValue(key = IntValueBase.SISTER_DISTANCE,
                 defaultValue = 20,
                 meetUpValue = 20,
                 step = 2,
-                item = UniversalMaterial.GRAY_WOOL)},
+                item = UniversalMaterial.GRAY_WOOL) },
         requireDouble = true)
 public class Sister extends RoleImpl implements IAffectedPlayers {
 
@@ -112,22 +109,15 @@ public class Sister extends RoleImpl implements IAffectedPlayers {
             return;
         }
 
-        Location location = this.getPlayerWW().getLocation();
-
         boolean recoverResistance = game.getPlayersWW()
-                .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .map(IPlayerWW::getRole)
-                .filter(roles -> !roles.equals(this))
-                .filter(roles -> roles.isKey(RoleBase.SISTER))
-                .map(IRole::getPlayerUUID)
-                .map(Bukkit::getPlayer)
-                .filter(Objects::nonNull)
-                .filter(player -> player.getWorld().equals(location.getWorld()) &&
-                        location.distance(player.getLocation()) < game.getConfig().getValue(IntValueBase.SISTER_DISTANCE))
-                .findFirst()
-                .orElse(null) != null;
-
+                                            .stream()
+                                            .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                                            .map(IPlayerWW::getRole)
+                                            .filter(roles -> !roles.equals(this))
+                                            .filter(roles -> roles.isKey(RoleBase.SISTER))
+                                            .filter(roles -> getPlayerWW().distance(roles.getPlayerWW()) < game.getConfig().getValue(IntValueBase.SISTER_DISTANCE))
+                                            .findFirst()
+                                            .orElse(null) != null;
 
         if (recoverResistance) {
 

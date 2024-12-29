@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.game;
 
 
 import com.google.common.collect.Sets;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -136,22 +137,19 @@ public class LoversManagement implements ILoverManager {
                 .collect(Collectors.toList());
 
         if (loversAvailable.size() < 2 && game.getConfig().getRoleCount(RoleBase.CUPID) +
-                game.getConfig().getLoverCount(LoverBase.LOVER) > 0) {
+                                          game.getConfig().getLoverCount(LoverBase.LOVER) > 0) {
             Bukkit.broadcastMessage(game.translate(Prefix.RED, "werewolf.lovers.lover.not_enough_players"));
             return;
         }
 
-        boolean polygamy = false;
 
-        if ((game.getConfig().getLoverCount(LoverBase.LOVER) == 0 &&
-                game.getConfig().getRoleCount(RoleBase.CUPID) * 2 >=
-                        game.getPlayersCount()) ||
-                (game.getConfig().getLoverCount(LoverBase.LOVER) != 0 &&
-                        (game.getConfig().getRoleCount(RoleBase.CUPID) +
-                                game.getConfig().getLoverCount(LoverBase.LOVER)) * 2 >
-                                game.getPlayersCount())) {
+        if ((game.getConfig().getLoverCount(LoverBase.LOVER) == 0 && game.getConfig().getRoleCount(RoleBase.CUPID) * 2 >=
+                                                                     game.getPlayersCount()) ||
+            (game.getConfig().getLoverCount(LoverBase.LOVER) != 0 &&
+             (game.getConfig().getRoleCount(RoleBase.CUPID) +
+              game.getConfig().getLoverCount(LoverBase.LOVER)) * 2 >
+             game.getPlayersCount())) {
 
-            polygamy = true;
             Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.lovers.lover.polygamy"));
         }
 
@@ -159,48 +157,53 @@ public class LoversManagement implements ILoverManager {
         IPlayerWW playerWW2;
 
 
-        for (IPlayerWW playerWW : game.getPlayersWW()) {
+        for (IPlayerWW cupidWW : game.getPlayersWW()) {
 
-            if (playerWW.getRole().isKey(RoleBase.CUPID)) {
+            if (!cupidWW.getRole().isKey(RoleBase.CUPID)) {
+                continue;
+            }
 
-                Cupid cupid = (Cupid) playerWW.getRole();
+            Cupid cupid = (Cupid) cupidWW.getRole();
 
-                if (cupid.hasPower() ||
-                        cupid.getAffectedPlayers().size() < 2 ||
-                        !cupid.getAffectedPlayers().get(0).isState(StatePlayer.ALIVE) ||
-                        !cupid.getAffectedPlayers().get(1).isState(StatePlayer.ALIVE)) {
+            if (cupid.hasPower() ||
+                cupid.getAffectedPlayers().size() < 2 ||
+                !cupid.getAffectedPlayers().get(0).isState(StatePlayer.ALIVE) ||
+                !cupid.getAffectedPlayers().get(1).isState(StatePlayer.ALIVE)) {
 
-                    if (loversAvailable.contains(playerWW)) {
-                        loversAvailable.remove(playerWW);
-                        playerWW2 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
-                        loversAvailable.remove(playerWW2);
-                        playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
-                        loversAvailable.add(playerWW2);
-                        loversAvailable.add(playerWW);
-                    } else {
-                        playerWW2 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
-                        loversAvailable.remove(playerWW2);
-                        playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
-                        loversAvailable.add(playerWW2);
-                    }
-
-                    cupid.clearAffectedPlayer();
-                    cupid.addAffectedPlayer(playerWW2);
-                    cupid.addAffectedPlayer(playerWW1);
-                    cupid.setPower(false);
-                    Bukkit.getPluginManager().callEvent(new CupidLoversEvent(playerWW, Sets.newHashSet(cupid.getAffectedPlayers())));
-                    playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.cupid.designation_perform",
-                            Formatter.format("&player1&", playerWW2.getName()),
-                            Formatter.format("&player2&", playerWW1.getName()));
-
-                } else {
-                    playerWW2 = cupid.getAffectedPlayers().get(0);
-                    playerWW1 = cupid.getAffectedPlayers().get(1);
-                }
-                if (!polygamy) {
+                if (loversAvailable.contains(cupidWW)) { // SI le cupidon est dans la liste des joeurs disponible pour le couple
+                    loversAvailable.remove(cupidWW); //
+                    playerWW2 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
                     loversAvailable.remove(playerWW2);
-                    loversAvailable.remove(playerWW1);
+                    playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
+                    loversAvailable.add(playerWW2);
+                    loversAvailable.add(cupidWW);
+                } else {
+                    playerWW2 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
+                    loversAvailable.remove(playerWW2);
+                    playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
+                    loversAvailable.add(playerWW2);
                 }
+
+                cupid.clearAffectedPlayer();
+                cupid.addAffectedPlayer(playerWW2);
+                cupid.addAffectedPlayer(playerWW1);
+                cupid.setPower(false);
+                Bukkit.getPluginManager().callEvent(new CupidLoversEvent(cupidWW, Sets.newHashSet(cupid.getAffectedPlayers())));
+                cupidWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.cupid.designation_perform",
+                        Formatter.format("&player1&", playerWW2.getName()),
+                        Formatter.format("&player2&", playerWW1.getName()));
+
+            } else {
+                playerWW2 = cupid.getAffectedPlayers().get(0);
+                playerWW1 = cupid.getAffectedPlayers().get(1);
+            }
+
+            loversAvailable.remove(playerWW2);
+            loversAvailable.remove(playerWW1);
+
+            if (game.getConfig().isConfigActive(ConfigBase.AMNESIAC_LOVERS)) {
+                lovers.add(new AmnesiacLover(game, playerWW1, playerWW2));
+            } else {
                 lovers.add(new LoverImpl(game, cupid.getAffectedPlayers()));
             }
         }
@@ -212,10 +215,8 @@ public class LoversManagement implements ILoverManager {
             playerWW1 = loversAvailable.get((int) Math.floor(game.getRandom().nextFloat() * loversAvailable.size()));
             loversAvailable.add(playerWW2);
 
-            if (!polygamy) {
-                loversAvailable.remove(playerWW2);
-                loversAvailable.remove(playerWW1);
-            }
+            loversAvailable.remove(playerWW2);
+            loversAvailable.remove(playerWW1);
 
             lovers.add(new LoverImpl(game, new ArrayList<>(Arrays.asList(playerWW2, playerWW1))));
         }
@@ -256,12 +257,12 @@ public class LoversManagement implements ILoverManager {
             }
             loverImplAPIS.add(new LoverImpl(game, linkCouple));
         }
-        for (ILover lover : lovers) {
-            lover.getLovers()
-                    .forEach(playerWW -> playerWW.getLovers()
-                            .remove(lover));
-        }
-        lovers.clear();
+
+        lovers.stream().filter(iLover -> iLover.isKey(LoverBase.LOVER)).forEach(iLover -> iLover.getLovers()
+                .forEach(playerWW -> playerWW.getLovers()
+                        .remove(iLover)));
+
+        lovers.removeIf(iLover -> iLover.isKey(LoverBase.LOVER));
         lovers.addAll(loverImplAPIS);
         loverImplAPIS.forEach(LoverImpl::announceLovers);
     }

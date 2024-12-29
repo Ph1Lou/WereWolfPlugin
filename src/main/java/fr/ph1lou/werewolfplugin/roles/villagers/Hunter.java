@@ -9,9 +9,8 @@ import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfKillEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -23,7 +22,6 @@ import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
         defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
         attribute = RoleAttribute.VILLAGER,
+        powerModifier = 1,
         configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.HUNTER_CAN_SHOOT, meetUpValue = true)))
 public class Hunter extends RoleImpl implements IPower {
 
@@ -48,8 +47,6 @@ public class Hunter extends RoleImpl implements IPower {
         DescriptionBuilder descBuilder = new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.hunter.description"))
                 .setItems(game.translate("werewolf.roles.hunter.items"))
-                .setEquipments(game.translate("werewolf.roles.hunter.stuff",
-                        Formatter.number(game.getConfig().getLimitPowerBow() + 1)))
                 .setEffects(game.translate("werewolf.roles.hunter.effect", Formatter.format("&number&", 0.5 + damageBonus)));
         if (game.getConfig().isConfigActive(ConfigBase.HUNTER_CAN_SHOOT)) {
             descBuilder = descBuilder.addExtraLines(game.translate("werewolf.roles.hunter.description_shoot"));
@@ -109,6 +106,7 @@ public class Hunter extends RoleImpl implements IPower {
 
         event.setDamage(event.getDamage() * (1 + (game.getConfig().getStrengthRate() / 100f) * (0.5 + damageBonus)));
     }
+
     @EventHandler
     public void onWerewolfKillEvent(WereWolfKillEvent event) {
         if (event.getVictimWW().equals(getPlayerWW())) {
@@ -124,17 +122,5 @@ public class Hunter extends RoleImpl implements IPower {
     @Override
     public boolean hasPower() {
         return power;
-    }
-
-    @EventHandler
-    public void onEnchantment(EnchantmentEvent event) {
-
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
-
-        if (event.getEnchants().containsKey(UniversalEnchantment.POWER)) {
-            event.getFinalEnchants().put(UniversalEnchantment.POWER,
-                    Math.min(event.getEnchants().get(UniversalEnchantment.POWER),
-                            game.getConfig().getLimitPowerBow() + 1));
-        }
     }
 }

@@ -45,13 +45,14 @@ import java.util.stream.Collectors;
         defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
         attribute = RoleAttribute.MINOR_INFORMATION,
-        configValues = {@IntValue(key = IntValueBase.GRAVEDIGGER_DISTANCE,
-                defaultValue = 70, meetUpValue = 30, step = 5, item = UniversalMaterial.BIRCH_LEAVES)})
+        configValues = { @IntValue(key = IntValueBase.GRAVEDIGGER_DISTANCE,
+                defaultValue = 70, meetUpValue = 30, step = 5, item = UniversalMaterial.BIRCH_LEAVES) })
 public class Gravedigger extends RoleImpl implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
     private final List<GravediggerClue> clues = new ArrayList<>();
     private int secondsCount = 0;
+
     public Gravedigger(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
     }
@@ -156,7 +157,7 @@ public class Gravedigger extends RoleImpl implements IAffectedPlayers {
             return;
         }
 
-        Utils.sendParticleArrow(player, angle);
+        Utils.sendParticleArrow(player.getLocation(), player, angle, 20);
     }
 
     @Override

@@ -22,7 +22,6 @@ import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -72,12 +71,7 @@ public class HowlingWerewolf extends RoleWereWolf {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
-                .filter(playerWW -> {
-                    Location location = playerWW.getLocation();
-                    Location playerLocation = this.getPlayerWW().getLocation();
-                    return location.getWorld() == playerLocation.getWorld() &&
-                            location.distance(playerLocation) < game.getConfig().getValue(IntValueBase.HOWLING_WEREWOLF_DISTANCE);
-                })
+                .filter(playerWW -> playerWW.distance(getPlayerWW()) < game.getConfig().getValue(IntValueBase.HOWLING_WEREWOLF_DISTANCE))
                 .collect(Collectors.toSet());
 
         if (playerWWS.size() < 5) {

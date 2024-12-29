@@ -15,6 +15,7 @@ import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -44,7 +45,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,6 +57,8 @@ import java.util.List;
         category = Category.NEUTRAL,
         auraDescriptionSpecialUseCase = "werewolf.roles.angel.aura",
         attribute = RoleAttribute.NEUTRAL,
+        sharpnessDiamondModifier = 1,
+        sharpnessIronModifier = 1,
         timers = @Timer(
                 key = TimerBase.ANGEL_DURATION,
                 defaultValue = 240,
@@ -247,7 +249,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                         game.translate("werewolf.roles.angel.command_2")),
                 ClickEvent.Action.RUN_COMMAND,
                 game.translate("werewolf.roles.angel.fallen_choice")
-                );
+        );
 
         TextComponent choice = new TextComponent(
                 game.translate(Prefix.YELLOW, "werewolf.roles.angel.angel_choice"));
@@ -359,8 +361,8 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
 
             if (playerWW.getLastMinutesDamagedPlayer().contains(this.getPlayerWW()) ||
-                    (playerWW.getLastKiller().isPresent() &&
-                            this.getPlayerWW().equals(playerWW.getLastKiller().get()))) {
+                (playerWW.getLastKiller().isPresent() &&
+                 this.getPlayerWW().equals(playerWW.getLastKiller().get()))) {
                 Bukkit.getPluginManager().callEvent(
                         new FallenAngelTargetDeathEvent(this.getPlayerWW(), playerWW));
                 this.getPlayerWW().addPlayerMaxHealth(6);
@@ -416,10 +418,10 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
     @Override
     public boolean isNeutral() {
         return super.isNeutral() &&
-                (!game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL)
-                        || !choice.equals(AngelForm.GUARDIAN_ANGEL)
-                        || affectedPlayer.isEmpty()
-                        || !affectedPlayer.get(0).isState(StatePlayer.DEATH));
+               (!game.getConfig().isConfigActive(ConfigBase.SWEET_ANGEL)
+                || !choice.equals(AngelForm.GUARDIAN_ANGEL)
+                || affectedPlayer.isEmpty()
+                || !affectedPlayer.get(0).isState(StatePlayer.DEATH));
     }
 
     @Override
@@ -478,7 +480,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                     .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                     .map(IPlayerWW::getRole)
                     .filter(roles -> roles.isKey(RoleBase.ANGEL)
-                            || roles.isKey(RoleBase.GUARDIAN_ANGEL))
+                                     || roles.isKey(RoleBase.GUARDIAN_ANGEL))
                     .map(iRole -> (Angel) iRole)
                     .filter(roles -> roles.isChoice(AngelForm.GUARDIAN_ANGEL))
                     .forEach(role -> {

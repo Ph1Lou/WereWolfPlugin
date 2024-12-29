@@ -9,6 +9,7 @@ import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.enums.UpdateCompositionReason;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
@@ -22,11 +23,9 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -143,12 +142,7 @@ public class Hermit extends RoleImpl {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .filter(iPlayerWW -> {
-                    Location hermit = this.getPlayerWW().getLocation();
-                    Location player = iPlayerWW.getLocation();
-                    return (hermit.getWorld() == player.getWorld() &&
-                            hermit.distance(player) < game.getConfig().getValue(IntValueBase.HERMIT_DISTANCE));
-                })
+                .filter(iPlayerWW -> getPlayerWW().distance(iPlayerWW) < game.getConfig().getValue(IntValueBase.HERMIT_DISTANCE))
                 .count();
 
         if (number == 0) {

@@ -10,6 +10,7 @@ import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -31,7 +32,6 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,8 +46,10 @@ import java.util.concurrent.atomic.AtomicInteger;
         defaultAura = Aura.NEUTRAL,
         category = Category.NEUTRAL,
         attribute = RoleAttribute.NEUTRAL,
-        configValues = {@IntValue(key = IntValueBase.THUG_DISTANCE,
-                defaultValue = 25, meetUpValue = 25, step = 5, item = UniversalMaterial.GRAY_WOOL)})
+        sharpnessDiamondModifier = 1,
+        sharpnessIronModifier = 1,
+        configValues = { @IntValue(key = IntValueBase.THUG_DISTANCE,
+                defaultValue = 25, meetUpValue = 25, step = 5, item = UniversalMaterial.GRAY_WOOL) })
 public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
 
     private int probability = 10;

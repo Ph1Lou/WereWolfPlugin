@@ -1,4 +1,4 @@
-package fr.ph1lou.werewolfplugin.commands.roles.villager.raven;
+package fr.ph1lou.werewolfplugin.commands.roles.villager.scape_goat;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;

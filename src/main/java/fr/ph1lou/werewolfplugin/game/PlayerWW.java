@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -24,7 +25,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -62,7 +63,7 @@ public class PlayerWW implements IPlayerWW {
     private StatePlayer state = StatePlayer.ALIVE;
     private double maxHealth = 20;
     private Location disconnectedLocation = null;
-    private int disconnectedChangeHealth = 0;
+    private double disconnectedChangeHealth = 0;
     @Nullable
     private UUID mojangUUID = null;
     private IRole role;
@@ -94,12 +95,12 @@ public class PlayerWW implements IPlayerWW {
 
     private UUID getUUID(String name) throws IOException {
 
-        if(this.uuid.version() == 4){
+        if (this.uuid.version() == 4) {
             return this.uuid;
         }
         String uuid;
         BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://api.mojang.com/users/profiles/minecraft/" + name).openStream()));
-        uuid = (((JsonObject)new JsonParser().parse(in)).get("id")).toString().replaceAll("\"", "");
+        uuid = (((JsonObject) new JsonParser().parse(in)).get("id")).toString().replaceAll("\"", "");
         uuid = uuid.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5");
         in.close();
         return UUID.fromString(uuid);
@@ -287,12 +288,12 @@ public class PlayerWW implements IPlayerWW {
                         .equals(potionModifier.getPotionEffectType()))
                 .forEach(potionModifier1 -> {
                     if ((20 * (potionModifier1.getTimer() - game.getTimer()) +
-                            potionModifier1.getDuration() < potionModifier.getDuration() &&
-                            potionModifier1.getAmplifier() == potionModifier.getAmplifier()) ||
-                            potionModifier1.getAmplifier() < potionModifier.getAmplifier()) {
+                         potionModifier1.getDuration() < potionModifier.getDuration() &&
+                         potionModifier1.getAmplifier() == potionModifier.getAmplifier()) ||
+                        potionModifier1.getAmplifier() < potionModifier.getAmplifier()) {
 
                         if (potionModifier1.getIdentifier().equals(potionModifier.getIdentifier()) &&
-                                potionModifier1.getAmplifier() == potionModifier.getAmplifier()) {
+                            potionModifier1.getAmplifier() == potionModifier.getAmplifier()) {
                             int id = this.potionModifiers.remove(potionModifier1);
                             if (id != -1) {
                                 Bukkit.getScheduler().cancelTask(id);
@@ -692,7 +693,7 @@ public class PlayerWW implements IPlayerWW {
     @Override
     public ChatColor getColor(IPlayerWW iPlayerWW) {
 
-        if(this.colors.containsKey(iPlayerWW)){
+        if (this.colors.containsKey(iPlayerWW)) {
             return this.colors.get(iPlayerWW);
         }
         return ChatColor.WHITE;
@@ -728,6 +729,14 @@ public class PlayerWW implements IPlayerWW {
                 .filter(playerWW1 -> playerWW1.getLocation().getWorld() == this.getLocation().getWorld() &&
                                      playerWW1.getLocation().distance(this.getLocation()) < game.getConfig().getValue(IntValueBase.VOTE_DISTANCE))
                 .forEach(this::addMetPlayer);
+    }
+
+    @Override
+    public double distance(IPlayerWW playerWW) {
+        if (Objects.equals(this.getLocation().getWorld(), playerWW.getLocation().getWorld())) {
+            return this.getLocation().distance(playerWW.getLocation());
+        }
+        return Integer.MAX_VALUE;
     }
 }
 

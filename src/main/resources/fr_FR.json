@@ -12,7 +12,6 @@
         "lover_death": "§d&player& par amour, le rejoint dans sa tombe",
         "not_enough_players": "il n'y a pas assez de personnes pour former un couple",
         "not_lover": "Vous ne pouvez partager des coeurs qu'avec un amant",
-        "polygamy": "En raison du trop faible nombre de joueurs par rapport au nombre de couples, la polygamie est activée",
         "received": "Vous recevez §b&number&§r % de la vie de §b&player&",
         "disconnected": "Votre amant n'est pas connecté",
         "complete": "Vous venez d'envoyer §b&number&§r % de votre vie à §b&player&",
@@ -77,8 +76,7 @@
         "items": "Un livre Tranchant III, un livre Protection III et un livre Puissance III",
         "effect": "Force avant son premier kill",
         "hearts": "Coeur(s) en Plus : §b&heart&\n",
-        "power": "Lorsque vous tuez un joueur, vous gagnez un coeur permanent supplémentaire et une pomme d'or.",
-        "limit": "Limite d'armure, d'arc et d'épée (§b+1§f)"
+        "power": "Lorsque vous tuez un joueur, vous gagnez un coeur permanent supplémentaire et une pomme d'or."
       },
       "amnesiac_werewolf": {
         "display": "Loup Garou Amnésique",
@@ -143,6 +141,7 @@
         "transform": "Vous pouvez passer dans votre forme Loup Garou avec la commande §b/ww changer§f (irreversible), vous avez §b&timer&",
         "time_over": "Vous ne pouvez plus choisir votre forme, vous restez donc Villageois",
         "perform": "Vous venez de choisir la forme Loup Garou",
+        "aura": "Chien Loup Forme chien : Aura §2Lumineuse§f, Forme Loup : Aura §cObscure§f",
         "description_2": "Forme §cLoup Garou§f : Les Loups Garous ne vous voient pas dans leur liste. Cependant, vous connaissez les Loups Garous. Les rôles à informations vous voient dans le camp des Villageois. Vous n'avez pas Force la nuit."
       },
       "stud": {
@@ -266,7 +265,6 @@
       },
       "rival": {
         "display": "Rival",
-        "extra": "Vous avez le droit à un arc Puissance §b&number&",
         "item": "Deux potions de dégats",
         "description": "Lors de l'annonce du couple vous obtiendrez le rôle de deux personnes formant un couple. Dans §b&timer&§r, vous obtiendrez une liste de 5 joueurs contenant les noms des deux amoureux. \nSi vous tuez un membre du couple, vous prendrez sa place et devrez gagner avec son couple. \nEn revanche, si le couple meurt, vous devrez gagner seul et vous perdrez 5 coeurs (vous récupèrerez un coeur par minute). Vous connaissez la direction du Cupidon si il est présent dans la partie.",
         "lover": "Le couple qui vous est associé se compose d'un §b&role1&§f et d'un §b&role2&§f.",
@@ -482,7 +480,7 @@
       },
       "avenger_werewolf": {
         "display": "Loup Garou Vengeur",
-        "power": "7 cœurs au départ. Lorsque un Loup Garou enregistré meurt, vous gagnez 1 cœur permanent supplémentaire.",
+        "power": "7 cœurs au départ. Lorsque un Loup Garou enregistré meurt, vous gagnez 1 cœur permanent supplémentaire, puis 0.5 coeurs après 12 coeurs.",
         "description": "Lorsque vous croisez d'autres Loup Garou à moins de §b&number&§f blocs, ceux-ci sont enregistrés.",
         "add": "§b&player&§f a été enregistré",
         "remove": "§b&player&§f était dans votre liste d'enregistrement, vous récupérez un coeur permanent supplémentaire",
@@ -502,14 +500,14 @@
         "none": "§cAucun§f",
         "items": "Un Livre Puissance II, Frappe I, 64 flèches, 3 fils",
         "description": "Vous devez gagner avec votre couple puis avec le Village.",
-        "extra": "Vous avez le droit à un arc Puissance §b&number&",
         "lover_designation_message": "Vous devez désigner un Couple, §b/ww couple§r, vous avez §b&timer&",
         "designation_perform": "Votre couple associé est §b&player1&§r et §b&player2&",
         "command": "couple",
         "wait": "Annonce du Couple dans §b&timer&",
         "random_cupid_message": "Le paramètre Cupidon aléatoire est activé",
         "configurations": {
-          "random_cupid": "Cupidon Aléatoire"
+          "random_cupid": "Cupidon Aléatoire",
+          "amnesiac_lovers": "Couple Amnésique"
         }
       },
       "siamese_twin": {
@@ -600,6 +598,15 @@
         "get_track": "Un Trappeur vous piste aujourd'hui",
         "command": "pister"
       },
+      "astronomer": {
+        "display": "Astronome",
+        "description": "Une fois par nuit, vous pouvez créer une trajectoire infinie entre vous et un joueur aléatoire présent dans la partie (se trouvant à plus de 20 blocs de lui) qui n'appartient pas au camp du Village. \nLa trajectoire entre le joueur et l'Astronome dure 2 minutes et ne s'actualise pas si le joueur se déplace. ",
+        "command_description": "§b/ww telescope",
+        "effect": "Vision Nocturne",
+        "tracking_perform": "Vous commencez à pister un joueur §cqui n'est pas Villageois§f pour 2 minutes",
+        "command": "telescope",
+        "aura": "l'Astronome a une aura §2Lumineuse§f la nuit et §1Obscure§f le jour"
+      },
       "succubus": {
         "display": "Succube",
         "charm": "Charmé : §b&list&\n",
@@ -624,12 +631,12 @@
       },
       "shaman": {
         "display": "Chaman",
-        "description": "A chaque fois qu'un joueur meurt, vous pouvez décider dans les 30 secondes qui suivent de sacrifier un coeur permanent pour obtenir aléatoirement le nom ou le rôle du joueur mort. Vous voyez toujours le véritable rôle d'un joueur mort définitivement",
+        "description": "A chaque fois qu'un joueur meurt, vous pouvez décider dans les 30 secondes qui suivent de sacrifier §c1.5§f coeur permanent pour obtenir aléatoirement le nom ou le rôle de §cla personne qui l'a tué§f. \nVous voyez toujours le véritable rôle d'un joueur mort définitivement",
         "cannot_use": "Vous ne pouvez plus exécuter cette action",
         "not_enough_life": "Vous n'avez pas assez de vie pour cela",
-        "choice_message": "Un joueur est mort. §bCliquez ici§r pour obtenir une information sur lui en échange d'un coeur permanent. Vous avez §b30§r secondes.",
-        "victim_name": "§b&player&§r est mort",
-        "victim_role": "Un §b&role&§r est mort",
+        "choice_message": "Un joueur est mort. §bCliquez ici§r pour obtenir une information sur son tueur en échange de §c1.5§f coeur permanent. Vous avez §b30§r secondes.",
+        "victim_name": "§b&player&§r est le tueur",
+        "victim_role": "Un §b&role&§r est le tueur",
         "command": "command_shaman",
         "aura": "Quand le §bChaman§f utilisent son pouvoir, son aura devient Obscure"
       },
@@ -677,9 +684,8 @@
         "description": "Invisible : vous pouvez voir les particules bleues de la petite fille et rouges du loup perfide. Au début de la nuit, vous recevez le rôle d'un joueur situé à moins de §b&number&§f blocs de vous",
         "effects": "Invisibilité et 4 coeurs d'absorption pendant 5 minutes en retirant son armure",
         "command_incendiary": "folie",
-        "feather": "Pouvoir : Vous pouvez vous téléporter de &number& blocs toutes les §b&timer&§f en étant invisible en faisant clique droit sur une plume\n",
+        "feather": "Pouvoir : Vous pouvez vous téléporter de &number& blocs toutes les §b&timer&§f en faisant clique droit sur une plume\n",
         "incendiary_madness": "Vous pouvez déclencher ure folie incendiaire toutes les §b&timer&§f avec §b/ww folie§f. Elle vous procure Vitesse I et mets le feu au joueur que vous tapez pendant §b&timer2&§f",
-        "should_be_invisible": "Vous devez être invisible pour vous téléporter",
         "perform_madness": "Vous venez de déclencher votre folie incendiaire. Elle vous procure Vitesse I pendant §b&timer& et mets en feu les joueurs que vous tapez ",
         "colldown_end": "Vous pouvez de nouveau déclencher votre folie incendiaire avec §b/ww folie",
         "colldown_end_tp": "Vous pouvez de nouveau vous téléporter avec votre plume",
@@ -831,7 +837,6 @@
         "display": "Chasseur",
         "description": "A chaque fois que vous tuez un loup, les dégâts que vous infligez aux Loups sont définitivement augmentés",
         "effect": "&number& force contre les loups",
-        "stuff": "Vous avez le droit à un arc Puissance §b&number&",
         "description_shoot": "A votre mort, vous pouvez tirer sur un joueur de votre choix autre que votre tueur",
         "items": "3 fils, 64 flèches, un livre power III",
         "command": "tirer",
@@ -873,18 +878,17 @@
         }
       },
       "necromancer": {
-        "description": "Après activation de votre pouvoir, vous ressuscitez le 1er joueur qui meurt à moins de §b&number&§f blocs et lui volez de la vie progressivement",
-        "power_disable": "Pour activer votre pouvoir §b/ww active§f",
-        "power_enable": "§aPouvoir activé§f, Progression prochain coeur : §b&number&§f %",
+        "description": "Vous marquez tous les joueurs proches de vous dans un rayon de §b&number&§f blocs pendant 5 minutes (avec §6☠§f en suffix). Une fois dans la partie, lorque un joueur marqué meurt, le joueur mort ressuscite en tant que mort-vivant et vous lui volez de la vie progressivement",
+        "power_enable": "Progression prochain coeur : §b&number&§f / 600",
         "display": "Nécromancien",
-        "command": "active",
         "perform": "Vous venez de ressusciter §b&player&§f grâce à votre pouvoir",
         "new_victim": "Votre victime est maintenant &player&",
         "necromancer_steal": "Le Nécromancien vous vole un coeur permanent",
         "steal": "Vous récuperez un coeur permanent supplémentaire sur §b&player&",
-        "use": "Vous venez d'activer votre pouvoir",
         "resurrection": "Vous venez d'être ressuscité par un §bNécromancien§f",
-        "necromancer_death": "Le §bNécromancien§f vient de mourir, vous récuperez un coeur permanent toutes les trois minutes",
+        "progress": "§fVol de coeur : (§b&number&§f / 600)",
+        "pve": "Votre mort vivant est mort §aPVE§f, vous récuperez votre pouvoir",
+        "mark": "§6☠§f",
         "configurations": {
           "distance": "Champ d'action du Nécromancien §b&number&§f blocs"
         }
@@ -1977,6 +1981,14 @@
       "incomplete_list": {
         "name": "Liste à Trous",
         "description": "Les membres du camp des Loups n’ont dans leur liste \nque le pseudo de la moitié de leurs coéquipiers. \nTout joueur qui rejoint le camp des Loups par la suite\n aura accès à l’intégralité de la liste\n et fera partie de la liste chez tous ses coéquipiers."
+      },
+      "love_at_first_sight": {
+        "name": "Coup de foudre",
+        "description": "Le couple associé au Cupidon devient un couple amnésique"
+      },
+      "cupid_indecisive": {
+        "name": "Cupidon Indécis",
+        "description": "Lorsque cet événement est activé, il affecte la configuration de la partie \n: si le Couple est censé être aléatoire, il sera choisi par le Cupidon,\n s’il est censé être choisi, il sera aléatoire."
       }
     },
     "check": {
@@ -2005,6 +2017,7 @@
       "cancel": "Votre pouvoir a été annulé",
       "transformation": "Votre transformation a été annulé",
       "invalid_key": "Clef invalide",
+      "night": "Cette commande ne peut être effectuée que la nuit",
       "state": "Vous ne pouvez pas faire cette commande à ce moment de la partie"
     },
     "update": {
@@ -2056,6 +2069,13 @@
       "effect": "§bEffet : §f&effect&\n",
       "disable": "Vos pouvoirs ont été désactivés\n",
       "equipment": "§bÉquipement : §f&equipment&\n",
+      "equipments_attribut": {
+        "sharpness_iron": "Limite d'épée en fer (§b+&number&§f)",
+        "sharpness_diamond": "Limite d'épée en diamant (§b+&number&§f)",
+        "protection_iron": "Limite de protection équipements en fer (§b+&number&§f)",
+        "protection_diamond": "Limite de protection équipements en diamant (§b+&number&§f)",
+        "power": "Limite de puissance de l'arc (§b+&number&§f)"
+      },
       "command": "§bCommande : §f&command&\n",
       "transformed": "Transformé : §b&on&\n",
       "no": "Non",

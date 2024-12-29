@@ -12,6 +12,7 @@ import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.twin.AutoTwinEvent;
@@ -25,9 +26,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,13 +39,13 @@ import java.util.stream.Collectors;
         category = Category.VILLAGER,
         attribute = RoleAttribute.VILLAGER,
         requireDouble = true,
-        timers = {@Timer(key = TimerBase.TWIN_DURATION,
+        timers = { @Timer(key = TimerBase.TWIN_DURATION,
                 defaultValue = 1800, meetUpValue = 300,
                 decrementAfterRole = true,
-                onZero = AutoTwinEvent.class)},
-        configValues = {@IntValue(key = IntValueBase.TWIN_DISTANCE,
+                onZero = AutoTwinEvent.class) },
+        configValues = { @IntValue(key = IntValueBase.TWIN_DISTANCE,
                 defaultValue = 50,
-                meetUpValue = 50, step = 5, item = UniversalMaterial.GREEN_WOOL)})
+                meetUpValue = 50, step = 5, item = UniversalMaterial.GREEN_WOOL) })
 public class Twin extends RoleImpl {
 
     @Nullable
@@ -141,14 +140,8 @@ public class Twin extends RoleImpl {
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .findFirst()
                 .ifPresent(playerWW -> {
-                    Location twinLocation = playerWW.getLocation();
-                    Location playerLocation = this.getPlayerWW().getLocation();
 
-                    if (twinLocation.getWorld() != playerLocation.getWorld()) {
-                        return;
-                    }
-
-                    if (twinLocation.distance(playerLocation) < game.getConfig().getValue(IntValueBase.TWIN_DISTANCE) * 2) {
+                    if (playerWW.distance(getPlayerWW()) < game.getConfig().getValue(IntValueBase.TWIN_DISTANCE) * 2) {
                         this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.twin.too_near");
                         return;
                     }
@@ -158,13 +151,7 @@ public class Twin extends RoleImpl {
                             .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                             .filter(playerWW1 -> !playerWW1.equals(playerWW))
                             .filter(playerWW1 -> !playerWW1.equals(this.getPlayerWW()))
-                            .filter(playerWW1 -> {
-                                Location location = playerWW1.getLocation();
-
-                                return twinLocation.getWorld() == location.getWorld() &&
-                                        twinLocation.distance(location) < game.getConfig().getValue(IntValueBase.TWIN_DISTANCE);
-
-                            })
+                            .filter(playerWW1 -> playerWW.distance(playerWW1) < game.getConfig().getValue(IntValueBase.TWIN_DISTANCE))
                             .collect(Collectors.toList());
 
                     if (game.getRandom().nextBoolean()) {

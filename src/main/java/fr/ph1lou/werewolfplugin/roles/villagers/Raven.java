@@ -9,6 +9,7 @@ import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
@@ -25,7 +26,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -133,33 +133,33 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
     @EventHandler
     public void onVoteEvent(VoteResultEvent event) {
 
-        if(this.vote == null){
+        if (this.vote == null) {
             return;
         }
 
-        if (!event.getPlayerWW().equals(this.vote)) return;
+        if (!this.vote.equals(event.getPlayerWW())) return;
 
         Player player = Bukkit.getPlayer(this.getPlayerUUID());
 
-        if(player == null){
+        if (player == null) {
             return;
         }
 
-        Utils.sendParticleArrow(player, Utils.getAngle(this.getPlayerWW().getLocation(), this.vote.getLocation()));
+        Utils.sendParticleArrow(player.getLocation(), player, Utils.getAngle(this.getPlayerWW().getLocation(), this.vote.getLocation()), 20);
     }
 
     @EventHandler
     public void onVoteEndEvent(VoteResultEvent event) {
 
-        if(event.getPlayerWW() == null){
+        if (event.getPlayerWW() == null) {
             return;
         }
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
-        if(!Objects.equals(game.getVoteManager().getPlayerVote(this.getPlayerWW()).orElse(null), event.getPlayerWW())){
+        if (!Objects.equals(game.getVoteManager().getPlayerVote(this.getPlayerWW()).orElse(null), event.getPlayerWW())) {
             return;
         }
 

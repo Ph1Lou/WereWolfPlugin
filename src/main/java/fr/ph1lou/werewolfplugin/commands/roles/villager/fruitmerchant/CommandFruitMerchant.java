@@ -17,7 +17,6 @@ import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.roles.villagers.FruitMerchant;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
 import java.util.HashMap;
@@ -45,12 +44,7 @@ public class CommandFruitMerchant implements ICommandRole {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
-                .filter(iPlayerWW -> {
-                    Location location = iPlayerWW.getLocation();
-                    return location.getWorld() == playerWW.getLocation().getWorld() &&
-                            location.distance(playerWW.getLocation()) <
-                                    game.getConfig().getValue(IntValueBase.FRUIT_MERCHANT_DISTANCE);
-                })
+                .filter(iPlayerWW -> iPlayerWW.distance(playerWW) < game.getConfig().getValue(IntValueBase.FRUIT_MERCHANT_DISTANCE))
                 .collect(Collectors.toSet());
 
         fruitMerchant.setPower(false);
@@ -75,7 +69,7 @@ public class CommandFruitMerchant implements ICommandRole {
                                 .map(IPlayerWW::getName)
                                 .collect(Collectors.joining(", "))),
                 Formatter.timer(Utils.conversion(game.getConfig()
-                        .getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN) / 2)));
+                                                         .getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN) / 2)));
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
             if (playerWW.isState(StatePlayer.ALIVE)) {

@@ -14,6 +14,7 @@ import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.flute_player.AllPlayerEnchantedEvent;
@@ -32,9 +33,7 @@ import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -48,7 +47,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.ShapedRecipe;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -57,12 +55,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Role(key = RoleBase.FLUTE_PLAYER,
         category = Category.NEUTRAL,
         attribute = RoleAttribute.NEUTRAL,
+        sharpnessDiamondModifier = 1,
+        sharpnessIronModifier = 1,
         timers = @Timer(key = TimerBase.FLUTE_PLAYER_PROGRESS, defaultValue = 6, meetUpValue = 3, step = 1),
         configValues = @IntValue(key = IntValueBase.FLUTE_PLAYER_DISTANCE,
                 defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.LIGHT_BLUE_WOOL))
@@ -195,7 +194,6 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         if (!flute.equals(event.getInventory().getResult())) {
             return;
         }
-
         IPlayerWW playerWW = game.getPlayerWW(event.getView()
                 .getPlayer().getUniqueId()).orElse(null);
 
@@ -245,14 +243,11 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
         AtomicBoolean recoverResistance = new AtomicBoolean(false);
 
-        Bukkit.getOnlinePlayers().stream()
-                .filter(player1 -> !this.getPlayerUUID().equals(player1.getUniqueId()))
-                .filter(player1 -> this.checkDistance(this.getPlayerWW().getLocation(), player1) || this.checkDistance(player1))
-                .map(Entity::getUniqueId)
-                .map(game::getPlayerWW)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+        game.getPlayersWW()
+                .stream()
+                .filter(player1 -> !this.getPlayerWW().equals(player1))
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .filter(player1 -> this.checkDistance(this.getPlayerWW(), player1) || this.checkDistance(player1))
                 .peek(playerWW -> {
                     if (this.affectedPlayer.contains(playerWW)) {
                         recoverResistance.set(true);
@@ -299,15 +294,14 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         }
     }
 
-    private boolean checkDistance(Player player1) {
+    private boolean checkDistance(IPlayerWW player1) {
         return this.flutedPlayer.stream()
-                .anyMatch(player -> checkDistance(player.getLocation(), player1));
+                .anyMatch(player -> checkDistance(player, player1));
     }
 
-    private boolean checkDistance(Location player, Player player1) {
-        return player.getWorld() == player1.getWorld() &&
-                player.distance(player1.getLocation())
-                        < game.getConfig().getValue(IntValueBase.FLUTE_PLAYER_DISTANCE);
+    private boolean checkDistance(IPlayerWW player, IPlayerWW player1) {
+        return player.distance(player1)
+               < game.getConfig().getValue(IntValueBase.FLUTE_PLAYER_DISTANCE);
     }
 
     @EventHandler
@@ -426,9 +420,9 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     private void checkStrength() {
 
         if (!this.all && this.affectedPlayer
-                .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).count() + 1
-                == game.getPlayersCount()) {
+                                 .stream()
+                                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).count() + 1
+                         == game.getPlayersCount()) {
             this.all = true;
             Bukkit.getPluginManager().callEvent(new AllPlayerEnchantedEvent(this.getPlayerWW()));
             this.recoverPotionEffect();

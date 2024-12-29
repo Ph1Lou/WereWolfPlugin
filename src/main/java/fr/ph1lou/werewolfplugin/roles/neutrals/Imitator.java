@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
@@ -29,7 +30,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -40,6 +40,8 @@ import java.util.List;
         auraDescriptionSpecialUseCase = "werewolf.roles.imitator.aura",
         defaultAura = Aura.NEUTRAL,
         category = Category.NEUTRAL,
+        sharpnessIronModifier = 1,
+        sharpnessDiamondModifier = 1,
         attribute = RoleAttribute.NEUTRAL)
 public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
@@ -122,7 +124,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
             if (this.getPlayerWW().isState(StatePlayer.ALIVE)
-                    && hasPower()) {
+                && hasPower()) {
                 imitatorRecoverRole(playerWW);
             } else {
                 BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(
@@ -177,8 +179,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
         if (this.isSolitary()) {
             roleClone.setSolitary(true);
-        }
-        else if (roleClone.isSolitary()){
+        } else if (roleClone.isSolitary()) {
             if (this.getPlayerWW().getMaxHealth() < 30) {
                 this.getPlayerWW().addPlayerMaxHealth(Math.max(0, Math.min(8, 30 - this.getPlayerWW().getMaxHealth())));
             }

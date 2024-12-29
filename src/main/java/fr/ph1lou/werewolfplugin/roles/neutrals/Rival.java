@@ -10,10 +10,8 @@ import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
-import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AmnesiacLoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.LoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
@@ -53,11 +51,14 @@ import java.util.stream.Collectors;
         defaultAura = Aura.DARK,
         category = Category.NEUTRAL,
         attribute = RoleAttribute.NEUTRAL,
-        timers = {@Timer(key = TimerBase.RIVAL_DURATION,
+        sharpnessIronModifier = 1,
+        sharpnessDiamondModifier = 1,
+        powerModifier = 1,
+        timers = { @Timer(key = TimerBase.RIVAL_DURATION,
                 defaultValue = 2400, meetUpValue = 5 * 60,
                 decrementAfterRole = true,
-                onZero = RivalEvent.class)},
-        requireRoles = {RoleBase.CUPID})
+                onZero = RivalEvent.class) },
+        requireRoles = { RoleBase.CUPID })
 public class Rival extends RoleNeutral implements IPower {
 
     @Nullable
@@ -90,10 +91,8 @@ public class Rival extends RoleNeutral implements IPower {
                 .setDescription(game.translate("werewolf.roles.rival.description",
                         Formatter.timer(Utils.conversion(
                                 Math.max(0, game.getConfig().getTimerValue(TimerBase.ROLE_DURATION))
-                                        + game.getConfig().getTimerValue(TimerBase.RIVAL_DURATION)))))
+                                + game.getConfig().getTimerValue(TimerBase.RIVAL_DURATION)))))
                 .setItems(game.translate("werewolf.roles.rival.item"))
-                .setEquipments(game.translate("werewolf.roles.rival.extra",
-                        Formatter.number(game.getConfig().getLimitPowerBow() + 1)))
                 .build();
     }
 
@@ -132,18 +131,6 @@ public class Rival extends RoleNeutral implements IPower {
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.rival.lover",
                 Formatter.format("&role1&", lovers.isEmpty() ? "" : game.translate(lovers.get(0).getRole().getKey())),
                 Formatter.format("&role2&", lovers.size() == 2 ? game.translate(lovers.get(1).getRole().getKey()) : ""));
-    }
-
-    @EventHandler
-    public void onEnchantment(EnchantmentEvent event) {
-
-        if (!event.getPlayerWW().equals(getPlayerWW())) return;
-
-        if (event.getEnchants().containsKey(UniversalEnchantment.POWER)) {
-            event.getFinalEnchants().put(UniversalEnchantment.POWER,
-                    Math.min(event.getEnchants().get(UniversalEnchantment.POWER),
-                            game.getConfig().getLimitPowerBow() + 1));
-        }
     }
 
     @EventHandler
@@ -192,7 +179,7 @@ public class Rival extends RoleNeutral implements IPower {
 
         String loverKey = event.getLover().getKey();
         if (loverKey.equals(LoverBase.LOVER) ||
-                loverKey.equals(LoverBase.AMNESIAC_LOVER)) {
+            loverKey.equals(LoverBase.AMNESIAC_LOVER)) {
             List<? extends IPlayerWW> lovers = event.getLover().getLovers();
             if (lovers.size() >= 2) {
                 loverDeath(lovers.get(0), lovers.get(1));

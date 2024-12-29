@@ -26,13 +26,11 @@ import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,11 +40,11 @@ import java.util.stream.Collectors;
         category = Category.VILLAGER,
         attribute = RoleAttribute.INFORMATION,
         configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.BEAR_TRAINER_EVERY_OTHER_DAY)),
-        configValues = {@IntValue(key = IntValueBase.BEAR_TRAINER_DISTANCE,
+        configValues = { @IntValue(key = IntValueBase.BEAR_TRAINER_DISTANCE,
                 defaultValue = 50,
                 meetUpValue = 50,
                 step = 5,
-                item = UniversalMaterial.BROWN_WOOL)})
+                item = UniversalMaterial.BROWN_WOOL) })
 public class BearTrainer extends RoleImpl {
 
     private int dayNumber = -8;
@@ -76,16 +74,10 @@ public class BearTrainer extends RoleImpl {
         if (!isAbilityEnabled()) return;
 
         Location oursLocation = player.getLocation();
-        Set<IPlayerWW> growled = Bukkit.getOnlinePlayers()
+        Set<IPlayerWW> growled = game.getPlayersWW()
                 .stream()
-                .filter(player1 -> player1.getWorld().equals(oursLocation.getWorld())
-                        && oursLocation.distance(player1.getLocation())
-                        < game.getConfig().getValue(IntValueBase.BEAR_TRAINER_DISTANCE))
-                .map(Entity::getUniqueId)
-                .map(game::getPlayerWW)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .filter(playerWW -> playerWW.distance(getPlayerWW()) < game.getConfig().getValue(IntValueBase.BEAR_TRAINER_DISTANCE))
                 .map(IPlayerWW::getRole)
                 .filter(roles -> roles.isDisplayCamp(Camp.WEREWOLF.getKey()) || (roles.getDisplayCamp().equals(roles.getCamp().getKey()) && roles.isWereWolf()))
                 .map(IRole::getPlayerWW)

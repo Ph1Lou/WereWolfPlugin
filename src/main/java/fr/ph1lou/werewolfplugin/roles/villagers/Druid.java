@@ -20,10 +20,7 @@ import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,7 +28,6 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -39,8 +35,8 @@ import java.util.stream.Collectors;
         defaultAura = Aura.DARK,
         category = Category.VILLAGER,
         attribute = RoleAttribute.MINOR_INFORMATION,
-        configValues = {@IntValue(key = IntValueBase.DRUID_DISTANCE,
-                defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.CYAN_WOOL)})
+        configValues = { @IntValue(key = IntValueBase.DRUID_DISTANCE,
+                defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.CYAN_WOOL) })
 public class Druid extends RoleImpl implements IPower {
 
     private boolean power = true;
@@ -102,20 +98,11 @@ public class Druid extends RoleImpl implements IPower {
 
         this.setPower(false);
 
-        World world = this.getPlayerWW().getLocation().getWorld();
-
-        List<IPlayerWW> playerWWS = Bukkit.getOnlinePlayers()
+        List<IPlayerWW> playerWWS = game.getPlayersWW()
                 .stream()
-                .map(Entity::getUniqueId)
-                .filter(uuid -> !uuid.equals(this.getPlayerUUID()))
-                .map(game::getPlayerWW)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .filter(playerWW1 -> {
-                    Location location = playerWW1.getLocation();
-                    return location.getWorld() == world &&
-                            location.distance(this.getPlayerWW().getLocation()) < game.getConfig().getValue(IntValueBase.DRUID_DISTANCE);
-                })
+                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+                .filter(playerWW1 -> !playerWW1.equals(this.getPlayerWW()))
+                .filter(playerWW1 -> playerWW1.distance(this.getPlayerWW()) < game.getConfig().getValue(IntValueBase.DRUID_DISTANCE))
                 .filter(playerWW1 -> playerWW1.getRole().getAura() == Aura.DARK)
                 .collect(Collectors.toList());
 

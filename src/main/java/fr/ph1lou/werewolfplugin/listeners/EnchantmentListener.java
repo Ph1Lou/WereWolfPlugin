@@ -1,5 +1,7 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
+import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
 import fr.ph1lou.werewolfapi.events.game.utils.EnchantmentEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -10,7 +12,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import fr.ph1lou.werewolfapi.enums.UniversalEnchantment;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -67,6 +68,8 @@ public class EnchantmentListener implements Listener {
 
         if (playerWW == null) return result;
 
+        Role role = playerWW.getRole().getClass().getAnnotation(Role.class);
+
         for (Enchantment e : enchant.keySet()) {
 
             result.removeEnchantment(e);
@@ -78,28 +81,28 @@ public class EnchantmentListener implements Listener {
             } else if (UniversalEnchantment.PROTECTION.getEnchantment().equals(e)) {
 
                 if (item.getType().equals(Material.DIAMOND_BOOTS) ||
-                        item.getType().equals(Material.DIAMOND_LEGGINGS) ||
-                        item.getType().equals(Material.DIAMOND_HELMET) ||
-                        item.getType().equals(Material.DIAMOND_CHESTPLATE)) {
+                    item.getType().equals(Material.DIAMOND_LEGGINGS) ||
+                    item.getType().equals(Material.DIAMOND_HELMET) ||
+                    item.getType().equals(Material.DIAMOND_CHESTPLATE)) {
                     tempEnchant.put(e, Math.min(enchant.get(e),
-                            game.getConfig().getLimitProtectionDiamond()));
+                            game.getConfig().getLimitProtectionDiamond() + role.protectionDiamondModifier()));
                 } else {
                     tempEnchant.put(e, Math.min(enchant.get(e),
-                            game.getConfig().getLimitProtectionIron()));
+                            game.getConfig().getLimitProtectionIron() + role.protectionIronModifier()));
                 }
             } else if (UniversalEnchantment.SHARPNESS.getEnchantment().equals(e)) {
                 if (item.getType().equals(Material.DIAMOND_SWORD)) {
                     tempEnchant.put(e, Math.min(enchant.get(e),
-                            game.getConfig().getLimitSharpnessDiamond()));
+                            game.getConfig().getLimitSharpnessDiamond() + role.sharpnessDiamondModifier()));
                 } else {
                     tempEnchant.put(e, Math.min(enchant.get(e),
-                            Math.min(enchant.get(e), game.getConfig().getLimitSharpnessIron())));
+                            Math.min(enchant.get(e), game.getConfig().getLimitSharpnessIron() + role.sharpnessIronModifier())));
                 }
             } else if (UniversalEnchantment.PUNCH.getEnchantment().equals(e)) {
                 tempEnchant.put(e, Math.min(enchant.get(e), game.getConfig().getLimitPunch()));
 
             } else if (UniversalEnchantment.POWER.getEnchantment().equals(e)) {
-                tempEnchant.put(e, Math.min(enchant.get(e), game.getConfig().getLimitPowerBow()));
+                tempEnchant.put(e, Math.min(enchant.get(e), game.getConfig().getLimitPowerBow() + role.powerModifier()));
             } else if (UniversalEnchantment.DEPTH_STRIDER.getEnchantment().equals(e)) {
                 tempEnchant.put(e, Math.min(enchant.get(e), game.getConfig().getLimitDepthStrider()));
             } else tempEnchant.put(e, enchant.get(e));
@@ -113,7 +116,7 @@ public class EnchantmentListener implements Listener {
         } else {
             tempEnchant.entrySet().removeIf(enchantmentIntegerEntry -> enchantmentIntegerEntry.getValue() == 0);
             if (!tempEnchant.isEmpty()) {
-                    result = new ItemStack(Material.ENCHANTED_BOOK);
+                result = new ItemStack(Material.ENCHANTED_BOOK);
                 EnchantmentStorageMeta meta = (EnchantmentStorageMeta) result.getItemMeta();
                 if (meta != null) {
                     for (Enchantment e : tempEnchant.keySet())
@@ -126,5 +129,4 @@ public class EnchantmentListener implements Listener {
         }
         return result;
     }
-
 }

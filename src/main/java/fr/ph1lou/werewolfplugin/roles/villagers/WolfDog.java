@@ -35,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 @Role(key = RoleBase.WOLF_DOG,
         defaultAura = Aura.DARK,
         category = Category.VILLAGER,
+        auraDescriptionSpecialUseCase = "werewolf.roles.wolf_dog.aura",
         attribute = RoleAttribute.HYBRID)
 public class WolfDog extends RoleImpl implements ITransformed, IPower {
 

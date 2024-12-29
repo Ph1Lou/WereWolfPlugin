@@ -8,8 +8,12 @@ import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.events.ActionBarEvent;
+import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
+import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.necromancer.NecromancerResurrectionEvent;
@@ -17,34 +21,37 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
-import fr.ph1lou.werewolfapi.role.interfaces.IPower;
+import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IProgress;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 
 @Role(key = RoleBase.NECROMANCER,
         defaultAura = Aura.DARK,
         category = Category.NEUTRAL,
         attribute = RoleAttribute.NEUTRAL,
-        configValues = {@IntValue(key = IntValueBase.NECROMANCER_DISTANCE,
-                defaultValue = 70, meetUpValue = 70, step = 5, item = UniversalMaterial.BLACK_WOOL)})
-public class Necromancer extends RoleNeutral implements IPower, IProgress {
+        sharpnessIronModifier = 1,
+        sharpnessDiamondModifier = 1,
+        configValues = { @IntValue(key = IntValueBase.NECROMANCER_DISTANCE,
+                defaultValue = 20, meetUpValue = 20, step = 5, item = UniversalMaterial.BLACK_WOOL) })
+public class Necromancer extends RoleNeutral implements IProgress, IAffectedPlayers {
 
-    private boolean power = true;
     @Nullable
     private IPlayerWW playerWW;
     private float progress = 0;
     private int health = 0;
+    private final List<IPlayerWW> markedPlayers = new ArrayList<>();
 
     public Necromancer(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -55,9 +62,9 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.necromancer.description",
                         Formatter.number(game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE))))
-                .setPower(game.translate(this.power ? "werewolf.roles.necromancer.power_disable" :
-                                "werewolf.roles.necromancer.power_enable",
-                        Formatter.number((int) Math.min(100, Math.floor(this.getProgress())))))
+                .setPower(game.translate(
+                        "werewolf.roles.necromancer.power_enable",
+                        Formatter.number((int) this.getProgress())))
                 .build();
     }
 
@@ -73,10 +80,6 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
             return;
         }
 
-        if (this.hasPower()) {
-            return;
-        }
-
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
@@ -85,9 +88,13 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
             return;
         }
 
+        if (!this.getAffectedPlayers().contains(event.getPlayerWW())) {
+            return;
+        }
+
         if (event.getPlayerWW().getDeathLocation()
-                .distance(this.getPlayerWW().getLocation())
-                > game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE)) {
+                    .distance(this.getPlayerWW().getLocation())
+            > game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE)) {
             return;
         }
 
@@ -104,6 +111,10 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
 
         this.playerWW = event.getPlayerWW();
 
+        this.clearAffectedPlayer();
+
+        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
+
         this.playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.necromancer.resurrection");
 
         event.setCancelled(true);
@@ -115,67 +126,39 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
     }
 
     @EventHandler
-    public void OnDeath(FinalDeathEvent event) {
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
+    public void onDeadAliveDeath(FinalDeathEvent event) {
 
         if (!event.getPlayerWW().equals(this.playerWW)) {
             return;
         }
 
-        this.playerWW = event.getPlayerWW().getLastKiller().orElse(null);
-
-        if (this.getPlayerWW().equals(this.playerWW)) {
-            this.playerWW = Bukkit.getOnlinePlayers().stream()
-                    .map(Entity::getUniqueId)
-                    .filter(uuid -> !this.getPlayerUUID().equals(uuid))
-                    .map(game::getPlayerWW)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
-                    .min(Comparator.comparingDouble(value -> {
-                        if (event.getPlayerWW().getDeathLocation().getWorld() != value.getLocation().getWorld()) {
-                            return Integer.MAX_VALUE;
-                        }
-                        return event.getPlayerWW().getDeathLocation().distance(value.getLocation());
-                    }))
-                    .orElse(null);
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
         }
 
-        if (this.playerWW != null) {
+        if (event.getPlayerWW().getLastKiller().isPresent()) {
+
+            IPlayerWW killer = event.getPlayerWW().getLastKiller().get();
+
+            if (killer.equals(getPlayerWW())) {
+                return;
+            }
+
+            this.playerWW = killer;
+
             this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.necromancer.new_victim",
                     Formatter.player(this.playerWW.getName()));
+
+        } else {
+            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.necromancer.pve");
+            this.playerWW = null;
         }
-    }
+        this.progress = 0;
 
-    @EventHandler
-    public void OnNecromancerDeath(FinalDeathEvent event) {
-
-        if (!event.getPlayerWW().equals(this.getPlayerWW())) {
-            return;
-        }
-
-        if (this.playerWW == null) {
-            return;
-        }
-
-        if (!this.playerWW.isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
-        this.playerWW.sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.necromancer.necromancer_death");
-
-        int task = BukkitUtils.scheduleSyncRepeatingTask(game, () -> playerWW.addPlayerMaxHealth(2), 20 * 60 * 3, 20 * 60 * 3);
-        BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getScheduler().cancelTask(task), this.health * 20 * 61 * 3L);
     }
 
     @Override
     public void second() {
-
-        if (this.playerWW == null) {
-            return;
-        }
 
         if (!this.isAbilityEnabled()) {
             return;
@@ -189,6 +172,26 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
             return;
         }
 
+        if (this.playerWW == null) {
+
+            int distanceConfig = game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE);
+
+            game.getPlayersWW()
+                    .stream()
+                    .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
+                    .filter(playerWW1 -> !playerWW1.equals(getPlayerWW()))
+                    .filter(iPlayerWW -> iPlayerWW.distance(getPlayerWW()) < distanceConfig)
+                    .forEach(iPlayerWW -> {
+                        if (!this.getAffectedPlayers().contains(iPlayerWW)) {
+                            this.addAffectedPlayer(iPlayerWW);
+                            BukkitUtils.scheduleSyncDelayedTask(game, () -> this.removeAffectedPlayer(iPlayerWW), 5 * 60 * 20);
+                            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
+                        }
+                    });
+
+            return;
+        }
+
         if (!this.playerWW.isState(StatePlayer.ALIVE)) {
             return;
         }
@@ -196,17 +199,17 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
         double distance = this.playerWW.getLocation()
                 .distance(this.getPlayerWW().getLocation());
 
-        if (distance >
-                game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE)) {
-            return;
+        if (distance < 15) {
+            this.progress += 4;
+        } else if (distance < 45) {
+            this.progress += 3;
+        } else if (distance < 75) {
+            this.progress += 2;
+        } else if (distance < 100) {
+            this.progress += 1;
         }
 
-        this.progress += game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE) /
-                Math.max(distance, game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE) / 4f)
-                *
-                1 / 6f;
-
-        if (this.progress >= 100) {
+        if (this.progress >= 600) {
             this.progress = 0;
             health++;
             this.playerWW.removePlayerMaxHealth(2);
@@ -217,14 +220,52 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
         }
     }
 
-    @Override
-    public void setPower(boolean power) {
-        this.power = power;
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onNameTagUpdate(UpdatePlayerNameTagEvent event) {
+
+        if (!event.getTargetUUID().equals(getPlayerUUID())) {
+            return;
+        }
+
+        game.getPlayerWW(event.getPlayerUUID()).ifPresent(iPlayerWW -> {
+            if (this.getAffectedPlayers().contains(iPlayerWW)) {
+                event.setSuffix(" " + game.translate("werewolf.roles.necromancer.mark") + " " + event.getSuffix());
+            }
+        });
     }
 
-    @Override
-    public boolean hasPower() {
-        return this.power;
+
+    @EventHandler
+    public void onActionBar(ActionBarEvent event) {
+
+        if (!this.game.isState(StateGame.GAME)) return;
+
+        UUID uuid = event.getPlayerUUID();
+
+        if (!getPlayerUUID().equals(uuid)) {
+            return;
+        }
+
+        IPlayerWW playerWW = this.game.getPlayerWW(uuid).orElse(null);
+
+        StringBuilder sb = new StringBuilder(event.getActionBar());
+
+        if (this.playerWW != null) {
+            sb
+                    .append(" ")
+                    .append(game.translate("werewolf.roles.necromancer.progress", Formatter.number((int) this.progress)))
+                    .append(" ");
+        }
+        Player player = Bukkit.getPlayer(uuid);
+
+        if (player == null) return;
+
+        if (playerWW == null) return;
+
+        if (!playerWW.isState(StatePlayer.ALIVE)) return;
+
+        event.setActionBar(sb.toString());
+
     }
 
     @Override
@@ -235,5 +276,25 @@ public class Necromancer extends RoleNeutral implements IPower, IProgress {
     @Override
     public void setProgress(float progress) {
         this.progress = progress;
+    }
+
+    @Override
+    public void addAffectedPlayer(IPlayerWW playerWW) {
+        this.markedPlayers.add(playerWW);
+    }
+
+    @Override
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
+        this.markedPlayers.remove(playerWW);
+    }
+
+    @Override
+    public void clearAffectedPlayer() {
+        this.markedPlayers.clear();
+    }
+
+    @Override
+    public List<? extends IPlayerWW> getAffectedPlayers() {
+        return this.markedPlayers;
     }
 }

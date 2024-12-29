@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
         timers = {
                 @Timer(key = WolfFleas.TIMER_START, defaultValue = 50 * 60, meetUpValue = 10 * 60, step = 30),
                 @Timer(key = WolfFleas.PERIOD, defaultValue = 100 * 60, meetUpValue = 40 * 60, step = 30),
-                @Timer(key = WolfFleas.DURATION, defaultValue = 3 * 60, meetUpValue = 3 * 60, step = 10)})
+                @Timer(key = WolfFleas.DURATION, defaultValue = 3 * 60, meetUpValue = 3 * 60, step = 10) })
 public class WolfFleas extends ListenerWerewolf {
     public static final String TIMER_START = "werewolf.random_events.wolf_fleas.timer_start";
     public static final String PERIOD = "werewolf.random_events.wolf_fleas.period";
@@ -61,8 +61,7 @@ public class WolfFleas extends ListenerWerewolf {
                 .filter(playerWW -> this.fleas.keySet().stream()
                         .filter(ww -> ww.isState(StatePlayer.ALIVE))
                         .filter(this::hasFleas)
-                        .anyMatch(ww -> ww.getLocation().getWorld() == playerWW.getLocation().getWorld() &&
-                                ww.getLocation().distance(playerWW.getLocation()) <= this.getGame().getConfig().getValue(WolfFleas.DISTANCE))
+                        .anyMatch(ww -> ww.distance(playerWW) <= this.getGame().getConfig().getValue(WolfFleas.DISTANCE))
                 )
                 .forEach(p -> {
                     this.contamination.put(p, this.contamination.getOrDefault(p, 0) + 1);
@@ -78,10 +77,10 @@ public class WolfFleas extends ListenerWerewolf {
                 .filter(p -> {
                     Player player = Bukkit.getPlayer(p.getUUID());
                     return player != null &&
-                            player.getInventory().getHelmet() == null
-                            && player.getInventory().getChestplate() == null
-                            && player.getInventory().getLeggings() == null
-                            && player.getInventory().getBoots() == null;
+                           player.getInventory().getHelmet() == null
+                           && player.getInventory().getChestplate() == null
+                           && player.getInventory().getLeggings() == null
+                           && player.getInventory().getBoots() == null;
                 })
                 .filter(p -> p.getEyeLocation().getBlock().getType() == Material.WATER)
                 .forEach(p -> {
