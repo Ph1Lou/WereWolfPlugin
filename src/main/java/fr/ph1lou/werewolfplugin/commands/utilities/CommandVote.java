@@ -20,7 +20,7 @@ import java.util.UUID;
         descriptionKey = "werewolf.commands.player.vote.description",
         statesPlayer = StatePlayer.ALIVE,
         statesGame = StateGame.GAME,
-        argNumbers = {0, 1})
+        argNumbers = { 0, 1 })
 public class CommandVote implements ICommand {
 
     @Override
@@ -32,7 +32,7 @@ public class CommandVote implements ICommand {
 
         if (playerWW == null) return;
 
-        if (game.getConfig().getTimerValue(TimerBase.VOTE_BEGIN) > 0) {
+        if (game.getConfig().getTimerValue(TimerBase.VOTE_START) > 0) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.vote_not_yet_activated");
             return;
         }
@@ -52,7 +52,7 @@ public class CommandVote implements ICommand {
             return;
         }
 
-        if(args.length == 0){
+        if (args.length == 0) {
             VoteGui.getInventory(player).open(player);
             return;
         }

@@ -15,10 +15,8 @@ import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -85,20 +83,5 @@ public class Assassin extends RoleNeutral {
     public void disableAbilitiesRole() {
 
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, this.getKey(), 0));
-    }
-
-    @EventHandler
-    public void onPlayerDeathByAssassin(PlayerDeathEvent event) {
-
-        if (event.getEntity().getKiller() == null) return;
-
-        Player killer = event.getEntity().getKiller();
-
-        if (!killer.getUniqueId().equals(this.getPlayerUUID())) {
-            return;
-        }
-
-        getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED, 1200, 0, this.getKey()));
-        getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.ABSORPTION, 1200, 0, this.getKey()));
     }
 }

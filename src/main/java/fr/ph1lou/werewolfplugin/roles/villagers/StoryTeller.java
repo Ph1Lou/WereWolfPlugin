@@ -40,8 +40,7 @@ public class StoryTeller extends RoleImpl {
 
     @EventHandler
     public void onActionableStory(ActionableStoryEvent event) {
-        game.getPlayerWW(event.getPlayer())
-                .ifPresent(players::add);
+        players.add(event.getPlayer());
     }
 
     @EventHandler

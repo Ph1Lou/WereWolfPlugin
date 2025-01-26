@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration(config = @ConfigurationBasic(key = ConfigBase.HIDDEN_ROLES,
-        loreKey = "werewolf.configurations.hidden_roles.description"))
+        loreKey = "werewolf.configurations.hidden_roles.description", incompatibleConfigs = ConfigBase.HONOR))
 public class HiddenRoles extends ListenerWerewolf {
 
     @Nullable
@@ -64,7 +64,7 @@ public class HiddenRoles extends ListenerWerewolf {
         }
 
         if (event.getTargetPlayer().equals(this.playerWW)) {
-            return; //la prêtresse voit les vrais rôles
+            return; //le rôle pivot voit les vrais rôles
         }
 
         if (event.getTargetPlayer().equals(event.getPlayerWW())) {
@@ -74,7 +74,7 @@ public class HiddenRoles extends ListenerWerewolf {
         IPlayerWW playerWW = event.getTargetPlayer();
 
         if (playerWW.getRole().isNeutral()) {
-            if (this.playerWW.isState(StatePlayer.ALIVE) && getGame().getRandom().nextFloat() > 0.95) {
+            if (getGame().getRandom().nextFloat() > 0.95) {
                 event.setRole("werewolf.configurations.hidden_roles.magic");
             }
         } else if (getGame().getRandom().nextFloat() < 0.8) {

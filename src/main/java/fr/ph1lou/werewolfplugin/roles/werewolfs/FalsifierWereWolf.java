@@ -17,10 +17,13 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Role(key = RoleBase.FALSIFIER_WEREWOLF,
         auraDescriptionSpecialUseCase = "werewolf.roles.falsifier_werewolf.aura",
@@ -51,9 +54,19 @@ public class FalsifierWereWolf extends RoleWereWolf {
             return;
         }
 
-        IPlayerWW displayWW = Utils.autoSelect(game, getPlayerWW());
+        List<IPlayerWW> displayWWs = game.getPlayersWW()
+                .stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .filter(playerWW -> !playerWW.getRole().isWereWolf())
+                .collect(Collectors.toList());
 
-        IRole roles = displayWW.getRole();
+        Collections.shuffle(displayWWs);
+
+        if (displayWWs.isEmpty()) {
+            return;
+        }
+
+        IRole roles = displayWWs.get(0).getRole();
         NewDisplayRole newDisplayRole = new NewDisplayRole(this.getPlayerWW(), roles.getKey(), roles.getCamp().getKey());
         Bukkit.getPluginManager().callEvent(newDisplayRole);
 

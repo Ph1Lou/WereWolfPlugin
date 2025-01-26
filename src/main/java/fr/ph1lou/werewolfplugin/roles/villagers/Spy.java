@@ -82,12 +82,9 @@ public class Spy extends RoleImpl implements IAffectedPlayers, IPower {
 
     @EventHandler
     public void onActionableStory(ActionableStoryEvent event) {
-        game.getPlayerWW(event.getPlayer())
-                .ifPresent(iPlayerWW -> {
-                    if (iPlayerWW.equals(this.playerWW)) {
-                        this.count++;
-                    }
-                });
+        if (event.getPlayer().equals(this.playerWW)) {
+            this.count++;
+        }
     }
 
     @EventHandler

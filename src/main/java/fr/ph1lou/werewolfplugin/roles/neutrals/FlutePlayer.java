@@ -194,7 +194,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         if (!flute.equals(event.getInventory().getResult())) {
             return;
         }
-        IPlayerWW playerWW = game.getPlayerWW(event.getView()
+        IPlayerWW playerWW = game.getPlayerWW(event.getView() //todo Caused by: java.lang.IncompatibleClassChangeError: Found class org.bukkit.inventory.InventoryView, but interface was expected
                 .getPlayer().getUniqueId()).orElse(null);
 
         if (playerWW == null) {

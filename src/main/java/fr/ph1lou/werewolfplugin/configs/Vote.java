@@ -15,6 +15,7 @@ import fr.ph1lou.werewolfapi.enums.VoteStatus;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteBeginEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
+import fr.ph1lou.werewolfapi.events.game.vote.VoteStartEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -29,12 +30,12 @@ import org.bukkit.event.EventPriority;
         defaultValue = true,
         meetUpValue = true),
         timers = {
-                @Timer(key = TimerBase.VOTE_BEGIN,
+                @Timer(key = TimerBase.VOTE_START,
                         defaultValue = 40 * 60,
                         meetUpValue = 6 * 60,
                         decrement = true,
                         step = 30,
-                        onZero = VoteBeginEvent.class),
+                        onZero = VoteStartEvent.class),
                 @Timer(key = TimerBase.VOTE_DURATION,
                         defaultValue = 60 * 3,
                         meetUpValue = 60,
@@ -61,7 +62,7 @@ public class Vote extends ListenerWerewolf {
     }
 
     @EventHandler
-    public void onVoteBegin(VoteBeginEvent event) {
+    public void onVoteStartEvent(VoteStartEvent event) {
         this.getGame().getVoteManager().setStatus(VoteStatus.NOT_IN_PROGRESS);
         this.getGame().getConfig().setScenario(ScenarioBase.NO_POISON, false);
     }
@@ -99,11 +100,11 @@ public class Vote extends ListenerWerewolf {
 
         int duration = game.getConfig().getTimerValue(TimerBase.VOTE_DURATION);
 
-        voteManager.resetVote();
         Bukkit.getOnlinePlayers().forEach(Sound.CHICKEN_HURT::play);
         Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.configurations.vote.vote_time",
                 Formatter.timer(Utils.conversion(duration))));
         voteManager.setStatus(VoteStatus.IN_PROGRESS);
+        Bukkit.getPluginManager().callEvent(new VoteBeginEvent());
         BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new VoteEndEvent()), duration * 20L);
     }
 }

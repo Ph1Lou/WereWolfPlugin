@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -34,7 +35,7 @@ import java.util.List;
         category = Category.VILLAGER,
         auraDescriptionSpecialUseCase = "werewolf.roles.priestess.aura",
         attribute = RoleAttribute.INFORMATION,
-        configValues = {@IntValue(key = IntValueBase.PRIESTESS_DISTANCE, defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.BLUE_WOOL)})
+        configValues = { @IntValue(key = IntValueBase.PRIESTESS_DISTANCE, defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.BLUE_WOOL) })
 public class Priestess extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -100,7 +101,8 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.roles.priestess.description"))
+                .setDescription(game.translate(game.getConfig().isConfigActive(ConfigBase.HONOR) ?
+                        "werewolf.roles.priestess.description_with_honor" : "werewolf.roles.priestess.description"))
                 .setItems(game.translate("werewolf.roles.priestess.items"))
                 .build();
     }
@@ -116,12 +118,26 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
         return Aura.LIGHT;
     }
 
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onAnnounceDeath(AnnouncementDeathEvent event) {
+
+        if (!event.getTargetPlayer().equals(getPlayerWW())) {
+            return;
+        }
+
+        if (!isAbilityEnabled()) return;
+
+        event.setFormat("werewolf.announcement.death_message_with_role");
+        event.setRole(event.getPlayerWW().getRole().getKey());
+        event.setPlayerName(event.getPlayerWW().getName());
+    }
+
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void sendDeathMessage(AnnouncementDeathEvent event) {
+    public void onAnnouncementDeathEvent(AnnouncementDeathEvent event) {
 
-        if (event.getTargetPlayer().equals(this.getPlayerWW())) {
-            return; //la prêtresse voit les vrais rôles
+        if (game.getConfig().isConfigActive(ConfigBase.HONOR)) {
+            return;
         }
 
         if (event.getTargetPlayer().equals(event.getPlayerWW())) {
@@ -131,7 +147,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
         IPlayerWW playerWW = event.getTargetPlayer();
 
         if (playerWW.getRole().isNeutral()) {
-            if (this.getPlayerWW().isState(StatePlayer.ALIVE) && game.getRandom().nextFloat() > 0.95) {
+            if (game.getRandom().nextFloat() > 0.95) {
                 event.setRole("werewolf.roles.priestess.magic");
             }
         } else if (game.getRandom().nextFloat() < 0.8) {

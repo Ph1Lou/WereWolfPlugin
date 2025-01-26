@@ -10,6 +10,7 @@ import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.enums.VoteStatus;
+import fr.ph1lou.werewolfapi.events.game.vote.AbsentionistListVoteEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.MultiVoteResultEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class VoteManager implements Listener, IVoteManager {
     private static final Integer MIN_VOTE = 3;
@@ -60,6 +62,7 @@ public class VoteManager implements Listener, IVoteManager {
             }
         }
         this.currentStatus = VoteStatus.NOT_IN_PROGRESS;
+        this.resetVote();
     }
 
     public void setOneVote(IPlayerWW voterWW, IPlayerWW vote) {
@@ -87,8 +90,7 @@ public class VoteManager implements Listener, IVoteManager {
         voterWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.configurations.vote.perform_vote", Formatter.player(vote.getName()));
     }
 
-
-    public void resetVote() {
+    private void resetVote() {
         this.voters.clear();
         this.votes.clear();
     }
@@ -109,14 +111,20 @@ public class VoteManager implements Listener, IVoteManager {
     }
 
     @Override
-
     public void setPlayerVote(IPlayerWW voterWW, IPlayerWW iPlayerWW1) {
         this.voters.put(voterWW, iPlayerWW1);
     }
 
+    @Override
     public void triggerResult() {
 
         List<IPlayerWW> results = this.getResult(this.votes);
+
+        Bukkit.getPluginManager().callEvent(new AbsentionistListVoteEvent(game.getPlayersWW()
+                .stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .filter(playerWW -> !this.voters.containsKey(playerWW))
+                .collect(Collectors.toList())));
 
         if (results.isEmpty()) {
             BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new VoteResultEvent(null)),
@@ -167,7 +175,7 @@ public class VoteManager implements Listener, IVoteManager {
                 playersVote.add(playerWW);
             }
         }
-        if (maxVote < MIN_VOTE) {
+        if (maxVote < MIN_VOTE && !((GameManager) game).isDebug()) {
             return Collections.emptyList();
         }
         return playersVote;

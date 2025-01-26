@@ -43,9 +43,8 @@ public class CommandPriestess implements ICommandRole {
             return;
         }
 
-        if (playerWW.getLocation().getWorld() != playerArg.getWorld() ||
-                playerWW.getLocation().distance(playerArg.getLocation()) >
-                        game.getConfig().getValue(IntValueBase.PRIESTESS_DISTANCE)) {
+        if (playerWW.distance(playerWW1) >
+            game.getConfig().getValue(IntValueBase.PRIESTESS_DISTANCE)) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.priestess.distance",
                     Formatter.number(game.getConfig().getValue(IntValueBase.PRIESTESS_DISTANCE)));
             return;

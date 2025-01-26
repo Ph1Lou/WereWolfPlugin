@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
+import fr.ph1lou.werewolfapi.events.game.honor.HonorChangeEvent;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -78,6 +79,7 @@ public class PlayerWW implements IPlayerWW {
     @Nullable
     private Location deathLocation;
     private final Set<IPlayerWW> metPlayers = new HashSet<>();
+    private int honor = 0;
 
     public PlayerWW(GameManager api, Player player) {
         this.spawn = player.getWorld().getSpawnLocation();
@@ -85,6 +87,7 @@ public class PlayerWW implements IPlayerWW {
         this.name = player.getName();
         this.role = new Villager(api, this);
         this.game = api;
+        this.honor = game.getRandom().nextInt(-1, 2);
         try {
             this.mojangUUID = getUUID(name);
         } catch (Exception ignored) {
@@ -145,6 +148,16 @@ public class PlayerWW implements IPlayerWW {
         }
 
         this.disconnectedChangeHealth += health;
+    }
+
+    @Override
+    public void addPlayerAbsorptionHealth(double health) {
+
+        Player player = Bukkit.getPlayer(this.uuid);
+
+        if (player != null) {
+            VersionUtils.getVersionUtils().addPlayerAbsorptionHealth(player, health);
+        }
     }
 
     @Override
@@ -737,6 +750,29 @@ public class PlayerWW implements IPlayerWW {
             return this.getLocation().distance(playerWW.getLocation());
         }
         return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public int getHonor() {
+        return this.honor;
+    }
+
+    @Override
+    public void modifyHonor(int honorModifier) {
+
+        int oldHonor = this.honor;
+
+        this.honor += honorModifier;
+
+        if (this.honor > 3) {
+            this.honor = 3;
+        } else if (this.honor < -3) {
+            this.honor = -3;
+        }
+
+        if (oldHonor != this.honor) {
+            Bukkit.getPluginManager().callEvent(new HonorChangeEvent(this, oldHonor));
+        }
     }
 }
 

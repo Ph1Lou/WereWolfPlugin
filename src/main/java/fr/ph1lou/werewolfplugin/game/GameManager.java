@@ -4,6 +4,7 @@ import fr.mrmicky.fastboard.FastBoard;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.StateGame;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.LoadEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
@@ -38,7 +39,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -135,6 +135,7 @@ public class GameManager implements WereWolfAPI {
                 Formatter.player(player.getName())));
         player.setGameMode(GameMode.ADVENTURE);
         IPlayerWW playerWW = new PlayerWW(this, player);
+
         this.playersWW.put(uuid, playerWW);
         Bukkit.getPluginManager().callEvent(new FinalJoinEvent(playerWW));
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(player));

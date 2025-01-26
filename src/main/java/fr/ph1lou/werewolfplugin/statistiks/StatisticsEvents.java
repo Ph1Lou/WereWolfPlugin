@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.statistiks;
 
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Primitives;
+import fr.ph1lou.werewolfapi.annotations.SpyEvent;
 import fr.ph1lou.werewolfapi.annotations.TellableStoryEvent;
 import fr.ph1lou.werewolfapi.annotations.statistics.StatisticsEvent;
 import fr.ph1lou.werewolfapi.annotations.statistics.StatisticsExtraInfo;
@@ -9,9 +10,11 @@ import fr.ph1lou.werewolfapi.annotations.statistics.StatisticsExtraInt;
 import fr.ph1lou.werewolfapi.annotations.statistics.StatisticsPlayer;
 import fr.ph1lou.werewolfapi.annotations.statistics.StatisticsTarget;
 import fr.ph1lou.werewolfapi.annotations.statistics.StatisticsTargets;
+import fr.ph1lou.werewolfapi.events.game.actionablestory.ActionableStoryEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StartEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.WinEvent;
+import fr.ph1lou.werewolfapi.events.game.spy.SpyInfoEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.statistics.impl.GameReview;
@@ -92,6 +95,10 @@ public class StatisticsEvents implements Listener {
                                             event,
                                             StatisticsTargets.class);
 
+                                    boolean tellableStory = eventClass.getClazz().getAnnotation(TellableStoryEvent.class) != null;
+                                    boolean spyEvent = eventClass.getClazz().getAnnotation(SpyEvent.class) != null;
+
+
                                     this.currentGameReview
                                             .addRegisteredAction(new RegisteredAction(statisticsEvent.key(),
                                                     playerWW,
@@ -99,7 +106,15 @@ public class StatisticsEvents implements Listener {
                                                     api.getTimer(),
                                                     extraInfo,
                                                     extraInt)
-                                                    .setActionableStory(eventClass.getClazz().getAnnotation(TellableStoryEvent.class) != null));
+                                                    .setActionableStory(tellableStory)
+                                                    .setSpyEvent(spyEvent));
+
+                                    if (tellableStory && playerWW != null) {
+                                        Bukkit.getPluginManager().callEvent(new ActionableStoryEvent(playerWW, statisticsEvent.key()));
+                                    }
+                                    if (spyEvent && playerWW != null && targetsWW != null && !targetsWW.isEmpty()) {
+                                        targetsWW.forEach(target -> Bukkit.getPluginManager().callEvent(new SpyInfoEvent(playerWW, target, statisticsEvent.key())));
+                                    }
 
                                     if (eventClass.getClazz().isAssignableFrom(WinEvent.class)) {
                                         this.currentGameReview.end(main.getWereWolfAPI(), extraInfo, targetsWW);
@@ -136,7 +151,7 @@ public class StatisticsEvents implements Listener {
                     try {
                         Object object = method.invoke(event);
 
-                        if(object == null){
+                        if (object == null) {
                             return null;
                         }
                         Class<?> objectClass = object.getClass();
@@ -145,8 +160,8 @@ public class StatisticsEvents implements Listener {
                         }
 
                         if (returnedClazz.isInterface() &&
-                                Arrays.stream(objectClass.getInterfaces())
-                                        .anyMatch(aClass -> aClass.isAssignableFrom(returnedClazz))) {
+                            Arrays.stream(objectClass.getInterfaces())
+                                    .anyMatch(aClass -> aClass.isAssignableFrom(returnedClazz))) {
                             return (T) object;
                         }
 

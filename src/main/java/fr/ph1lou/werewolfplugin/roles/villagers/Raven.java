@@ -21,6 +21,7 @@ import fr.ph1lou.werewolfapi.role.impl.RoleWithLimitedSelectionDuration;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.Utils;
+import fr.ph1lou.werewolfapi.vote.IVoteManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -125,7 +126,8 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        game.getVoteManager().setVotes(event.getTargetWW(), 1 + game.getVoteManager().getVotes(event.getTargetWW()));
+        IVoteManager voteManager = game.getVoteManager();
+        voteManager.setVotes(event.getTargetWW(), 1 + voteManager.getVotes(event.getTargetWW()));
 
         vote = event.getTargetWW();
     }

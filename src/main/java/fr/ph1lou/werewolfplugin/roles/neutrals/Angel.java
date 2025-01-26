@@ -359,8 +359,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                 playerWW));
         if (isChoice(AngelForm.FALLEN_ANGEL)) {
 
-
-            if (playerWW.getLastMinutesDamagedPlayer().contains(this.getPlayerWW()) ||
+            if (event.getLastStrikers().contains(this.getPlayerWW()) ||
                 (playerWW.getLastKiller().isPresent() &&
                  this.getPlayerWW().equals(playerWW.getLastKiller().get()))) {
                 Bukkit.getPluginManager().callEvent(

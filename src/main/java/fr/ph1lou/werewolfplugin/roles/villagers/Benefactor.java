@@ -42,7 +42,7 @@ public class Benefactor extends RoleImpl implements IAffectedPlayers {
 
         if (this.affectedPlayers.size() < 3) return;
 
-        if (this.game.getTimer() % (3 * 60) != 0) return;
+        if (this.game.getTimer() % 60 != 0) return;
 
         this.getPlayerWW().addPlayerHealth(2);
     }

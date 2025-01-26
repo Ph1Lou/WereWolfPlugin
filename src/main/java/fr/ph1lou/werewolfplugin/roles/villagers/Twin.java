@@ -190,7 +190,7 @@ public class Twin extends RoleImpl {
 
                         this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.twin.role_near",
                                 Formatter.number(game.getConfig().getValue(IntValueBase.TWIN_DISTANCE)),
-                                Formatter.role(game.translate(twinRoleEvent.getTargetWW().getRole().getKey())));
+                                Formatter.role(game.translate(twinRoleEvent.getTargetWW().getRole().getDisplayRole())));
                     }
                 });
     }

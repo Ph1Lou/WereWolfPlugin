@@ -15,6 +15,7 @@ import fr.ph1lou.werewolfapi.enums.UpdateCompositionReason;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.UpdateCompositionEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
+import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -23,6 +24,7 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
@@ -77,6 +79,21 @@ public class FearFulWerewolf extends RoleWereWolf {
         }
 
         event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    public void onFirstDeath(FirstDeathEvent event) {
+        if (!event.getPlayerWW().equals(this.getPlayerWW())) {
+            return;
+        }
+
+        event.setCancelled(true);
+
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            if (this.getPlayerWW().isState(StatePlayer.JUDGEMENT)) {
+                game.death(getPlayerWW());
+            }
+        }, 14 * 20L);
     }
 
     @EventHandler

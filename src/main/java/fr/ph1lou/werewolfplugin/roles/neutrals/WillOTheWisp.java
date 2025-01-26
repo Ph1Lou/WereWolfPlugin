@@ -71,7 +71,6 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
     public final static String INCENDIARY_MADNESS = "incendiary_madness";
     private boolean invisible = false;
     private int use = 0;
-    private int timer = -1;
     private boolean power = true;
 
     private boolean canBeTeleported = true;
@@ -314,22 +313,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                         Integer.MAX_VALUE, 1,
                         this.getKey()));
 
-                this.timer = BukkitUtils.scheduleSyncDelayedTask(game, () -> {
-                    if (this.isInvisible()) {
-                        this.setInvisible(false);
-                        this.getPlayerWW().addPotionModifier(PotionModifier
-                                .remove(UniversalPotionEffectType.INVISIBILITY,
-                                        this.getKey(),
-                                        0));
-                        this.getPlayerWW().addPotionModifier(PotionModifier
-                                .remove(UniversalPotionEffectType.ABSORPTION,
-                                        this.getKey(),
-                                        1));
-                        Bukkit.getPluginManager().callEvent(new InvisibleEvent(this.getPlayerWW(), false));
-                        Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
-                        this.timer = -1;
-                    }
-                }, 6000);
+
                 if (isInfected() && game.isDay(Day.NIGHT)) {
                     this.getPlayerWW().addPotionModifier(PotionModifier
                             .remove(UniversalPotionEffectType.STRENGTH,
@@ -357,10 +341,7 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
                     .remove(UniversalPotionEffectType.ABSORPTION,
                             this.getKey(),
                             1));
-            if (this.timer != -1) {
-                Bukkit.getScheduler().cancelTask(this.timer);
-                this.timer = -1;
-            }
+
             this.setInvisible(false);
             Bukkit.getPluginManager().callEvent(
                     new InvisibleEvent(this.getPlayerWW(), false));

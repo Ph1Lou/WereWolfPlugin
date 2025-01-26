@@ -2,10 +2,14 @@ package fr.ph1lou.werewolfplugin.listeners;
 
 
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
+import fr.ph1lou.werewolfapi.events.werewolf.RequestStrengthRateEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,7 +19,6 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -37,14 +40,23 @@ public class PatchPotions implements Listener {
         Player damager = (Player) event.getDamager();
         Player player = (Player) event.getEntity();
 
+        IPlayerWW damagerWW = game.getPlayerWW(damager.getUniqueId()).orElse(null);
+
+        if (damagerWW == null) {
+            return;
+        }
+
         if (damager.hasPotionEffect(UniversalPotionEffectType.STRENGTH.getPotionEffectType())) {
+
+            RequestStrengthRateEvent requestStrengthRateEvent = new RequestStrengthRateEvent(damagerWW, game.getConfig().getStrengthRate());
+            Bukkit.getPluginManager().callEvent(requestStrengthRateEvent);
 
             if (damager.getActivePotionEffects().stream()
                         .filter(potionEffect -> potionEffect.getType().equals(UniversalPotionEffectType.STRENGTH.getPotionEffectType())).map(PotionEffect::getAmplifier).findFirst().orElse(-1) == 0) {
                 event.setDamage(event.getDamage() / 2.3f *
-                        (1 + game.getConfig().getStrengthRate() / 100f));
+                                (1 + requestStrengthRateEvent.getStrengthRate() / 100f));
             } else event.setDamage(event.getDamage() *
-                    (1 + game.getConfig().getStrengthRate() / 100f));
+                                   (1 + requestStrengthRateEvent.getStrengthRate() / 100f));
         }
         if (player.hasPotionEffect(UniversalPotionEffectType.RESISTANCE.getPotionEffectType())) {
             if (game.getConfig().getResistanceRate() >= 100) {

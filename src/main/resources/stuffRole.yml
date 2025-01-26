@@ -49,7 +49,7 @@ werewolf.roles.little_girl.display:
   0:
     ==: org.bukkit.inventory.ItemStack
     type: TNT
-    amount: 5
+    amount: 3
 werewolf.roles.protector.display:
   0:
     potion_data: 16389
@@ -89,12 +89,6 @@ werewolf.roles.chatty_seer.display:
     ==: org.bukkit.inventory.ItemStack
     type: OBSIDIAN
     amount: 4
-werewolf.roles.guard.display:
-  0:
-    potion_data: 16393
-    item:
-      ==: org.bukkit.inventory.ItemStack
-      type: POTION
 werewolf.roles.seer.display:
   0:
     ==: org.bukkit.inventory.ItemStack

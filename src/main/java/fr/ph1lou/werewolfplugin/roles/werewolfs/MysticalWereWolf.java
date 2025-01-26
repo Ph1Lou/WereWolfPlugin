@@ -86,6 +86,6 @@ public class MysticalWereWolf extends RoleWereWolf {
 
         this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.mystical_werewolf.werewolf_death",
                 Formatter.player(roleWW.getName()),
-                Formatter.role(game.translate(roleWW.getRole().getKey())));
+                Formatter.role(game.translate(roleWW.getRole().getDisplayRole())));
     }
 }

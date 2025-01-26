@@ -165,7 +165,7 @@
       },
       "little_girl": {
         "display": "Petite Fille",
-        "item": "5 Tnt",
+        "item": "3 Tnt",
         "effect": "Invisible en enlevant votre armure la nuit.",
         "description": "Lorsque vous êtes invisible, vous laissez des particules bleues derrière vous visibles par les Loups Garous Perfides. Inversement vous pouvez les repérer par leurs particules rouges. Vous pouvez également voir le chat des Loups Garous",
         "remove_armor": "C'est la nuit, enlevez votre armure pour devenir invisible",
@@ -338,13 +338,13 @@
       },
       "assassin": {
         "display": "Assassin",
-        "effect": "Force le Jour, 1 minute de Vitesse et 2 coeur d'absorption après chaque kill",
+        "effect": "Force le Jour",
         "items": "Un livre Sharpness III, un livre Protection III et un livre Puissance III",
         "limit": "limite d'armure, d'arc et d'épée (+1)"
       },
       "falsifier_werewolf": {
         "display": "Loup Garou Feutré",
-        "description": "§fVous avez un rôle d’affichage différent chaque jour parmi ceux encore en vie pour tromper le Village.",
+        "description": "§fVous avez un rôle d’affichage différent, qui n'est pas du camp des §cLoup Garou§f, chaque jour parmi ceux encore en vie pour tromper le Village.",
         "role": "§fRole d'affichage Actuel : §b&role&\n",
         "display_role_message": "Votre Rôle d'affichage aujourd'hui est §b&role&",
         "aura": "Le §cLoup-Garou Feutré§f obtient l'aura par défaut de son rôle de façade"
@@ -417,6 +417,7 @@
       "priestess": {
         "display": "Prêtresse",
         "description": "Le Jour, Vous pouvez connaître le camp d'un joueur en échange de deux coeurs permanents. Tant que vous êtes en vie, les Loups Garous ont 20% de chance de voir le rôles des joueurs morts contre 80% pour les Villageois. Quand vous mourrez, ces probabilités s'inversent. Les Neutres ont 95% de chance de le voir",
+        "description_with_honor": "Le Jour, Vous pouvez connaître le camp d'un joueur en échange de deux coeurs permanents. Si vous mourrez, les probabilités de voir les rôles s'inversent. Les Neutres ont 95% de chance de le voir",
         "command": "spec",
         "items": "Quatre Obsidiennes",
         "magic": "§kCoucou",
@@ -457,12 +458,11 @@
       "guard": {
         "display": "Garde",
         "description": "Chaque matin, vous pouvez décider de protéger un joueur. S'il se fait tuer par un Loup Garou, il ressuscitera et vous ne pourrez plus utiliser votre pouvoir. Vous ne pouvez protéger qu'une fois chaque joueur",
-        "items": "Une Potion Splash de Force",
         "command": "proteger",
         "perform": "Vous venez de protéger §b&player&",
         "protected": "Le garde vient de vous protéger, si vous vous faites tuer par un §aLoup Garou§f vous ressusciterez",
         "protect": "Le garde vous avait protégé, de ce fait vous ressuscitez",
-        "resurrection": "La personne que vous avez protégé vient de ressusciter. Vous n'avez plus de pouvoirs",
+        "resurrection": "La personne que vous avez protégé vient de ressusciter. Vous n'avez plus de pouvoirs, mais vous obtenez résistance pendant deux jours",
         "message": "Protégez un joueur pour la journée §b/ww proteger§r vous avez §b&timer&",
         "aura": "Se faire protéger par le §bGarde§f donne une aura §bLumineuse"
       },
@@ -526,7 +526,7 @@
       "mischievous_werewolf": {
         "display": "Loup Garou Perfide",
         "items": "5 Tnt",
-        "effect": "Invisibilité en enlevant votre armure la nuit",
+        "effect": "Invisibilité et Force en enlevant votre armure la nuit",
         "description": "Lorsque vous êtes invisible, vous laissez des particules rouges derrière vous qui sont visibles par les §bPetites Filles§f. Inversement vous pouvez les repérer par leurs particules bleues."
       },
       "elder": {
@@ -682,7 +682,7 @@
       "will_o_the_wisp": {
         "display": "Feu Follet",
         "description": "Invisible : vous pouvez voir les particules bleues de la petite fille et rouges du loup perfide. Au début de la nuit, vous recevez le rôle d'un joueur situé à moins de §b&number&§f blocs de vous",
-        "effects": "Invisibilité et 4 coeurs d'absorption pendant 5 minutes en retirant son armure",
+        "effects": "Invisibilité et 4 coeurs d'absorption en retirant son armure",
         "command_incendiary": "folie",
         "feather": "Pouvoir : Vous pouvez vous téléporter de &number& blocs toutes les §b&timer&§f en faisant clique droit sur une plume\n",
         "incendiary_madness": "Vous pouvez déclencher ure folie incendiaire toutes les §b&timer&§f avec §b/ww folie§f. Elle vous procure Vitesse I et mets le feu au joueur que vous tapez pendant §b&timer2&§f",
@@ -1227,7 +1227,8 @@
           "role": "§b&player&§r est §b&role&",
           "transformed": "Transformé : §b&on&",
           "yes": "oui",
-          "no": "non"
+          "no": "non",
+          "honor": "Son honneur est de : §b&number&"
         },
         "final_heal": {
           "command": "fh",
@@ -1768,6 +1769,12 @@
       "thiercelieux": {
         "name": "Thiercelieux",
         "description": "Les morts sont annoncées le matin"
+      },
+      "honor": {
+        "name": "Honneur",
+        "description": "Active le système d'honneur",
+        "list_near_player": "Les joueurs à moins de §b80 blocs§f sont : §b&list&",
+        "spy_info": "Un joueur a eu une info sur votre §brôle§f"
       }
     },
     "scenarios": {

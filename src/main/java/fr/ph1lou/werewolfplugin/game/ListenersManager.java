@@ -12,6 +12,7 @@ import fr.ph1lou.werewolfplugin.listeners.ChatListener;
 import fr.ph1lou.werewolfplugin.listeners.CycleListener;
 import fr.ph1lou.werewolfplugin.listeners.DamagesListener;
 import fr.ph1lou.werewolfplugin.listeners.DeathListener;
+import fr.ph1lou.werewolfplugin.listeners.DebugListener;
 import fr.ph1lou.werewolfplugin.listeners.EnchantmentListener;
 import fr.ph1lou.werewolfplugin.listeners.InvisibleListener;
 import fr.ph1lou.werewolfplugin.listeners.PatchPotions;
@@ -55,6 +56,8 @@ public class ListenersManager implements IListenersManager {
         this.listeners.add(new DeathListener(this.game));
         this.listeners.add(new DamagesListener(this.game));
         this.listeners.add(new InvisibleListener(this.game));
+        this.listeners.add(new DebugListener(this.game));
+
         VoteManager voteManager = new VoteManager(this.game);
         this.game.setVoteManager(voteManager);
         this.listeners.add(voteManager);
