@@ -4,7 +4,6 @@ import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.random_events.MysanthropeSisterEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
@@ -34,9 +33,8 @@ public class MisanthropeSister extends ListenerWerewolf {
     @EventHandler
     public void onWerewolfList(WereWolfListEvent event) {
         WereWolfAPI game = this.getGame();
-        List<IPlayerWW> sisters = game.getPlayersWW()
+        List<IPlayerWW> sisters = game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.getRole().isKey(RoleBase.SISTER))
                 .collect(Collectors.toList());
 

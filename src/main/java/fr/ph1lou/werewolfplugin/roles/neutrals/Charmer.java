@@ -180,9 +180,8 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
         if (this.playerWW == null) {
             this.setPower(false);
 
-            List<IPlayerWW> playerWWS = game.getPlayersWW()
+            List<IPlayerWW> playerWWS = game.getAlivePlayersWW()
                     .stream()
-                    .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                     .filter(playerWW1 -> !playerWW1.equals(this.getPlayerWW()))
                     .collect(Collectors.toList());
             Collections.shuffle(playerWWS, game.getRandom());

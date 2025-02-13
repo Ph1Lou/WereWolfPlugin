@@ -1,9 +1,9 @@
 package fr.ph1lou.werewolfplugin.commands.roles.werewolf;
 
-import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
+import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfCanSpeakInChatEvent;
@@ -14,23 +14,16 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfplugin.configs.WerewolfChat;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
-@PlayerCommand(key = "werewolf.commands.player.ww_chat.command",
-        descriptionKey = "werewolf.commands.player.ww_chat.description",
+@RoleCommand(key = "werewolf.commands.player.ww_chat.command",
+        roleKeys = {},
         statesPlayer = StatePlayer.ALIVE,
-        statesGame = StateGame.GAME)
-public class CommandWereWolfChat implements ICommand {
+        statesGame = StateGame.GAME,
+        argNumbers = {})
+public class CommandWereWolfChat implements ICommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
-
-        UUID uuid = player.getUniqueId();
-        IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
-
-        if (playerWW == null) return;
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
 
         if (!game.getConfig().isConfigActive(ConfigBase.WEREWOLF_CHAT)) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.commands.player.ww_chat.disable");
@@ -55,13 +48,11 @@ public class CommandWereWolfChat implements ICommand {
 
                     game.getWerewolfChatHandler().addMessage(playerWW, sb.toString());
 
-                    game.getPlayersWW()
-                            .stream()
-                            .filter(playerWW1 -> !playerWW1.isState(StatePlayer.DEATH))
+                    game.getAlivePlayersWW()
                             .forEach(playerWW1 -> {
-                        WereWolfChatEvent wereWolfChatEvent = new WereWolfChatEvent(playerWW, playerWW1, sb.toString());
-                        Bukkit.getPluginManager().callEvent(wereWolfChatEvent);
-                    });
+                                WereWolfChatEvent wereWolfChatEvent = new WereWolfChatEvent(playerWW, playerWW1, sb.toString());
+                                Bukkit.getPluginManager().callEvent(wereWolfChatEvent);
+                            });
                     Bukkit.getPluginManager().callEvent(new WereWolfSiteChatEvent(playerWW, sb.toString()));
                 } else {
                     playerWW.sendMessageWithKey(Prefix.RED, "werewolf.commands.player.ww_chat.timer");

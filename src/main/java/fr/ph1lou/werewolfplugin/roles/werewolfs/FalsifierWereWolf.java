@@ -54,9 +54,8 @@ public class FalsifierWereWolf extends RoleWereWolf {
             return;
         }
 
-        List<IPlayerWW> displayWWs = game.getPlayersWW()
+        List<IPlayerWW> displayWWs = game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().isWereWolf())
                 .collect(Collectors.toList());
 

@@ -5,7 +5,6 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfplugin.Main;
@@ -49,10 +48,9 @@ public class ChoiceGui implements InventoryProvider {
 
 
         game.getPlayerWW(player.getUniqueId())
-                .ifPresent(playerWW -> game.getPlayersWW()
+                .ifPresent(playerWW -> game.getAlivePlayersWW()
                         .stream()
                         .sorted((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()))
-                        .filter(playerWW1 -> !playerWW1.isState(StatePlayer.DEATH))
                         .forEach(targetWW -> items.add(ClickableItem.of((
                                 new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
                                         .setHead(targetWW.getName(),

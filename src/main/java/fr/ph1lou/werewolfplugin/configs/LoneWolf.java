@@ -6,7 +6,6 @@ import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.configs.LoneWolfEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -42,8 +41,8 @@ public class LoneWolf extends ListenerWerewolf {
 
         WereWolfAPI game = this.getGame();
 
-        List<IRole> roleWWs = game.getPlayersWW().stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+        List<IRole> roleWWs = game.getAlivePlayersWW()
+                .stream()
                 .map(IPlayerWW::getRole)
                 .filter(IRole::isWereWolf)
                 .filter(iRole -> !iRole.isNeutral())

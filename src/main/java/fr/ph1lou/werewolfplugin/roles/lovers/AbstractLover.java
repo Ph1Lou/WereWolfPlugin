@@ -66,7 +66,7 @@ public abstract class AbstractLover extends LoverBaseImpl implements ILover {
 
         if (!lovers.contains(playerWW)) return;
 
-        StringBuilder sb = new StringBuilder(event.getActionBar());
+        StringBuilder sb = event.getActionBar();
         Player player = Bukkit.getPlayer(uuid);
 
         if (player == null) return;
@@ -76,9 +76,6 @@ public abstract class AbstractLover extends LoverBaseImpl implements ILover {
         if (!playerWW.isState(StatePlayer.ALIVE)) return;
 
         buildActionbarLover(player, sb, lovers);
-
-        event.setActionBar(sb.toString());
-
     }
 
     private void buildActionbarLover(Player player, StringBuilder sb, List<IPlayerWW> list) {

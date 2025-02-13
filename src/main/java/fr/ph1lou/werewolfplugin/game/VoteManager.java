@@ -7,7 +7,6 @@ package fr.ph1lou.werewolfplugin.game;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.enums.VoteStatus;
 import fr.ph1lou.werewolfapi.events.game.vote.AbsentionistListVoteEvent;
@@ -120,9 +119,8 @@ public class VoteManager implements Listener, IVoteManager {
 
         List<IPlayerWW> results = this.getResult(this.votes);
 
-        Bukkit.getPluginManager().callEvent(new AbsentionistListVoteEvent(game.getPlayersWW()
+        Bukkit.getPluginManager().callEvent(new AbsentionistListVoteEvent(game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !this.voters.containsKey(playerWW))
                 .collect(Collectors.toList())));
 
@@ -204,15 +202,9 @@ public class VoteManager implements Listener, IVoteManager {
                 Formatter.player(playerWW.getName()),
                 Formatter.number(vote == 0 ? MIN_VOTE : vote)));
 
-        game.getPlayersWW()
-                .stream()
-                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
-                .forEach(playerWW1 -> {
-                    if (playerWW1.getLocation().getWorld() == playerWW.getLocation().getWorld()) {
-                        playerWW1.sendMessageWithKey(Prefix.YELLOW,
-                                "werewolf.configurations.vote.distance_voted",
-                                Formatter.number(((int) playerWW1.getLocation().distance(playerWW.getLocation())) / 100 * 100 + 100));
-                    }
-                });
+        game.getAlivePlayersWW()
+                .forEach(playerWW1 -> playerWW1.sendMessageWithKey(Prefix.YELLOW,
+                        "werewolf.configurations.vote.distance_voted",
+                        Formatter.number(((int) playerWW1.getLocation().distance(playerWW.getLocation())) / 100 * 100 + 100)));
     }
 }

@@ -5,7 +5,6 @@ import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.SwapEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -16,6 +15,7 @@ import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,16 +46,13 @@ public class Swap extends ListenerWerewolf {
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
             if (isRegister()) {
 
-                List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
-                        .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                        .collect(Collectors.toList());
+                List<IPlayerWW> playerWWS = new ArrayList<>(game.getAlivePlayersWW());
 
                 if (playerWWS.isEmpty()) return;
 
                 IPlayerWW playerWW1 = playerWWS.get((int) Math.floor(game.getRandom().nextDouble() * playerWWS.size()));
 
-                playerWWS = game.getPlayersWW().stream()
-                        .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                playerWWS = game.getAlivePlayersWW().stream()
                         .filter(playerWW -> !playerWW.equals(playerWW1))
                         .collect(Collectors.toList());
 

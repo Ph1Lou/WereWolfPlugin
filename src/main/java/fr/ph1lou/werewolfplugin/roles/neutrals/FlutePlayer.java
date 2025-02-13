@@ -98,7 +98,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
         ShapedRecipe recipe = VersionUtils.getVersionUtils().registerCraft(flute, "recipe_flute_player");
 
-        recipe.shape("OOO", "OSO", "OOO");
+        recipe.shape("XOX", "OSO", "XOX");
 
         recipe.setIngredient('O', Material.GOLD_INGOT);
         recipe.setIngredient('S', Material.STICK);
@@ -243,10 +243,9 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
         AtomicBoolean recoverResistance = new AtomicBoolean(false);
 
-        game.getPlayersWW()
+        game.getAlivePlayersWW()
                 .stream()
                 .filter(player1 -> !this.getPlayerWW().equals(player1))
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(player1 -> this.checkDistance(this.getPlayerWW(), player1) || this.checkDistance(player1))
                 .peek(playerWW -> {
                     if (this.affectedPlayer.contains(playerWW)) {

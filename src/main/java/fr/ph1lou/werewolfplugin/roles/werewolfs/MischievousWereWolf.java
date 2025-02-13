@@ -81,9 +81,8 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
             return;
         }
 
-        game.getPlayersWW()
+        game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
                 .filter(roles -> !roles.equals(this))
                 .filter(roles -> roles instanceof IInvisible)

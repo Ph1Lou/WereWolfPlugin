@@ -4,6 +4,7 @@ import fr.mrmicky.fastboard.FastBoard;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.StateGame;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.game_cycle.LoadEvent;
@@ -50,6 +51,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class GameManager implements WereWolfAPI {
 
@@ -250,6 +252,13 @@ public class GameManager implements WereWolfAPI {
     @Override
     public Collection<? extends IPlayerWW> getPlayersWW() {
         return this.playersWW.values();
+    }
+
+    @Override
+    public Collection<? extends IPlayerWW> getAlivePlayersWW() {
+        return this.playersWW.values().stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .collect(Collectors.toSet());
     }
 
     @Override

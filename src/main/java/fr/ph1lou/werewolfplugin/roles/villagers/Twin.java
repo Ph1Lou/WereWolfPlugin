@@ -146,9 +146,8 @@ public class Twin extends RoleImpl {
                         return;
                     }
 
-                    List<IPlayerWW> nearPlayers = game.getPlayersWW()
+                    List<IPlayerWW> nearPlayers = game.getAlivePlayersWW()
                             .stream()
-                            .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                             .filter(playerWW1 -> !playerWW1.equals(playerWW))
                             .filter(playerWW1 -> !playerWW1.equals(this.getPlayerWW()))
                             .filter(playerWW1 -> playerWW.distance(playerWW1) < game.getConfig().getValue(IntValueBase.TWIN_DISTANCE))

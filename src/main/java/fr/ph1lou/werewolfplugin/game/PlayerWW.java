@@ -734,9 +734,8 @@ public class PlayerWW implements IPlayerWW {
 
     @Override
     public void second() {
-        game.getPlayersWW()
+        game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .filter(playerWW1 -> !playerWW1.equals(this))
                 .filter(playerWW1 -> !this.getPlayersMet().contains(playerWW1))
                 .filter(playerWW1 -> playerWW1.getLocation().getWorld() == this.getLocation().getWorld() &&

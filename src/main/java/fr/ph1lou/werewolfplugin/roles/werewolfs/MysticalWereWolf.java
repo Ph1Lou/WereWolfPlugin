@@ -71,9 +71,8 @@ public class MysticalWereWolf extends RoleWereWolf {
             return;
         }
 
-        List<IPlayerWW> roles = game.getPlayersWW()
+        List<IPlayerWW> roles = game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().isDisplayCamp(Camp.WEREWOLF.getKey()) ||
                                     (playerWW.getRole().getDisplayCamp().equals(playerWW.getRole().getCamp().getKey()) && !playerWW.getRole().isWereWolf()))
                 .collect(Collectors.toList());

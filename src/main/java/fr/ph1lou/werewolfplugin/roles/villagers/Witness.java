@@ -3,10 +3,10 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.random_events.SwapEvent;
@@ -28,14 +28,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
-    @Role(key = RoleBase.WITNESS,
-            category = Category.VILLAGER,
-            attribute = RoleAttribute.MINOR_INFORMATION)
+@Role(key = RoleBase.WITNESS,
+        category = Category.VILLAGER,
+        attribute = RoleAttribute.MINOR_INFORMATION)
 public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
 
     public Witness(WereWolfAPI main, IPlayerWW playerWW) {
-        super(main,playerWW);
+        super(main, playerWW);
     }
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -48,7 +49,7 @@ public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
         if (affectedPlayer.isEmpty()) {
             if (power) {
                 descBuilder.addExtraLines(game.translate("werewolf.roles.witness.culprit_unknown", Formatter.format("&time&",
-                                Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST)))));
+                        Utils.conversion(game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST)))));
             } else {
                 descBuilder.addExtraLines(game.translate("werewolf.roles.witness.culprit_dead"));
             }
@@ -94,20 +95,17 @@ public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
     }
 
     @EventHandler
-    public void onWerewolfListEvent(WereWolfListEvent event){
+    public void onWerewolfListEvent(WereWolfListEvent event) {
 
-        List<IPlayerWW> wolves = new ArrayList<>();
-        for (IPlayerWW p : game.getPlayersWW()) {
+        List<IPlayerWW> wolves = game.getAlivePlayersWW()
+                .stream()
+                .filter(playerWW -> playerWW.getRole().isWereWolf())
+                .collect(Collectors.toList());
 
-            if(p.isState(StatePlayer.ALIVE) && p.getRole().isWereWolf()) {
-                wolves.add(p);
-            }
-        }
-
-        if (wolves.isEmpty()){
+        if (wolves.isEmpty()) {
             return;
         }
-        IPlayerWW culprit = wolves.get((int) Math.floor(new Random(System.currentTimeMillis()).nextFloat()*wolves.size()));
+        IPlayerWW culprit = wolves.get((int) Math.floor(new Random(System.currentTimeMillis()).nextFloat() * wolves.size()));
         addAffectedPlayer(culprit);
 
         getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.witness.reveal_culprit", Formatter.format("&player&", culprit.getName()));
@@ -121,7 +119,7 @@ public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
 
         if (!getAffectedPlayers().contains(playerWW)) return;
 
-        if (getPlayerWW().isState(StatePlayer.DEATH)){
+        if (getPlayerWW().isState(StatePlayer.DEATH)) {
             if (!power) {
                 return;
             }
@@ -134,29 +132,28 @@ public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
     }
 
     @EventHandler
-    public void onTargetIsStolen(StealEvent event){
+    public void onTargetIsStolen(StealEvent event) {
         IPlayerWW player = event.getTargetWW();
         IPlayerWW thief = event.getPlayerWW();
 
-        if(!getAffectedPlayers().contains(player)) return;
+        if (!getAffectedPlayers().contains(player)) return;
 
         removeAffectedPlayer(player);
         addAffectedPlayer(thief);
 
-        if(getPlayerWW().isState(StatePlayer.DEATH)) return;
+        if (getPlayerWW().isState(StatePlayer.DEATH)) return;
 
         getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.witness.change", Formatter.format("&player&", thief.getName()));
     }
 
     @EventHandler
-    public void onStealEvent(StealEvent event){
+    public void onStealEvent(StealEvent event) {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
-        if(power) {
+        if (power) {
             getPlayerWW().sendMessageWithKey(Prefix.BLUE, "werewolf.roles.witness.reveal_culprit", Formatter.format("&player&", getAffectedPlayers().get(0).getName()));
-        }
-        else {
+        } else {
             getPlayerWW().removePlayerMaxHealth(4);
         }
     }

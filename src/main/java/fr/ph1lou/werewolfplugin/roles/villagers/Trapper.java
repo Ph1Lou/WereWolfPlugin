@@ -100,7 +100,7 @@ public class Trapper extends RoleImpl implements IAffectedPlayers, IPower {
 
         if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
 
-        StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
+        StringBuilder stringBuilder = event.getActionBar();
 
         Player player = Bukkit.getPlayer(event.getPlayerUUID());
 
@@ -117,7 +117,5 @@ public class Trapper extends RoleImpl implements IAffectedPlayers, IPower {
                         .append(playerWW.getName())
                         .append(" "))
                 .forEach(playerWW -> stringBuilder.append(Utils.updateArrow(player, playerWW.getLocation())));
-
-        event.setActionBar(stringBuilder.toString());
     }
 }

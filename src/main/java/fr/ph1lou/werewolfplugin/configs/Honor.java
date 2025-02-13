@@ -247,10 +247,9 @@ public class Honor extends ListenerWerewolf {
     @EventHandler(ignoreCancelled = true)
     public void onVoteBegin(VoteBeginEvent event) {
 
-        getGame().getPlayersWW()
+        getGame().getAlivePlayersWW()
                 .stream()
                 .filter(playerWW -> playerWW.getRole().isCamp(Camp.VILLAGER))
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.getHonor() < -1)
                 .forEach(playerWW -> getGame().getVoteManager().setVotes(playerWW, getGame().getVoteManager().getVotes(playerWW) + 1));
     }
@@ -293,8 +292,8 @@ public class Honor extends ListenerWerewolf {
         }
 
         if (playerWW.getHonor() == 3) {
-            role.setDisplayRole(this.getGame().getPlayersWW().stream()
-                    .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+            role.setDisplayRole(this.getGame().getAlivePlayersWW()
+                    .stream()
                     .map(IPlayerWW::getRole)
                     .filter(roles -> roles.isCamp(Camp.VILLAGER))
                     .map(IRole::getKey)
@@ -329,9 +328,8 @@ public class Honor extends ListenerWerewolf {
     @EventHandler(ignoreCancelled = true)
     private void onNight(NightEvent event) {
 
-        getGame().getPlayersWW()
+        getGame().getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
                 .forEach(playerWW -> {
                     switch (playerWW.getHonor()) {
@@ -366,9 +364,8 @@ public class Honor extends ListenerWerewolf {
                             playerWW.addPlayerHealth(2);
                             break;
                         case 3:
-                            String playerNearWWList = getGame().getPlayersWW()
+                            String playerNearWWList = getGame().getAlivePlayersWW()
                                     .stream()
-                                    .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                                     .filter(playerWW1 -> playerWW1.distance(playerWW) < 80)
                                     .map(IPlayerWW::getName)
                                     .collect(Collectors.joining(", "));

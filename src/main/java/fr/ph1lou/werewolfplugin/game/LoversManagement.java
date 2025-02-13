@@ -75,8 +75,7 @@ public class LoversManagement implements ILoverManager {
 
     private void autoAmnesiacLovers() {
 
-        List<IPlayerWW> amnesiacLovers = game.getPlayersWW().stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+        List<IPlayerWW> amnesiacLovers = game.getAlivePlayersWW().stream()
                 .filter(playerWW -> playerWW.getLovers().isEmpty())
                 .filter(playerWW -> !playerWW.getRole().isKey(RoleBase.CHARMER))
                 .filter(playerWW -> !playerWW.getRole().isKey(RoleBase.RIVAL))
@@ -157,7 +156,7 @@ public class LoversManagement implements ILoverManager {
         IPlayerWW playerWW2;
 
 
-        for (IPlayerWW cupidWW : game.getPlayersWW()) {
+        for (IPlayerWW cupidWW : game.getAlivePlayersWW()) {
 
             if (!cupidWW.getRole().isKey(RoleBase.CUPID)) {
                 continue;

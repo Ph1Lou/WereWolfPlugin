@@ -4,7 +4,6 @@ import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.TrollLoverEvent;
 import fr.ph1lou.werewolfapi.events.lovers.LoversRepartitionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -22,7 +21,6 @@ import org.bukkit.event.HandlerList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Timer(key = TimerBase.LOVER_DURATION,
         defaultValue = 4 * 60,
@@ -56,9 +54,7 @@ public class LoverDuration extends ListenerWerewolf {
 
         List<ILover> loverAPIS = new ArrayList<>();
 
-        List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .collect(Collectors.toList());
+        List<IPlayerWW> playerWWS = new ArrayList<>(game.getAlivePlayersWW());
 
         if (playerWWS.isEmpty()) return;
 

@@ -258,9 +258,8 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
 
             IPlayerWW playerWW = list.get(i);
 
-            game.getPlayersWW()
+            game.getAlivePlayersWW()
                     .stream()
-                    .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                     .map(IPlayerWW::getRole)
                     .filter(roles -> roles.isKey(RoleBase.SUCCUBUS))
                     .forEach(role -> {

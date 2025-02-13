@@ -18,6 +18,7 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FirstDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AnnouncementLoverDeathEvent;
+import fr.ph1lou.werewolfapi.events.werewolf.WereWolfCanHowlingEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -124,6 +125,17 @@ public class FearFulWerewolf extends RoleWereWolf {
         if (event.getPlayerWW().equals(this.getPlayerWW()) || this.getPlayerWW().getLovers().contains(event.getLover())) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onRequestHowling(WereWolfCanHowlingEvent event) {
+        
+        if (!event.getPlayerWW().equals(this.getPlayerWW())) {
+            return;
+        }
+
+        event.setCanHowling(false);
+
     }
 
     @Override

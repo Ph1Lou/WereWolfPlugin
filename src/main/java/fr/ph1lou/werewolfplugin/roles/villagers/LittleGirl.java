@@ -10,12 +10,14 @@ import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayWillComeEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.roles.InvisibleEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfChatEvent;
+import fr.ph1lou.werewolfapi.events.werewolf.WereWolfHowlingEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -30,7 +32,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,6 +44,7 @@ import java.util.UUID;
 public class LittleGirl extends RoleImpl implements IInvisible {
 
     private boolean invisible = false;
+    private int compteur = -1;
 
     public LittleGirl(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -58,6 +60,23 @@ public class LittleGirl extends RoleImpl implements IInvisible {
 
         this.getPlayerWW().sendMessageWithKey(
                 Prefix.YELLOW, "werewolf.roles.little_girl.remove_armor");
+    }
+
+    @EventHandler
+    public void onWerewolfHowling(WereWolfHowlingEvent event) {
+
+        if (!event.getTargetWW().equals(this.getPlayerWW())) {
+            return;
+        }
+
+        compteur++;
+
+        if (!this.isInvisible()) {
+            return;
+        }
+
+        event.setDuration(20 * (5 + 3 * compteur));
+        event.setCancelled(false);
     }
 
     @EventHandler
@@ -113,9 +132,8 @@ public class LittleGirl extends RoleImpl implements IInvisible {
             return;
         }
 
-        game.getPlayersWW()
+        game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
                 .filter(roles -> !roles.equals(this))
                 .filter(roles -> roles instanceof IInvisible)
@@ -185,9 +203,9 @@ public class LittleGirl extends RoleImpl implements IInvisible {
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (inventory.getItem(36) == null &&
-                inventory.getItem(37) == null &&
-                inventory.getItem(38) == null &&
-                inventory.getItem(39) == null) {
+            inventory.getItem(37) == null &&
+            inventory.getItem(38) == null &&
+            inventory.getItem(39) == null) {
             if (!this.isInvisible()) {
                 if (!isAbilityEnabled()) {
                     getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.ability_disabled");

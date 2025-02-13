@@ -3,7 +3,6 @@ package fr.ph1lou.werewolfplugin.random_events;
 import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
 import fr.ph1lou.werewolfapi.events.random_events.TroupleEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -41,8 +40,7 @@ public class Triple extends ListenerWerewolf {
                 LoverImpl loverImpl = loverImpls.get((int) Math.floor(
                         game.getRandom().nextFloat() * loverImpls.size()));
 
-                List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
-                        .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                List<IPlayerWW> playerWWS = game.getAlivePlayersWW().stream()
                         .filter(playerWW -> playerWW.getLovers().isEmpty())
                         .collect(Collectors.toList());
 

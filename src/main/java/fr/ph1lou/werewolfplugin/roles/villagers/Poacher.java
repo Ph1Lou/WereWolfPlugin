@@ -13,6 +13,7 @@ import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.poacher.PoacherRecoverFurEvent;
@@ -29,7 +30,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,7 +40,7 @@ import java.util.UUID;
 @Role(key = RoleBase.POACHER, category = Category.VILLAGER,
         defaultAura = Aura.NEUTRAL,
         attribute = RoleAttribute.VILLAGER,
-        timers = {@Timer(key = TimerBase.POACHER_PROGRESS, defaultValue = 10, meetUpValue = 10)},
+        timers = { @Timer(key = TimerBase.POACHER_PROGRESS, defaultValue = 10, meetUpValue = 10) },
         configValues = {
                 @IntValue(key = IntValueBase.POACHER_DISTANCE, defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.ARROW)
         })
@@ -115,7 +115,7 @@ public class Poacher extends RoleImpl {
             return;
         }
 
-        StringBuilder sb = new StringBuilder(event.getActionBar());
+        StringBuilder sb = event.getActionBar();
         String actionBar = this.switchColor++ < 20 ?
                 game.translate("werewolf.roles.poacher.actionbar_1") :
                 game.translate("werewolf.roles.poacher.actionbar_2");
@@ -123,7 +123,6 @@ public class Poacher extends RoleImpl {
 
         sb.insert(0, actionBar + " ");
         sb.append(" ").append(actionBar);
-        event.setActionBar(sb.toString());
     }
 
     @Override

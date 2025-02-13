@@ -109,9 +109,8 @@ public class ScapeGoat extends RoleImpl implements IPower, IAffectedPlayers {
             return;
         }
 
-        List<IPlayerWW> playerWWs = game.getPlayersWW()
+        List<IPlayerWW> playerWWs = game.getAlivePlayersWW()
                 .stream()
-                .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
                 .filter(iPlayerWW -> !voteResultEvent.getPlayerWW().getRole().getKey().equals(iPlayerWW.getRole().getKey()))
                 .collect(Collectors.toList());
 

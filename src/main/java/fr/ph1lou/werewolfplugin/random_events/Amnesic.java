@@ -5,7 +5,6 @@ import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.random_events.AmnesicEvent;
@@ -49,8 +48,7 @@ public class Amnesic extends ListenerWerewolf {
 
         WereWolfAPI game = this.getGame();
 
-        List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+        List<IPlayerWW> playerWWS = game.getAlivePlayersWW().stream()
                 .filter(playerWW -> !playerWW.getRole().isWereWolf())
                 .collect(Collectors.toList());
 
@@ -130,8 +128,7 @@ public class Amnesic extends ListenerWerewolf {
 
         WereWolfAPI game = this.getGame();
 
-        List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+        List<IPlayerWW> playerWWS = game.getAlivePlayersWW().stream()
                 .filter(playerWW -> {
                     AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(temp, playerWW);
                     return appearInWereWolfListEvent.isAppear();

@@ -8,7 +8,7 @@ import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.roles.tenebrous_werewolf.TenebrousEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
@@ -17,7 +17,6 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfplugin.roles.werewolfs.TenebrousWerewolf;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,8 +39,7 @@ public class CommandTenebrous implements ICommandRole {
 
         int range = game.getConfig().getValue(IntValueBase.TENEBROUS_WEREWOLF_DISTANCE);
 
-        List<IPlayerWW> affectedPlayers = game.getPlayersWW().stream()
-                .filter(player1 -> player1.isState(StatePlayer.ALIVE))
+        List<IPlayerWW> affectedPlayers = game.getAlivePlayersWW().stream()
                 .filter(player1 -> !player1.getRole().isWereWolf())
                 .filter(player1 -> player1.getLocation().distance(location) < range)
                 .collect(Collectors.toList());
@@ -62,12 +60,12 @@ public class CommandTenebrous implements ICommandRole {
         for (IPlayerWW p : affectedPlayers) {
             role.addAffectedPlayer(p);
             p.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.BLINDNESS, game.getConfig()
-                    .getTimerValue(TimerBase.WEREWOLF_TENEBROUS_DURATION) * 20, 1, playerWW.getRole().getKey()));
+                                                                                                .getTimerValue(TimerBase.WEREWOLF_TENEBROUS_DURATION) * 20, 1, playerWW.getRole().getKey()));
             p.sendMessageWithKey(Prefix.RED, "werewolf.roles.tenebrous_werewolf.darkness");
         }
 
-        List<IPlayerWW> werewolves = game.getPlayersWW().stream()
-                .filter(player1 -> player1.isState(StatePlayer.ALIVE))
+        List<IPlayerWW> werewolves = game.getAlivePlayersWW()
+                .stream()
                 .filter(player1 -> player1.getRole().isWereWolf()).collect(Collectors.toList());
 
         playerWW.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.DARK, 1, false));

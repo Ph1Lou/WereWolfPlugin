@@ -161,8 +161,7 @@ public class WolfDog extends RoleImpl implements ITransformed, IPower {
     public String getDisplayRole() {
 
         if (this.transformed) {
-            return this.game.getPlayersWW().stream()
-                    .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+            return this.game.getAlivePlayersWW().stream()
                     .map(IPlayerWW::getRole)
                     .filter(roles -> roles.isCamp(Camp.VILLAGER))
                     .map(IRole::getKey)
@@ -171,8 +170,7 @@ public class WolfDog extends RoleImpl implements ITransformed, IPower {
         }
 
 
-        return this.game.getPlayersWW().stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+        return this.game.getAlivePlayersWW().stream()
                 .map(IPlayerWW::getRole)
                 .filter(role -> role.isCamp(Camp.WEREWOLF))
                 .map(IRole::getKey)

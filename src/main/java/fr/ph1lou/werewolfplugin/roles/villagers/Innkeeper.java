@@ -171,11 +171,10 @@ public class Innkeeper extends RoleImpl implements IPower {
                 if (game.isDay(Day.DAY) || !clientData.watching || game.isState(StateGame.END)) {
                     cancel();
                 } else {
-                    game.getPlayersWW()
+                    game.getAlivePlayersWW()
                             .stream()
                             .filter(iPlayerWW -> !iPlayerWW.equals(getPlayerWW()))
                             .filter(iPlayerWW -> !iPlayerWW.equals(clientData.playerWW))
-                            .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
                             .filter(iPlayerWW -> iPlayerWW
                                                          .distance(clientData.playerWW) <= game.getConfig()
                                                          .getValue(IntValueBase.INNKEEPER_DETECTION_RADIUS))

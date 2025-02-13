@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RandomEvent(key = EventBase.INFECTION, loreKey = "werewolf.random_events.infection.description",
-        timers = {@Timer(key = Infection.TIMER_START, defaultValue = 60 * 60, meetUpValue = 30 * 60, step = 30),
-                @Timer(key = Infection.PERIOD, defaultValue = 15 * 60, meetUpValue = 10 * 60, step = 30)})
+        timers = { @Timer(key = Infection.TIMER_START, defaultValue = 60 * 60, meetUpValue = 30 * 60, step = 30),
+                @Timer(key = Infection.PERIOD, defaultValue = 15 * 60, meetUpValue = 10 * 60, step = 30) })
 public class Infection extends ListenerWerewolf {
 
     public static final String TIMER_START = "werewolf.random_events.infection.timer_start";
@@ -37,11 +37,13 @@ public class Infection extends ListenerWerewolf {
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
             if (isRegister()) {
 
-                if (game.getPlayersWW().stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).filter(playerWW -> playerWW.getRole().isWereWolf()).count() > game.getPlayersWW().stream().filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).count() / 2f)
+                if (game.getAlivePlayersWW().stream()
+                            .filter(playerWW -> playerWW.getRole().isWereWolf()).count()
+                    > game.getPlayersWW().stream()
+                              .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).count() / 2f)
                     return;
 
-                List<IRole> roles1 = game.getPlayersWW().stream()
-                        .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                List<IRole> roles1 = game.getAlivePlayersWW().stream()
                         .map(IPlayerWW::getRole)
                         .filter(roles -> !roles.isWereWolf())
                         .collect(Collectors.toList());
@@ -67,7 +69,7 @@ public class Infection extends ListenerWerewolf {
                 Bukkit.broadcastMessage(game.translate("werewolf.random_events.infection.message"));
             }
         }, (long) (20L * game.getConfig().getTimerValue(TIMER_START) +
-                game.getRandom().nextDouble() * game.getConfig().getTimerValue(PERIOD) * 20));
+                   game.getRandom().nextDouble() * game.getConfig().getTimerValue(PERIOD) * 20));
     }
 
 

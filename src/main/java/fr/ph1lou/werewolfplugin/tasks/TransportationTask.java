@@ -118,8 +118,6 @@ public class TransportationTask implements Listener {
             i.getAndDecrement();
 
         }, 0, 20));
-
-
     }
 
     private void step3(Plugin main) {
@@ -155,7 +153,7 @@ public class TransportationTask implements Listener {
                 player.teleport(this.game.getMapManager().getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.SPECTATOR);
                 if (game.getConfig().getSpectatorMode() < 2 && !player.isOp() &&
-                        !game.getModerationManager().isStaff(player.getUniqueId())) {
+                    !game.getModerationManager().isStaff(player.getUniqueId())) {
                     player.kickPlayer(game.translate(Prefix.RED, "werewolf.check.spectator_disabled"));
                 }
             }
@@ -244,7 +242,7 @@ public class TransportationTask implements Listener {
 
     @EventHandler
     public void onActionBar(ActionBarEvent event) {
-        event.setActionBar(event.getActionBar() + this.actionBar);
+        event.getActionBar().append(this.actionBar);
     }
 
 

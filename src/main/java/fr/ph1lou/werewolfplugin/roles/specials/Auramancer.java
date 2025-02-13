@@ -85,9 +85,8 @@ public class Auramancer extends RoleImpl {
                 }
             }
             if (knownPlayer == null) {
-                List<IPlayerWW> lightPlayers = game.getPlayersWW()
+                List<IPlayerWW> lightPlayers = game.getAlivePlayersWW()
                         .stream()
-                        .filter(playerWW2 -> playerWW2.isState(StatePlayer.ALIVE))
                         .filter(playerWW2 -> !playerWW2.equals(getPlayerWW()))
                         .filter(playerWW2 -> playerWW2.getRole().getAura().equals(Aura.LIGHT))
                         .collect(Collectors.toList());
@@ -240,9 +239,8 @@ public class Auramancer extends RoleImpl {
 
             if (!isAbilityEnabled()) return;
 
-            Set<IPlayerWW> nearbyPlayers = game.getPlayersWW()
+            Set<IPlayerWW> nearbyPlayers = game.getAlivePlayersWW()
                     .stream()
-                    .filter(playerWW2 -> playerWW2.isState(StatePlayer.ALIVE))
                     .filter(playerWW2 -> !playerWW2.equals(getPlayerWW()))
                     .filter(playerWW2 -> playerWW2.getRole().getAura().equals(Aura.LIGHT))
                     .filter(playerWW2 -> playerWW2.getLocation().distance(getPlayerWW().getLocation()) < game.getConfig().getValue(IntValueBase.AURAMANCER_DISTANCE))
@@ -265,9 +263,8 @@ public class Auramancer extends RoleImpl {
 
         if (!this.getAura().equals(Aura.DARK)) return;
 
-        long lightAuras = game.getPlayersWW()
+        long lightAuras = game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
                 .filter(roles -> !roles.equals(this))
                 .filter(roles -> roles.getAura().equals(Aura.LIGHT)).count();

@@ -117,9 +117,8 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
             return;
         }
 
-        game.getPlayersWW()
+        game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
                 .filter(roles -> !roles.equals(this))
                 .filter(roles -> roles instanceof IInvisible)

@@ -4,7 +4,6 @@ import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -25,8 +24,7 @@ public class WerewolfList extends ListenerWerewolf {
 
     @EventHandler
     public void onWerewolfList(WereWolfListEvent event) {
-        this.getGame().getPlayersWW().stream()
-                .filter(playerWW -> !playerWW.isState(StatePlayer.DEATH))
+        this.getGame().getAlivePlayersWW().stream()
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
                 .forEach(playerWW -> {
                     playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.werewolf.see_others");

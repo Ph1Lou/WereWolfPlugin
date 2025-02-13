@@ -26,7 +26,6 @@ import fr.ph1lou.werewolfapi.role.interfaces.IProgress;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
@@ -176,9 +175,8 @@ public class Necromancer extends RoleNeutral implements IProgress, IAffectedPlay
 
             int distanceConfig = game.getConfig().getValue(IntValueBase.NECROMANCER_DISTANCE);
 
-            game.getPlayersWW()
+            game.getAlivePlayersWW()
                     .stream()
-                    .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
                     .filter(playerWW1 -> !playerWW1.equals(getPlayerWW()))
                     .filter(iPlayerWW -> iPlayerWW.distance(getPlayerWW()) < distanceConfig)
                     .forEach(iPlayerWW -> {
@@ -248,7 +246,11 @@ public class Necromancer extends RoleNeutral implements IProgress, IAffectedPlay
 
         IPlayerWW playerWW = this.game.getPlayerWW(uuid).orElse(null);
 
-        StringBuilder sb = new StringBuilder(event.getActionBar());
+        if (playerWW == null) return;
+
+        if (!playerWW.isState(StatePlayer.ALIVE)) return;
+
+        StringBuilder sb = event.getActionBar();
 
         if (this.playerWW != null) {
             sb
@@ -256,16 +258,6 @@ public class Necromancer extends RoleNeutral implements IProgress, IAffectedPlay
                     .append(game.translate("werewolf.roles.necromancer.progress", Formatter.number((int) this.progress)))
                     .append(" ");
         }
-        Player player = Bukkit.getPlayer(uuid);
-
-        if (player == null) return;
-
-        if (playerWW == null) return;
-
-        if (!playerWW.isState(StatePlayer.ALIVE)) return;
-
-        event.setActionBar(sb.toString());
-
     }
 
     @Override

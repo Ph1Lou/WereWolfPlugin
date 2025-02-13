@@ -50,12 +50,12 @@ public class End {
 
         if (game.isState(StateGame.END)) return;
 
-        if(game.getPlayersWW().stream().anyMatch(iPlayerWW -> iPlayerWW.isState(StatePlayer.JUDGEMENT))){
+        if (game.getPlayersWW().stream().anyMatch(iPlayerWW -> iPlayerWW.isState(StatePlayer.JUDGEMENT))) {
             return;
         }
 
-        List<IRole> iRolesAlive = game.getPlayersWW().stream()
-                .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
+        List<IRole> iRolesAlive = game.getAlivePlayersWW()
+                .stream()
                 .map(IPlayerWW::getRole)
                 .collect(Collectors.toList());
 
@@ -101,20 +101,17 @@ public class End {
             return;
         }
 
-        if(iRolesAlive.size() == 1 && iRolesAlive.stream().allMatch(ICamp::isNeutral)){
-            if(iRolesAlive.get(0).isSolitary()){
+        if (iRolesAlive.size() == 1 && iRolesAlive.stream().allMatch(ICamp::isNeutral)) {
+            if (iRolesAlive.get(0).isSolitary()) {
                 end(iRolesAlive.get(0).getKey(), game.translate(iRolesAlive.get(0).getKey()) + game.translate("werewolf.end.solitary"));
-            }
-            else{
+            } else {
                 end(iRolesAlive.get(0).getKey());
             }
-        }
-        else if(iRolesAlive.stream().noneMatch(ICamp::isNeutral)){
+        } else if (iRolesAlive.stream().noneMatch(ICamp::isNeutral)) {
 
             if (iRolesAlive.stream().allMatch(ICamp::isWereWolf)) {
                 end(Category.WEREWOLF.getKey());
-            }
-            else if (iRolesAlive.stream().noneMatch(ICamp::isWereWolf)) {
+            } else if (iRolesAlive.stream().noneMatch(ICamp::isWereWolf)) {
                 end(Category.VILLAGER.getKey());
             }
         }
@@ -129,10 +126,7 @@ public class End {
         game.cleanSchedules();
 
         Bukkit.getPluginManager().callEvent(new WinEvent(winner,
-                game.getPlayersWW()
-                        .stream()
-                        .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                        .collect(Collectors.toSet())));
+                new HashSet<>(game.getAlivePlayersWW())));
 
         game.setState(StateGame.END);
 

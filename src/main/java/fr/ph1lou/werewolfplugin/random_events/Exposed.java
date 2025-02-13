@@ -3,7 +3,6 @@ package fr.ph1lou.werewolfplugin.random_events;
 import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.ExposedEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -24,9 +23,9 @@ import java.util.stream.Collectors;
 
 @RandomEvent(key = EventBase.EXPOSED,
         loreKey = "werewolf.random_events.exposed.description",
-        timers = {@Timer(key = Exposed.TIMER_START_1, defaultValue = 65 * 60, meetUpValue = 20 * 60, step = 30),
+        timers = { @Timer(key = Exposed.TIMER_START_1, defaultValue = 65 * 60, meetUpValue = 20 * 60, step = 30),
                 @Timer(key = Exposed.TIMER_START_2, defaultValue = 30 * 60, meetUpValue = 15 * 60, step = 30),
-                @Timer(key = Exposed.PERIOD, defaultValue = 15 * 60, meetUpValue = 15 * 60, step = 30)})
+                @Timer(key = Exposed.PERIOD, defaultValue = 15 * 60, meetUpValue = 15 * 60, step = 30) })
 public class Exposed extends ListenerWerewolf {
 
     public static final String TIMER_START_1 = "werewolf.random_events.exposed.timer_start_1";
@@ -66,8 +65,7 @@ public class Exposed extends ListenerWerewolf {
 
         WereWolfAPI game = this.getGame();
 
-        List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+        List<IPlayerWW> playerWWS = game.getAlivePlayersWW().stream()
                 .filter(playerWW -> !playerWW.equals(temp))
                 .collect(Collectors.toList());
 
@@ -75,8 +73,7 @@ public class Exposed extends ListenerWerewolf {
 
         IPlayerWW playerWW = playerWWS.get((int) Math.floor(game.getRandom().nextDouble() * playerWWS.size()));
 
-        List<IRole> role1List = game.getPlayersWW().stream()
-                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+        List<IRole> role1List = game.getAlivePlayersWW().stream()
                 .filter(playerWW1 -> !playerWW.equals(playerWW1))
                 .map(IPlayerWW::getRole)
                 .filter(iRole -> !iRole.isKey(playerWW.getRole().getKey()))
@@ -87,8 +84,7 @@ public class Exposed extends ListenerWerewolf {
 
         IRole role1 = role1List.get((int) Math.floor(game.getRandom().nextDouble() * role1List.size()));
 
-        List<IRole> role2List = game.getPlayersWW().stream()
-                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+        List<IRole> role2List = game.getAlivePlayersWW().stream()
                 .filter(playerWW1 -> !playerWW.equals(playerWW1))
                 .map(IPlayerWW::getRole)
                 .filter(roles -> !roles.isKey(role1.getKey()))

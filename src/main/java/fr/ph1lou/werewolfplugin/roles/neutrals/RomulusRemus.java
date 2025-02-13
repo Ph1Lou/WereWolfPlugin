@@ -11,6 +11,7 @@ import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -36,7 +37,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -49,9 +49,9 @@ import java.util.stream.Collectors;
         category = Category.NEUTRAL,
         attribute = RoleAttribute.HYBRID,
         requireDouble = true,
-configValues = @IntValue(key = IntValueBase.ROMULUS_REMUS_DISTANCE_BROTHER, defaultValue = 50, meetUpValue = 40, step = 5, item = UniversalMaterial.BOOK))
+        configValues = @IntValue(key = IntValueBase.ROMULUS_REMUS_DISTANCE_BROTHER, defaultValue = 50, meetUpValue = 40, step = 5, item = UniversalMaterial.BOOK))
 public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransformed {
-    
+
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
     private boolean transformed;
     private boolean romulus;
@@ -194,9 +194,8 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
             return;
         }
 
-        List<IPlayerWW> brothers = game.getPlayersWW()
+        List<IPlayerWW> brothers = game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().equals(this))
                 .filter(playerWW -> playerWW.getRole().isKey(RoleBase.ROMULUS_REMUS))
                 .filter(playerWW -> playerWW.getRole() instanceof RomulusRemus && !((RomulusRemus) playerWW.getRole()).isInitialized())
@@ -209,16 +208,14 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
         IPlayerWW brother = brothers.get(game.getRandom().nextInt(brothers.size()));
         romulus = game.getRandom().nextBoolean();
 
-        List<IPlayerWW> wolves = game.getPlayersWW()
+        List<IPlayerWW> wolves = game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().getKey().equals(this.getKey()))
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
                 .collect(Collectors.toList());
 
         if (wolves.isEmpty()) {
-            wolves = game.getPlayersWW().stream()
-                    .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+            wolves = game.getAlivePlayersWW().stream()
                     .filter(playerWW -> !playerWW.getRole().getKey().equals(this.getKey()))
                     .collect(Collectors.toList());
         }
@@ -281,7 +278,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
             return;
         }
 
-        if(!this.isWereWolf()){
+        if (!this.isWereWolf()) {
             return;
         }
 
@@ -300,13 +297,13 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
             return;
         }
 
-        if(this.killedBrother){
+        if (this.killedBrother) {
             return;
         }
 
         if (!isAbilityEnabled()) return;
 
-        StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
+        StringBuilder stringBuilder = event.getActionBar();
 
         Player player = Bukkit.getPlayer(event.getPlayerUUID());
 
@@ -314,7 +311,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
 
         IPlayerWW brother = getBrother().orElse(null);
 
-        if(brother == null) return;
+        if (brother == null) return;
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
@@ -324,8 +321,6 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
                 .append(brother.getName())
                 .append(" ")
                 .append(Utils.updateArrow(player, brother.getLocation()));
-
-        event.setActionBar(stringBuilder.toString());
     }
 
     @EventHandler
@@ -345,9 +340,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
 
         if (mother == null || !mother.isState(StatePlayer.ALIVE)) return;
 
-        if (game.getPlayersWW()
-                    .stream()
-                    .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE)).count() == 3) {
+        if ((long) game.getAlivePlayersWW().size() == 3) {
             event.setWin();
             event.setVictoryTeam(RoleBase.ROMULUS_REMUS);
         }
@@ -356,12 +349,12 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
     @EventHandler
     public void onAppearInWerewolfList(AppearInWereWolfListEvent event) {
 
-        if(!event.getTargetWW().equals(this.getPlayerWW()) &&
-           !event.getPlayerWW().equals(this.getPlayerWW())){
+        if (!event.getTargetWW().equals(this.getPlayerWW()) &&
+            !event.getPlayerWW().equals(this.getPlayerWW())) {
             return;
         }
 
-        if(this.isWereWolf() && !this.romulus && !this.killedBrother){
+        if (this.isWereWolf() && !this.romulus && !this.killedBrother) {
             event.setAppear(false);
         }
     }
@@ -371,7 +364,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
     public void second() {
 
 
-        if(this.transformed){
+        if (this.transformed) {
             return;
         }
 
@@ -388,13 +381,12 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
 
         Location location = this.getPlayerWW().getLocation();
 
-        if (brother != null &&  brother.isState(StatePlayer.ALIVE) && isAbilityEnabled()) {
+        if (brother != null && brother.isState(StatePlayer.ALIVE) && isAbilityEnabled()) {
             boolean recoverResistance = brother.getLocation().distance(location) > game.getConfig().getValue(IntValueBase.ROMULUS_REMUS_DISTANCE_BROTHER);
 
             if (recoverResistance) {
                 this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.RESISTANCE, 120, 0, getKey()));
-            }
-            else{
+            } else {
                 this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE, getKey(), 0));
             }
         }
@@ -412,7 +404,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
     @Override
     public void disableAbilitiesRole() {
 
-        if(!this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -427,17 +419,17 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
         IPlayerWW playerWW2 = event.getPlayerWW2();
         boolean change = false;
 
-        if(getMother().isPresent()){
+        if (getMother().isPresent()) {
             if (getMother().get().equals(playerWW1)) {
                 affectedPlayers.set(1, playerWW2);
                 change = true;
             } else if (getMother().get().equals(playerWW2)) {
                 affectedPlayers.set(1, playerWW1);
                 change = true;
-            }  
+            }
         }
 
-        if(getBrother().isPresent()){
+        if (getBrother().isPresent()) {
             if (getBrother().get().equals(playerWW1)) {
                 affectedPlayers.set(0, playerWW2);
                 change = true;

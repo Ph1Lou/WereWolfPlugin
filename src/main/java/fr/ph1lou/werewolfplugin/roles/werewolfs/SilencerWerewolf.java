@@ -94,19 +94,17 @@ public class SilencerWerewolf extends RoleWereWolf implements IPower, IGuesser, 
             return false;
         }
 
-        if (!power || !isAbilityEnabled() ) {
+        if (!power || !isAbilityEnabled()) {
             getPlayerWW().sendMessageWithKey("werewolf.check.power");
             return false;
         }
 
-        long nVillagers = game.getPlayersWW().stream()
-                .filter(playerWW->playerWW.isState(StatePlayer.ALIVE))
-                .filter(playerWW->playerWW.getRole().getCamp() == Camp.VILLAGER)
+        long nVillagers = game.getAlivePlayersWW().stream()
+                .filter(playerWW -> playerWW.getRole().getCamp() == Camp.VILLAGER)
                 .count();
 
-        long nWW = game.getPlayersWW().stream()
-                .filter(playerWW->playerWW.isState(StatePlayer.ALIVE))
-                .filter(playerWW->playerWW.getRole().getCamp() == Camp.WEREWOLF)
+        long nWW = game.getAlivePlayersWW().stream()
+                .filter(playerWW -> playerWW.getRole().getCamp() == Camp.WEREWOLF)
                 .count();
         if (nWW >= nVillagers) {
             getPlayerWW().sendMessageWithKey(Prefix.BLUE, "werewolf.roles.silencer_werewolf.more_wolves");

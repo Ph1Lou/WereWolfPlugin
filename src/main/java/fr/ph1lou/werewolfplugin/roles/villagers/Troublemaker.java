@@ -52,8 +52,7 @@ public class Troublemaker extends RoleImpl implements IAffectedPlayers, IPower {
 
         AtomicInteger i = new AtomicInteger();
 
-        game.getPlayersWW().stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+        game.getAlivePlayersWW()
                 .forEach(playerWW -> {
                     game.getMapManager().transportation(playerWW,
                             i.get() * 2 * Math.PI / game.getPlayersCount());

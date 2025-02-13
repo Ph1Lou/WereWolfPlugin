@@ -6,7 +6,6 @@ import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Camp;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
 import fr.ph1lou.werewolfapi.events.random_events.DiscordEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
@@ -41,8 +40,7 @@ public class Discord extends ListenerWerewolf {
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
             if (isRegister()) {
 
-                List<IPlayerWW> playerWWsWerewolf = game.getPlayersWW().stream()
-                        .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                List<IPlayerWW> playerWWsWerewolf = game.getAlivePlayersWW().stream()
                         .map(IPlayerWW::getRole)
                         .filter(ICamp::isWereWolf)
                         .filter(iRole -> !iRole.isNeutral())
@@ -54,8 +52,7 @@ public class Discord extends ListenerWerewolf {
                 IPlayerWW werewolf = playerWWsWerewolf
                         .get((int) Math.floor(game.getRandom().nextDouble() * playerWWsWerewolf.size()));
 
-                List<IPlayerWW> playerWWsNeutral = game.getPlayersWW().stream()
-                        .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                List<IPlayerWW> playerWWsNeutral = game.getAlivePlayersWW().stream()
                         .filter(playerWW -> !playerWW.equals(werewolf))
                         .map(IPlayerWW::getRole)
                         .filter(ICamp::isNeutral)
@@ -69,8 +66,7 @@ public class Discord extends ListenerWerewolf {
                         .get((int) Math.floor(game.getRandom().nextDouble() * playerWWsNeutral.size()));
 
 
-                List<IPlayerWW> playerWWsVillager = game.getPlayersWW().stream()
-                        .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                List<IPlayerWW> playerWWsVillager = game.getAlivePlayersWW().stream()
                         .filter(playerWW -> !playerWW.equals(werewolf))
                         .filter(playerWW -> !playerWW.equals(neutral))
                         .map(IPlayerWW::getRole)

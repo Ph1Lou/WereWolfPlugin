@@ -34,7 +34,7 @@ public class ActionBarListener implements Listener {
         if (player == null) return;
 
         int d = Utils.midDistance(player);
-        event.setActionBar(event.getActionBar() + game.translate("werewolf.action_bar.in_game",
+        event.getActionBar().append(game.translate("werewolf.action_bar.in_game",
                 Formatter.format("&min&", d),
                 Formatter.format("&max&", d + 300),
                 Formatter.format("&height&", (int) Math.floor(player.getLocation().getY()))));
@@ -49,6 +49,7 @@ public class ActionBarListener implements Listener {
 
         if (player == null) return;
 
+        StringBuilder actionBar = event.getActionBar();
         if (game.getMapManager().getPercentageGenerated() == 0) {
 
             if (game.getModerationManager()
@@ -56,8 +57,7 @@ public class ActionBarListener implements Listener {
                             "werewolf.commands.admin.generation.command",
                             player,
                             false)) {
-                event.setActionBar(event.getActionBar() +
-                        game.translate("werewolf.action_bar.generation"));
+                actionBar.append(game.translate("werewolf.action_bar.generation"));
             }
 
             return;
@@ -65,18 +65,13 @@ public class ActionBarListener implements Listener {
 
 
         if (game.getMapManager().getPercentageGenerated() < 100) {
-            event.setActionBar(event.getActionBar() +
-                    game.translate("werewolf.action_bar.progress",
-                            Formatter.format("&progress&", new DecimalFormat("0.0")
-                                    .format(game.getMapManager()
-                                            .getPercentageGenerated()))));
+            actionBar.append(game.translate("werewolf.action_bar.progress",
+                    Formatter.format("&progress&", new DecimalFormat("0.0")
+                            .format(game.getMapManager()
+                                    .getPercentageGenerated()))));
 
             return;
         }
-
-        event.setActionBar(event.getActionBar() +
-                game.translate("werewolf.action_bar.complete"));
-
-
+        actionBar.append(game.translate("werewolf.action_bar.complete"));
     }
 }

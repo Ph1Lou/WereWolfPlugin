@@ -167,7 +167,7 @@
         "display": "Petite Fille",
         "item": "3 Tnt",
         "effect": "Invisible en enlevant votre armure la nuit.",
-        "description": "Lorsque vous êtes invisible, vous laissez des particules bleues derrière vous visibles par les Loups Garous Perfides. Inversement vous pouvez les repérer par leurs particules rouges. Vous pouvez également voir le chat des Loups Garous",
+        "description": "Lorsque vous êtes invisible, vous laissez des particules bleues derrière vous visibles par les Loups Garous Perfides. Inversement vous pouvez les repérer par leurs particules rouges. Vous pouvez également voir le chat des Loups Garous et leur §cHurlement§f",
         "remove_armor": "C'est la nuit, enlevez votre armure pour devenir invisible",
         "visible": "Vous redevenez visible",
         "remove_armor_perform": "Vous devenez invisible. Remettez votre armure pour redevenir visible",
@@ -659,7 +659,7 @@
       },
       "fearful_werewolf": {
         "display": "Loup Garou Craintif",
-        "description": "Vous disposez d'effets dépendants du nombre de loups garous présents à &number& blocs autour de vous. Vous ne pouvez pas voter, et votre mort ne sera pas annoncée dans le chat global",
+        "description": "Vous disposez d'effets dépendants du nombre de loups garous présents à &number& blocs autour de vous. Vous ne pouvez pas voter, et votre mort ne sera pas annoncée dans le chat global.\n Vous ne pouvez pas utiliser le §cHurlement§f",
         "effects": "4 LG ou plus : Faiblesse, 2 LG ou moins : Resistance le Jour, Force la nuit, Seul : Vitesse",
         "configurations": {
           "distance": "Champ d'action du Loup-Garou Craintif §b&number&"
@@ -700,11 +700,8 @@
       },
       "howling_werewolf": {
         "display": "Loup Garou Hurleur",
-        "description": "À chaque début de nuit, vous hurlez si il y a plus de 5 joueurs à &number& blocs de vous. En fonction du nombre de joueurs non Loup Garou qui ont entendu votre cri, vous gagnez des slots de coeurs supplémentaires pendant &timer&. [2 ou 3 = 1♥ / 4 ou 5 = 2♥ / 6+ = 3♥]",
-        "message": "Il y avait §b&number&§f personne(s) non Loup Garou autour de vous. Vous gagnez ainsi §b&heart&§f coeurs en plus pendant &timer&",
-        "configurations": {
-          "distance": "Champ d'action du Loup Garou Hurleur §b&number&"
-        }
+        "description": "Vous pouvez utiliser §b3 fois§f le hurlement. §b/ww hurler§f. A chaque fois qu'un Loup Garou hurle, vous obtenez §bRégénération II§f pendant 7 secondes ainsi que le pseudo du Loup",
+        "pseudo": "Le joueur qui a hurlé est §b&player&§f"
       },
       "twin": {
         "display": "Jumeau",
@@ -1346,7 +1343,6 @@
         },
         "ww_chat": {
           "command": "chatlg",
-          "description": "Pour parler dans le chat des Loups Garous",
           "prefix": "[§cChat LG§r] &message&",
           "modo": "[§c&name&§r] &message&",
           "announce": "Vous avez §b&timer&§f secondes pour écrire §b&number&§f message(s) dans le chat des Loups Garous §b/ww chatlg§r <message>, attention des rôles peuvent voir le contenu du chat",
@@ -1692,6 +1688,16 @@
           "werewolf_chat_duration": "Durée du Chat des Loups Garous (§b&timer&§r)"
         }
       },
+      "werewolf_howling": {
+        "name": "Hurlement des Loups Garous",
+        "action_bar": "§CHurlement§f : ",
+        "message": "Il y a §b&number&§f loups à §b50 blocs§f de vous",
+        "command": "hurler",
+        "not_allowed": "Vous n'avez pas le droit d'utiliser le §cHurlement",
+        "disabled": "Hurlement désactivé",
+        "warn": "Un joueur vient d'utiliser le §cHurlement",
+        "can_use": "Vous pouvez utiliser le §cHurlement§f avec §b/ww hurler"
+      },
       "show_role_to_death": {
         "name": "Affiche le Rôle à la Mort"
       },
@@ -1872,6 +1878,9 @@
       },
       "beta_zombies": {
         "name": "Beta Zombies"
+      },
+      "auto_break": {
+        "name": "Auto Break"
       }
     },
     "random_events": {
@@ -1996,6 +2005,13 @@
       "cupid_indecisive": {
         "name": "Cupidon Indécis",
         "description": "Lorsque cet événement est activé, il affecte la configuration de la partie \n: si le Couple est censé être aléatoire, il sera choisi par le Cupidon,\n s’il est censé être choisi, il sera aléatoire."
+      },
+      "blood_moon": {
+        "name": "Lune de Sang",
+        "description": "Pendant cette nuit, les Loups-Garous ont des particules rouges à leurs pieds \nvisibles uniquement par les autres Loups-Garous.\n Les messages de mort des joueurs qui meurent pendant cette nuit\n ne sont envoyés qu'au petit matin le jour suivant",
+        "start": "Début d'une Lune de §cSang",
+        "end": "Fin de la Lune de §cSang",
+        "count": "Début de la Lune au bout de §b&number&§f jour(s)"
       }
     },
     "check": {

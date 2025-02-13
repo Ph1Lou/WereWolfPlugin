@@ -55,8 +55,7 @@ public class WolfFleas extends ListenerWerewolf {
                 .filter(p -> this.fleas.get(p) == this.getGame().getTimer())
                 .forEach(p -> p.sendMessageWithKey(Prefix.ORANGE, "werewolf.random_events.wolf_fleas.werewolf_message"));
 
-        this.getGame().getPlayersWW().stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+        this.getGame().getAlivePlayersWW().stream()
                 .filter(playerWW -> !this.isDefaultWereWolf(playerWW))
                 .filter(playerWW -> this.fleas.keySet().stream()
                         .filter(ww -> ww.isState(StatePlayer.ALIVE))

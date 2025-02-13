@@ -71,10 +71,9 @@ public class Illusionist extends RoleImpl implements IPower, IAffectedPlayers {
         }
         this.setWait(false);
 
-        List<IPlayerWW> playersWW = game.getPlayersWW()
+        List<IPlayerWW> playersWW = game.getAlivePlayersWW()
                 .stream()
                 .filter(playerWW1 -> !playerWW1.equals(this.getPlayerWW()))
-                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
                 .filter(iRole -> !iRole.isWereWolf())
                 .map(IRole::getPlayerWW)
@@ -102,9 +101,8 @@ public class Illusionist extends RoleImpl implements IPower, IAffectedPlayers {
 
         Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(this.getPlayerWW()));
 
-        this.game.getPlayersWW().stream()
+        this.game.getAlivePlayersWW().stream()
                 .filter(playerWW1 -> playerWW1.getRole().isWereWolf())
-                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .forEach(player1 -> {
                     player1.sendMessageWithKey(Prefix.RED, "werewolf.roles.werewolf.new_werewolf");
                     Sound.WOLF_HOWL.play(player1);
@@ -116,11 +114,10 @@ public class Illusionist extends RoleImpl implements IPower, IAffectedPlayers {
                 return;
             }
             playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.illusionist.reveal");
-            List<IPlayerWW> players1WW = game.getPlayersWW()
+            List<IPlayerWW> players1WW = game.getAlivePlayersWW()
                     .stream()
                     .filter(playerWW1 -> !playerWW1.equals(this.getPlayerWW()))
                     .filter(playerWW1 -> !playerWW1.equals(playerWW))
-                    .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                     .map(IPlayerWW::getRole)
                     .map(IRole::getPlayerWW)
                     .collect(Collectors.toList());

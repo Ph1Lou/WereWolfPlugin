@@ -94,7 +94,7 @@ public class LootBox extends ListenerWerewolf {
     @EventHandler
     public void onActionBarRequest(ActionBarEvent event) {
 
-        StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
+        StringBuilder stringBuilder = event.getActionBar();
 
         if (chestHasBeenOpen.isEmpty()) return;
 
@@ -113,7 +113,6 @@ public class LootBox extends ListenerWerewolf {
             stringBuilder.append(" ").append(Utils.updateArrow(player,
                     location));
         }
-        event.setActionBar(stringBuilder.toString());
     }
 
 
@@ -123,8 +122,7 @@ public class LootBox extends ListenerWerewolf {
         World world = game.getMapManager().getWorld();
         WorldBorder wb = world.getWorldBorder();
 
-        List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
-                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
+        List<IPlayerWW> playerWWS = game.getAlivePlayersWW().stream()
                 .filter(playerWW1 -> !playerWW1.getRole().isCamp(Camp.VILLAGER))
                 .collect(Collectors.toList());
 
@@ -150,9 +148,9 @@ public class LootBox extends ListenerWerewolf {
 
             double a = Math.random() * 2 * Math.PI;
             int x = (int) (Math.round(wb.getSize() / 3 *
-                    Math.cos(a) + world.getSpawnLocation().getX()));
+                                      Math.cos(a) + world.getSpawnLocation().getX()));
             int z = (int) (Math.round(wb.getSize() / 3 *
-                    Math.sin(a) + world.getSpawnLocation().getBlockZ()));
+                                      Math.sin(a) + world.getSpawnLocation().getBlockZ()));
             Location location = new Location(world, x, world.getHighestBlockYAt(x, z), z);
 
             createTarget(location, i == 0, playerWW.getName());

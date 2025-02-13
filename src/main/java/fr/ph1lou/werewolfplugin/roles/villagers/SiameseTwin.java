@@ -9,7 +9,6 @@ import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.Sound;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -67,9 +66,8 @@ public class SiameseTwin extends RoleImpl {
 
         StringBuilder list = new StringBuilder();
 
-        game.getPlayersWW()
+        game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().equals(this))
                 .filter(playerWW -> playerWW.getRole().isKey(
                         RoleBase.SIAMESE_TWIN))
@@ -87,39 +85,37 @@ public class SiameseTwin extends RoleImpl {
     @Override
     public void second() {
 
-        double health = game.getPlayersWW()
+        double health = game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
                 .filter(roles -> roles.isKey(RoleBase.SIAMESE_TWIN))
                 .map(IRole::getPlayerUUID)
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
                 .mapToDouble(player -> player.getHealth() /
-                        VersionUtils.getVersionUtils().getPlayerMaxHealth(player))
+                                       VersionUtils.getVersionUtils().getPlayerMaxHealth(player))
                 .average()
                 .orElse(0);
 
-        game.getPlayersWW()
+        game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
                 .filter(roles -> roles.isKey(RoleBase.SIAMESE_TWIN))
                 .map(IRole::getPlayerUUID)
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
                 .filter(player -> health *
-                        VersionUtils.getVersionUtils().getPlayerMaxHealth(player)
-                        > 10)
+                                  VersionUtils.getVersionUtils().getPlayerMaxHealth(player)
+                                  > 10)
                 .forEach(player -> {
                     if (health * VersionUtils.getVersionUtils()
                             .getPlayerMaxHealth(player) + 1
-                            < player.getHealth()) {
+                        < player.getHealth()) {
                         Sound.BURP.play(player);
                     }
                     player.setHealth(health *
-                            VersionUtils.getVersionUtils()
-                                    .getPlayerMaxHealth(player));
+                                     VersionUtils.getVersionUtils()
+                                             .getPlayerMaxHealth(player));
                 });
 
     }

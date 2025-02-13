@@ -98,9 +98,8 @@ public class Druid extends RoleImpl implements IPower {
 
         this.setPower(false);
 
-        List<IPlayerWW> playerWWS = game.getPlayersWW()
+        List<IPlayerWW> playerWWS = game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .filter(playerWW1 -> !playerWW1.equals(this.getPlayerWW()))
                 .filter(playerWW1 -> playerWW1.distance(this.getPlayerWW()) < game.getConfig().getValue(IntValueBase.DRUID_DISTANCE))
                 .filter(playerWW1 -> playerWW1.getRole().getAura() == Aura.DARK)

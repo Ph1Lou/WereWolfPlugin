@@ -82,7 +82,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
                     .forEach(player -> {
                         ActionBarEvent actionBarEvent = new ActionBarEvent(player.getUniqueId());
                         Bukkit.getPluginManager().callEvent(actionBarEvent);
-                        VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar());
+                        VersionUtils.getVersionUtils().sendActionBar(player, actionBarEvent.getActionBar().toString());
                     }), 0, 4);
         });
         StatistiksUtils.loadContributors();

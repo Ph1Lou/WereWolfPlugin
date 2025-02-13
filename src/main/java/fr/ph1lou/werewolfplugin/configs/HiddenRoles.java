@@ -41,9 +41,8 @@ public class HiddenRoles extends ListenerWerewolf {
             return;
         }
 
-        List<IPlayerWW> playerWWs = this.getGame().getPlayersWW()
+        List<IPlayerWW> playerWWs = this.getGame().getAlivePlayersWW()
                 .stream()
-                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .filter(playerWW1 -> playerWW1.getRole().isCamp(Camp.VILLAGER))
                 .collect(Collectors.toList());
 

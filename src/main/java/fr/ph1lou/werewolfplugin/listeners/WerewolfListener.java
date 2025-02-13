@@ -5,6 +5,7 @@ import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -22,7 +23,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 import java.util.Optional;
 
@@ -30,7 +30,7 @@ public class WerewolfListener implements Listener {
 
     private final WereWolfAPI game;
 
-    public WerewolfListener(WereWolfAPI game){
+    public WerewolfListener(WereWolfAPI game) {
         this.game = game;
     }
 
@@ -99,9 +99,8 @@ public class WerewolfListener implements Listener {
             iRole.recoverPotionEffects();
         }
 
-        this.game.getPlayersWW().stream()
+        this.game.getAlivePlayersWW().stream()
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .forEach(player1 -> {
                     player1.sendMessageWithKey(Prefix.RED, "werewolf.roles.werewolf.new_werewolf");
                     Sound.WOLF_HOWL.play(player1);
@@ -111,12 +110,11 @@ public class WerewolfListener implements Listener {
     @EventHandler
     public void onNightForWereWolf(NightEvent event) {
 
-        game.getPlayersWW().stream()
+        game.getAlivePlayersWW().stream()
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
                 .filter(playerWW -> playerWW.getRole().isAbilityEnabled())
                 .forEach(playerWW -> playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, RoleBase.WEREWOLF)));
     }
-
 
 
     @EventHandler(priority = EventPriority.LOWEST)

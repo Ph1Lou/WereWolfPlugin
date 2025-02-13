@@ -92,9 +92,8 @@ public class Sister extends RoleImpl implements IAffectedPlayers {
 
         StringBuilder list = new StringBuilder();
 
-        game.getPlayersWW()
+        game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.getRole().equals(this))
                 .filter(playerWW -> playerWW.getRole().isKey(RoleBase.SISTER))
                 .forEach(playerWW -> list.append(playerWW.getName()).append(" "));
@@ -109,9 +108,8 @@ public class Sister extends RoleImpl implements IAffectedPlayers {
             return;
         }
 
-        boolean recoverResistance = game.getPlayersWW()
+        boolean recoverResistance = game.getAlivePlayersWW()
                                             .stream()
-                                            .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                                             .map(IPlayerWW::getRole)
                                             .filter(roles -> !roles.equals(this))
                                             .filter(roles -> roles.isKey(RoleBase.SISTER))

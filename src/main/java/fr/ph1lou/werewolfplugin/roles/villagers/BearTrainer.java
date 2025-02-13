@@ -74,9 +74,8 @@ public class BearTrainer extends RoleImpl {
         if (!isAbilityEnabled()) return;
 
         Location oursLocation = player.getLocation();
-        Set<IPlayerWW> growled = game.getPlayersWW()
+        Set<IPlayerWW> growled = game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> playerWW.distance(getPlayerWW()) < game.getConfig().getValue(IntValueBase.BEAR_TRAINER_DISTANCE))
                 .map(IPlayerWW::getRole)
                 .filter(roles -> roles.isDisplayCamp(Camp.WEREWOLF.getKey()) || (roles.getDisplayCamp().equals(roles.getCamp().getKey()) && roles.isWereWolf()))

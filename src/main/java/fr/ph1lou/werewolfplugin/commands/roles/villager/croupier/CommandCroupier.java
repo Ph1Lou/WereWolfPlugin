@@ -9,15 +9,20 @@ import fr.ph1lou.werewolfapi.events.roles.croupier.CroupierChooseEventEvent;
 import fr.ph1lou.werewolfapi.events.roles.croupier.CroupierEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfplugin.roles.villagers.Croupier;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RoleCommand(key = "werewolf.roles.croupier.command",
@@ -50,9 +55,8 @@ public class CommandCroupier implements ICommandRole {
             return;
         }
 
-        List<IPlayerWW> playerWWS = game.getPlayersWW()
+        List<IPlayerWW> playerWWS = game.getAlivePlayersWW()
                 .stream()
-                .filter(p -> p.isState(StatePlayer.ALIVE))
                 .filter(iPlayerWW -> !iPlayerWW.equals(playerWW))
                 .filter(iPlayerWW -> !iPlayerWW.equals(targetWW))
                 .collect(Collectors.toList());
@@ -77,7 +81,7 @@ public class CommandCroupier implements ICommandRole {
 
         Bukkit.getPluginManager().callEvent(croupierChooseEventEvent);
 
-        if(croupierChooseEventEvent.isCancelled()){
+        if (croupierChooseEventEvent.isCancelled()) {
             playerWW.sendMessageWithKey(Prefix.ORANGE, "werewolf.check.cancel");
             return;
         }

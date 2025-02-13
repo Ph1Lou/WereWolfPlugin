@@ -387,7 +387,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
         if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
 
-        StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
+        StringBuilder stringBuilder = event.getActionBar();
 
         Player player = Bukkit.getPlayer(event.getPlayerUUID());
 
@@ -410,8 +410,6 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
                                 playerWW.getLocation()));
             }
         }
-
-        event.setActionBar(stringBuilder.toString());
     }
 
     @Override
@@ -474,9 +472,8 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
             IPlayerWW playerWW2 = list.get(i);
 
-            game.getPlayersWW()
+            game.getAlivePlayersWW()
                     .stream()
-                    .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                     .map(IPlayerWW::getRole)
                     .filter(roles -> roles.isKey(RoleBase.ANGEL)
                                      || roles.isKey(RoleBase.GUARDIAN_ANGEL))

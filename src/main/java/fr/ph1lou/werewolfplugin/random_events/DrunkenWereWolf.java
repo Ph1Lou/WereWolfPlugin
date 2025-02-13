@@ -3,7 +3,6 @@ package fr.ph1lou.werewolfplugin.random_events;
 import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.random_events.DrunkenWereWolfEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
@@ -14,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -41,8 +41,7 @@ public class DrunkenWereWolf extends ListenerWerewolf {
 
         WereWolfAPI game = this.getGame();
 
-        List<IPlayerWW> playerWWS = game.getPlayersWW().stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+        List<IPlayerWW> playerWWS = game.getAlivePlayersWW().stream()
                 .filter(playerWW -> playerWW.getRole().isWereWolf())
                 .collect(Collectors.toList());
 
@@ -59,9 +58,7 @@ public class DrunkenWereWolf extends ListenerWerewolf {
             return;
         }
 
-        List<IPlayerWW> fakeListPool = game.getPlayersWW().stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
-                .collect(Collectors.toList());
+        List<IPlayerWW> fakeListPool = new ArrayList<>(game.getAlivePlayersWW());
 
         if (fakeListPool.size() < playerWWS.size()) {
             this.temp = null;
@@ -73,8 +70,7 @@ public class DrunkenWereWolf extends ListenerWerewolf {
 
         this.fakeList.addAll(fakeListPool.subList(0, playerWWS.size()));
 
-        this.fakeList.addAll(game.getPlayersWW().stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+        this.fakeList.addAll(game.getAlivePlayersWW().stream()
                 .filter(playerWW -> playerWW.getRole().isKey(RoleBase.ALPHA_WEREWOLF))
                 .collect(Collectors.toList()));
 

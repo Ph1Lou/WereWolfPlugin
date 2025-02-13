@@ -140,9 +140,8 @@ public class Rival extends RoleNeutral implements IPower {
 
         if (lover == null) return;
 
-        List<IPlayerWW> playerWWS = game.getPlayersWW()
+        List<IPlayerWW> playerWWS = game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
                 .filter(playerWW -> !playerWW.equals(getPlayerWW()))
                 .filter(playerWW -> !lover.getLovers().contains(playerWW))
                 .collect(Collectors.toList());
@@ -272,7 +271,7 @@ public class Rival extends RoleNeutral implements IPower {
 
         if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
 
-        StringBuilder stringBuilder = new StringBuilder(event.getActionBar());
+        StringBuilder stringBuilder = event.getActionBar();
 
         Player player = Bukkit.getPlayer(event.getPlayerUUID());
 
@@ -294,8 +293,6 @@ public class Rival extends RoleNeutral implements IPower {
                     .append(Utils.updateArrow(player,
                             cupidWW.getLocation()));
         }
-
-        event.setActionBar(stringBuilder.toString());
     }
 
     @Override

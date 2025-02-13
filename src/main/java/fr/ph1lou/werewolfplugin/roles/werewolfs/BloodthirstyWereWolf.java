@@ -7,7 +7,11 @@ import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.enums.*;
+import fr.ph1lou.werewolfapi.enums.Aura;
+import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
@@ -67,10 +71,10 @@ import java.util.stream.Collectors;
         },
         timers = {
                 @Timer(key = TimerBase.BLOODTHIRSTY_COOL_DOWN,
-                        defaultValue = 15*60,
-                        meetUpValue = 5*60,
+                        defaultValue = 15 * 60,
+                        meetUpValue = 5 * 60,
                         step = 30
-                )}
+                ) }
 )
 public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPower {
     private static final float BASE_SPEED = 0.2f;
@@ -92,11 +96,11 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
     public @NotNull String getDescription() {
         String powerString;
         String timeS = Utils.conversion(game.getConfig().getTimerValue(TimerBase.BLOODTHIRSTY_COOL_DOWN));
-        if(this.havePower){
+        if (this.havePower) {
             powerString = game.translate("werewolf.roles.bloodthirsty_werewolf.power_enable");
-        } else if(this.traquedPlayerWW != null){
+        } else if (this.traquedPlayerWW != null) {
             powerString = game.translate("werewolf.roles.bloodthirsty_werewolf.power_already_used", Formatter.player(this.traquedPlayerWW.getName()));
-        } else{
+        } else {
             powerString = game.translate("werewolf.roles.bloodthirsty_werewolf.power_disable");
         }
 
@@ -108,7 +112,7 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
                         Formatter.format("&speed&", game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_SPEED)),
                         Formatter.format("&list_day&", game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_MAX_LIFE_DETECT_DAY)),
                         Formatter.format("&damage_day&", game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_TAKE_DAMAGE_DAY))
-                        ))
+                ))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .setPower(powerString)
                 .build();
@@ -116,7 +120,7 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
 
     @Override
     public void recoverPower() {
-        if (!this.hasPower()){
+        if (!this.hasPower()) {
             this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.bloodthirsty_werewolf.recover_power");
             this.havePower = true;
         }
@@ -135,7 +139,7 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
     @Override
     public void removeAffectedPlayer(IPlayerWW iPlayerWW) {
         this.affectedPlayers.remove(iPlayerWW);
-        if(this.affectedPlayers.size() == 0){
+        if (this.affectedPlayers.isEmpty()) {
             this.clearAffectedPlayer();
         }
     }
@@ -162,17 +166,17 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
     }
 
     @Override
-    public void second(){
+    public void second() {
 
-        if(this.traquedPlayerWW == null) return;
+        if (this.traquedPlayerWW == null) return;
 
         Player player = Bukkit.getPlayer(this.getPlayerUUID());
         Player traquedPlayer = Bukkit.getPlayer(this.traquedPlayerWW.getUUID());
 
-        if(player == null | traquedPlayer == null) return;
+        if (player == null | traquedPlayer == null) return;
 
-        if (this.arrowDirection.endsWith("↑")){
-            if(!this.speedIsAdded){
+        if (this.arrowDirection.endsWith("↑")) {
+            if (!this.speedIsAdded) {
                 float playerWalkSpeed = player.getWalkSpeed();
 
                 this.speedModification = BASE_SPEED * game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_SPEED) / 100F;
@@ -180,7 +184,7 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
 
                 this.speedIsAdded = true;
             }
-        } else if (this.speedIsAdded){
+        } else if (this.speedIsAdded) {
             float playerWalkSpeed = player.getWalkSpeed();
             player.setWalkSpeed(playerWalkSpeed - this.speedModification);
 
@@ -190,8 +194,8 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerFinalDeath(FinalDeathEvent e){
-        if(!e.getPlayerWW().equals(this.traquedPlayerWW)){
+    public void onPlayerFinalDeath(FinalDeathEvent e) {
+        if (!e.getPlayerWW().equals(this.traquedPlayerWW)) {
             return;
         }
         int coolDownValue = game.getConfig().getTimerValue(TimerBase.BLOODTHIRSTY_COOL_DOWN);
@@ -211,43 +215,43 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent e){
-        if(!(e.getEntity() instanceof Player & e.getDamager() instanceof Player)) return;
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
+        if (!(e.getEntity() instanceof Player & e.getDamager() instanceof Player)) return;
 
         IPlayerWW damagerWW = game.getPlayerWW(e.getDamager().getUniqueId()).orElse(null);
 
-        if(damagerWW == null) return;
-        if(damagerWW.getRole() != this) return;
+        if (damagerWW == null) return;
+        if (damagerWW.getRole() != this) return;
 
 
         IPlayerWW playerWW = game.getPlayerWW(e.getEntity().getUniqueId()).orElse(null);
-        if(playerWW == null) return;
+        if (playerWW == null) return;
 
 
-        if(playerWW.getRole().isWereWolf()) return;
+        if (playerWW.getRole().isWereWolf()) return;
 
         this.haveDealDamage = true;
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void checkList(DayEvent e){
+    public void checkList(DayEvent e) {
         // ne prend que les jours après le jour spécifié
         if (e.getNumber() < game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_MAX_LIFE_DETECT_DAY)) {
             return;
         }
 
         // qu'une seule fois tout les deux jours
-        if(e.getNumber() % 2 != game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_MAX_LIFE_DETECT_DAY) % 2){
+        if (e.getNumber() % 2 != game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_MAX_LIFE_DETECT_DAY) % 2) {
             return;
         }
         float max_life = game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_MAX_LIFE_DETECT) / 100f;
-        List<IPlayerWW> players = game.getPlayersWW().stream()
+        List<IPlayerWW> players = game.getAlivePlayersWW().stream()
                 .filter(player1 -> player1 != this.getPlayerWW())
                 .filter(player1 -> {
                     double ratio = player1.getHealth() / player1.getMaxHealth();
                     return (ratio < max_life);
                 })
-                .filter(player1 ->{
+                .filter(player1 -> {
                     BloodthirstyWerewolfLifeDetectionEvent event = new BloodthirstyWerewolfLifeDetectionEvent(this.getPlayerWW(), player1);
                     Bukkit.getPluginManager().callEvent(event);
 
@@ -267,22 +271,22 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void checkDamage(DayEvent e){
+    public void checkDamage(DayEvent e) {
         //seulement un jour sur deux
-        if (e.getNumber() % 2 != game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_TAKE_DAMAGE_DAY) % 2){
+        if (e.getNumber() % 2 != game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_TAKE_DAMAGE_DAY) % 2) {
             return;
         }
 
         //seulement a partir du jour spécifié dans la configuration
-        if (e.getNumber() >= (game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_TAKE_DAMAGE_DAY))){
-            if(this.haveDealDamage){
-                this.getPlayerWW().sendMessageWithKey(Prefix.BLUE,"werewolf.roles.bloodthirsty_werewolf.have_deal_damage");
-            }else if(this.getPlayerWW().isState(StatePlayer.ALIVE)){
+        if (e.getNumber() >= (game.getConfig().getValue(IntValueBase.BLOODTHIRSTY_TAKE_DAMAGE_DAY))) {
+            if (this.haveDealDamage) {
+                this.getPlayerWW().sendMessageWithKey(Prefix.BLUE, "werewolf.roles.bloodthirsty_werewolf.have_deal_damage");
+            } else if (this.getPlayerWW().isState(StatePlayer.ALIVE)) {
                 this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.bloodthirsty_werewolf.havent_deal_damage");
 
-                if(this.getPlayerWW().getHealth() > 8){
+                if (this.getPlayerWW().getHealth() > 8) {
                     this.getPlayerWW().removePlayerHealth(8);
-                }else{
+                } else {
                     this.getPlayerWW().removePlayerHealth(this.getPlayerWW().getHealth() - 0.5);
                 }
             }
@@ -292,16 +296,16 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onActionBarRequest(ActionBarEvent e){
-        if(!this.getPlayerUUID().equals(e.getPlayerUUID())) return;
+    public void onActionBarRequest(ActionBarEvent e) {
+        if (!this.getPlayerUUID().equals(e.getPlayerUUID())) return;
 
-        if(this.traquedPlayerWW == null) return;
+        if (this.traquedPlayerWW == null) return;
 
         Player player = Bukkit.getPlayer(e.getPlayerUUID());
 
-        if(player == null) return;
+        if (player == null) return;
 
-        StringBuilder builder = new StringBuilder(e.getActionBar());
+        StringBuilder builder = e.getActionBar();
 
         Location arrowLoc = this.traquedPlayerWW.getLocation();
 
@@ -309,7 +313,7 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
         this.arrowDirection = String.valueOf(str.charAt(str.length() - 1));
 
 
-        if(this.traquedPlayerWW.isState(StatePlayer.ALIVE)){
+        if (this.traquedPlayerWW.isState(StatePlayer.ALIVE)) {
             builder
                     .append(" ")
                     .append(traquedPlayerWW.getName())
@@ -317,6 +321,5 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
                     .append(arrowDirection);
         }
 
-        e.setActionBar(builder.toString());
     }
 }

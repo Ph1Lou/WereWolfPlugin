@@ -4,7 +4,6 @@ import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.librarian.LibrarianGiveBackEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -44,9 +43,8 @@ public class CommandSendToLibrarian implements ICommand {
         for (String w : args) {
             sb2.append(w).append(" ");
         }
-        game.getPlayersWW()
+        game.getAlivePlayersWW()
                 .stream()
-                .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
                 .map(IPlayerWW::getRole)
                 .filter(role -> role.isKey(RoleBase.LIBRARIAN))
                 .filter(roles -> ((IAffectedPlayers) roles).getAffectedPlayers().contains(playerWW))

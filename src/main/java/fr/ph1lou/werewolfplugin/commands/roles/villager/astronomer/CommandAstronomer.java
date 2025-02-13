@@ -5,7 +5,6 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
 import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.astronomer.TrackEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -35,9 +34,8 @@ public class CommandAstronomer implements ICommandRole {
             return;
         }
 
-        List<IPlayerWW> playerWWS = game.getPlayersWW()
+        List<IPlayerWW> playerWWS = game.getAlivePlayersWW()
                 .stream()
-                .filter(iPlayerWW -> iPlayerWW.isState(StatePlayer.ALIVE))
                 .filter(iPlayerWW -> !iPlayerWW.equals(playerWW))
                 .filter(iPlayerWW -> iPlayerWW.getRole().isNeutral() || iPlayerWW.getRole().isWereWolf())
                 .filter(iPlayerWW -> iPlayerWW.distance(playerWW) > 20)

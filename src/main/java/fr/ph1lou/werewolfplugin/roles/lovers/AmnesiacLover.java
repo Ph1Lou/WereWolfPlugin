@@ -176,7 +176,7 @@ public class AmnesiacLover extends LoverBaseImpl implements ILover, Listener {
 
         if (!getLovers().contains(playerWW)) return;
 
-        StringBuilder sb = new StringBuilder(event.getActionBar());
+        StringBuilder sb = event.getActionBar();
         Player player = Bukkit.getPlayer(uuid);
 
         if (player == null) return;
@@ -192,9 +192,6 @@ public class AmnesiacLover extends LoverBaseImpl implements ILover, Listener {
         buildActionbarLover(player,
                 sb,
                 new ArrayList<>(Arrays.asList(this.amnesiacLover1, this.amnesiacLover2)));
-
-        event.setActionBar(sb.toString());
-
     }
 
     @EventHandler

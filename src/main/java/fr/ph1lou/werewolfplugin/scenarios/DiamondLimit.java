@@ -26,7 +26,7 @@ import java.util.Map;
                 step = 1,
                 item = UniversalMaterial.DIAMOND))
 public class DiamondLimit extends ListenerWerewolf {
-
+    
     final Map<String, Integer> diamondPerPlayer = new HashMap<>();
 
     public DiamondLimit(WereWolfAPI main) {
@@ -52,13 +52,13 @@ public class DiamondLimit extends ListenerWerewolf {
         if (!VersionUtils.getVersionUtils()
                 .getItemInHand(event.getPlayer())
                 .getType().equals(Material.DIAMOND_PICKAXE) &&
-                !VersionUtils.getVersionUtils()
-                        .getItemInHand(event.getPlayer())
-                        .getType().equals(Material.IRON_PICKAXE)) {
+            !VersionUtils.getVersionUtils()
+                    .getItemInHand(event.getPlayer())
+                    .getType().equals(Material.IRON_PICKAXE)) {
             return;
         }
         if (diamondPerPlayer.getOrDefault(playerName, 0) >=
-                game.getConfig().getValue(IntValueBase.DIAMOND_LIMIT)) {
+            game.getConfig().getValue(IntValueBase.DIAMOND_LIMIT)) {
             block.getWorld().dropItem(loc, new ItemStack(Material.GOLD_INGOT, 1));
             block.getWorld().spawn(loc, ExperienceOrb.class).setExperience(event.getExpToDrop());
             block.setType(Material.AIR);
