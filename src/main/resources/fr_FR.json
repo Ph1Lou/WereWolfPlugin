@@ -1767,6 +1767,10 @@
       "troll_lover": {
         "name": "Troll Saint Valentin"
       },
+      "group_algo": {
+        "name": "Algorithme de Groupe",
+        "description": "Permet de désactiver l'algorithme des groupes de base"
+      },
       "hidden_roles": {
         "name": "Rôles Masqués",
         "description": "permet d’activer le système de Rôles masqués sans avoir de Prêtresse dans la composition. \nUn joueur du Village est alors choisi aléatoirement au début de la partie sans qu'il le sache",
