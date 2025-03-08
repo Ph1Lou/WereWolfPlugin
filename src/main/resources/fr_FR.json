@@ -542,7 +542,7 @@
         "full": "Le joueur a son inventaire rempli, il ne peut recevoir la flûte",
         "wait": "Vous devez attendre §bun jour§f avant de transmettre une nouvelle flûte",
         "affected": "§bPersonne affectée§f : §f&list&\n",
-        "craft_description": "Pour fabriquer votre flûte, un baton entouré de lingots d'or dans votre établi",
+        "craft_description": "Pour fabriquer votre flûte, un baton entouré de 4 lingots d'or dans votre établi",
         "description": "Lorsque vous aurez fabriqué votre flûte, toutes les personnes se situant à moins de §b&number&§f blocs de vous seront charmées progressivement (1% toutes les &timer& secondes).",
         "power": "Vous pouvez fabriquer des flûtes §bsupplémentaires§f, et les donner furtivement aux joueurs par un §bclique droit§f une fois par cycle. Si le joueur repère la flûte son effet est annulé. Un joueur avec une flûte charmera §bà son insu§f les joueurs autour de lui.",
         "enchanted": "Vous venez d'enchanter §b&player&",

@@ -99,7 +99,6 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         ShapedRecipe recipe = VersionUtils.getVersionUtils().registerCraft(flute, "recipe_flute_player");
 
         recipe.shape("XOX", "OSO", "XOX");
-
         recipe.setIngredient('O', Material.GOLD_INGOT);
         recipe.setIngredient('S', Material.STICK);
         Bukkit.addRecipe(recipe);
