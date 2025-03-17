@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.listeners;
 
+import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Day;
@@ -41,7 +42,9 @@ public class CycleListener implements Listener {
 
         Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.announcement.day",
                 Formatter.number(event.getNumber())));
-        groupSizeChange();
+        if(game.getConfig().isConfigActive("werewolf.configurations.group_algo.name")){
+            groupSizeChange();
+        }
 
 
         long duration = game.getConfig().getTimerValue(TimerBase.POWER_DURATION);
@@ -76,7 +79,9 @@ public class CycleListener implements Listener {
 
         Bukkit.broadcastMessage(game.translate(Prefix.YELLOW, "werewolf.announcement.night",
                 Formatter.number(event.getNumber())));
-        groupSizeChange();
+        if(game.getConfig().isConfigActive("werewolf.configurations.group_algo.name")){
+            groupSizeChange();
+        }
 
         if (duration > 0) {
             BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getPluginManager().callEvent(new DayWillComeEvent()), duration * 20);
