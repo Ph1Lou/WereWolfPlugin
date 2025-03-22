@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.scenarios;
 
 import fr.ph1lou.werewolfapi.annotations.Scenario;
 import fr.ph1lou.werewolfapi.basekeys.ScenarioBase;
+import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -19,6 +20,10 @@ public class AutoBreak extends ListenerWerewolf {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
+
+        if (getGame().isState(StateGame.LOBBY)) {
+            return;
+        }
 
         Block block = event.getBlock(); // Récupère le bloc placé
         Material blockType = block.getType();
