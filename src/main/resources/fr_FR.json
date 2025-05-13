@@ -1536,7 +1536,7 @@
         "name": "Configuration §bTimers"
       },
       "random_events": {
-        "name": "Configuration §bEvents aléatoires",
+        "name_fix": "Conf §bEvents aléatoires",
         "probability": "§fProbabilité : §b&number&§f%"
       },
       "save": {

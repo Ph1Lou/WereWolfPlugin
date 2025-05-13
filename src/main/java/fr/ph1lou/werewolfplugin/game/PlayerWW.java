@@ -87,7 +87,7 @@ public class PlayerWW implements IPlayerWW {
         this.name = player.getName();
         this.role = new Villager(api, this);
         this.game = api;
-        this.honor = game.getRandom().nextInt(-1, 2);
+        this.honor = game.getRandom().nextInt(3) - 1;
         try {
             this.mojangUUID = getUUID(name);
         } catch (Exception ignored) {

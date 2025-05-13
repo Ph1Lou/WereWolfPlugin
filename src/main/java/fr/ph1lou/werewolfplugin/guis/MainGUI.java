@@ -94,7 +94,7 @@ public class MainGUI implements InventoryProvider {
                 .build()), e -> SaveGUI.INVENTORY.open(player)));
 
         contents.set(5, 4, ClickableItem.of((new ItemBuilder(Material.EGG)
-                .setDisplayName(game.translate("werewolf.menus.random_events.name"))
+                .setDisplayName(game.translate("werewolf.menus.random_events.name_fix"))
                 .build()), e -> RandomEventsGUI.INVENTORY.open(player)));
 
         contents.set(5, 5, ClickableItem.of((new ItemBuilder(UniversalMaterial.CRAFTING_TABLE.getType())
@@ -137,8 +137,8 @@ public class MainGUI implements InventoryProvider {
         }));
 
 
-        int[] SlotRedGlass = {1, 2, 6, 7, 9, 10, 16, 17, 18, 26, 27, 35, 36, 37, 43, 44, 46, 47, 51, 52};
-        int[] SlotBlackGlass = {5, 11, 12, 14, 15, 19, 20, 21, 23, 24, 25, 28, 34, 38, 39, 41, 42};
+        int[] SlotRedGlass = { 1, 2, 6, 7, 9, 10, 16, 17, 18, 26, 27, 35, 36, 37, 43, 44, 46, 47, 51, 52 };
+        int[] SlotBlackGlass = { 5, 11, 12, 14, 15, 19, 20, 21, 23, 24, 25, 28, 34, 38, 39, 41, 42 };
         for (int slotRedGlass : SlotRedGlass) {
             contents.set(slotRedGlass / 9, slotRedGlass % 9, ClickableItem.empty((new ItemBuilder(UniversalMaterial.RED_STAINED_GLASS_PANE.getStack()).build())));
 
