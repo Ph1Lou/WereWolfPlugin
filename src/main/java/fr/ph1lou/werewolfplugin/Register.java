@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings({ "unchecked" })
 public class Register implements IRegisterManager {
 
     private static Register INSTANCE;
@@ -289,7 +289,7 @@ public class Register implements IRegisterManager {
 
                         }
                     });
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -316,9 +316,9 @@ public class Register implements IRegisterManager {
     private Optional<String> checkLovers(String key) {
         return this.lovers.stream()
                 .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
+                                                Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
+                                                Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
+                                                Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
                 .map(Wrapper::getAddonKey)
                 .findFirst();
     }
@@ -347,9 +347,9 @@ public class Register implements IRegisterManager {
     private Optional<String> checkEvents(String key) {
         return this.randomEvents.stream()
                 .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)))
+                                                Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)) ||
+                                                Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
+                                                Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)))
                 .map(Wrapper::getAddonKey)
                 .findFirst();
     }
@@ -357,9 +357,9 @@ public class Register implements IRegisterManager {
     private Optional<String> checkScenarios(String key) {
         return this.scenarios.stream()
                 .filter(configurationWrapper -> configurationWrapper.getMetaDatas().key().equals(key) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
+                                                Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
+                                                Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
+                                                Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
                 .map(Wrapper::getAddonKey)
                 .findFirst();
     }
@@ -374,9 +374,9 @@ public class Register implements IRegisterManager {
     private Optional<String> checkConfigurations(String key) {
         return this.configurations.stream()
                 .filter(configurationWrapper -> configurationWrapper.getMetaDatas().config().key().equals(key) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
-                        Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configurationBasic -> configurationBasic.key().equals(key)))
+                                                Arrays.stream(configurationWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)) ||
+                                                Arrays.stream(configurationWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
+                                                Arrays.stream(configurationWrapper.getMetaDatas().configurations()).anyMatch(configurationBasic -> configurationBasic.key().equals(key)))
                 .map(Wrapper::getAddonKey)
                 .findFirst();
     }
@@ -384,9 +384,9 @@ public class Register implements IRegisterManager {
     private Optional<String> checkRoles(String key) {
         return this.roles.stream()
                 .filter(iRoleRoleWrapper -> iRoleRoleWrapper.getMetaDatas().key().equals(key) ||
-                        Arrays.stream(iRoleRoleWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
-                        Arrays.stream(iRoleRoleWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
-                        Arrays.stream(iRoleRoleWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
+                                            Arrays.stream(iRoleRoleWrapper.getMetaDatas().timers()).anyMatch(timer -> timer.key().equals(key)) ||
+                                            Arrays.stream(iRoleRoleWrapper.getMetaDatas().configurations()).anyMatch(configuration -> configuration.config().key().equals(key)) ||
+                                            Arrays.stream(iRoleRoleWrapper.getMetaDatas().configValues()).anyMatch(intValue -> intValue.key().equals(key)))
                 .map(Wrapper::getAddonKey)
                 .findFirst();
     }

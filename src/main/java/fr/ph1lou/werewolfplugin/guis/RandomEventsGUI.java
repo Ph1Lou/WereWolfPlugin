@@ -37,7 +37,7 @@ public class RandomEventsGUI implements InventoryProvider {
                             .getRegisterManager()
                             .getRandomEventsRegister()
                             .size(), false), 9)
-            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menus.random_events.name"))
+            .title(JavaPlugin.getPlugin(Main.class).getWereWolfAPI().translate("werewolf.menus.random_events.name_fix"))
             .closeable(true)
             .build();
 

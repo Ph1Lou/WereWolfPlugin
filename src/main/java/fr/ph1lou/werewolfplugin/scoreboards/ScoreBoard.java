@@ -50,8 +50,8 @@ public class ScoreBoard implements IScoreboard {
         this.formatters.add(Formatter.format("&name&", WereWolfAPI::getGameName));
 
         this.formatters.add(Formatter.format("&timer&", (wereWolfAPI) -> Utils.conversion(wereWolfAPI.getTimer())));
-        this.formatters.add(Formatter.format("&day&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getTimer() / wereWolfAPI.getConfig()
-                .getTimerValue(TimerBase.DAY_DURATION) / 2 + 1)));
+        this.formatters.add(Formatter.format("&day&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getTimer() / (wereWolfAPI.getConfig()
+                                                                                                                        .getTimerValue(TimerBase.DAY_DURATION) / 2 + 1))));
         this.formatters.add(Formatter.format("&group&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getGroup())));
         this.formatters.add(Formatter.format("&border&", (wereWolfAPI) -> {
             if (game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN) > 0) {
@@ -64,21 +64,21 @@ public class ScoreBoard implements IScoreboard {
 
         this.formatters.add(Formatter.format("&border_size&", (wereWolfAPI) -> {
 
-                    World world = wereWolfAPI.getMapManager().getWorld();
+            World world = wereWolfAPI.getMapManager().getWorld();
 
-                    if(world == null){
-                        return String.valueOf(wereWolfAPI.getConfig().getBorderMin());
-                    }
-                    WorldBorder wb = world.getWorldBorder();
-                    String borderSize = String.valueOf(Math.round(wb.getSize()));
+            if (world == null) {
+                return String.valueOf(wereWolfAPI.getConfig().getBorderMin());
+            }
+            WorldBorder wb = world.getWorldBorder();
+            String borderSize = String.valueOf(Math.round(wb.getSize()));
 
-                    if (wereWolfAPI.getConfig().getTimerValue(TimerBase.BORDER_BEGIN) <= 0) {
-                        if (wb.getSize() != wereWolfAPI.getConfig().getBorderMin()) {
-                            return borderSize + " > " + wereWolfAPI.getConfig().getBorderMin();
-                        }
-                    }
-                    return borderSize;
-                }));
+            if (wereWolfAPI.getConfig().getTimerValue(TimerBase.BORDER_BEGIN) <= 0) {
+                if (wb.getSize() != wereWolfAPI.getConfig().getBorderMin()) {
+                    return borderSize + " > " + wereWolfAPI.getConfig().getBorderMin();
+                }
+            }
+            return borderSize;
+        }));
     }
 
     public void updateScoreBoard1() {
@@ -239,7 +239,7 @@ public class ScoreBoard implements IScoreboard {
             scoreboardScore.remove(index);
             for (int i = 0; i < Math.min(game.getPlayersWW().size(), 10); i++) {
                 scoreboardScore.add(index++, topKillers.get(topKillers.size() - 1).getName() +
-                        "§3 " + topKillers.remove(topKillers.size() - 1).getPlayersKills().size());
+                                             "§3 " + topKillers.remove(topKillers.size() - 1).getPlayersKills().size());
             }
         }
     }
@@ -254,8 +254,7 @@ public class ScoreBoard implements IScoreboard {
 
         if (!game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION)) {
             updateScoreBoardRole();
-        }
-        else{
+        } else {
             this.roles.clear();
         }
 
