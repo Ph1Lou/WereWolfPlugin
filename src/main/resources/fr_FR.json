@@ -731,7 +731,7 @@
         "command_see": "observer",
         "command_analyse": "analyser",
         "cooldown": "Il y a un cooldown de §b&timer&",
-        "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé précedemment via §b/ww oberver§f",
+        "not_affected": "Vous ne pouvez effectuer cette commande que sur un joueur observé précedemment via §b/ww observer§f",
         "timers": {
           "analyse_duration": "Début du pouvoir Analyste (§b&timer&§r)"
         },
@@ -875,7 +875,7 @@
         }
       },
       "necromancer": {
-        "description": "Vous marquez tous les joueurs proches de vous dans un rayon de §b&number&§f blocs pendant 5 minutes (avec §6☠§f en suffix). Une fois dans la partie, lorque un joueur marqué meurt, le joueur mort ressuscite en tant que mort-vivant et vous lui volez de la vie progressivement",
+        "description": "Vous marquez tous les joueurs proches de vous dans un rayon de §b&number&§f blocs pendant 5 minutes (avec §6☠§f en suffix). Une fois dans la partie, lorsque un joueur marqué meurt, le joueur mort ressuscite en tant que mort-vivant et vous lui volez de la vie progressivement",
         "power_enable": "Progression prochain coeur : §b&number&§f / 600",
         "display": "Nécromancien",
         "perform": "Vous venez de ressusciter §b&player&§f grâce à votre pouvoir",
@@ -1325,7 +1325,7 @@
           "description": "Pour rajouter un joueur en retard au cours de la partie",
           "in_game": "Le joueur est déjà dans la partie",
           "launch": "§b&player&§r vient d'être rajouté à la partie",
-          "teleportation": "Attendez la fin de la téléportaton avant de rajouter un nouveau joueur"
+          "teleportation": "Attendez la fin de la téléportation avant de rajouter un nouveau joueur"
         },
         "config": {
           "command": "config",
@@ -1690,7 +1690,7 @@
       },
       "werewolf_howling": {
         "name": "Hurlement des Loups Garous",
-        "action_bar": "§CHurlement§f : ",
+        "action_bar": "§cHurlement§f : ",
         "message": "Il y a §b&number&§f loups à §b50 blocs§f de vous",
         "command": "hurler",
         "not_allowed": "Vous n'avez pas le droit d'utiliser le §cHurlement",
@@ -1991,7 +1991,7 @@
       },
       "vaccination": {
         "name": "Vaccination",
-        "description": "Le joueur infecté par l'Infect Père des Loups\n est mis au courant qu'exceptionellement \nil ne rejoint pas le camps des Loups\n Les Loups seront néanmoins informés que ce joueur \na bien rejoint leur camp.",
+        "description": "Le joueur infecté par l'Infect Père des Loups\n est mis au courant qu'exceptionnellement \nil ne rejoint pas le camps des Loups\n Les Loups seront néanmoins informés que ce joueur \na bien rejoint leur camp.",
         "infection_cancelled": "Vous avez été infecté par l'Infect Père des Loups mais exceptionnellement, vous ne rejoignez pas le camp des Loups. Ces derniers vous verront comme appartenant à leur camp."
       },
       "incomplete_list": {

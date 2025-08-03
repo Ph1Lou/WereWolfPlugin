@@ -17,7 +17,6 @@ import java.util.function.Supplier;
 
 public class InventoryUtils {
 
-
     public static int getRowNumbers(int elements, boolean onFirstLine) {
         if (onFirstLine) {
             elements -= 8;
@@ -41,7 +40,7 @@ public class InventoryUtils {
             contents.set(4, 7, null);
             contents.set(4, 8, null);
 
-            if(!pagination.isFirst()){
+            if (!pagination.isFirst()) {
                 contents.set(4, 2, ClickableItem.of(new ItemBuilder(Material.ARROW)
                                 .setDisplayName(game.translate("werewolf.menus.pagination.previous",
                                         Formatter.format("&current&", page),
@@ -50,7 +49,7 @@ public class InventoryUtils {
                         e -> currentInventory.get().open((Player) e.getWhoClicked(), pagination.previous().getPage())));
             }
 
-            if(!pagination.isLast()){
+            if (!pagination.isLast()) {
                 contents.set(4, 6, ClickableItem.of(new ItemBuilder(Material.ARROW)
                                 .setDisplayName(game.translate("werewolf.menus.pagination.next",
                                         Formatter.format("&current&", page),

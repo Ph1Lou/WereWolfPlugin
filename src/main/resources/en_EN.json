@@ -1,64 +1,86 @@
 {
   "werewolf": {
     "name": "WereWolfPlugin",
+    "description_plugin": "Base plugin",
     "lovers": {
       "lover": {
         "display": "Lovers",
+        "color": "§d",
         "random": " Random",
         "description": "§6WEREWOLF §7➽§d You madly fall in love with §b&player&§d.\n§dIf they die, you will kill yourself in despair.\n§dYou can send heart points to your soul mate with §b/ww donate §d[% of life to send] [optional:player who will receive the hearts]",
         "not_in_pairs": "You are not in love",
         "lover_death": "§d&player& by love, joins them in their grave",
-        "not_enough_players": "there aren't enough players to add lovers",
-        "not_lover": "You can only donate hearts to your lover",
-        "polygamy": "Due to a lack of players compared to the number of players, polygamy is disabled",
-        "received": "You receive §b&number&§r % of §b&player& 's life",
-        "disconnected": "You lover isn't online",
-        "complete": "You sent §b&number&§r % of your life to §b&player&",
+        "not_enough_players": "there are not enough people to form a couple",
+        "not_lover": "You can only share hearts with a lover",
+        "received": "You receive §b&number&§r % of the life of §b&player&",
+        "disconnected": "Your lover is not connected",
+        "complete": "You just sent §b&number&§r % of your life to §b&player&",
         "100": "You cannot send 100% or more of your life",
         "command": "donate",
         "too_many_heart": "§b&player&§r has too much life"
       },
       "cursed_lover": {
         "display": "Cursed Lovers",
+        "color": "§0",
         "description": "§6Werewolf §7➽§c A destructive link between §6&player&§c and you has emerged. You cannot win together, even if you are in the same team.\n §c You have an additional heart and NoFall while both of you are alive.",
         "death_cursed_lover": "Your cursed lover is dead, you loose all your bonus effects",
         "not_enough_players": "There aren't enough players to add cursed lovers"
       },
       "amnesiac_lover": {
         "display": "Amnesiac Lovers",
-        "not_enough_players": "There aren't enough players to add amnesiac lovers"
+        "color": "§5",
+        "not_enough_players": "There aren't enough players to add amnesiac lovers",
+        "configurations": {
+          "distance": "Amnesiac lovers action range §b&number&"
+        }
+      },
+      "fake_lover": {
+        "display": "Lovers",
+        "color": "§7"
       }
     },
     "roles": {
+      "innkeeper": {
+        "display": "Innkeeper",
+        "effect": "Speed while all rooms are closed",
+        "available": "Your power is available again",
+        "description": "During the day, you may right-click a player to host him.\nOn the next day, you may again right-click them again to know how many players they met during the night, as well as the name of one of them.\nIf a hosted player performs a kill, you are informed of it, but all hosted players are thrown out.\nIf a hosted player dies, you obtain the killer's role and the room is closed.\nIf you do not have any available rooms left, you get Speed 0.5.",
+        "available_room": "You have &number& room(s) available",
+        "dead": "One of your hosted players died, his killer is a &role&",
+        "kill": "One of your hosted players performed a kill, all hosted players are thrown out",
+        "seen_players": "This customer (&player1&) has seen &number& person(s) including &player&",
+        "no_seen_players": "This player met nobody last night",
+        "already_seen": "You have already received this customer's information",
+        "add_client": "You will host §b&player&§f",
+        "no_more_room": "You do not have an available room, you cannot host this player",
+        "list": "§bPlayer(s) hosted§6: &list&\n §bPlayers previously§f hosted : &list2&\n",
+        "speed": "You do not have any rooms left, you now have Speed 0.5",
+        "already": "You already host this player",
+        "configurations": {
+          "detection_radius": "Detection radius for met players §b&number&§r"
+        }
+      },
+      "mire": {
+        "display": "Mire",
+        "description": "When you eat a golden apple, you are given the name of the lowest health player (in % of his maximal life).\nYou are informed whenever a nearby player (less than &number& blocs) drops below 3 ♥.",
+        "effect": "2 ♥ of Absorption below 3 ♥",
+        "min_health": "The player &player& has the lowest % health",
+        "all_full": "All players are full life or there are no nearby players (§b&number&§f blocs)",
+        "warning_death": "A player less than &number& blocs away is close to death !",
+        "configurations": {
+          "distance": "Mire action range §b&number&"
+        }
+      },
       "serial_killer": {
         "display": "Serial Killer",
         "items": "A Sharpness III book, a Protection III book and a Power III book",
         "effect": "Strength before his first kill",
         "hearts": "Additional Heart(s) : §b&heart&\n",
-        "power": "Whenever you kill a player, you get an additional permanent heart and a golden apple.",
-        "limit": "Armor, bow and sword enchantement limit (§b+1§f)"
-      },
-      "guardian_angel": {
-        "display": "Guardian Angel",
-        "protege": "Ward : §b&player&\n",
-        "wait": "You will know your ward in §b&player&§f",
-        "effect": "15 hearts as long as your ward is alive, 12 if he's dead",
-        "show_command": "You may, thrice during the game, give your ward a Regeneration effect for 20 seconds §b/ww regen",
-        "description": "You have to protect a randomly picked ward and win with him. If he were to die, you §lwin as part of the village.",
-        "description_patch": "You have to protect a randomly picked ward and win with him. If he were to die, you §lhave to win alone.",
-        "protege_death": "Your protégé died, you lose 3 hearts and you now have to win with the Village",
-        "protege_death_patch": "Your ward has been killed. You lose 3 hearts and now have to win alone",
-        "reveal_protege": "Your protégé is §b&player&",
-        "get_regeneration": "You receive the effect Regeneration from your Guardian Angel for 20 secondes",
-        "no_protege": "You don't have a protégé yet",
-        "disconnected_protege": "Your protégé is not currently online",
-        "command": "regen",
-        "perform": "Your ward receives Regeneration, you may use this ability §b&number&§r more times",
-        "new_protege": "Your protégé is now §b&player&"
+        "power": "Whenever you kill a player, you get an additional permanent heart and a golden apple."
       },
       "amnesiac_werewolf": {
         "display": "Amnesiac Wolf",
-        "description": "You do not have access to the werewolf list and the other werewolves won't see you in the list as long as you haven't killed a villager. You are NOT considered a werewolf as long as you haven't killed a villager"
+        "description": "You do not have access to the werewolf list and the other werewolves won't see you in the list as long as you haven't killed a villager. You are Not considered a werewolf as long as you haven't killed a villager"
       },
       "werewolf": {
         "display": "Werewolf",
@@ -85,7 +107,10 @@
         "model_death": "§cDead§f",
         "model": "§bMaster§f : &player&\n",
         "command": "master",
-        "change": "Your master is now §b&player&"
+        "model_end": " master &player&",
+        "timers": {
+          "model_duration": "Time for choosing a Master (§b&timer&§r)"
+        }
       },
       "sister": {
         "display": "Sister",
@@ -100,18 +125,23 @@
         "already": "You already received the information",
         "command_name": "commandseenamesister",
         "command_role": "commandseerolesister",
-        "choice_2": "of §b&player&§f's murderer",
+        "end_message": "of §b&player&§f's killer",
         "reveal_killer_name": "Your sister has been slain by §b&player&",
         "reveal_killer_role": "Your sister was slain by a §b&role&",
-        "sisters_list": "List of your sisters : §b&list&\n"
+        "sisters_list": "List of your sisters : §b&list&\n",
+        "sisters": "Sisters : §b&list&",
+        "configurations": {
+          "distance": "Sisters action range §b&number&"
+        }
       },
       "wolf_dog": {
         "display": "Wolf Dog",
         "command": "change",
-        "description": "§aVillager§f form : The Werewolves see you as a werewolf in their list. However, you do not know the werewolves. Be careful, the information roles will see you as a werewolf. You can read and send messages in the werewolf chat",
+        "description": "§aVillager§f form : The Werewolves see you as a werewolf in their list. However, you do not know the werewolves. Be careful, the information roles will see you as a werewolf. You can read and send messages in the werewolf chat. You have force at night.",
         "transform": "You may change into your werewolf form through §b/ww change§f (cannot be reversed), you have §b&timer&",
         "time_over": "You can no longer choose your form. As such, you will stay as a Villager",
         "perform": "You chose the Werewolf form",
+        "aura": "Wolf Dog Dog Form: Aura §2Luminous§f, Wolf Form: Aura §cObscure§f",
         "description_2": "§cWerewolf§f form : The Werewolves do not see you in their list. However, you do know the werewolves. The information roles see you as a Villager. You do not have Strength during the night."
       },
       "stud": {
@@ -129,13 +159,15 @@
         "resuscitation_message": "§b&player&§r is dead, to revive them, §6Click here §r(You have §b7sec§r)",
         "resuscitation_perform": "You revived §b&player&",
         "command": "save_witch",
-        "auto_rez_witch": "the witch can bring herself back to life"
+        "configurations": {
+          "auto_rez_witch": "the Witch can bring herself back to life"
+        }
       },
       "little_girl": {
         "display": "Little Girl",
-        "item": "5 Tnt",
+        "item": "3 Tnt",
         "effect": "When you take of your armor during the night, you become invisible.",
-        "description": "When you are Invisible, you leave a trace of blue particles visible by Mischievous Werewolves. Inversely, you can find them by the red particles they leave in their wake. You are also able to see the Werewolves' chat",
+        "description": "When you are Invisible, you leave a trace of blue particles visible by Mischievous Werewolves. Inversely, you can find them by the red particles they leave in their wake. You are also able to see the Werewolves' chat and their §cHowl§f",
         "remove_armor": "It's night, remove your armor to become invisible",
         "visible": "You are now visible",
         "remove_armor_perform": "You are now invisible. Put your armor back to be visible",
@@ -153,24 +185,30 @@
       },
       "citizen": {
         "display": "Citizen",
-        "description": "You may, twice during the game, chose to see the ballots and, once, cancel the result.",
-        "cancel_vote_message": "You may cancel the vote §b&number&§r time. ",
+        "description": "You may, §b&number&§f times during the game, chose to see the ballots and, once, modify the result.",
+        "change_vote_message": "You may modify the vote §b&number&§r more times",
+        "description_extra": "If the composition is hidden, you will receive each morning a list of 3 roles that are present in the game, as well as how many of them are present",
         "see_vote_message": "Youmay look at the ballots §b&number&§r more time(s). ",
         "click": "§bClick here ",
-        "cancel": "Cancel the §bVote",
+        "change": "Modify the §bVote to §b&player&",
         "see": "Look at the §bBallots",
         "time_left": ", you have §b&timer&",
-        "cancelling_vote_perform": "Vote canceled, you have saved §b&player&",
-        "cancelling_broadcast": "A Citizen canceled the vote",
+        "change_vote_perform": "You changed the vote to §b&player&",
         "count_votes": "Counting Votes ",
         "see_vote": "§b&voter&§r voted for §b&player&§r",
         "command_1": "depouiller_citizen",
-        "command_2": "cancel_citizen"
+        "command_change": "change_citizen",
+        "new_vote_count": "The player &player& has receives &number& votes.",
+        "hide_composition": "There are &number& roles in the composition amongst : &role1&, &role2&, &role3&",
+        "rumor": "The player §b&player&§f has written the rumor &message&",
+        "configurations": {
+          "vote_see_number": "Number of ballots counted §b&number&§r"
+        }
       },
       "angel": {
         "display": "Angel",
         "angel_choice": "You can decide to be either ",
-        "angle_choice_click": "You just choose §b&form&§b§f. You will know your target in §b&timer&",
+        "angle_choice_click": "You just selected §b&form&§b§f. You will get your target or protected in §b&timer&",
         "or": " or ",
         "target": "Target : §b&player&\n",
         "time": ", you have §b&timer& §f(Click to chose)",
@@ -181,7 +219,42 @@
         "command_1": "guardian",
         "command_2": "fallen",
         "choice": "he chose &form&",
-        "sweet_angel": "The Guardian angel wins with the Village if his ward dies"
+        "choice_form": "Chosen Angel : §b&form&",
+        "timers": {
+          "angel_duration": "Time for the Angel's choice (§b&timer&§r)"
+        },
+        "configurations": {
+          "sweet_angel": "The Guardian Angel wins as a Villager after his ward dies"
+        },
+        "aura": "§aAngele§f ALWAYS keeps a Luminous aura"
+      },
+      "fallen_angel": {
+        "display": "Fallen Angel",
+        "effect": "Resistance during the Night",
+        "wait": "You will know your target in §b&timer&§f",
+        "power": "12 hearts, 15 if you kill your target.",
+        "deadly_target": "You killed your target, you gain 3 extra hearts",
+        "deadly_target_by_other": "Your target has been slain by another player, you cannot obtain your additional hearts anymore",
+        "reveal_target": "Your target is §b&player&",
+        "new_target": "Your target is now §b&player&"
+      },
+      "guardian_angel": {
+        "display": "Guardian Angel",
+        "protege": "Ward : §b&player&\n",
+        "wait": "You will know your ward in §b&player&§f",
+        "effect": "15 hearts as long as your ward is alive, 12 if he's dead",
+        "show_command": "You may, thrice during the game, give your ward a Regeneration effect for 20 seconds §b/ww regen",
+        "description": "You have to protect a randomly picked ward and win with him. If he were to die, you §lwin as part of the village.",
+        "description_patch": "You have to protect a randomly picked ward and win with him. If he were to die, you §lhave to win alone.",
+        "protege_death": "Your protégé died, you lose 3 hearts and you now have to win with the Village",
+        "protege_death_patch": "Your ward has been killed. You lose 3 hearts and now have to win alone",
+        "reveal_protege": "Your protégé is §b&player&",
+        "get_regeneration": "You receive the effect Regeneration from your Guardian Angel for 20 secondes",
+        "no_protege": "You don't have a protégé yet",
+        "disconnected_protege": "Your protégé is not currently online",
+        "command": "regen",
+        "perform": "Your ward receives Regeneration, you may use this ability §b&number&§r more times",
+        "new_protege": "Your protégé is now §b&player&"
       },
       "mystical_werewolf": {
         "display": "Mystic Werewolf",
@@ -192,18 +265,20 @@
       },
       "rival": {
         "display": "Rival",
-        "extra": "You are allowed a Power §b&number& bow",
         "item": "Two potions of damage",
         "description": "When the Lovers are announced, you will obtain the roles of two players in love with each other. In §b&timer&§r, you will obtain a list of 5 players containing the names of the two lovers. \nIf you kill a lover, you will take his place and will have to win with his lover. \nHowever, if they die, you will have to win alone and you lose 5 hearts (a heart container is returned to you every minute). You do know the direction in which to find the Cupid if he is part of the game.",
-        "lover": "The lovers are a §b&role1&§f and a §b&role2&§f.",
+        "lover": "The lovers you are associated with are a §b&role1&§f and a §b&role2&§f.",
         "error": "No lovers have been found for your role (Rival)",
         "find_lovers": "The lovers are among the following players : &player1&, &player2&, &player3&, &player4&, &player5&",
-        "lover_death": "The lovers are dead, you now have to win alone and lose two permanent hearts."
+        "lover_death": "The lovers are dead, you now have to win alone and you lose 5 hearts.",
+        "timers": {
+          "rival_duration": "Rival informations wait time (§b&timer&§r)"
+        }
       },
       "fox": {
         "display": "Fox",
         "effect": "Three minutes of speed after each kill",
-        "description": "You are able to sniff other players in order to know if they are a Werewolf or not. You can only sniff players who are less than §b&number&§f blocks away from you for §b&timer&§f.\nYou have §b&number&§f sniffs.",
+        "description": "You are able to sniff other players in order to know if they are a Werewolf or not. You can only sniff players who are less than §b&number&§f blocks away from you for §b&timer&§f.\nYou have §b&number1&§f sniff(s). An arrow guides you to the last sniffed player",
         "smell_message": "You may sniff a player §b/ww sniff§. If you are already sniffing someone, he will be replaced by the new target and progression will be reset to 0. You have §b&number&§r sniffs remaining",
         "smell_beginning": "You started smelling §b&player&",
         "not_werewolf": "&player& §2isn't in the Werewolf team",
@@ -212,18 +287,28 @@
         "not_enough_near": "You aren't close enough to the player you are smelling",
         "progress": "Smell Progression §b&progress&%",
         "smell": "You have been sniffed by a §bFox§f 5 minutes ago",
-        "command": "smell"
+        "command": "smell",
+        "timers": {
+          "fox_smell_duration": "Fox Smell Duration (§b&timer&§r)"
+        },
+        "configurations": {
+          "fox_smell_number": "Fox Number of Smells §b&number&",
+          "distance": "Fox action range §b&number&"
+        },
+        "aura": "When the §bRenard§f sniffs a Werewolf, his aura becomes dark"
       },
       "raven": {
         "display": "Raven",
         "effect": "NoFall",
         "item": "Feather Falling III book",
-        "description": "Your vote counts double. At dawn, you may curse a player who will receive Jump Boost II for a day.",
-        "curse_message": "You may curse a player for the day §b/ww curse§r, you have §b&timer&",
+        "description": "Your vote counts twice. \nYou are able to vote for any player, even a player you haven't met yet. \nIf the player you voted for is the most voted, \nyou obtain a minute of Strength and Speed and player direction by particles",
+        "curse_message": "Curse a player who will receive Jump Boost I for a day §b/ww curse§r, you have §b&timer&",
         "curse_perform": "You have cursed §b&player&",
+        "raven_player_voted": "You obtain a minute of Strength and Speed because the player you voted for is the most voted",
         "get_curse": "You have been cursed by the Raven. You now have Jump Boost until the next morning",
         "no_longer_curse": "You are not cursed anymore",
-        "command": "curse"
+        "command": "curse",
+        "aura": "Being cursed by the §bRaven§f grants a §bDark§f aura"
       },
       "village_idiot": {
         "display": "Village Idiot",
@@ -231,6 +316,7 @@
         "power_on": "You are §aable to§f come back to life",
         "power_off": "You §ccannot§f come back to life anymore",
         "announce": "The Village Idiot §b&player&§r has come back to life.",
+        "vote": "You have lost your voting right following you resurrection",
         "description": "When you are killed by a player who isn't part of the Werewolves, you come back to life and all players are told your role, but you lose two permanent hearts."
       },
       "villager": {
@@ -253,14 +339,15 @@
       "assassin": {
         "display": "Assassin",
         "effect": "Strength during daytime",
-        "items": "a Sharpness III book, a Protection III book and a Power III book",
+        "items": "A Sharpness III book, a Protection III book and a Power III book",
         "limit": "armor, bow and sword enchantement limit (+1)"
       },
       "falsifier_werewolf": {
         "display": "Falsifier Wolf",
-        "description": "§fYou have a different display role every day in order to deceive the villagers.",
+        "description": "§fYou have a different display role, which is not in the §cWolf Garou§f camp, every day among those still alive to deceive the Village.",
         "role": "§fCurrent Display Role : §b&role&\n",
-        "display_role_message": "Today, your display Role is §b&role&"
+        "display_role_message": "Today, your display Role is §b&role&",
+        "aura": "The §cFalsifier Werewolf§f gets the default aura of its display role"
       },
       "thief": {
         "display": "Thief",
@@ -268,12 +355,14 @@
         "details": "To see the details of your role §b/ww role",
         "description": "You obtain the role of the first person you kill and will have to win with its team.",
         "effect": "Resistance until your first kill",
-        "realized_theft": "You are now §b&role&"
+        "realized_theft": "You are now §b&role&",
+        "aura": "§6Thief§f gets the aura of the player he's stealing"
       },
       "imitator": {
         "display": "Imitator",
         "effect": "Strength until his first kill",
-        "description": "You obtain the role of the first person you kill."
+        "description": "You obtain the role of the first person you kill.",
+        "aura": "§6Imitator§f gets the aura of the player he's stealing"
       },
       "detective": {
         "display": "Detective",
@@ -283,15 +372,16 @@
         "opposing_camp": "&player1& and &player2& §2are not in the same team",
         "already_inspect": "At least one of the players has already been inspected",
         "command": "inspect",
-        "detective_every_other_day": "Detective every two days"
+        "configurations": {
+          "detective_every_other_day": "Detective every other day"
+        }
       },
       "naughty_little_wolf": {
         "display": "Naughty Little Wolf",
         "effect": "Strength and Speed (during the night), Night Vision. 2 hearts of absorption after each kill"
       },
       "chatty_seer": {
-        "display": "Chatty Seer",
-        "description": "In the morning, you may see the team a player belongs to. However, if it's a villager, you lose 3 Hearts and won't be able to use your power the next day. The message will be displayed in the global chat.",
+        "extra_description": " The message will be displayed in the global chat.",
         "see_perform": "A Chatty Seer has spied on a member of the §b&camp& camp"
       },
       "infect_father_of_the_wolves": {
@@ -303,7 +393,10 @@
         "infection_message": "§b&player&§r is dead, to infect §6Click here §r(You have §b7sec§r)",
         "infection_perform": "You infected §b&player&",
         "player_cannot_be_infected": "The player can't (anymore) be infected",
-        "command": "infecter_infect"
+        "command": "infecter_infect",
+        "configurations": {
+          "auto_rez": "The infect father of the Wolves can resurrect himself"
+        }
       },
       "seer": {
         "display": "Seer",
@@ -316,18 +409,26 @@
         "not_enough_life": "You don't have enough life to spy on someone",
         "see_villager": "You just spied on a villager and thus lose 3 hearts and cannot use your power the next time",
         "command": "see",
-        "seer_every_other_day": "Seer every two days"
+        "configurations": {
+          "seer_every_other_day": "Seer every other day",
+          "chatty_seer": "Chatty Seer"
+        }
       },
       "priestess": {
         "display": "Priestess",
         "description": "During the day, You may chose to learn to which team a player belongs in exchange for two permanent hearts. While you are alive, the werewolves have a probability of 20% to see the role of a dead person while this is 80% for the villagers. After you died, those probabilities are reversed. Neutral roles have a 95% probability of seeing the role",
+        "description_with_honor": "During the day, you can know a player's camp in exchange for two permanent hearts. If you die, the probability of seeing the roles reverse. Neutrals have a 95% chance to see it",
         "command": "spec",
         "items": "Four blocks of Obsidian",
         "magic": "§kHello There",
         "message": "§b&player&§r is a member of the §b&camp&",
         "werewolf_death": "A Werewolf you discovered died. You get 1 heart back",
         "perform": "Discover the role of a player who is at less than §b&number&§r blocks of you with §b/ww spec§r you have §b&timer&",
-        "distance": "You have to be at less than 10 blocs of the player"
+        "distance": "You have to be at less than 10 blocs of the player",
+        "configurations": {
+          "distance": "Priestess action range §b&number&"
+        },
+        "aura": "§aAngele§f ALWAYS keeps a Luminous aura"
       },
       "oracle": {
         "display": "Oracle",
@@ -336,10 +437,12 @@
         "command": "oracle",
         "perform": "Discover the current aura of a player with §b/ww oracle§r you have §b&timer&",
         "message": "The aura of §b&player&§r is &aura&",
-        "light": "Bright",
-        "neutral": "Neutral",
-        "dark": "Dark",
-        "oracle_every_other_day": "Oracle every two days"
+        "light": "§aLight",
+        "neutral": "§7Neutral",
+        "dark": "§4Dark",
+        "configurations": {
+          "oracle_every_other_day": "Oracle every other day"
+        }
       },
       "protector": {
         "display": "Protector",
@@ -349,40 +452,42 @@
         "protection_perform": "You just protected §b&player&",
         "get_protection": "The Protector is protecting today, you now have Resistance and NoFall",
         "no_longer_protected": "You aren't protected anymore",
-        "command": "protect"
+        "command": "protect",
+        "aura": "Being protected by the §bProtector§f grants a §bBright§f aura"
       },
       "guard": {
         "display": "Guard",
         "description": "Every morning, you can chose to protect a player. If he is killed by a Werewolf, he'll come back to life, but you won't be able to use your power anymore. You may protect each player only once",
-        "items": "A splash potion of Strength",
         "command": "protect",
         "perform": "You just protected §b&player&",
+        "protected": "The guard just protected you, if you get killed by a §aWolf Garou§f you will resurrect",
         "protect": "The guard is protecting you. As such, you come back to life",
-        "resurrection": "The player you were protecting just came back to life. You don't have your power anymore",
-        "message": "Protect a player for the day §b/ww protect§r you have §b&timer&"
+        "resurrection": "The person you protected just resurrected. You no longer have powers, but you get resistance for two days",
+        "message": "Protect a player for the day §b/ww protect§r you have §b&timer&",
+        "aura": "Being protected by the §bGuard§f grants a §bBright§f aura"
       },
       "bear_trainer": {
         "display": "Bear Trainer",
         "description": "At dawn, you growl once for each Werewolf in a §b&number&§f blocks radius around you. Growls are displayed in global chat.",
         "growling_message": "&growling&",
-        "growling": "Grrrr "
+        "no_growl": "There are no Garous Wolves around you",
+        "growling": "Grrrr ",
+        "configurations": {
+          "distance": "Bear Trainer's action zone §b&number&",
+          "bear_trainer_every_other_day": "Growl every two days"
+        },
+        "aura": "§bBeartrainer§f changes aura depending on the number of “Grrrrr” (§b0§f / §71§f / §c2+§f)"
       },
       "avenger_werewolf": {
         "display": "Avenging Werewolf",
-        "power": "7 Hearts at the beginning. Whenever a recorded Werewolf dies, you gain an additional heart container.",
+        "power": "7 Hearts at the beginning. Whenever a recorded Werewolf dies, you gain an additional heart container, then 0.5 hearts after 12 hearts.",
         "description": "Whenever you meet another Werewolf at less than §b&number&§f blocs, he is recorded.",
         "add": "§b&player&§f has been recorded",
-        "remove": "§b&player&§f was among the werewolves you recorded. You gain an additional heart container"
-      },
-      "fallen_angel": {
-        "display": "Fallen Angel",
-        "effect": "Resistance during the Night",
-        "wait": "You will know your target in §b&timer&§f",
-        "power": "12 hearts, 15 if you kill your target.",
-        "deadly_target": "You killed your target, you gain 3 extra hearts",
-        "deadly_target_by_other": "Your target has been slain by another player, you cannot obtain your additional hearts anymore",
-        "reveal_target": "Your target is §b&player&",
-        "new_target": "Your target is now §b&player&"
+        "remove": "§b&player&§f was among the werewolves you recorded. You gain an additional heart container",
+        "configurations": {
+          "distance": "Avenging Werewolf action radius §b&number&"
+        },
+        "aura": "When the Werewolf reaches 10 ♥️, his aura becomes Dark"
       },
       "white_werewolf": {
         "display": "White Werewolf",
@@ -395,16 +500,22 @@
         "none": "§cNone§f, to make two people fall in love §b/ww lovers",
         "items": "A Power II, Punch I Book, 64 arrows, 3 strings",
         "description": "You have to win with your lovers. If the were to die, you win as a villager.",
-        "extra": "You are allowed a bow Power §b&number&",
         "lover_designation_message": "You have to designate two Lovers, §b/ww lovers§r, you have §b&timer&",
         "designation_perform": "Your chosen lovers are §b&player1&§r and §b&player2&",
-        "command": "lovers"
+        "command": "lovers",
+        "wait": "Lovers announcement in §b&timer&",
+        "random_cupid_message": "Random Cupid setting is enabled",
+        "configurations": {
+          "random_cupid": "Random Cupid",
+          "amnesiac_lovers": "Amnesiac Lovers"
+        }
       },
       "siamese_twin": {
         "display": "Siamese Twin",
-        "power": "Two additional hearts",
+        "power": "Two additional heart containers",
         "description": "You have been separated from your brother at birth, but keep a strong link to him. Your hearts above the fifth are linked.",
-        "siamese_twin_list": "List of your Siamese Brothers: §b&list&"
+        "siamese_twin_list": "List of your Siamese Brothers: §b&list&",
+        "siamese_twin": "Siamese Twins : §b&list&"
       },
       "alpha_werewolf": {
         "display": "Alpha Werewolf",
@@ -415,23 +526,24 @@
       "mischievous_werewolf": {
         "display": "Mischievous Wolf",
         "items": "5 Tnt",
-        "effect": "Invisibility while taking off your armor during the night, Strength during the night otherwise",
-        "description": "While you are invisible, you leave a trace of red particles visible by the §bLittle Girl§f. Inversely, you can see them by the blue particles they leave behind."
+        "effect": "Invisibility and Strength by removing armor at night",
+        "description": "While you are invisible, you leave a trace of red particles visible for the §bLittle Girl§f. Inversely, you can see them by the blue particles they leave behind."
       },
       "elder": {
         "display": "Elder",
-        "effect": "Resistance during his first life",
+        "effect": "Resistance while you haven't resurrected",
         "available": "You do §astill have§f your second life.",
         "not_available": "You do §cno longer§f have your second life.",
-        "description": "You do have a second life. You will lose your resistance the first time you die. But careful, if a villager kills you, you will lose three permanent hearts."
+        "description": "If a Werewolf kills you, you resurrect but lose your §bResistance§f. If a villager kills you, they lose their power and five hearts.",
+        "info_villager": "You killed the Elder. You lose 5 hearts and your powers"
       },
       "flute_player": {
         "display": "Pied Piper",
         "full": "This player has a full inventory, he cannot receive a pipe",
         "wait": "You have to wait §bone day§f before giving another pipe",
         "affected": "§bAffected player§f : §f&list&\n",
-        "craft_description": "To craft a pipe, surround a stick with gold ingots in a crafting table",
-        "description": "Once you craft a pipe, every player at less than §b&number&§f blocs of you will slowly become charmed (1% every 6 seconds).",
+        "craft_description": "To craft a pipe, surround a stick with 4 golds ingots",
+        "description": "Once you craft your pipe, every player at less than §b&number&§f blocs of you will slowly become charmed (1% every &timer& seconds).",
         "power": "You may craft §badditional§f pipes and give them to other players once per day by §bright-clicking§f them. If the player finds the pipe in his inventory, it's effect is cancelled. A player carrying a pipe will §bunknowingly§f charm players around him.",
         "enchanted": "You charmed §b&player&",
         "transmit": "You gave a pipe to §b&player&§f you have §b&number&%f pipes remaining",
@@ -441,7 +553,13 @@
         "day": "You may again give a pipe to someone (you currently have §b&number&§f pipes)",
         "craft": "You crafted an additional pipe (you currently have §f&number&§f), right-click a player to give him the pipe. He will charm players near him as long as he doesn't discover the pipe in your inventory",
         "perform": "You crafted §byour pipe§f, you now charm people who are at less than §b&number&§f blocs of you",
-        "item": "Magical pipe"
+        "item": "Magical pipe",
+        "timers": {
+          "progress": "Charming 1% every §b&timer&"
+        },
+        "configurations": {
+          "distance": "Pied Piper action radius §b&number&"
+        }
       },
       "librarian": {
         "display": "Librarian",
@@ -480,6 +598,15 @@
         "get_track": "A Trapper is tracking you today",
         "command": "track"
       },
+      "astronomer": {
+        "display": "Astronomer",
+        "description": "Once per night, you can create an infinite trajectory between you and a random player present in the game (more than 20 blocks from it) that does not belong to the Village Camp. \nThe trajectory between the player and the Astronoma lasts 2 minutes and does not refresh if the player moves. ",
+        "command_description": "§b/ww telescope",
+        "effect": "Night Vision",
+        "tracking_perform": "You are starting to track a player §cwho is not a Villager§f for 2 minutes",
+        "command": "telescope",
+        "aura": "the astronomer has a §2Luminous§r aura at night and §1Obscure§r on the day"
+      },
       "succubus": {
         "display": "Succubus",
         "charm": "Charmed : §b&list&\n",
@@ -488,40 +615,496 @@
         "description": "You may charm a player who will have to win with you. If you die, the charmed players dies in your stead. The time necessary to charm is §b&timer&",
         "charming_message": "You may now chose a player to charm §b/ww charm",
         "charming_beginning": "You started charming §b&player&",
-        "charming_perform": "§b&player&§r is totally charmed, if you die he will die in your place",
+        "charming_perform": "§b&player&§r is totally charmed : if you die, he will die in your stead",
         "get_charmed": "The succubus §b&player&§r charmed you, you now have to win with her. If the succubus were to die, you die in her stead.",
         "free_of_succubus": "You have been freed from your Succubus, but at what price...",
         "not_enough_near": "You aren't close enough to the player you are trying to charm",
         "progress_charm": "Charm's Progression §b&progress&%",
         "command": "charm",
-        "change": "Your Charmed is now §b&player&"
+        "change": "Your charmed player is now §b&player&",
+        "timers": {
+          "succubus_duration": "Succubus Charm duration (§b&timer&§r)"
+        },
+        "configurations": {
+          "distance": "Succubus action range §b&number&"
+        }
       },
       "shaman": {
         "display": "Shaman",
-        "description": "Whenever a player dies, you have 30 seconds to choose if you wish to sacrifice a heart container in order to randomly obtain the role or the name of the dead player. You always see a dead players real role",
+        "description": "Whenever a player dies, you can decide within 30 seconds to sacrifice §c1. §f permanent heart to randomly obtain the name or role of §cthe person who killed it. \nYou still see the true king of a player who died definitively",
         "cannot_use": "You can no longer do this",
         "not_enough_life": "You do not have enough life to do this",
-        "choice_message": "A player died. §bClick here§r to obtain an information about hum in exchange of a heart container. You have §b30§r seconds.",
-        "victim_name": "§b&player&§r died",
-        "victim_role": "A §b&role&§r died",
-        "command": "command_shaman"
+        "choice_message": "A player has died. §bClick here§r to get information about his killer in exchange for §c1.5§f permanent heart. You have §b30§r seconds.",
+        "victim_name": "§b&player&§r is the killer",
+        "victim_role": "§b&role&§r is the killer",
+        "command": "command_shaman",
+        "aura": "When the §bShaman§f uses his power, his aura becomes dark"
+      },
+      "charmer": {
+        "display": "Charmer",
+        "description": "You have the power to make a player believe they are in love with you, but have to win without them. If your charmed dies before the end of the countdown, you lose 3 heart containers",
+        "choose": "Use §b/ww charm§f to charm a player, you have §b&timer&",
+        "effects": "Speed and 10 hearts of absorption when the real lovers die",
+        "command": "charm",
+        "timer": "You will be able to kill your charmed &player& without penalty in &timer&",
+        "affected": "Your charmed is &player&, you may kill them without penalty",
+        "reveal": "Your love with &player& was not real",
+        "before_count_down": "Your charmed died before the end of the countdown, you lose 3 heart containers",
+        "lover_death": "You receive §bSpeed§f and 10 hearts of absorption because the lovers died",
+        "perform": "You charmed &player&",
+        "announcement": "Your charmed &player& has been told they are in love with you",
+        "timers": {
+          "charmer_countdown": "Charmer countdown duration (§b&timer&§r)"
+        }
+      },
+      "fearful_werewolf": {
+        "display": "Fearful Werewolf",
+        "description": "You have effects depending on the number of werewolves in a range of &number& blocs. You cannot vote, and your death will not be announced in the chat You cannot use the §cHowl§f",
+        "effects": "4 or more WW : Weakness, 2 WW or less: Daily Resistance, Night Strength, Alone : Speed",
+        "configurations": {
+          "distance": "Fearful Werewolf action field §b&number&"
+        }
+      },
+      "hermit": {
+        "display": "Hermit",
+        "description": "You have effects depending on the number of players in a range of &number& blocs. You cannot vote, and your death will not be announced in the chat",
+        "effects": "5 or more people : Weakness otherwise Resists Night, Force Day, Alone : Speed",
+        "configurations": {
+          "distance": "Hermit Field Action §b&number&"
+        }
+      },
+      "big_bad_werewolf": {
+        "display": "Big Bad Wolf",
+        "effects": "Force Day until a member of the Garous Wolves has died",
+        "werewolf_death": "A Werewolf just died, you lose your strength in the day",
+        "aura": "§cBig Bad Wolf§f ALWAYS keeps an umbral aura"
+      },
+      "will_o_the_wisp": {
+        "display": "Will-O-Wisp",
+        "description": "Invisible : you can see the blue particles of the little girl and red of the perfidious wolf. At the beginning of the night, you receive a role from a player located less than §b&number&§f blocks from you",
+        "effects": "Invisibility and 4 absorption hearts by removing armor",
+        "command_incendiary": "madness",
+        "feather": "Power: You can drop from &number& blocks every §b&timer&§f by right-clicking on a pen\n",
+        "incendiary_madness": "You can trigger incendiary madness every §b&timer&§f with §b/ww madness§f. It provides Speed I and sets fire to the player you type for §b&timer2&§f",
+        "perform_madness": "You just unleashed your incendiary madness. It provides Speed I for §b&timer& and ignites players you type ",
+        "colldown_end": "You can trigger your incendiary madness again with §b/ww madness",
+        "colldown_end_tp": "You can teleport again with your feather",
+        "role_reveal": "A player located below §b&number&§f blocks is §b&role&",
+        "wait_cooldown_tp": "You must wait for cooldown to finish",
+        "configurations": {
+          "distance": "Will O The Wisp action range §b&number&",
+          "cooldown_tp": "Cooldown teleportation (§b&timer&§r)",
+          "duration_madness": "Incendiary madness (§b&timer&§r)",
+          "cooldown_madness": "Incendiary madness Cooldown (§b&timer&§r)"
+        }
+      },
+      "howling_werewolf": {
+        "display": "Howling Werewolf",
+        "description": "You can use §b3 times§f the scream. §b/ww howl§f. Whenever a Werewolf screams, you get §bGeared II§f for 7 seconds as well as the Wolf's nickname",
+        "pseudo": "The screaming player is §b&player&§f"
+      },
+      "twin": {
+        "display": "Twin",
+        "description": "At the beginning of the night, if you are more than §b&number2&§f blocs away from your twin, you receive either the list of players in a range of §b&number&§f blocs from your twin OR the role of one of those players.",
+        "effects": "When your twin dies, you get five minutes of Strength and Speed",
+        "timer": "In &timer&you get the nickname of your Twins.",
+        "twin_list": "You are a Twin with: &list&",
+        "too_near": "You are too close to your twin to obtain any information",
+        "list_near": "The following players are in a range of &number& blocs around your twin, &list&",
+        "role_near": "A player at most &number& blocs away from your twin is a §b&role&§f",
+        "death": "Your twin &player& died. Enraged by this, you obtain Strength and Speed for 5 minutes",
+        "configurations": {
+          "distance": "Twins action range §b&number&"
+        },
+        "timers": {
+          "twin_duration": "Twins revelation time (§b&timer&§r)"
+        }
+      },
+      "analyst": {
+        "display": "Analyst",
+        "description": "You can observe (still §b&number&§f times) a player with: \n§b/ww observer§f to see whether or not they have any of the following effects: \nStrength, Resistance, Weakness, Speed, Invisible. \nYou can then analyze the player (1x per game) to know exactly what effects it poses. \nThe analysed player will be informed and §cif he is not a Village member§f, §cil will get the Analyst nickname§f.",
+        "has_effects": "The player §b&player&§f §ahas at least one following effects§f : Strength, Resistance, Weakness, Speed, Invisibility",
+        "no_effects": "The player §b&player&§f does §cnot have any of the following effects§f : Strength, Resistance, Weakness, Speed, Invisibility",
+        "effects": "The playes §b&player&§f has the following effects : &list&",
+        "call_back": "An §bAnalyst§f just observed your effects",
+        "call_back_no_villager": "The Analyst &player& just observed your effects",
+        "command_see": "observe",
+        "command_analyse": "analyse",
+        "cooldown": "There's a cooldown of §b&timer&",
+        "not_affected": "You may use this command only on a player previously observed through §b/ww observe§f",
+        "timers": {
+          "analyse_duration": "Analyst power unlock time (§b&timer&§r)"
+        },
+        "aura": "When the §bAnalyst§f uses his analytical power, his aura becomes dark"
+      },
+      "servitor": {
+        "display": "Servitor",
+        "message": "Your master today is §b&player&§f\n",
+        "description": "You have a master who is chosen randomly every morning. If he kills you, you resurrect. The masters do not have any information about you",
+        "effects": "Strength 1 while your master is less than &number& blocs away from you",
+        "effects_death": "Weakness 1 while your master is less than &number& blocs away from you",
+        "resurrection": "Your master &player& killed you. He stays your master definitvely and grants you Weakness I when closer than &number& blocs",
+        "configurations": {
+          "distance": "Servitor action range §b&number&"
+        }
+      },
+      "scammer": {
+        "display": "Scammer",
+        "message_villager": "The §bScammer§f scammed you, you become a §bSimple Villager§f",
+        "message_werewolf": "The §bScammer§f scammed you, you become a §bWerewolf§f without any powers",
+        "description": "You steal progressively the role of players in a range of §b&number&§f blocs around you at a rhythm of 1% every §b&timer&§f. The first scammed player becomes a Werewolf without powers if he was a Werewolf and a Simple Villager otherwise",
+        "message": "You scammed &player&'s role",
+        "timers": {
+          "scammer_delay": "Scammer delay &timer&"
+        },
+        "configurations": {
+          "distance": "Scammer action range §b&number&"
+        }
+      },
+      "fruit_merchant": {
+        "display": "Fruit Merchant",
+        "perform": "You have used your power, the players in your action range are &players&. \nYou will receive the information in §b&timer&§f",
+        "announce_info": "You receive the informations from your power",
+        "info": "The player &player& had &number& golden apple(s) when you used your command. He now has &number2&",
+        "command": "count",
+        "recover": "You may now use your power again. Do §b/ww count§f to use it",
+        "description": "Using §b/ww count§f, you may count the golden apples of the players in a range of §b&number&§f blocs around you.",
+        "power": "1/4 chance to regenerate 3 ♥ with a golden apple, eating food grants you 1 more food.",
+        "configurations": {
+          "distance": "Fruit merchant action range §b&number&"
+        },
+        "timers": {
+          "fruit_merchant_cooldown": "Fruit Merchant cooldown (§b&timer&§r)"
+        }
+      },
+      "druid": {
+        "display": "Druid",
+        "perform": "You just used your power, there are &number& dark aura(s) in &blocks& blocks",
+        "description": "You may know the amount of dark auras in a range of &number& blocs by eating a golden apple during the night while crouching",
+        "day": "You may use your power again",
+        "configurations": {
+          "distance": "Druid action range §b&number&"
+        }
+      },
+      "wise_elder": {
+        "display": "Old wise",
+        "description": "As of day &day&, you have a counter for each type of Aura\nFor each second passed less than &number& blocks of a player The counter corresponding to its aura is increasing.",
+        "end_of_cycle": "You receive the contents of counters => \nCounter §fNeutre§f: &neutral&§r.\n Counter §0Obscure§f: &dark&§r.\n Counter Aura §eLuminous§f: &light&",
+        "configurations": {
+          "distance": "Wise Elder action range §b&number&",
+          "begin_day": "Start of power day: §b&number&"
+        }
+      },
+      "tenebrous_werewolf": {
+        "display": "Tenebrous Wolf",
+        "description": "Once per game, during the night, you can blind all non-wolves within a radius of &number& for &time& seconds or until they are attacked by a wolf",
+        "description_command": "/ww darkness",
+        "command": "darkness",
+        "darkness": "The Dark Wolf has plunged you into darkness!",
+        "darkness_wolves": "The Dark Wolf plunged part of the village into the darkness",
+        "not_night": "You cannot perform this action on the day",
+        "power_available": "You may §astill§f use your power",
+        "power_not_available": "You have §calready§f used your power",
+        "timers": {
+          "darkness_duration": "Darkness duration : §b&timer&§r seconds"
+        },
+        "configurations": {
+          "darkness_distance": "Darkness action range : §b&number&§r blocs"
+        },
+        "aura": "When the Tenebrous Werewolf uses his power, his aura becomes dark"
+      },
+      "gravedigger": {
+        "display": "Gravedigger",
+        "description": "When a player dies, particles show you the direction of the corpse. If the dead is not a villager, the indicated direction is random. You can investigate a corpse by staying close to it (20 blocs), and will obtain informations, each minute, about the players that were in a range of &number& blocs at the time of death",
+        "clue_player": "§b&player&§r died here, §b&number&§r other players were close when they died",
+        "clue_role": "§b&victim&§r was a §b&role&§r. §b&players&§r were close to them when they died",
+        "clue_nearby": "§b&players&§r were close to §b&victim&§r when they died",
+        "configurations": {
+          "distance": "The investigation reveals the players in a range of §b&number&§r blocs around the dead"
+        }
+      },
+      "occultist": {
+        "display": "Occultist",
+        "description": "Every 4 years, you see the last wills of the deceased and that of the Troublemakers if it has changed it in the meantime. After your death, your last wish is shown",
+        "last_wishes": "Here are the wills of the last 4 dead",
+        "self_death": "The Occultist died his last will: &wish&",
+        "command": "The Occultist is present in the game, you can do §b/ww will§f to write your last will."
+      },
+      "hunter": {
+        "display": "Hunter",
+        "description": "Whenever you slay a wolf, the Wolves you inflict are definitely increased",
+        "effect": "&number& forces against wolves",
+        "description_shoot": "Upon your death, you can shoot a player of your choice other than your Slayer",
+        "items": "3 strings, 64 arrows, a power III book",
+        "command": "shot",
+        "perform": "You can shoot a player other than your killer to make them lose 5 hearts with §b/ww shot§r. You have 30 seconds",
+        "invalid_target": "You cannot shoot this target",
+        "success": "The hunter fired at &target&. He loses 5 hearts.",
+        "werewolf_slain": "You killed a wolf; you dealt more wolves than before.",
+        "configurations": {
+          "can_shoot": "Hunter can shoot after death"
+        }
+      },
+      "thug": {
+        "display": "Thug",
+        "description": "You can hide the §bnametag§f of a player every day, you get half of the golden apples if you have less than §b&number&§f blocks of the corpse",
+        "power": "§b&number&%§f chance your ball will appear if you kill a §bplayer",
+        "command_message": "You can hide the §bnametag§f of a player, have §b/ww hide",
+        "effect": "§bResistance§f after your first kill, an additional permanent heart per kill player",
+        "death_message": "The §bThug§f killed &player& who was &role&",
+        "new_heart": "You win an additional permanent heart as a result of the murder of &player&who had already killed someone",
+        "resistance": "You obtain Resistance due to your first murder",
+        "get_apple": "You receive §b&number&§f golden apples from §b&player&§f's corpse's stuff. The probability that your next kill reveals your role increases by §b10%§f to &number1&%",
+        "perform": "You have masked §b&player&§f's nametag",
+        "alert": "The §bThug§f has masked your nametag until the next day",
+        "command": "mask",
+        "configurations": {
+          "distance": "Thug action range §b&number&"
+        }
+      },
+      "barbarian": {
+        "display": "Barbarian",
+        "description": "Once in the game, you can hide the role of a dead player within &number& blocks",
+        "power": "The inflicted damage is doubled when you hit a player for the first time",
+        "click_message": "You may hide the role of &player&, you have §b14§f seconds",
+        "command": "barbarian_hide",
+        "item": "Book Sharpness III",
+        "perform": "You have hidden &player&'s role",
+        "configurations": {
+          "distance": "Barbarian action range §b&number&"
+        }
+      },
+      "necromancer": {
+        "description": "You mark all players near you within a range of §b&number&§f blocks for 5 minutes (with §6☠️§f suffix). Once in the game, when a player scored dies, Dead player resurrects as undead and you steal life from him",
+        "power_enable": "Next Heart Progress: §b&number&§f / 600",
+        "display": "Necromancer",
+        "perform": "You have resurrected §b&player&§f using your power",
+        "new_victim": "Your victim is now &player&",
+        "necromancer_steal": "The Necromancer has stolen one of your heart containers",
+        "steal": "You stole a heart container from §b&player&",
+        "resurrection": "You have been resurrected by a §bNecromancer§f",
+        "progress": "§fHeart feed: (§b&number&§f / 600)",
+        "pve": "Your living death has died §aPVE§f, you will regain your power",
+        "mark": "§6☠️§f",
+        "configurations": {
+          "distance": "Necromancer action range §b&number&§f blocs"
+        }
+      },
+      "devoted_servant": {
+        "display": "Devoted Servant",
+        "click": "§bClick here§f to steal the role of the Villager who just died",
+        "command": "steal_devoted_servant",
+        "steal": "You have stolen &player&'s role",
+        "perform": "You asked to steal &player&'s role",
+        "resurrection": "You couldn't steal &player&'s role because he was resurrected",
+        "description": "You may steal a Villagers power when he is killed by another player (once per game). The dead player's role is revealed as being Devoted Servant."
+      },
+      "story_teller": {
+        "display": "Storyteller",
+        "items": "§bTwo§f Libraries",
+        "players": "Players who have acted during the day : &players&",
+        "day": "Power activated Day §b&number&",
+        "description": "After Day §b&number&§f, you receive every morning a list of players who have acted during the previous day."
+      },
+      "spy": {
+        "display": "Spy",
+        "command": "spy",
+        "description": "After the §b&number&§f day, you may spy on a player. You will know how many story actions that player performs on the following day",
+        "use_power": "You can spy on a new player §b/ww spy",
+        "result": "The player &player& has performed &number& story action(s)",
+        "perform": "You have started to spy on §b&player&",
+        "day": "Power activated Day §b&number&"
+      },
+      "benefactor": {
+        "display": "Benefactor",
+        "description": "3 times during the game, you may grant a heart container to a player of your choice (excluding yourself).",
+        "effect": "You obtain a slow Regeneration effect (1 ♥ every 3 minutes) once you have used your power",
+        "items": "2 Books Protection II",
+        "command": "life",
+        "command_description": "/ww life",
+        "too_many_players": "You have already used your power on §b3§fplayers",
+        "already_use_on_player": "You have already used your power over this player",
+        "perform": "You gave §b1 ♥️ §f to §b&player& §f!",
+        "target_message": "The benefactor has given you §b1 ♥️ §f!"
+      },
+      "rabbit": {
+        "display": "Rabbit",
+        "description": "When you have less than 6 ♥️, all players in the Village around you (within 20 blocks) take 10% less degae except those who already have a Resistance effect.",
+        "effects": "Weakness I at night Speed based on your lifebar: 10% at 3 ♥️ and + | 20% below 3 ♥️"
+      },
+      "interpreter": {
+        "display": "Interpreter",
+        "description": "You have a list of 3 Village Roles that are not part of the composition",
+        "power": "Once in the game and for one day, you can embody one of the following roles: §b&roles&",
+        "click": "Click here to become §b&role&, you can click until morning",
+        "perform": "You become §b&role&§f for a day",
+        "command": "changerole",
+        "end": "You are back to §bInterpreter"
+      },
+      "illusionist": {
+        "display": "Illusionist",
+        "description": "On the first death after activating your power, a random player's nickname will be added to the Wolf list",
+        "power": "One minute later, the player will know this and you will receive a list of three nicknames containing this one.",
+        "activate": "To enable your power §b/ww activate§f",
+        "already_activate": "Your power is §aactive",
+        "reveal": "§bIllusionist§f added you to the list of Garous Wolves",
+        "reveal_pseudos": "The username of the player you added to the Wolf list is one of the following: §b&names&",
+        "command": "activate",
+        "perform": "Your power was active"
+      },
+      "poacher": {
+        "display": "Poacher",
+        "actionbar_1": "§c========§r",
+        "actionbar_2": "§6========§r",
+        "description": "Your bar action colors in red less than §b&number&§f blocks of a Wolf corpse.\nBy staying there §b&timer&§f, you can take their fur.\nThe first fur, you will appear Werewolf for all info roles.",
+        "effects": "Fur : Resistance §b10%§f then §b+3%§f Fur Resistance",
+        "fur_numbers": "Number of furs: §b&number&",
+        "recover": "You retrieve the fur from §b&player&",
+        "timers": {
+          "progress": "Fur recovery duration §b&timer&"
+        },
+        "configurations": {
+          "distance": "Range of action of the Poacher §b&number&§f blocks"
+        }
+      },
+      "bonesetter": {
+        "display": "Bonesetter",
+        "description": "You can apply an automatic pride to 3 players in the game except yourself (targets are aware of): when these players fall below 4 ♥️, they will receive 7 seconds of Regebration II (3 ♥️ de heal).\nYou receive a message when one of the targets activates pride (without knowing who).\nYou also have 3 ♥️ Gold apple regeneration.",
+        "command": "auto_heal",
+        "command_description": "/ww auto_heal",
+        "too_many_players": "You have already used your power on §b3§fplayers",
+        "already_use_on_player": "You have already used your power over this player",
+        "perform": "§b&player& will be healed if he loses too much health!",
+        "target_message": "The bonesetter will cure you of §b3 ♥ §f if you fall below §b4 ♥!",
+        "activate": "A player has been cured thanks to you",
+        "receive_heal": "You are receiving the healing from the §bBonesetter"
+      },
+      "witness": {
+        "display": "Witness",
+        "description": "When the wolf list is announced, you will know the name of a culprit, a member of the wolf camp. However, if the culprit dies, you will lose 2 permanent hearts. In addition, you will inflict 30 fewer%% s to the culprit.",
+        "culprit_name": "The guilty is §b&player&",
+        "culprit_unknown": "The culprit was revealed in &time&",
+        "culprit_dead": "The guilty is Dead",
+        "item": "Role by havwila",
+        "reveal_culprit": "Player §b&player&§r belongs to the Werewolf camp",
+        "culprit_death": "The culprit is dead, so you lose 2 permanent hearts",
+        "change": "The identity of the guilty party has changed, this is §b&player&§r"
+      },
+      "croupier": {
+        "display": "Croupier",
+        "description": "Each day you can select a player who will receive a message containing a random player's nickname and 3 roles, Among which is the role of this player.",
+        "command": "distribute",
+        "perform": "You can distribute information to a player with §b/ww distribute§r you have §b&timer&",
+        "not_enough_players": "There are not enough players left to use this command",
+        "yourself": "You cannot select yourself",
+        "repeated_target": "You can only select the same player once",
+        "card": "Grade in the §bCroupier§f, you know that the role of §b&player&§r is one of the following: §b&role1&§r, §b&role2&§r, §b&role3&",
+        "confirm": "Message has been sent",
+        "problem": "There are not enough players to list roles",
+        "configurations": {
+          "croupier_every_other_day": "Croupier every two days"
+        }
+      },
+      "romulus_remus": {
+        "display": "Romulus or Remus",
+        "description_naive": "For now, you can earn with your brother and adoptive. \nHowever, if one of you three dies, your goal will change. \nYou only know the rope of your mean. \nIf you pass with it, she will know §b2§f minutes later that she met one of those sons.",
+        "power_naive": "Resistance when you have more than &number& blocks of your brother",
+        "mother_role": "Your mother is a §b&role&§r\n",
+        "brother_name": "Your brother is §b&name&§r\n",
+        "description_romulus": "You are Romulus. You will get a permanent force effect if you succeed in killing your brother",
+        "description_remus": "You are Remus. You will get a permanent force effect if you kill your brother. Wolves will see you with them that you killed your brother",
+        "strength": "Permanent Strength\n",
+        "mother_message": "You feel the smell of one of your adoptive threads. You were close to him §b2§r minutes ago",
+        "killed_brother_strength": "You managed to kill your brother. You have now §4Strength§r for the rest of the game",
+        "mother_dead": "Your mother is dead. Your rope has changed. §b/ww role§r to learn more.",
+        "family_change": "A family member has changed. §b/ww role§r to learn more.",
+        "family_init": "You know your family. §b/ww role§r to learn more.",
+        "configuration": {
+          "distance_brother": "Distance between brothers §b&number&§f blocks"
+        }
+      },
+      "inquisitor": {
+        "display": "Inquisitor",
+        "description": "At the beginning of the day, you can choose a player. If the player is a §cWolf§, he loses his powers and effects. If the target player is not a Wolf, you lose your power",
+        "smite_message": "Each player with §b/ww punishment§r, you have §b&timer&",
+        "command": "punishment",
+        "smite_disable": "§bInquisitor§f has changed you. You lose your effects and powers definitively",
+        "smite_success": "Your target is a Wolf, so it definitively loses all its powers and effects",
+        "smite_fail": "Target player is not a Wolf. You are losing your power definitively"
+      },
+      "auramancer": {
+        "display": "Auramancer",
+        "description": "You have different effects depending on the aura you have. When you are affected by an aura modifier, your aura becomes the aura of the modifier. When you kill a player with an &dark&§r, your aura will improve by one screen.",
+        "passive_light": "§bPassive§r: Players near &light&§r have 0.5 strength.\n",
+        "passive_neutral": "§bPassive§r: When a player is killed near you (50 blocks), you learn about the auras of death and Slayer\n",
+        "passive_dark": "§bPassive§r: You must win §calone§r. You inflict strength damage on players with an &light& aura§r. You have the nickname of a player with an &light& aura. If there are no players left with an &light& aura§r, your aura no longer changes and you gain permanent speed.\n",
+        "aura_sense": "A nearby player with an &auraVictim&aura has been killed by a player with an &auraKiller& aura",
+        "aura_kill": "You killed a player with an &aura_dead&aura §r. Your aura is now &aura_new&",
+        "aura_change": "Your aura has changed. It is now &aura&",
+        "aura_locked": "No more players have &aura_light&§r. You keep &aura&§r for the rest of the game.",
+        "light_player": "Player §b&player&§r has an &light& kit.",
+        "no_light": "There are no more players with &light& kit.",
+        "configurations": {
+          "distance": "Auramancer action field §b&number&§f blocks"
+        }
+      },
+      "mastermind": {
+        "display": "Mastermind",
+        "description": "You can guess players' roles with §b/ww guess player§r. If you guess correctly, you win a permanent heart, otherwise you lose one.",
+        "command": "§b/ww mindsilence player§r for a permanent heart, disable the king of a player you guessed",
+        "repeat_target": "You have already tried to guess this player's role",
+        "guess_success": "You guessed the role of &player&. You get an additional permanent heart",
+        "guess_fail": "You have mistaken your role. Therefore, you lose a permanent heart",
+        "not_guessed": "You did not guess the role of &player&. You cannot perform this action",
+        "command_disable": "mindsilence",
+        "disable_perform": "You disabled &player& skills",
+        "disable_target": "Your skills have been disabled. You are losing your effects and powers definitively"
+      },
+      "silencer_werewolf": {
+        "display": "Silencer Werewolf",
+        "description": "Once a night, as long as there are more villagers than wolves, you can try to guess the role of a villager. If you succeed, it will lose its powers. If you mislead, you will not be able to use this command until the end of the game",
+        "desc_command": "/ww guess player",
+        "guess_success": "You guessed the role of &player&. It loses its powers",
+        "guess_fail": "You were misleading as a role. You can no longer use this command",
+        "disable_target": "The Muzzling Wolf found your role and deactivated your powers until the end of the game",
+        "power": "You may use your power again",
+        "more_wolves": "There are fewer villagers than wolves. You cannot use your power"
+      },
+      "bloodthirsty_werewolf": {
+        "display": "Bloodthirsty Werewolf",
+        "description_command": "/ww track",
+        "command": "track",
+        "description": "You can track players with §c/ww tracking§f. You get §b&speed&%§f extra speed when you go to the tracked player. You can track down a new player §b&time&§r after the death of your previous target. \nFrom day &damage_day& and every two days, you lose 4 hearts if you did not charge a non-wolf player for the last 2 days. \nFrom day &list_day& and every two days, you receive a list containing all players with less than §b&number&%§f of their maximum life.",
+        "power_enable": "You can track a player",
+        "power_disable": "You cannot track players at the moment",
+        "power_already_used": "You are already tracking player §b&player&§f",
+        "hunt_down_confirm": "You are tracking the player §c&player&",
+        "player_cant_be_traqued": "You cannot track player §b&player&§r",
+        "player_death": "Your target is dead, you will be able to track down another player in §b&time&§f",
+        "have_deal_damage": "You inflicted degae on a non-wolf player during the previous episode, you don't lose life in this episode",
+        "havent_deal_damage": "You didn't inflict any degae on a non-wolf player, so you lose 4 hearts",
+        "low_life_players_list": "Here is the list of players who have less than §b&number&%§f\n§b&names&",
+        "recover_power": "You can track a player again",
+        "timers": {
+          "cooldown": "Cooldown duration: §b&timer&§f"
+        },
+        "configurations": {
+          "max_life": "Maximum life of §b&number&%§r Blood Detection",
+          "speed": "Speed increased by §b&number&%§f",
+          "life_detect_day": "You are starting to detect players with a low life of the day §b&number&§f",
+          "take_damage_day": "You will take damage from day §b&number&§f"
+        }
+      },
+      "scape_goat": {
+        "display": "Scape Goat",
+        "description": "You must choose the player that will be assigned when a match occurs, otherwise you will be assigned to its place. In case there is no egalitarian, you receive §b1§f gold apple and get the role of a live random player that is §4NOT§f the player assigned by votes.",
+        "select": "§l§bClick§r here to vote for §b&player&§f",
+        "command_name": "scape_command",
+        "multi_vote_equality": "People have the same number of votes, so you can decide:",
+        "vote_no_equality": "The vote was clear, you will not have to decide.\nYou receive §b1§f gold apple and the following information: \n the player assigned by vote is §cnot§f §b&role&",
+        "vote_no_result": "No player voted more than once, you won't have to decide. You receive §b1§f Golden Apple.",
+        "perform": "You have selected for §b&player&"
       }
-    },
-    "vote": {
-      "already_voted": "You have already voted today",
-      "not_vote_time": "Voting time is over",
-      "player_already_voted": "This player has already been voted",
-      "perform_vote": "You voted for §b&player&",
-      "vote_disable": "Votes are disabled",
-      "vote_deactivate": "Due to the number of players, Votes are disabled",
-      "vote_not_yet_activated": "Votes are not enabled yet",
-      "vote_result": "§b&player&§r is the player who was voted most often§r : §b&number&§r. He loses 5 hearts",
-      "no_result": "No player have been voted more than ounce",
-      "vote_time": " It is time to vote §b/ww vote§r You have §b&timer&",
-      "command": "vote"
-    },
-    "lone_wolf": {
-      "message": "You become a lone wolf. You now have to win alone. To help you in this task, you have 4 additional permanent hearts (within a limit of 15 hearts maximum)"
     },
     "announcement": {
       "restart": "Restarting the game in §b&timer&",
@@ -529,9 +1112,9 @@
       "border": "Borders started to shrink",
       "mining": "Mining Disabled",
       "day": "It is now Day §b&number&§r ✸ ",
-      "death_message_with_role": " §b&player&§r died, he was a §b&role&",
-      "death_message_with_camp": "  §b&player&§r died, he was a member of the §b&role&",
-      "death_message": "      §b&player&§r died",
+      "death_message_with_role": "§b&player&§r died, he was a §b&role&",
+      "death_message_with_camp": "§b&player&§r died, he was a member of the §b&role&",
+      "death_message": "§b&player&§r died",
       "review_role": "To see your role's description again, §b/ww role",
       "troll": "Well, the joke has gone on for long enough ! Here's your real role : ",
       "lover_troll": "The Valentine's Day joke is over, your love was an illusion",
@@ -539,8 +1122,7 @@
       "start": {
         "message": "You have §b&timer&§r of invulnerability\n§f More informations about the game §b/ww h",
         "top_title": "Game is Starting",
-        "bot_title": "§bHave a good game",
-        "launch": "Start the §bGame"
+        "bot_title": "§bHave a good game"
       },
       "potential_revive": "Waiting for a potential revive",
       "invulnerability": "Invulnerability is now disabled",
@@ -560,15 +1142,14 @@
       "resurrection": "You just came back to life"
     },
     "end": {
-      "thief": "§e He stole a &role&",
       "infect": " Infected",
       "solitary": " Lone Wolf",
       "reveal_death": "§e§m&player& was &role&",
       "transform": " transformed",
       "reveal": "§e&player& was &role&",
-      "model": " master &player&",
       "death": "§cOf Death",
       "lover": " in love with &player&",
+      "fake_lover": " fake couple with &player&",
       "cursed_lover": " in a cursed relationship with &player&",
       "victory": "Victory",
       "message": "Victory &winner&"
@@ -577,61 +1158,43 @@
       "admin": {
         "stop": {
           "command": "stop",
-          "message": "Stop the game",
-          "send": "§b&player&§r stopped the game",
-          "description": "Stop the game"
+          "description": "Stop the game",
+          "send": "§b&player&§r stopped the game"
         },
         "start": {
           "command": "start",
+          "description": "Start the game",
           "too_much_role": "You have to remove roles to start the game.",
-          "description": "Start the game"
+          "generation_not_finished": "Wait for the map's generation to end (§b&progress&%§r)"
         },
         "group": {
           "command": "group",
-          "command_2": "setgroup",
+          "description": "Send a message to remind group size",
           "group_change": "Group's limit are now at §b&number&",
           "respect_limit": "Respect the limits, group of §b&number&",
           "top_title": "Respect the limit",
-          "bot_title": "group of §b&number&",
-          "description1": "Send a message to remind group size",
-          "description2": "Change group size"
+          "bot_title": "group of §b&number&"
         },
-        "anonymous_chat": {
-          "command": "?",
-          "send": "[§b&player&§r] &message& (Click to answer)",
-          "anonyme": "Anonymous",
-          "failure": "Your message couldn't be sent. No staff is connected",
-          "description": "To send an anonymous message",
-          "empty": "You have to send a message after the ?"
+        "set_group": {
+          "command": "setgroup",
+          "description": "Change group size"
         },
         "info": {
           "command": "info",
-          "send": "§b§l[Info]§r » §b&message&",
-          "description": "To send an information in the global chat"
+          "description": "To send an information in the global chat",
+          "send": "§b§l[Info]§r » §b&message&"
         },
         "set_game_name": {
-          "send": "Name of the game configured",
           "command": "name",
-          "description": "To change game name"
+          "description": "To change game name",
+          "send": "Name of the game configured"
         },
         "chat": {
           "command": "chat",
+          "description": "To activate/deactivate chat",
           "on": "Chat is §benabled",
           "off": "Chat is §bdisabled",
-          "template": "&player& : &message&",
-          "description": "To activate/deactivate chat"
-        },
-        "ww_chat": {
-          "name": "chatww",
-          "prefix": "[§cChat WW§r] &message&",
-          "modo": "[§c&name&§r] &message&",
-          "announce": "You have §b&timer&§f seconds to write §b&number&§f messages(s) in the Werwolf Chat §b/ww chatww§r <message>, but be careful, some non-Werewolves roles have the ability to read the messages as well",
-          "timer": "The time to write in the Werewolf chat is over",
-          "not_access": "You cannot talk in the Werewolf chat",
-          "disable": "The Werewolf chat is disabled",
-          "number": "§b&number&§r messages per cycle in the Werewolf chat",
-          "speak_number": "You may talk only §b&number&§r times per cycle",
-          "drunken": "Be Warned, there is a drunk werewolf in this game"
+          "template": "&player& : &message&"
         },
         "stuff_start": {
           "command": "lootStart",
@@ -650,350 +1213,362 @@
         },
         "role": {
           "command": "role",
+          "description": "To see a player's role",
           "in_game": "You can't see a player's role if you are in the game",
           "affected": "Affects : §b&player&",
           "cursed_lover": "In cursed relationship with : §b&player&",
           "lover": "In love with : §b&player&",
+          "fake_lover": "False Couple with: §b&player&",
           "kill_by": "Killed by : §b&player&",
           "power": "Ability : §b&on&",
           "role": "§b&player&§r is §b&role&",
-          "sister": "Sisters : §b&list&",
-          "siamese_twin": "Siamese Twins : §b&list&",
-          "angel": "Chosen Angel : §b&form&",
           "transformed": "Transformed: §b&on&",
           "yes": "yes",
           "no": "no",
-          "description": "To see a player's role"
+          "honor": "His honor is: §b&number&"
         },
         "final_heal": {
           "command": "fh",
-          "send": "Final Heal !",
-          "description": "Heal all players"
-        },
-        "generation": {
-          "command": "generation",
-          "already_start": "Generation has already been launched",
-          "perform": "World generation has begun",
-          "not_generated": "Map not generated. Do §b/a generation",
-          "not_finished": "Wait for the map's generation to end (§b&progress&%§r)",
-          "description": "Generated the game map"
+          "description": "Heal all players",
+          "send": "Final Heal!"
         },
         "change": {
           "command": "change",
+          "description": "Change game map",
           "in_progress": "Changing map...",
-          "finished": "New map created",
-          "description": "Change game map"
+          "finished": "New map created"
         },
         "preview": {
           "command": "preview",
+          "description": "Teleport to the game map",
           "map": "You have been teleported to the center of the game map\n §b/a preview§r to return to lobby",
           "lobby": "You have returned to the lobby",
-          "create": "Creating map, please wait...",
-          "description": "Teleport to the game map"
+          "create": "Creating map, please wait..."
         },
         "tp_group": {
           "command": "tpgroup",
+          "description": "Teleport a part of a too big group",
           "broadcast": "§b&players&§r have been teleported by §b&player&",
-          "perform": "You have been teleported by §b&player&",
-          "description": "Teleport a part of a too big group"
+          "perform": "You have been teleported by §b&player&"
         },
         "disconnected": {
           "command": "disc",
-          "send": "§b&player&§r disconnected §b&timer&§r ago",
-          "description": "See disconnected players"
+          "description": "See disconnected players",
+          "send": "§b&player&§r disconnected §b&timer&§r ago"
         },
         "revive": {
           "command": "revive",
+          "description": "Revive a player",
           "perform": "§b&player&§r has been revived by §b&dmin&",
-          "not_death": "The player isn't Dead",
-          "description": "Revive a player"
+          "not_death": "The player isn't Dead"
         },
         "size": {
           "command": "size",
-          "begin": "Beginning of calculation (area of the central biome)",
+          "description": "Calculate size of central biome",
+          "begin": "Beginning of the calculation of the surface of the Central Biome",
           "result": "The central biome has an area of §b&number&§r blocks.",
-          "change": "Click here to change the Map",
-          "description": "Calculate size of central biome"
+          "change": "Click here to change the Map"
         },
         "host": {
           "command": "host",
+          "description": "Add a host",
           "name": "Host",
           "add": "§b&player&§r is now Host",
           "remove": "§b&player&§r isn't Host anymore",
           "one": "At least one host is necessary",
-          "tag": "§cHost§r » ",
-          "description": "Add a host"
+          "tag": "§cHost§r » "
         },
         "whitelist": {
           "command": "whitelist",
+          "description": "Add a player to the whitelist",
           "add": "The player has been added to the whitelist",
           "remove": "The player was removed from the whitelist",
-          "player_not_whitelisted": "You are not on the whitelist",
-          "description": "Add a player to the whitelist"
+          "player_not_whitelisted": "You are not on the whitelist"
         },
         "moderator": {
           "command": "moderator",
+          "description": "Add a moderator",
           "name": "Moderator",
           "add": "§b&player&§r is now moderator",
           "remove": "§b&player&§r isn't moderator anymore",
           "player_living": "You can't make a player, still alive, a moderator",
           "tag": "§bModo§r » ",
-          "message": "You are in Moderator Mode",
-          "description": "Add a moderator"
+          "message": "You are in Moderator Mode"
         },
         "gamemode": {
           "command": "gamemode",
-          "send": "§b&player&§r changed his gamemode to §b&number&",
-          "description": "Change your gamemode"
+          "description": "Change your gamemode",
+          "send": "§b&player&§r changed his gamemode to §b&number&"
         },
         "teleportation": {
           "command": "tp",
-          "send": "Teleporting §b&player1&§r to §b&player2&",
-          "description": "Teleport"
+          "description": "Teleport",
+          "send": "Teleporting §b&player1&§r to §b&player2&"
         },
         "help": {
           "command": "h",
           "help": "Available commands :\n"
+        },
+        "inventory": {
+          "command": "inv",
+          "description": "See a players inventory"
+        },
+        "kill": {
+          "command": "kill",
+          "description": "Remove a player from the game",
+          "on_line": "The player is connected",
+          "remove_role": "Remove a role from the configuration to compensate for the player",
+          "not_living": "The player is not alive"
+        },
+        "late": {
+          "command": "late",
+          "description": "To add a player overdue during the game",
+          "in_game": "This player is already in the game",
+          "launch": "§b&player&§r has been added to the game",
+          "teleportation": "Wait until the teleportation is complete before adding a new player"
+        },
+        "config": {
+          "command": "config",
+          "description": "Configure the game"
         }
       },
-      "inventory": {
-        "command": "inv",
-        "description": "See a players inventory"
-      },
-      "message": {
-        "send": "[Message sent to §b&player&§r] » §b&message&",
-        "received": "[Message from §b&player&§r] » §b&message&"
-      },
-      "compo": {
-        "composition_hide": "The role's Composition is hidden",
-        "description": "See the composition",
-        "_": "§6================================\n"
-      },
-      "doc": {
-        "command": "doc",
-        "description": "See the role documentation",
-        "link": "Click here for the roles documentation"
-      },
-      "kill": {
-        "command": "kill",
-        "on_line": "The player is connected",
-        "remove_role": "Remove a role in the configuration to compensate with the player",
-        "not_living": "The player isn't alive",
-        "description": "Remove a player from the game"
-      },
-      "late": {
-        "command": "late",
-        "in_game": "This player is already in the game",
-        "launch": "§b&player&§r has been added to the game",
-        "description": "Add a player while the game has already started"
-      },
-      "help": {
-        "command": "h"
+      "player": {
+        "anonymous_chat": {
+          "command": "?",
+          "description": "Send anonymous messages",
+          "send": "[§b&player&§r] &message& (Click to answer)",
+          "anonyme": "Anonymous",
+          "failure": "Your message could not be sent. No Staff online",
+          "empty": "You have to send a message after the ?"
+        },
+        "ww_chat": {
+          "command": "chatww",
+          "prefix": "[§cChat LG§r] &message&",
+          "modo": "[§c&name&§r] &message&",
+          "announce": "You have §b&timer&§f seconds write §b&number&§f message(s) in the Werewolf chat §b/ww chatww§r <message>, be careful, there are roles which can read the chat's content",
+          "timer": "The time to write in the Werewolf chat is over",
+          "not_access": "Yu cannot write in the Werewolf chat",
+          "disable": "The Werewolf chat is disabled",
+          "speak_number": "You may speak only §b&number&§r times per cycle",
+          "drunken": "Be warned, the drunken Werewolf is present in the game"
+        },
+        "message": {
+          "send": "[Message sent to §b&player&§r] » §b&message&",
+          "received": "[Message from §b&player&§r] » §b&message&"
+        },
+        "compo": {
+          "command": "compo",
+          "description": "See the composition",
+          "composition_hide": "The composition is hidden",
+          "_": "§6================================"
+        },
+        "aura": {
+          "command": "aura",
+          "description": "Explications about the auras",
+          "specific_use_cases": [
+            "§6Special cases§f:",
+            "Kill a player (who is not resurrected) gives a §bDark§f aura",
+            "Being resurrected grants a §bNeutral§f aura"
+          ],
+          "prefix": "Auras Descriptive:",
+          "menu_role": "Aura: &aura&"
+        },
+        "doc": {
+          "command": "doc",
+          "description": "See the role documentation",
+          "link": "Click here for the roles documentation"
+        },
+        "role": {
+          "command": "role",
+          "description": "See the description of your role"
+        },
+        "help": {
+          "command": "h"
+        },
+        "rank": {
+          "command": "rank",
+          "description": "See your position in the queue",
+          "perform": "You are in position §b&number&§r in the queue",
+          "not_in_queue": "You are not in the queue",
+          "tag": "§6Queue§r » "
+        },
+        "enchantments": {
+          "command": "enchantment",
+          "description": "See enchantement limits",
+          "title": "Enchantment Limits :",
+          "note": "§oSome roles may override certain limits",
+          "iron_diamond_protection": "- Armor Protection §6Iron§ed: §b&number&§f / §3Diamond§f: §b&number2&§f",
+          "iron_diamond_sharpness": "- Sharpness Sword §6Iron§ed: §b&number&§f / §3Diamond§f: §b&number2&§f",
+          "punch_power": "- Power bow: §b&number&§f / Strike: §b&number2&",
+          "knock_back_depth_rider": "- KnockBack: §b&number&§f / aquatic agilite: §b&number2&",
+          "knock_back_invisible": "§cKnockback§f only for §aInvisible§f players"
+        },
+        "timers": {
+          "command": "timers",
+          "description": "See the timers",
+          "list": "§bTimers list:"
+        },
+        "configurations": {
+          "command": "configurations",
+          "description": "See general configuration",
+          "list": "§bConfigurations list §f:"
+        },
+        "configurations_roles": {
+          "command": "configroles",
+          "description": "To see the configuration of the roles",
+          "list": "§bRoles Settings list:"
+        },
+        "random_events": {
+          "command": "events",
+          "description": "See random events",
+          "list": "§bEnabled§f random events :",
+          "disable": "Displaying the random events is disabled",
+          "command_message": "§b&event& §f(probability §b&number&%§f)"
+        },
+        "scenarios": {
+          "command": "scenarios",
+          "description": "See the scenarios",
+          "disable": "Displaying the scenarios is disabled",
+          "list": "List of §benabled§f scenarios :"
+        },
+        "wish": {
+          "command": "will",
+          "description": "Allows you to define your last wish",
+          "change_wish": "Your last wish is: &wish&"
+        },
+        "vote": {
+          "command": "vote",
+          "description": "Allows to vote"
+        },
+        "guess": {
+          "command": "guess",
+          "title": "Guess the role of §b&player&"
+        },
+        "color": {
+          "command": "color",
+          "description": "Allows to colorize a player's nickname",
+          "player_choice": "§bPlayer Marking",
+          "color_choice": "§bcolor choice"
+        }
       }
     },
-    "menu": {
-      "command": "config",
-      "description": "Configure the game",
-      "name": "Option §bWW",
-      "return": "Return to Main Menu",
-      "left": "§fLeft-§bClick§f >> +",
-      "right": "§fRight-§bClick§f >> -",
-      "shift": "§bShift§f-Click >> Advanced configuration",
-      "addon": {
-        "name": "Addon Settings"
+    "menus": {
+      "return": "Return to main menu",
+      "lore": {
+        "left": "§bLeft§f-Click » +",
+        "right": "§bRight§f-Click » -",
+        "shift": "§bShift§f-Click » Configuration"
       },
-      "advanced_tool_role": {
-        "menu": "Advanced Menu §b&role&",
-        "config": "Customize a §b&role&§f's starting stuff"
-      },
-      "advanced_tool": {
-        "name": "§bAdvanced §rSettings",
-        "troll_on": "Troll §2Enabled",
-        "troll_off": "Troll §4Disabled",
-        "troll_lover_on": "Valentine's Day troll §2Enabled",
-        "troll_lover_off": "Valentine's Day troll §4Disabled",
-        "troll_set": "§bShift§f-Click to configure",
-        "resistance": "Resistance §b&number&%",
-        "succubus": "Succubus' action zone §b&number&",
-        "sister": "Sisters action range §b&number&",
-        "priestess": "Priestess action radius §b&number&",
-        "fox_smell_number": "Fox's Number of Smell §b&number&",
-        "ender_pearl": "EnderPearl's Drop Rate §b&number&%",
-        "flint": "Flint's Drop Rate §b&number&%",
-        "apple": "Apple's Drop Rate §b&number&%",
-        "vote": "End of votes at §b&number&§r players",
-        "diamond": "Diamond Limit §b&number&",
-        "xp": "XpBoost §b&number&%",
-        "strength": "Strength + §b&number&%",
-        "particles": "Golden Apples' Particules",
-        "particles_on": "§bEnabled§r for all players",
-        "particles_off": "§4Disable§r for all players",
-        "exception": "§6Disable for Little-Girl and the Mischievous Wolf invisible",
-        "fox": "Fox's action zone §b&number&",
-        "avenger_werewolf": "Avenging Werewolf action radius §b&number&",
-        "flute_player": "Pied Piper action radius §b&number&",
-        "bear_trainer": "Bear Trainer's action zone §b&number&"
-      },
-      "troll": "Configuration §bTroll",
-      "roles": {
-        "command_1": "role",
-        "need": "§cThis role needs a §f&role&§c in the composition",
-        "dependant_load": "§cDepending role loaded (§f&role&§c)",
-        "command_2": "compo",
-        "description1": "See the description of your role",
-        "description2": "See the composition",
-        "name": "§bRoles §rSettings",
-        "zero": "Reset",
-        "previous": "Previous §b&current& §r»§b &previous&",
+      "pagination": {
+        "previous": "Previous §b&current& §r»§b &previous& ",
         "next": "Next §b&current& §r»§b &next&",
         "current": "Page §b&current&§r/§b&sum&"
       },
+      "main": {
+        "name": "Options §bWW"
+      },
+      "addon": {
+        "name": "Addon(s) Settings"
+      },
+      "advanced_tool_role": {
+        "menu": "Advanced Settings §b&role&",
+        "config": "§b&role&§r Stuff Configuration"
+      },
+      "meet_up": {
+        "button": "§bMeetUp§f Mode &on&",
+        "enable": "§aEnable§f MeetUp Mode",
+        "disable": "§cDisable§f MeetUp Mode",
+        "name": "Manage §bMeetUp",
+        "warning": "§cWarning§f, this deletes your current settings"
+      },
+      "advanced_tool": {
+        "name": "Advanced §bSettings",
+        "resistance": "Resistance §b&number&%",
+        "strength": "Strength + §b&number&%",
+        "particles": "Golden Apple Particles",
+        "particles_on": "§bEnabled§r for all players",
+        "particles_off": "§4Disabled§r for all players",
+        "exception": "§6Disabled§f for Invisible players"
+      },
+      "troll": {
+        "name": "Setting §bTroll Role",
+        "current": "Current role §b&role&"
+      },
+      "roles": {
+        "need": "§cThis role needs a §f&role&§c in the composition",
+        "dependant_load": "§cDepending role loaded (§f&role&§c)",
+        "name": "§bRoles§f Settings",
+        "zero": "Reset to Zero",
+        "incompatible": "§cIncompatible role loaded : §b&role&",
+        "filters": {
+          "aura": "Filter by aura",
+          "category": "Filter by category",
+          "attribute": "Filter by attributes"
+        }
+      },
       "whitelist": {
-        "name": "§bWhiteList §rSettings",
-        "max": "Max # of Players §b&number&",
+        "name": "§bWhiteList§f Settings",
+        "max": "Max Players §b&number&",
         "spectator_mode": "§fSpectator Mode :",
-        "open": "§fWhiteList §2open",
-        "close": "§fWhiteList §4closed",
-        "disable": "§4Disabled§f for all",
-        "death_only": "§fFor Deads §6only",
-        "enable": "§2Enabled§f for all"
+        "open": "§fWhiteList §aopen",
+        "close": "§fWhiteList §cclosed",
+        "disable": "§cDisabled§f for all",
+        "death_only": "§fFor dead players §6only",
+        "enable": "§aEnabled§f for all"
       },
       "scenarios": {
-        "disable": "Displaying the scenarios is disabled",
-        "list": "List of §benabled§f scenarios :\n",
-        "command": "scenarios",
-        "no_nether": "NoNether",
-        "no_end": "NoEnd",
-        "description": "See the scenarios",
-        "name": "§bScenarios §rSettings",
-        "diamond_limit": "DiamondLimit",
-        "no_clean_up": "NoCleanUp",
-        "cat_eyes": "CatEyes",
-        "vanilla_plus": "Vanilla+",
-        "fire_less": "FireLess",
-        "no_egg_snowball": "NoSnowBall",
-        "no_poison": "NoPoison",
-        "horse_less": "HorseLess",
-        "cut_clean": "CutClean",
-        "no_fall": "NoFall",
-        "fast_smelting": "FastMelting",
-        "compass_target_last_death": "DeathCompass",
-        "xp_boost": "XPBoost",
-        "compass_middle": "MiddleCompass",
-        "hastey_boys": "HasteyBoys",
-        "no_name_tag": "NoNameTag",
-        "rod_less": "RodLess",
-        "slow_bow": "SlowBow",
-        "no_fire_weapons": "NoFireWeapons",
-        "timber": "Timber",
-        "double_jump": "Double Jump",
-        "incompatible": "§cIncompatible scenario loaded : §b&scenario&"
-      },
-      "rank": {
-        "command": "rank",
-        "description": "See your position in the queue",
-        "perform": "You are in position §b&number&§r in the queue",
-        "not_in_queue": "You are not in the queue",
-        "tag": "§6Queue§r » "
+        "name": "§bScenarios§f Settings",
+        "incompatible": "§cIncompatible Scenario loaded : §b&scenario&"
       },
       "enchantments": {
-        "command": "enchantment",
-        "description": "See enchantement limits",
-        "name": "§bEnchantments §rSettings",
-        "title": "Enchantment Limits :",
-        "iron_protection": "Protection's Limit on iron : §b&number&",
-        "diamond_protection": "Protection's Limit on diamond : §b&number&",
-        "power": "Power §b&number&",
-        "sharpness_iron": "Iron sword : Max Sharpness §b&number&",
-        "sharpness_diamond": "Diamond Sword : Max Sharpness §b&number&",
-        "knock_back": "KnockBack §b&number&",
-        "knock_back_invisible": "§4KnockBack only\n§4for the Little Girl\n§4and the Mischievous Werewolf",
-        "knock_back_normal": "§bShift§f-Click >> configure",
-        "punch": "Punch §b&number&",
-        "depth_rider": "Depth Strider §b&number&"
-      },
-      "advanced_config_roles": {
-        "name": "Advanced $bRole§r Configuration"
+        "name": "§bEnchantements§f Settings",
+        "iron_protection": "§6Iron§f Armor . Protection §b&number&",
+        "diamond_protection": "§3Diamond§f Armor : Protection §b&number&",
+        "power": "Power : §b&number&",
+        "sharpness_iron": "§6Iron§f Sword : Sharpness §b&number&",
+        "sharpness_diamond": "§3Diamond§f Sword : Sharpness §b&number&",
+        "knock_back": "Knockback §b&number&",
+        "knock_back_invisible": "§cKnockback§f only for §aInvisible§f players",
+        "punch": "Punch : §b&number&",
+        "depth_strider": "Depth Strider: §b&number&"
       },
       "timers": {
-        "command": "timers",
-        "description": "See the timers",
-        "name": "§bTimers §rSettings",
-        "pvp": "PVP (§b&timer&§r)",
-        "vote_duration": "Vote Duration (§b&timer&§r)",
-        "werewolf_chat_duration": "Werewolf chat duration (§b&timer&§r)",
-        "rival_duration": "Waiting for the rival's informations (§b&timer&§r)",
-        "citizen_duration": "Ctizen's choice Duration (§b&timer&§r)",
-        "border_begin": "Border's shrink start (§b&timer&§r)",
-        "model_duration": "Choice of a Master Duration (§b&timer&§r)",
-        "fox_smell_duration": "Fox's Smell Duration (§b&timer&§r)",
-        "werewolf_list": "Waiting time for the Werewolves' list (§b&timer&§r)",
-        "lover_duration": "Duration for Lovers' choice and lovers reveal (§b&timer&§r)",
-        "day_duration": "Day/Night Duration (§b&timer&§r)",
-        "role_duration": "Roles Reveal (§b&timer&§r)",
-        "digging_end": "End of Mining (§b&timer&§r)",
-        "angel_duration": "Choice of Angel Duration (§b&timer&§r)",
-        "power_duration": "Duration for abilities usage in the morning (§b&timer&§r)",
-        "vote_begin": "Votes start (§b&timer&§r)",
-        "auto_restart_duration": "Server restart duration (§b&timer&§r)",
-        "invulnerability": "Invulnerability (§b&timer&§r)",
-        "succubus_duration": "Succubus' Charm Duration (§b&timer&§r)"
+        "name": "§bTimers §rSettings"
       },
       "random_events": {
-        "list": "§bEnabled§f random events :\n",
-        "name": "§bEvents§f configuration",
-        "command": "events",
-        "disable": "Displaying the random events is disabled",
-        "description": "See random events",
-        "command_message": "§b&event& §f(probability §b&number&%§f)",
+        "name_fix": "§bRandom Events Conf",
         "probability": "§fProbability : §b&number&§f%"
       },
       "save": {
         "name": "§bBackup §rSettings",
         "new": "Create a new backup",
+        "save_name": "save",
         "load": "Load §b&save&",
-        "save_name": "Save name",
         "delete": "Delete §b&save&",
         "configuration": "Configuration §b&save&",
         "load_message": "Configurations §b&save&§r loaded",
         "delete_message": "Configuration §b&save&§r deleted",
         "success": "Settings §bsaved",
         "failure": "Configuration slots full",
-        "save_menu": "§bSaves §bMenu"
+        "save_menu": "§bBackup Menu"
       },
       "stuff": {
-        "name": "§bInventory §rSettings",
-        "normal": "§bLoad§r Default Role Inventory",
-        "meet_up": "§bLoad§r MeetUp Inventory",
+        "name": "§bStuff Configuration",
         "chill": "§bLoad§r Chill Starting Inventory",
         "delete": "§4Delete§r Starting and Death Inventory",
         "death": "§bDeath Inventory §rSettings",
-        "start": "§bStarting Inventory §rSettings"
+        "start": "§bStarting Inventory §rSettings",
+        "reset": "§aLoad§r Default Role Stuff"
       },
-      "global": {
-        "command": "rules",
-        "description": "See general configuration",
+      "configurations": {
         "name": "§bGeneral §rSettings",
-        "victory_couple": "Lovers can only win as Lovers",
-        "chat": "Chat",
-        "werewolf_chat": "Werewolf chat",
-        "show_role_to_death": "Displays Role at Death",
-        "show_role_category_to_death": "Show role category on death",
-        "vote": "Vote",
-        "hide_composition": "Hidden Composition",
-        "red_name_tag": "Werewolves' name in red",
-        "hide_scenarios": "Hides the scenarios",
-        "hide_events": "Hides the Events",
-        "proximity_chat": "Proximity chat",
-        "double_troll": "Double Troll",
-        "lone_wolf": "Lone Wolf",
         "incompatible": "§cIncompatible configuration loaded : §b&configuration&"
       },
       "border": {
         "name": "§bBorder §rSettings",
         "radius_border_max": "Initial Border size (§b&size&§r)",
         "radius_border_min": "Final Border Size (§b&size&§r)",
-        "speed": "Border speed (§b&number&§r) block(s) per second"
+        "speed": "Border speed (§b&speed&§r) block(s) per second"
       },
       "maps": {
         "name": "§bMaps§f Configuration",
@@ -1002,11 +1577,15 @@
       },
       "languages": {
         "name": "§bLanguage §rSettings"
+      },
+      "start_stop": {
+        "stop": "Stop the game",
+        "launch": "Start the §bGame"
       }
     },
     "tab": {
       "top": "§4§lWEREWOLF UHC",
-      "timer": "Timer §b&timer&§f - Day §b&day& §f(§b&day_state&§f)\n",
+      "timer": "Timer §b&timer&§f - Day §b&day& §f(§b&daystate&§f)\n",
       "bot": "§7Plugin made by §bPh1Lou"
     },
     "action_bar": {
@@ -1015,7 +1594,7 @@
       "in_game": "§7Center §b&min& §7at§b &max& §7blocs | Y §b&height&",
       "create_tp_point": "TP points creation: §b&number&§r/§b&sum&§r",
       "tp": "Teleportation : §b&number&§r/§b&sum&§r",
-      "complete": "Generation §bFinished"
+      "complete": "Generation done"
     },
     "score_board": {
       "title": "§4§lWEREWOLF UHC",
@@ -1023,37 +1602,295 @@
       "night": "Night",
       "day": "Day",
       "spectator": "Spectator",
-      "composition": "§3§m------↠§8compo§3§m↞------",
-      "page": "§3§m-----↠§8page &number&/&sum&§3§m↞-----",
-      "score": "§3§m-----↠§8score§3§m↞------",
-      "game_name": "§3§m-----↠§8game§3§m↞------",
-      "name": "§b&name&",
-      "scoreboard_1": [
+      "scoreboard_role": [
+        "§3§m------↠§8compo§3§m↞------",
+        "&roles&",
+        "§3§m-----↠§8page &current&/&sum&§3§m↞-----",
+        "§b&name&"
+      ],
+      "scoreboard_lobby": [
         "§3§m-----↠§8infos§3§m↞------",
         "Waiting for players ",
         "§3§m------------------",
-        "Players : §b&players&§r/§b&roles&",
+        "Players : §b&players&§r/§b&roles_total&",
         "§3§m------------------",
-        "Max # of Players : §b&max&"
+        "Max Players §b&max&",
+        "§3§m-----↠§8game§3§m↞------",
+        "§b&name&"
       ],
-      "scoreboard_2": [
+      "scoreboard_game": [
         "§3§m-----↠§8role§3§m↞-----",
         "Role §b&role&",
         "§3§m----↠§8infos§3§m↞-----",
         "Timer §b&timer&",
         "Day §b&day& §r(§b&daystate&§r)",
-        "Player alive §b&players&",
-        "Group of §b&group&",
+        "Alive §b&players&",
+        "Groups of §b&group&",
         "§3§m---↠§8border§3§m↞----",
         "Border §b&border&",
-        "Size §b&border_size&"
-      ]
+        "Size §b&border_size&",
+        "§3§m-----↠§8game§3§m↞------",
+        "§b&name&"
+      ],
+      "scoreboard_score": [
+        "§3§m-----↠§8score§3§m↞------",
+        "&scores&",
+        "§3§m-----↠§8game§3§m↞------",
+        "§b&name&"
+      ],
+      "default_game_name": "@Ph1Lou_"
+    },
+    "timers": {
+      "pvp": {
+        "name": "PVP (§b&timer&§r)"
+      },
+      "border_begin": {
+        "name": "Start of Border reduction (§b&timer&§r)"
+      },
+      "werewolf_list": {
+        "name": "Wait time until Werewolf list (§b&timer&§r)"
+      },
+      "lover_duration": {
+        "name": "Duration for Lovers choice and Lovers revelation (§b&timer&§r)"
+      },
+      "day_duration": {
+        "name": "Day/Night Duration (§b&timer&§r)"
+      },
+      "role_duration": {
+        "name": "Roles Reveal (§b&timer&§r)"
+      },
+      "digging_end": {
+        "name": "End of Mining (§b&timer&§r)"
+      },
+      "power_duration": {
+        "name": "Duration for abilities usage in the morning (§b&timer&§r)"
+      },
+      "auto_restart_duration": {
+        "name": "Server restart duration (§b&timer&§r)"
+      },
+      "invulnerability": {
+        "name": "Invulnerability (§b&timer&§r)"
+      }
+    },
+    "configurations": {
+      "victory_lovers": {
+        "name": "Lovers can only win as Lovers"
+      },
+      "chat": {
+        "name": "Chat"
+      },
+      "werewolf_chat": {
+        "name": "Werewolf chat",
+        "configurations": {
+          "vote_end": "§b&number&§r messages per cycle in the Werewolf chat"
+        },
+        "timers": {
+          "werewolf_chat_duration": "Werewolf chat duration (§b&timer&§r)"
+        }
+      },
+      "werewolf_howling": {
+        "name": "Howl of the Garous Wolves",
+        "action_bar": "§cHowl§f: ",
+        "message": "§b&number&§f wolves §b50 blocks§f from you",
+        "command": "howl",
+        "not_allowed": "You do not have the right to use the §cHowling",
+        "disabled": "Howling off",
+        "warn": "A player has just used the §cHowl",
+        "can_use": "You can use the §cHowl§f with §b/ww howl"
+      },
+      "show_role_to_death": {
+        "name": "Displays Role on Death"
+      },
+      "show_role_category_to_death": {
+        "name": "Show role category on death"
+      },
+      "vote": {
+        "name": "Vote",
+        "timers": {
+          "vote_duration": {
+            "name": "Vote Duration (§b&timer&§r)"
+          },
+          "vote_waiting": {
+            "name": "Vote transition Duration (§b&timer&§r)"
+          },
+          "vote_begin": {
+            "name": "Votes start (§b&timer&§r)"
+          }
+        },
+        "configurations": {
+          "vote_end": "End of votes at §b&number&§r players",
+          "vote_every_other_day": "Vote every other day",
+          "distance": "Meet distance: §b &number& block(s)"
+        },
+        "already_voted": "You already voted today",
+        "not_vote_time": "Voting time is over",
+        "player_already_voted": "This player has already been voted",
+        "perform_vote": "You voted for §b&player&",
+        "vote_disable": "Votes are disabled",
+        "vote_deactivate": "Due to the number of players, Votes are disabled",
+        "vote_not_yet_activated": "Votes are not enabled yet",
+        "vote_result": "§b&player&§f is the one with the most votes: §b&number&§r. It has poison for 15 seconds",
+        "no_result_more_one": "No players voted more than twice",
+        "vote_time": "It is time to vote §b/ww vote§r You have §b&timer&",
+        "not_met": "You cannot vote a player you haven't met within §b&number& blocks",
+        "distance_voted": "Voted player is §b&number&§f blocks +- 100"
+      },
+      "hide_composition": {
+        "name": "Hidden Composition"
+      },
+      "red_name_tag": {
+        "name": "Werewolves' name in red"
+      },
+      "hide_scenarios": {
+        "name": "Hides the scenarios"
+      },
+      "hide_events": {
+        "name": "Hides the Events"
+      },
+      "proximity_chat": {
+        "name": "Proximity chat"
+      },
+      "double_troll": {
+        "name": "Double Troll"
+      },
+      "lone_wolf": {
+        "name": "Lone Wolf",
+        "message": "You are becoming §0Solitary§f. From now on, you must earn §calone§f. For this, you get four additional permanent hearts (up to 15 hearts max)",
+        "timer": "Single Wolf trigger period (§b&timer&§f)"
+      },
+      "new_vote": {
+        "name": "New Vote"
+      },
+      "troll_role": {
+        "name": "Troll Role"
+      },
+      "troll_lover": {
+        "name": "Valentine's Day Troll"
+      },
+      "hidden_roles": {
+        "name": "Hide Roles",
+        "description": "allows to activate the system of masked Roles without having a Pretresse in the composition. \nA player in the Village is randomly selected at the beginning of the game without knowing the player",
+        "magic": "§kCoucou"
+      },
+      "thiercelieux": {
+        "name": "Thiercelieux",
+        "description": "The dead are announced in the morning"
+      },
+      "honor": {
+        "name": "Honor",
+        "description": "Enable Honor System",
+        "list_near_player": "Players under §b80 blocks§f are: §b&list&",
+        "spy_info": "A player got a info about your §brole§f"
+      }
+    },
+    "scenarios": {
+      "no_nether": {
+        "name": "NoNether"
+      },
+      "no_end": {
+        "name": "NoEnd"
+      },
+      "diamond_limit": {
+        "name": "DiamondLimit",
+        "configurations": {
+          "limit": "Diamond limit: §b&number&"
+        }
+      },
+      "no_clean_up": {
+        "name": "NoCleanUp"
+      },
+      "cat_eyes": {
+        "name": "CatEyes"
+      },
+      "vanilla+": {
+        "name": "Vanilla+",
+        "configurations": {
+          "ender_pearl_rate": "EnderPearl's Drop Rate §b&number&%",
+          "flint_rate": "Flint's Drop Rate §b&number&%",
+          "apple_rate": "Apple's Drop Rate §b&number&%"
+        }
+      },
+      "fire_less": {
+        "name": "FireLess"
+      },
+      "no_egg_snowball": {
+        "name": "NoSnowBall"
+      },
+      "no_poison": {
+        "name": "NoPoison"
+      },
+      "horse_less": {
+        "name": "HorseLess"
+      },
+      "cut_clean": {
+        "name": "CutClean"
+      },
+      "no_fall": {
+        "name": "NoFall"
+      },
+      "fast_smelting": {
+        "name": "FastMelting"
+      },
+      "compass_target_last_death": {
+        "name": "DeathCompass"
+      },
+      "xp_boost": {
+        "name": "XPBoost",
+        "configurations": {
+          "xp": "XpBoost: §b&number&%"
+        }
+      },
+      "compass_middle": {
+        "name": "MiddleCompass"
+      },
+      "hastey_boys": {
+        "name": "HasteyBoys"
+      },
+      "no_name_tag": {
+        "name": "NoNameTag"
+      },
+      "rod_less": {
+        "name": "RodLess"
+      },
+      "slow_bow": {
+        "name": "SlowBow"
+      },
+      "no_fire_weapons": {
+        "name": "NoFireWeapons"
+      },
+      "timber": {
+        "name": "Timber"
+      },
+      "double_jump": {
+        "name": "Double Jump"
+      },
+      "hastey_babies": {
+        "name": "Hastey Babies"
+      },
+      "no_extra_stones": {
+        "name": "No Extra Stones"
+      },
+      "safe_miner": {
+        "name": "Safe Miner"
+      },
+      "final_heal": {
+        "name": "Final Heal"
+      },
+      "beta_zombies": {
+        "name": "Beta Zombies"
+      },
+      "auto_break": {
+        "name": "Auto-Break"
+      }
     },
     "random_events": {
       "exposed": {
         "name": "Exposed",
         "message": "[§5Exposed§r] §b&player&§f's role is among the following §b&role1& §f&role2& §b&role3&",
-        "description": "Twice during the game \n(in the intervals [65~80 min] and [100~115 min]), \na randomly chosen player has his nickname \ndisplayed in the chat next to 3 roles\n still present in the game. \nAmong those 3 roles are : his role, a role from a different team, \na randomly chosen role among the remaining.\nA player cannot be exposed twice during a game."
+        "description": "Twice in game \n(The event may trigger during a period of §b&period&§f from §b&timer_start_1&§f after the roles \nand then a second time §b&timer_start_2&§f after the first), \na randomly selected player has their \nnickname displayed in the chat next to 3\nroles still represented in the game. \nAmong these 3 roles are: its rose, a role of a different camp, \na random role among all the others.\nA player cannot be exposed twice in the same game.",
+        "timer_start_1": "First occurence Time start (§b&timer&§f)",
+        "timer_start_2": "Second occurence Time start (§b&timer&§f)",
+        "period": "Event trigger period (§b&timer&§f)"
       },
       "loot_box": {
         "name": "Loot Box",
@@ -1064,21 +1901,23 @@
       },
       "infection": {
         "name": "Infection",
-        "description": "Once during the game, infects a player at random.\nThe infection happens between 1h and 1h15 after the roles, \nif less than half the players are Werewolves.",
-        "message": "[§5Infection§r] A random player has been infected"
+        "description": "Once in the game, a random player is infected.\nThe infection can trigger during a period of §b&period&§f from §b&timer_start&§f after the roles,\nif there are less than half of the players \nwho are Garous Wolves.",
+        "message": "[§5Infection§r] A random player has been infected",
+        "timer_start": "Trigger time start (§b&timer&§f)",
+        "period": "Event trigger period (§b&timer&§f)"
       },
       "amnesic": {
         "name": "Amnesiac",
         "message": "[§5Amnesiac§r] You discover that you are actually are a Werewolf. You will know a Werewolf every five minutes",
-        "description": "When the Werewolves' list is announced, \na non-Werewolf player is chosen at random \nand becomes Amnesiac.\nIf he is hit by a Werewolf he will \nbecome part of their pack \nand will know a Werewolf \nevery five minutes. \nIf he is not transformed, he stays in \nhis original team",
-        "new": "§b&player&§f is a Werewolf, next name in five minutes"
+        "description": "At the time of the Wolf list,\na non-Wolf person is randomly selected\nand becomes American.\nIf she gets shot by a Wolf Garou \nshe will pass to their camp \nand know a member of the Wolves \nall §b&timer&§f. \nIf it is not transformed \nit keeps its original camp",
+        "new": "§b&player&§f is a Werewolf, next name in five minutes",
+        "timer": "New Werewolf every §b&timer&"
       },
       "triple": {
         "name": "Love Triangle",
         "description": "A third person has joined the Lovers",
         "lover_join": "§b&player&§f joined your couple",
-        "join": "You joined the lovers, §b&player&",
-        "message": "[§5Love Triangle§r] A third player has joined the lovers"
+        "join": "You joined the lovers, §b&player&"
       },
       "drunken_werewolf": {
         "name": "Drunk Werewolf",
@@ -1088,13 +1927,17 @@
         "name": "Fall Guys",
         "message": "[§5Fall Guys§r] For a day, everyone has NoFall",
         "end": "[§5Fall Guys§r] End of the random event",
-        "description": "Once during the game, for one day, \nall players have NoFall. \nThis event triggers between 1h and 1h40"
+        "description": "Once during the game, for one day, \nall players have NoFall. \nThis event triggers between 1h and 1h40",
+        "timer_start": "Trigger time start (§b&timer&§f)",
+        "period": "Event trigger period (§b&timer&§f)"
       },
       "putrefaction": {
         "name": "Putrefaction",
         "message": "[§5Putrefaction§r] For a day, water causes damage",
         "end": "[§5Putrefaction§r] End of the event",
-        "description": "Once during the game, for a day, \nwater deals damage.\nThis event triggers between 1h and 1h20"
+        "description": "Once during the game, for a day, \nwater deals damage.\nThis event triggers between 1h and 1h20",
+        "timer_start": "Trigger time start (§b&timer&§f)",
+        "period": "Event trigger period (§b&timer&§f)"
       },
       "god_miracle": {
         "name": "Divine Miracle",
@@ -1106,6 +1949,69 @@
         "message": "[§5Swap§r] Two people had their roles swapped",
         "concerned": "Your role has been swapped §b/ww role§f do discover your new one",
         "description": "Once during the game,\n before the Werewolves know their teammates\n 2 roles are swapped"
+      },
+      "discord": {
+        "name": "Discord",
+        "message": "[§5Discord§r] A villager joins the Werewolves, a Werewolf becomes solitary and a Neutral becomes a Villager",
+        "description": "A member of the Village passes with the Garous Wolves, \none of the Wolves becomes lonely \nfinally a Solo King passes with the Village.\nThe event can untap within a period of §b&period&§f from §b&timer_start&§f after the roles",
+        "to_villager": "You are passing the village camp",
+        "timer_start": "Trigger time start (§b&timer&§f)",
+        "period": "Event trigger period (§b&timer&§f)"
+      },
+      "sister_misanthrope": {
+        "name": "Misanthropic Sister",
+        "message": "[§5Misanthrope Sister§r] You are in the Garous Wolf camp, but you do not appear in the Wolf list and cannot interact with the Wolf chat.",
+        "description": "When the Wolf list is launched, \none of the Sisters learns that she is in the Wolf Camp \n(she has access to the list, gets Force I at night but does not appear in list \nand cannot interact with the Wolf chat."
+      },
+      "rumors": {
+        "name": "Rumors",
+        "description": "Once in the game event can trigger \nduring a period of §b&period&§f from §b&timer_start&§f after the roles,\na message tells players that they have 20 seconds \nto send a message in chat.\nMessages from all players are then displayed anonymously\nand in the order. Only the Citizen will be able to see the\nname of the player who wrote one of the rumours.",
+        "message": "[§5Rumors§r] You have §b20§f seconds to send a message, §bclick here",
+        "rumors_announcement": "[§5Rumors§r] Rumors are: &rumors&",
+        "command": "rumor",
+        "no_rumor": "Rumors event is not in progress",
+        "perform": "Your rumor has been sent or updated",
+        "timer_start": "Trigger time start (§b&timer&§f)",
+        "period": "Event trigger period (§b&timer&§f)"
+      },
+      "not_all_werewolfs": {
+        "name": "Not All Wolves",
+        "description": "When a Wolf (whatever it may be) dies, he appeared as \"Garouwolf\" in his death message.\nThe displayed composition indicates only the total number of Werewolves."
+      },
+      "wolf_fleas": {
+        "name": "Wolf Fleas",
+        "description": "Each Wolf player in the beginning of the game receives\n at a random moment from §b&timer_start&§f and for §b&period&§f\n a message that he caught chips.\nThen after §b&duration&§f cumulated passed to any non-Wolf player, \nhe will know that a LG is close to him.\nTo get rid of its fleas, \na Wolf must dive completely into the water without armor.",
+        "target_message": "Something is scratching you...",
+        "werewolf_message": "You're getting fleas! You have to dive completely into the water without armor to get rid of them",
+        "cleaned": "You lose your fleas",
+        "timer_start": "Trigger time start (§b&timer&§f)",
+        "period": "Event trigger period (§b&timer&§f)",
+        "duration": "Time before fleas spread (§b&timer&§f)",
+        "distance": "Flea propagation distance §b&number&"
+      },
+      "vaccination": {
+        "name": "Vaccination",
+        "description": "The player infected by the Father of Wolves Infection\n is informed that, exceptionally, \nthey will not join the Wolves' camp.\n The Wolves will nevertheless be informed that this player \nhas joined their camp.",
+        "infection_cancelled": "You were infected by the Wolf Infect, but exceptionally, you do not join the Wolf camp. They will see you as belonging to their camp."
+      },
+      "incomplete_list": {
+        "name": "Holes List",
+        "description": "The members of the Wolf camp have only half of their teammates in their \nlist. \nAny player who joins the Wolf camp later on\n will have access to the\n list and will be on the list at all teammates."
+      },
+      "love_at_first_sight": {
+        "name": "Love at First Sight",
+        "description": "The couple associated with the Cupid becomes an amnesian couple"
+      },
+      "cupid_indecisive": {
+        "name": "Cupid Indecis",
+        "description": "When this event is enabled, it affects the configuration of Part \n: if the Couple is randomly censored, it will be chosen by the Cupidon,\n if it is considered selected, it will be random."
+      },
+      "blood_moon": {
+        "name": "Blood Moon",
+        "description": "During that night, the Garous Wolves have red particles at their \nfeet visible only to the other Garous Wolves.\n Death messages from players who die during this night\n are only sent in early morning the next day",
+        "start": "Beginning of §cBlood Moon",
+        "end": "§cBlood Moon End",
+        "count": "Beginning of the Moon after §b&number&§f day(s)"
       }
     },
     "check": {
@@ -1113,6 +2019,7 @@
       "game_in_progress": "The game is in progress",
       "not_in_game": "You are not in the game",
       "power": "Your ability can't be used yet or can't be used anymore",
+      "end_selection": "You can't use your power today",
       "ability_disabled": "Your powers have been deactivated, you cannot perform this action",
       "two_distinct_player": "You have to select two different players",
       "not_yourself": "You can't choose yourself",
@@ -1133,6 +2040,7 @@
       "cancel": "Your power has been canceled",
       "transformation": "Your transformation has been canceled",
       "invalid_key": "Invalid key",
+      "night": "This command can only be made at night",
       "state": "You cannot use this command at this point of the game"
     },
     "update": {
@@ -1147,8 +2055,8 @@
       "display": "&field& (§b&value&§r)",
       "pve": "§bPVE",
       "on": "§bON",
+      "off": "§cOFF",
       "debug": "§4Debug §fMode",
-      "none": "§4None",
       "author": "§fAuthor(s) :",
       "bar": "\n§r§b§m§l-+-----------------------------------+-§r§r§r§f\n"
     },
@@ -1156,18 +2064,41 @@
       "villager": "Villagers",
       "werewolf": "Werewolves",
       "neutral": "Neutrals",
-      "addons": "Addons Roles"
+      "addons": "Addons Roles",
+      "colors": {
+        "villager": "§a",
+        "werewolf": "§c",
+        "neutral": "§7"
+      }
+    },
+    "attributes": {
+      "menu": "Attribute: &attribute&",
+      "villager": "§aVillager",
+      "minor_information": "§eMinor Information",
+      "information": "§6Major information",
+      "werewolf": "§Werewolf",
+      "hybrid": "§1Hybrid",
+      "neutral": "§7Neutral"
     },
     "description": {
-      "_": "§b================================\n",
-      "doc": "https://cylenosheavenly.gitbook.io/doc-loup-garou-uhc-plugin-ph1lou/",
+      "_": "§b================================",
+      "doc": "https://cylenosheavenly.gitbook.io/doc-werewolf-uhc-plugin-ph1lou/",
       "role": "§fYou are §b&role&\n",
       "description": "§bDescription : §f &text&\n",
       "camp": "§fTeam of the §b&camp&\n",
       "power": "§bPower : §f&on&\n",
+      "aura": "§bAura: §f&aura&\n",
       "item": "§bItems : §f&items&\n",
       "effect": "§bEffects : §f&effect&\n",
+      "disable": "Your powers were disabled\n",
       "equipment": "§bEquipment : §f&equipment&\n",
+      "equipments_attribut": {
+        "sharpness_iron": "Sharpness Iron Limit (§b+&number&§f)",
+        "sharpness_diamond": "Sharpness Diamond Limit (§b+&number&§f)",
+        "protection_iron": "Iron Equipment Protection Limit (§b+&number&§f)",
+        "protection_diamond": "Diamond Equipment Protection Limit (§b+&number&§f)",
+        "power": "Bow Power Limit (§b+&number&§f)"
+      },
       "command": "§bCommand : §f&command&\n",
       "transformed": "Transformed: §b&on&\n",
       "no": "No",
@@ -1185,6 +2116,50 @@
       "orange": "[§6WW UHC§r] ",
       "blue": "[§9WW UHC§r] ",
       "light_blue": "[§3WW UHC§r] "
+    },
+    "elections": {
+      "name": "§fElections",
+      "lore": "Allows the election of a Mayor",
+      "election": {
+        "command": "election",
+        "star": "§6⭐ ",
+        "name": "Elections",
+        "regime": {
+          "doctor": {
+            "name": "Doctor",
+            "description": "You have a second life",
+            "resurrection": "You resurrect with the power of Mayor §bMedecin"
+          },
+          "farmer": {
+            "name": "Farmer",
+            "description": "You no longer need to feed yourself during the game. Have a 20% chance when crafting a Gold Apple get one more"
+          },
+          "undertaker": {
+            "name": "Undertaker",
+            "description": "If someone from your camp dies, you win a Golden Apple",
+            "message": "Someone from your side just died, you get a Golden Apple"
+          },
+          "black_smith": {
+            "name": "Blacksmith",
+            "description": "You take 10% less degae"
+          }
+        },
+        "death": "Mayor is dead",
+        "disable": "Elections are disabled",
+        "not_begin": "Elections have not started yet",
+        "empty": "You have not written any message",
+        "register": "Your participation has been saved",
+        "change": "Your participation has been changed",
+        "finish": "Elections are finished",
+        "menu_title": "§bVotes Menu",
+        "timer": "Elections start (§b&timer&§f)",
+        "timer_application": "Application period (§b&timer&§f)",
+        "timer_vote_mayor": "Duration of voting for the Mayor (§b&timer&§f)",
+        "application": "Application: §b&application&",
+        "begin": "This is the beginning of the Mayor's elections, to present you §b/ww election§f <message to convince voters>you have §b&timer&",
+        "vote": "This is the time for voting. Vote for your mayor with §b/ww election§f, you have §b&timer&",
+        "result": "Mayor &forme& §b&name&§f has been chosen with §b&votes&§f votes. It has a double vote in addition to its shape power"
+      }
     }
   }
 }
