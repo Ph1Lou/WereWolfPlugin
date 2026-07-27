@@ -8,6 +8,7 @@ import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.Sound;
@@ -19,8 +20,8 @@ import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.flute_player.AllPlayerEnchantedEvent;
 import fr.ph1lou.werewolfapi.events.roles.flute_player.EnchantedEvent;
-import fr.ph1lou.werewolfapi.events.roles.flute_player.FindFluteEvent;
 import fr.ph1lou.werewolfapi.events.roles.flute_player.GiveFluteEvent;
+import fr.ph1lou.werewolfapi.events.werewolf.RequestStrengthRateEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -38,10 +39,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -50,16 +53,18 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.Arrays;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Role(key = RoleBase.FLUTE_PLAYER,
         category = Category.NEUTRAL,
         attribute = RoleAttribute.NEUTRAL,
+        defaultAura = Aura.LIGHT,
         sharpnessDiamondModifier = 1,
         sharpnessIronModifier = 1,
         timers = @Timer(key = TimerBase.FLUTE_PLAYER_PROGRESS, defaultValue = 6, meetUpValue = 3, step = 1),
@@ -72,13 +77,16 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     private final List<IPlayerWW> flutedPlayer = new ArrayList<>();
     private final Map<IPlayerWW, Integer> progress = new HashMap<>();
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
+    private final Set<IPlayerWW> hitPlayers = new HashSet<>();
+    private final Set<IPlayerWW> pendingNotify = new HashSet<>();
     private boolean power = true;
     private boolean hasOwnFlute = false;
-    private int timer = 0; //pour faire les calculs une fois toutes les 6 secondes
-
-    private boolean all = false;
-
+    private int timer = 0;
+    private int flutedCycle = 0;
     private int fluteInStore = 0;
+    private boolean bonus3Heart = false;
+    private boolean bonus12Heart = false;
+    private boolean all = false;
 
     public FlutePlayer(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -193,7 +201,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         if (!flute.equals(event.getInventory().getResult())) {
             return;
         }
-        IPlayerWW playerWW = game.getPlayerWW(event.getView() //todo Caused by: java.lang.IncompatibleClassChangeError: Found class org.bukkit.inventory.InventoryView, but interface was expected
+        IPlayerWW playerWW = game.getPlayerWW(event.getView()
                 .getPlayer().getUniqueId()).orElse(null);
 
         if (playerWW == null) {
@@ -212,14 +220,15 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             return;
         }
 
-        if (!this.hasOwnFlute) {
-            return;
+        if (this.hasOwnFlute) {
+            this.power = true;
+            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.flute_player.day",
+                    Formatter.number(this.fluteInStore));
         }
 
-        this.power = true;
-
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.flute_player.day",
-                Formatter.number(this.fluteInStore));
+        new ArrayList<>(pendingNotify).forEach(playerWW ->
+                playerWW.sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.flute_player.fluted_notify"));
+        pendingNotify.clear();
     }
 
     @Override
@@ -240,55 +249,132 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             return;
         }
 
-        AtomicBoolean recoverResistance = new AtomicBoolean(false);
+        this.flutedCycle++;
+        boolean flutedTick = (this.flutedCycle % 3 == 0);
 
         game.getAlivePlayersWW()
                 .stream()
                 .filter(player1 -> !this.getPlayerWW().equals(player1))
-                .filter(player1 -> this.checkDistance(this.getPlayerWW(), player1) || this.checkDistance(player1))
-                .peek(playerWW -> {
-                    if (this.affectedPlayer.contains(playerWW)) {
-                        recoverResistance.set(true);
-                    }
-                })
-                .filter(playerWW -> !this.affectedPlayer.contains(playerWW))
+                .filter(player1 -> !this.flutedPlayer.contains(player1))
+                .filter(player1 -> !this.affectedPlayer.contains(player1))
                 .forEach(playerWW -> {
+                    boolean nearFlutePlayer = this.checkDistance(this.getPlayerWW(), playerWW);
+                    boolean nearFluted = !nearFlutePlayer && this.checkDistance(playerWW);
 
-                    if (isAbilityEnabled()) {
+                    if (nearFlutePlayer) {
                         this.progress.merge(playerWW, 1, Integer::sum);
-
-                        if (this.progress.get(playerWW) > 100) {
-
-                            EnchantedEvent event = new EnchantedEvent(this.getPlayerWW(), playerWW);
-
-                            Bukkit.getPluginManager().callEvent(event);
-
-                            if (!event.isCancelled()) {
-                                this.affectedPlayer.add(playerWW);
-                                this.progress.remove(playerWW);
-                                this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.flute_player.enchanted",
-                                        Formatter.player(playerWW.getName()));
-                                this.checkStrength();
-                            }
-                        }
+                    } else if (nearFluted && flutedTick) {
+                        this.progress.merge(playerWW, 1, Integer::sum);
+                    } else {
+                        return;
                     }
-                });
 
-        if (recoverResistance.get()) {
-            this.getPlayerWW()
-                    .addPotionModifier(
-                            PotionModifier
-                                    .add(UniversalPotionEffectType.RESISTANCE,
-                                            240,
-                                            0,
-                                            this.getKey()));
+                    this.tryEnchant(playerWW);
+                });
+    }
+
+    @EventHandler
+    public void onHit(EntityDamageByEntityEvent event) {
+
+        if (!this.isAbilityEnabled()) return;
+        if (!this.hasOwnFlute) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (!(event.getDamager() instanceof Player)) return;
+        if (!event.getDamager().getUniqueId().equals(this.getPlayerUUID())) return;
+
+        if (!(event.getEntity() instanceof Player)) return;
+        Player victim = (Player) event.getEntity();
+        IPlayerWW victimWW = game.getPlayerWW(victim.getUniqueId()).orElse(null);
+        if (victimWW == null) return;
+        if (!victimWW.isState(StatePlayer.ALIVE)) return;
+        if (this.affectedPlayer.contains(victimWW)) return;
+        if (this.hitPlayers.contains(victimWW)) return;
+
+        this.hitPlayers.add(victimWW);
+        this.progress.merge(victimWW, 10, Integer::sum);
+
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW,
+                "werewolf.roles.flute_player.hit_progress",
+                Formatter.player(victimWW.getName()));
+
+        this.tryEnchant(victimWW);
+    }
+
+    private void tryEnchant(IPlayerWW target) {
+
+        if (this.progress.getOrDefault(target, 0) <= 100) return;
+
+        EnchantedEvent event = new EnchantedEvent(this.getPlayerWW(), target);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) return;
+
+        this.affectedPlayer.add(target);
+        this.progress.remove(target);
+        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.flute_player.enchanted",
+                Formatter.player(target.getName()));
+        this.applyTierEffects();
+    }
+
+    private void applyTierEffects() {
+
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        long count = this.affectedPlayer.stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .count();
+
+        if (count >= 3 && !this.bonus3Heart) {
+            this.bonus3Heart = true;
+            this.getPlayerWW().addPlayerMaxHealth(4);
+        }
+        if (count >= 12 && !this.bonus12Heart) {
+            this.bonus12Heart = true;
+            this.getPlayerWW().addPlayerMaxHealth(2);
+        }
+
+        if (count >= 6) {
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, this.getKey()));
         } else {
-            this.getPlayerWW()
-                    .addPotionModifier(
-                            PotionModifier
-                                    .remove(UniversalPotionEffectType.RESISTANCE,
-                                            this.getKey(),
-                                            0));
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, this.getKey(), 0));
+        }
+
+        if (count >= 9) {
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED, this.getKey()));
+        } else {
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.SPEED, this.getKey(), 0));
+        }
+
+        boolean allCharmed = count >= 6 && count + 1 >= game.getPlayersCount();
+        if (allCharmed) {
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.RESISTANCE, this.getKey()));
+            if (!this.all) {
+                this.all = true;
+                Bukkit.getPluginManager().callEvent(new AllPlayerEnchantedEvent(this.getPlayerWW()));
+            }
+        } else {
+            this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE, this.getKey(), 0));
+            this.all = false;
+        }
+    }
+
+    @EventHandler
+    public void onRequestStrengthRate(RequestStrengthRateEvent event) {
+
+        if (!this.isAbilityEnabled()) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!event.getPlayerWW().equals(this.getPlayerWW())) return;
+
+        long count = this.affectedPlayer.stream()
+                .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE))
+                .count();
+
+        if (count >= 9) {
+            return;
+        }
+        if (count >= 6) {
+            event.setStrengthRate(event.getStrengthRate() / 2);
         }
     }
 
@@ -299,7 +385,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
     private boolean checkDistance(IPlayerWW player, IPlayerWW player1) {
         return player.distance(player1)
-               < game.getConfig().getValue(IntValueBase.FLUTE_PLAYER_DISTANCE);
+                < game.getConfig().getValue(IntValueBase.FLUTE_PLAYER_DISTANCE);
     }
 
     @EventHandler
@@ -313,18 +399,29 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             return;
         }
 
-        IPlayerWW playerWW = this.flutedPlayer.stream()
+        IPlayerWW clicker = this.flutedPlayer.stream()
                 .filter(playerWW1 -> playerWW1.getUUID().equals(event.getWhoClicked().getUniqueId()))
                 .findFirst().orElse(null);
-        if (playerWW != null) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.flute_player.find");
-            Sound.ANVIL_BREAK.play(playerWW);
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.flute_player.find_flute",
-                    Formatter.player(playerWW.getName()));
-            event.setCurrentItem(null);
-            this.flutedPlayer.remove(playerWW);
-            event.getWhoClicked().closeInventory();
-            Bukkit.getPluginManager().callEvent(new FindFluteEvent(playerWW, this.getPlayerWW()));
+
+        if (clicker != null) {
+            event.setCancelled(true);
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> event.getWhoClicked().closeInventory());
+        }
+    }
+
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent event) {
+
+        if (!this.hasOwnFlute) {
+            return;
+        }
+
+        if (!flute.equals(event.getItemDrop().getItemStack())) {
+            return;
+        }
+
+        if (this.flutedPlayer.stream().anyMatch(playerWW -> playerWW.getUUID().equals(event.getPlayer().getUniqueId()))) {
+            event.setCancelled(true);
         }
     }
 
@@ -369,6 +466,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
                 inventory.setItem(j, flute);
                 Bukkit.getPluginManager().callEvent(new GiveFluteEvent(clickedPlayerWW, this.getPlayerWW()));
                 this.flutedPlayer.add(clickedPlayerWW);
+                this.pendingNotify.add(clickedPlayerWW);
                 this.power = false;
                 this.fluteInStore--;
                 this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.flute_player.transmit",
@@ -388,9 +486,14 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             return;
         }
 
-        this.checkStrength();
-    }
+        IPlayerWW dead = event.getPlayerWW();
+        this.flutedPlayer.remove(dead);
+        this.pendingNotify.remove(dead);
+        this.hitPlayers.remove(dead);
+        this.progress.remove(dead);
 
+        this.applyTierEffects();
+    }
 
     public String enchantedList() {
         StringBuilder sb = new StringBuilder();
@@ -410,22 +513,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
     @Override
     public void recoverPotionEffect() {
-        if (this.all) {
-            this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, this.getKey()));
-        }
-    }
-
-    private void checkStrength() {
-
-        if (!this.all && this.affectedPlayer
-                                 .stream()
-                                 .filter(playerWW -> playerWW.isState(StatePlayer.ALIVE)).count() + 1
-                         == game.getPlayersCount()) {
-            this.all = true;
-            Bukkit.getPluginManager().callEvent(new AllPlayerEnchantedEvent(this.getPlayerWW()));
-            this.recoverPotionEffect();
-        }
-
+        this.applyTierEffects();
     }
 
     @Override

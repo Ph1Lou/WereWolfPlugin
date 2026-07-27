@@ -4,7 +4,8 @@ import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
@@ -18,10 +19,10 @@ import org.bukkit.Bukkit;
         argNumbers = 0,
         statesGame = StateGame.GAME,
         statesPlayer = StatePlayer.ALIVE, roleKeys = {})
-public class CommandWereWolf implements ICommandRole {
+public class CommandWereWolf implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext commandContext) {
 
         if (game.getConfig().getTimerValue(TimerBase.WEREWOLF_LIST) > 0) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.werewolf.list_not_revealed");

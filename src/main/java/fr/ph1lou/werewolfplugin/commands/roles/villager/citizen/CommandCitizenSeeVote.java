@@ -4,7 +4,8 @@ import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.VoteStatus;
 import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeVoteEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -17,9 +18,9 @@ import org.bukkit.Bukkit;
         roleKeys = RoleBase.CITIZEN,
         argNumbers = 0,
         autoCompletion = false)
-public class CommandCitizenSeeVote implements ICommandRole {
+public class CommandCitizenSeeVote implements IParameterizedCommandRole {
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext commandContext) {
 
 
         Citizen citizen = (Citizen) playerWW.getRole();
@@ -43,7 +44,7 @@ public class CommandCitizenSeeVote implements ICommandRole {
         game.getVoteManager().getVoters()
                 .forEach((voterWW) -> game.getVoteManager().getPlayerVote(voterWW)
                         .ifPresent(playerWW1 -> playerWW.sendMessageWithKey("werewolf.roles.citizen.see_vote",
-                        Formatter.format("&voter&", voterWW.getName()),
-                        Formatter.player(playerWW1.getName()))));
+                                Formatter.format("&voter&", voterWW.getName()),
+                                Formatter.player(playerWW1.getName()))));
     }
 }

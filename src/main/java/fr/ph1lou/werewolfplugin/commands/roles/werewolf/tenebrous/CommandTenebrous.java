@@ -5,7 +5,8 @@ import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
@@ -25,10 +26,10 @@ import java.util.stream.Collectors;
         roleKeys = RoleBase.TENEBROUS_WEREWOLF,
         requiredPower = true,
         argNumbers = 0)
-public class CommandTenebrous implements ICommandRole {
+public class CommandTenebrous implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] strings) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext commandContext) {
 
         if (game.isDay(Day.DAY)) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.tenebrous_werewolf.not_night");

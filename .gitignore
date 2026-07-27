@@ -3,6 +3,6 @@
 /target/
 
 *.iml
-
+.run
 dependency-reduced-pom.xml
 

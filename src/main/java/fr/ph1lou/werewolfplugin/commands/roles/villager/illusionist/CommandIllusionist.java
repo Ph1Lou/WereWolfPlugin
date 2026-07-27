@@ -3,7 +3,8 @@ package fr.ph1lou.werewolfplugin.commands.roles.villager.illusionist;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.events.roles.illusionist.IllusionistActivatePowerEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -14,10 +15,10 @@ import org.bukkit.Bukkit;
         roleKeys = RoleBase.ILLUSIONIST,
         argNumbers = 0,
         requiredPower = true)
-public class CommandIllusionist implements ICommandRole {
+public class CommandIllusionist implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext commandContext) {
 
         Illusionist illusionist = (Illusionist) playerWW.getRole();
 

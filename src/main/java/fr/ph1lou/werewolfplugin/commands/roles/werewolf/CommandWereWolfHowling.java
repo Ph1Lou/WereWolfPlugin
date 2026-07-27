@@ -2,7 +2,8 @@ package fr.ph1lou.werewolfplugin.commands.roles.werewolf;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfCanHowlingEvent;
@@ -18,10 +19,10 @@ import org.bukkit.Location;
         statesPlayer = StatePlayer.ALIVE,
         statesGame = StateGame.GAME,
         argNumbers = {})
-public class CommandWereWolfHowling implements ICommandRole {
+public class CommandWereWolfHowling implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext commandContext) {
 
         WereWolfCanHowlingEvent wereWolfCanHowlingEvent = new WereWolfCanHowlingEvent(playerWW);
 

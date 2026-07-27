@@ -1,48 +1,48 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AmnesiacLoverDeathEvent;
+import fr.ph1lou.werewolfapi.events.lovers.DonEvent;
 import fr.ph1lou.werewolfapi.events.lovers.LoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.RevealLoversEvent;
 import fr.ph1lou.werewolfapi.events.random_events.SwapEvent;
 import fr.ph1lou.werewolfapi.events.roles.StealEvent;
-import fr.ph1lou.werewolfapi.events.roles.rival.RivalAnnouncementEvent;
-import fr.ph1lou.werewolfapi.events.roles.rival.RivalEvent;
 import fr.ph1lou.werewolfapi.events.roles.rival.RivalLoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.rival.RivalLoverEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.lovers.ILover;
+import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
-import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
-import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.roles.lovers.LoverImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,12 +54,16 @@ import java.util.stream.Collectors;
         sharpnessIronModifier = 1,
         sharpnessDiamondModifier = 1,
         powerModifier = 1,
-        timers = { @Timer(key = TimerBase.RIVAL_DURATION,
-                defaultValue = 2400, meetUpValue = 5 * 60,
-                decrementAfterRole = true,
-                onZero = RivalEvent.class) },
         requireRoles = { RoleBase.CUPID })
 public class Rival extends RoleNeutral implements IPower {
+
+    public static final int ANALYSE_COOLDOWN = 15 * 60;
+    public static final int DEVINER_COOLDOWN = 30 * 60;
+    public static final int ISOLATE_RANGE = 15;
+    public static final int ISOLATE_DURATION = 3 * 60;
+    public static final int REGEN_INTERVAL_TICKS = 5 * 60 * 20;
+    public static final double DAMAGE_REDUCTION = 0.30;
+    private static final int PENALTY_HEALTH = 10;
 
     @Nullable
     private IPlayerWW cupidWW = null;
@@ -68,11 +72,20 @@ public class Rival extends RoleNeutral implements IPower {
     private ILover lover = null;
 
     private boolean power = true;
+    private boolean killed = false;
+    private boolean bonusChosen = false;
+    private boolean guessed = false;
+
+    private int lastAnalyse = -ANALYSE_COOLDOWN;
+    private int lastDeviner = -DEVINER_COOLDOWN;
+
+    @Nullable
+    private IPlayerWW isolatedLover = null;
+    private int isolationEnd = 0;
 
     public Rival(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
     }
-
 
     @EventHandler
     public void onSwapEvent(SwapEvent event) {
@@ -83,16 +96,13 @@ public class Rival extends RoleNeutral implements IPower {
         }
     }
 
-
     @Override
     public @NotNull String getDescription() {
-
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.roles.rival.description",
-                        Formatter.timer(Utils.conversion(
-                                Math.max(0, game.getConfig().getTimerValue(TimerBase.ROLE_DURATION))
-                                + game.getConfig().getTimerValue(TimerBase.RIVAL_DURATION)))))
+                .setDescription(game.translate("werewolf.roles.rival.description"))
                 .setItems(game.translate("werewolf.roles.rival.item"))
+                .setPower(game.translate("werewolf.roles.rival.power"))
+                .setCommand(game.translate("werewolf.roles.rival.commands"))
                 .build();
     }
 
@@ -100,7 +110,6 @@ public class Rival extends RoleNeutral implements IPower {
     public void onLoverReveal(RevealLoversEvent event) {
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
         if (event.getLovers().isEmpty()) return;
 
         List<ILover> loverAPIs = event.getLovers().stream()
@@ -119,180 +128,294 @@ public class Rival extends RoleNeutral implements IPower {
             this.cupidWW = game.getPlayersWW()
                     .stream().map(IPlayerWW::getRole)
                     .filter(roles -> roles.isKey(RoleBase.CUPID))
-                    .map(roles -> (IAffectedPlayers) roles)
+                    .map(roles -> (fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers) roles)
                     .filter(affectedPlayers -> affectedPlayers.getAffectedPlayers().contains(lover.getLovers().get(0)))
-                    .map(affectedPlayers -> ((IRole) affectedPlayers).getPlayerWW())
-                    .findFirst()
-                    .orElse(null);
+                    .map(affectedPlayers -> ((fr.ph1lou.werewolfapi.role.interfaces.IRole) affectedPlayers).getPlayerWW())
+                    .findFirst().orElse(null);
         }
 
         List<IPlayerWW> lovers = new ArrayList<>(lover.getLovers());
-
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.rival.lover",
                 Formatter.format("&role1&", lovers.isEmpty() ? "" : game.translate(lovers.get(0).getRole().getKey())),
                 Formatter.format("&role2&", lovers.size() == 2 ? game.translate(lovers.get(1).getRole().getKey()) : ""));
     }
 
-    @EventHandler
-    public void onMultiChoice(RivalEvent event) {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onLoverKilled(FinalDeathEvent event) {
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
+        if (!power) return;
         if (lover == null) return;
+        if (!lover.getLovers().contains(event.getPlayerWW())) return;
 
-        List<IPlayerWW> playerWWS = game.getAlivePlayersWW()
-                .stream()
-                .filter(playerWW -> !playerWW.equals(getPlayerWW()))
-                .filter(playerWW -> !lover.getLovers().contains(playerWW))
-                .collect(Collectors.toList());
+        Optional<IPlayerWW> killerWW = event.getPlayerWW().getLastKiller();
+        if (!killerWW.isPresent() || !killerWW.get().equals(getPlayerWW())) return;
 
-        Collections.shuffle(playerWWS, game.getRandom());
+        IPlayerWW dead = event.getPlayerWW();
+        IPlayerWW survivor = lover.getLovers().stream()
+                .filter(p -> !p.equals(dead)).findFirst().orElse(null);
 
-        List<IPlayerWW> playerWW1S = new ArrayList<>(playerWWS.subList(0, Math.min(3, playerWWS.size())));
+        // Dissout le couple : death=true → le handler HIGH de LoverImpl/AmnesiacLover
+        // retourne immédiatement (pas de suicide du survivant), listener désenregistré,
+        // membres détachés. Aucune annonce → le nom du Rival n'est pas divulgué.
+        lover.dissolve();
 
-        playerWW1S.addAll(lover.getLovers());
+        Bukkit.getPluginManager().callEvent(new RivalLoverEvent(this.getPlayerWW(), dead));
 
-        Collections.shuffle(playerWW1S, game.getRandom());
+        killed = true;
+        power = false;
+        lover = null;
 
-        if (playerWW1S.isEmpty()) return;
-
-        RivalAnnouncementEvent rivalAnnouncementEvent = new RivalAnnouncementEvent(this.getPlayerWW(), playerWW1S);
-
-        Bukkit.getPluginManager().callEvent(rivalAnnouncementEvent);
-
-        if (rivalAnnouncementEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
-            return;
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.rival.kill_success");
+        if (survivor != null) {
+            survivor.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.rival.survivor_alone");
         }
-
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.rival.find_lovers",
-                Formatter.format("&player1&", playerWW1S.get(0).getName()),
-                Formatter.format("&player2&", playerWW1S.size() >= 2 ? playerWW1S.get(1).getName() : ""),
-                Formatter.format("&player3&", playerWW1S.size() >= 3 ? playerWW1S.get(2).getName() : ""),
-                Formatter.format("&player4&", playerWW1S.size() >= 4 ? playerWW1S.get(3).getName() : ""),
-                Formatter.format("&player5&", playerWW1S.size() >= 5 ? playerWW1S.get(4).getName() : ""));
     }
 
     @EventHandler
     public void onLoverDeath(LoverDeathEvent event) {
 
         String loverKey = event.getLover().getKey();
-        if (loverKey.equals(LoverBase.LOVER) ||
-            loverKey.equals(LoverBase.AMNESIAC_LOVER)) {
-            List<? extends IPlayerWW> lovers = event.getLover().getLovers();
-            if (lovers.size() >= 2) {
-                loverDeath(lovers.get(0), lovers.get(1));
-            }
+        if (loverKey.equals(LoverBase.LOVER) || loverKey.equals(LoverBase.AMNESIAC_LOVER)) {
+            applyPenalty(event.getLover());
         }
-    }
-
-    private void loverDeath(IPlayerWW playerWW1, IPlayerWW playerWW2) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
-        if (!power) return;
-
-        if (lover == null) return;
-
-        if (!lover.getLovers().contains(playerWW1) || !lover.getLovers().contains(playerWW2)) return;
-
-
-        double health = 5;
-        if (this.getPlayerWW().getMaxHealth() < 10) { //si le joueur a moins de coeurs ont réduit le temps de récupération de coeurs
-            health = this.getPlayerWW().getMaxHealth() / 2 - 1; //-1 car le joueur aura un coeur minimum quand il prend les votes
-        }
-        this.getPlayerWW().removePlayerMaxHealth(10);
-
-        int task = BukkitUtils.scheduleSyncRepeatingTask(game, () -> this.getPlayerWW().addPlayerMaxHealth(2), 1200, 1200);
-
-        BukkitUtils.scheduleSyncDelayedTask(game, () -> Bukkit.getScheduler().cancelTask(task), (long) health * 62 * 20);
-
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.lover_death");
-        Bukkit.getPluginManager().callEvent(new RivalLoverDeathEvent(this.getPlayerWW(), new ArrayList<>(lover.getLovers())));
-        lover = null;
     }
 
     @EventHandler
     public void onAmnesiacLoverDeath(AmnesiacLoverDeathEvent event) {
-        loverDeath(event.getPlayerWW1(), event.getPlayerWW2());
+        applyPenalty(null);
+    }
+
+    private void applyPenalty(@Nullable ILover deadLover) {
+
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!power) return;
+        if (lover == null) return;
+        if (deadLover != null && !deadLover.equals(lover)) return;
+
+        power = false;
+        lover = null;
+
+        this.getPlayerWW().removePlayerMaxHealth(PENALTY_HEALTH);
+
+        int task = BukkitUtils.scheduleSyncRepeatingTask(game,
+                () -> this.getPlayerWW().addPlayerMaxHealth(2),
+                REGEN_INTERVAL_TICKS, REGEN_INTERVAL_TICKS);
+        BukkitUtils.scheduleSyncDelayedTask(game,
+                () -> Bukkit.getScheduler().cancelTask(task),
+                5L * REGEN_INTERVAL_TICKS + 100L);
+
+        this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.penalty");
+        Bukkit.getPluginManager().callEvent(new RivalLoverDeathEvent(this.getPlayerWW(), new ArrayList<>()));
     }
 
     @EventHandler
     public void onSteal(StealEvent event) {
-
         if (!event.getPlayerWW().equals(cupidWW)) return;
-
         cupidWW = event.getPlayerWW();
     }
 
+    public void analyser(IPlayerWW p1, IPlayerWW p2, IPlayerWW p3) {
+
+        if (lover == null) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.no_couple");
+            return;
+        }
+        int now = game.getTimer();
+        int remaining = ANALYSE_COOLDOWN - (now - lastAnalyse);
+        if (remaining > 0) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.cooldown",
+                    Formatter.number((int) Math.ceil(remaining / 60.0)));
+            return;
+        }
+        lastAnalyse = now;
+
+        long count = Arrays.asList(p1, p2, p3).stream()
+                .filter(p -> lover.getLovers().contains(p))
+                .distinct()
+                .count();
+
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.rival.analyse_result",
+                Formatter.number((int) count));
+    }
+
+    public void deviner(IPlayerWW p1, IPlayerWW p2) {
+
+        if (lover == null) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.no_couple");
+            return;
+        }
+        if (guessed) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.already_guessed");
+            return;
+        }
+        int now = game.getTimer();
+        int remaining = DEVINER_COOLDOWN - (now - lastDeviner);
+        if (remaining > 0) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.cooldown",
+                    Formatter.number((int) Math.ceil(remaining / 60.0)));
+            return;
+        }
+        lastDeviner = now;
+
+        List<? extends IPlayerWW> couple = lover.getLovers();
+        boolean correct = couple.size() == 2
+                && couple.contains(p1) && couple.contains(p2) && !p1.equals(p2);
+
+        if (correct) {
+            guessed = true;
+            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.rival.deviner_success");
+        } else {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.deviner_fail");
+        }
+    }
+
+    public void isoler() {
+
+        if (!guessed) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.isolate_need_guess");
+            return;
+        }
+        if (lover == null) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.no_couple");
+            return;
+        }
+
+        IPlayerWW nearest = null;
+        double best = ISOLATE_RANGE;
+        for (IPlayerWW l : lover.getLovers()) {
+            if (!l.isState(StatePlayer.ALIVE)) continue;
+            double d = l.distance(this.getPlayerWW());
+            if (d <= best) {
+                best = d;
+                nearest = l;
+            }
+        }
+
+        if (nearest == null) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.isolate_no_target");
+            return;
+        }
+
+        isolatedLover = nearest;
+        isolationEnd = game.getTimer() + ISOLATE_DURATION;
+
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.rival.isolate_perform",
+                Formatter.player(nearest.getName()));
+    }
+
+    public void bonus(int choice) {
+
+        if (!killed) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.bonus_need_kill");
+            return;
+        }
+        if (bonusChosen) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.bonus_already");
+            return;
+        }
+        if (choice < 1 || choice > 4) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.bonus_invalid");
+            return;
+        }
+
+        bonusChosen = true;
+
+        switch (choice) {
+            case 1:
+                this.getPlayerWW().addItem(new ItemStack(Material.GOLDEN_APPLE, 25));
+                break;
+            case 2:
+                this.getPlayerWW().addPotionModifier(
+                        PotionModifier.add(UniversalPotionEffectType.SPEED, Integer.MAX_VALUE, 1, this.getKey()));
+                break;
+            case 3:
+                this.getPlayerWW().addPotionModifier(
+                        PotionModifier.add(UniversalPotionEffectType.STRENGTH, this.getKey()));
+                break;
+            case 4:
+                this.getPlayerWW().addPotionModifier(
+                        PotionModifier.add(UniversalPotionEffectType.REGENERATION, Integer.MAX_VALUE, 0, this.getKey()));
+                break;
+            default:
+                break;
+        }
+
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.rival.bonus_perform",
+                Formatter.number(choice));
+    }
+
+    @EventHandler
+    public void onDon(DonEvent event) {
+
+        if (isolatedLover == null) return;
+        if (game.getTimer() > isolationEnd) {
+            isolatedLover = null;
+            return;
+        }
+        if (event.getPlayerWW().equals(isolatedLover) || event.getReceiverWW().equals(isolatedLover)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent event) {
+
+        if (!guessed) return;
+        if (!this.isAbilityEnabled()) return;
+        if (!(event.getEntity() instanceof Player)) return;
+        if (!event.getEntity().getUniqueId().equals(this.getPlayerUUID())) return;
+        if (!(event.getDamager() instanceof Player)) return;
+
+        IPlayerWW damagerWW = game.getPlayerWW(event.getDamager().getUniqueId()).orElse(null);
+        if (damagerWW == null || lover == null) return;
+        if (lover.getLovers().contains(damagerWW)) {
+            event.setDamage(event.getDamage() * (1 - DAMAGE_REDUCTION));
+        }
+    }
+
     @Override
-    public void recoverPower() {
-
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onLoverDeath(FinalDeathEvent event) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
-        if (lover == null) return;
-
-        if (!lover.getLovers().contains(event.getPlayerWW())) return;
-
-        IPlayerWW playerWW = event.getPlayerWW();
-
-        Optional<IPlayerWW> killerWW = playerWW.getLastKiller();
-
-        if (!killerWW.isPresent()) {
-            return;
-        }
-
-        if (!killerWW.get().equals(getPlayerWW())) return;
-
-        RivalLoverEvent rivalLoverEvent = new RivalLoverEvent(this.getPlayerWW(), playerWW);
-
-        Bukkit.getPluginManager().callEvent(rivalLoverEvent);
-
-        if (rivalLoverEvent.isCancelled()) {
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
-            return;
-        }
-
-        if (lover.swap(playerWW, getPlayerWW())) {
-            this.getPlayerWW().addLover(lover);
-            playerWW.removeLover(lover);
-            power = false;
+    public void second() {
+        if (isolatedLover != null && game.getTimer() > isolationEnd) {
+            isolatedLover = null;
         }
     }
-
 
     @EventHandler
     public void onActionBarRequest(ActionBarEvent event) {
 
         if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!isAbilityEnabled()) return;
+
+        Player player = Bukkit.getPlayer(event.getPlayerUUID());
+        if (player == null) return;
 
         StringBuilder stringBuilder = event.getActionBar();
 
-        Player player = Bukkit.getPlayer(event.getPlayerUUID());
-
-        if (player == null) return;
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
-        if (cupidWW == null) return;
-
-        if (!isAbilityEnabled()) return;
-
-        if (cupidWW.isState(StatePlayer.ALIVE)) {
-
+        if (guessed && lover != null) {
+            lover.getLovers().stream()
+                    .filter(p -> p.isState(StatePlayer.ALIVE))
+                    .filter(p -> !p.getUUID().equals(getPlayerUUID()))
+                    .findFirst()
+                    .ifPresent(l -> stringBuilder
+                            .append(" ")
+                            .append(ChatColor.LIGHT_PURPLE)
+                            .append(game.translate("werewolf.roles.rival.lover_arrow"))
+                            .append(" ")
+                            .append(Utils.updateArrow(player, l.getLocation())));
+        } else if (cupidWW != null && cupidWW.isState(StatePlayer.ALIVE)) {
             stringBuilder
                     .append(" ")
                     .append(ChatColor.WHITE)
                     .append(game.translate(RoleBase.CUPID))
                     .append(" ")
-                    .append(Utils.updateArrow(player,
-                            cupidWW.getLocation()));
+                    .append(Utils.updateArrow(player, cupidWW.getLocation()));
         }
+    }
+
+    @Override
+    public void recoverPower() {
     }
 
     @Override

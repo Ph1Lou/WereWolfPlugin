@@ -5,7 +5,8 @@ import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.fruitmerchant.FruitMerchantCommandEvent;
 import fr.ph1lou.werewolfapi.events.roles.fruitmerchant.FruitMerchantRecoverInformationEvent;
@@ -29,10 +30,10 @@ import java.util.stream.Collectors;
         roleKeys = RoleBase.FRUIT_MERCHANT,
         requiredPower = true,
         argNumbers = 0)
-public class CommandFruitMerchant implements ICommandRole {
+public class CommandFruitMerchant implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext commandContext) {
 
         FruitMerchant fruitMerchant = (FruitMerchant) playerWW.getRole();
 
@@ -69,7 +70,7 @@ public class CommandFruitMerchant implements ICommandRole {
                                 .map(IPlayerWW::getName)
                                 .collect(Collectors.joining(", "))),
                 Formatter.timer(Utils.conversion(game.getConfig()
-                                                         .getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN) / 2)));
+                        .getTimerValue(TimerBase.FRUIT_MERCHANT_COOL_DOWN) / 2)));
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
             if (playerWW.isState(StatePlayer.ALIVE)) {

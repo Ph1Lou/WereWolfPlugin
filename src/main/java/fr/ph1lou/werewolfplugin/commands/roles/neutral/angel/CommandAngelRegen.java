@@ -3,8 +3,10 @@ package fr.ph1lou.werewolfplugin.commands.roles.neutral.angel;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.AngelForm;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.roles.angel.RegenerationEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -15,16 +17,15 @@ import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Angel;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 @RoleCommand(key = "werewolf.roles.guardian_angel.command",
         roleKeys = {RoleBase.ANGEL, RoleBase.GUARDIAN_ANGEL},
         argNumbers = 0,
         requiredLimitedUse = 3)
-public class CommandAngelRegen implements ICommandRole {
+public class CommandAngelRegen implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext commandContext) {
 
         if (playerWW == null) return;
 

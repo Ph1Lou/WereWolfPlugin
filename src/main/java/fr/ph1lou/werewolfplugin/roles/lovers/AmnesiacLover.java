@@ -214,6 +214,15 @@ public class AmnesiacLover extends LoverBaseImpl implements ILover, Listener {
         return !death;
     }
 
+    @Override
+    public void dissolve() {
+        if (this.death) return;
+        this.death = true;
+        getLovers().forEach(playerWW -> playerWW.removeLover(this));
+        HandlerList.unregisterAll(this);
+        this.game.getLoversManager().removeLover(this);
+    }
+
 
     public boolean isRevealed() {
         return find;

@@ -3,7 +3,8 @@ package fr.ph1lou.werewolfplugin.commands.roles.hybrid.wolfdog;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.roles.wolf_dog.WolfDogChooseWereWolfForm;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -17,10 +18,10 @@ import org.bukkit.Bukkit;
         roleKeys = RoleBase.WOLF_DOG,
         argNumbers = 0,
         requiredPower = true)
-public class CommandWolfDog implements ICommandRole {
+public class CommandWolfDog implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext commandContext) {
 
         IRole wolfDog = playerWW.getRole();
         ((IPower) wolfDog).setPower(false);

@@ -13,7 +13,9 @@ import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -99,5 +101,14 @@ public abstract class AbstractLover extends LoverBaseImpl implements ILover {
     @Override
     public boolean isAlive() {
         return !this.death;
+    }
+
+    @Override
+    public void dissolve() {
+        if (this.death) return;
+        this.death = true;
+        new ArrayList<>(this.lovers).forEach(playerWW -> playerWW.removeLover(this));
+        HandlerList.unregisterAll(this);
+        this.game.getLoversManager().removeLover(this);
     }
 }

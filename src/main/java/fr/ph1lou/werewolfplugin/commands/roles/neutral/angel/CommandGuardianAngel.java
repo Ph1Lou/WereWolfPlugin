@@ -4,7 +4,8 @@ import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.AngelForm;
 import fr.ph1lou.werewolfapi.events.roles.angel.AngelChoiceEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -17,10 +18,10 @@ import org.bukkit.Bukkit;
         roleKeys = RoleBase.ANGEL,
         autoCompletion = false,
         argNumbers = 0)
-public class CommandGuardianAngel implements ICommandRole {
+public class CommandGuardianAngel implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext commandContext) {
 
         Angel angel = (Angel) playerWW.getRole();
 

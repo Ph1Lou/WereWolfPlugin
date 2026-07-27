@@ -389,7 +389,7 @@ scannée/enregistrée.
 |---|---|---|
 | `@AdminCommand` | `AdminCommand.java:12` | `key`, `descriptionKey`, `statesGame`, `argNumbers`, `moderatorAccess`, `hostAccess`, `autoCompletion` |
 | `@PlayerCommand` | `PlayerCommand.java:13` | `key`, `descriptionKey`, `statesPlayer`, `statesGame`, `argNumbers`, `autoCompletion` |
-| `@RoleCommand` | `RoleCommand.java:13` | `key`, `roleKeys`, `statesPlayer`, `statesGame`, `argNumbers`, `autoCompletion`, `requiredPower`, `requiredAbilityEnabled` |
+| `@RoleCommand` | `RoleCommand.java:13` | `key`, `roleKeys`, `statesPlayer`, `statesGame`, `argNumbers`, `autoCompletion`, `requiredPower`, `requiredAbilityEnabled`, `requiredLimitedUse`, `args` |
 
 ### 4.3 Marqueurs d'events (annotations vides)
 
@@ -494,6 +494,130 @@ playerWW.setRole(role);
 > ⚠️ **Convention de constructeur** : toute classe de rôle doit exposer un
 > constructeur public `(WereWolfAPI game, IPlayerWW playerWW)`.
 
+#### Hiérarchie & classes de base
+
+```
+IRole (interface) ──extends──> RoleImpl (abstraite)
+                                  ├── RoleWereWolf        (isWereWolf() = true)
+                                  ├── RoleNeutral         (isNeutral() selon isWereWolf/transformedToVillager)
+                                  └── RoleWithLimitedSelectionDuration (implémente IPower + SelectionEndEvent)
+```
+
+| Classe de base | Quand l'étendre | Particularité |
+|---|---|---|
+| `RoleImpl` | Rôle villageois « pur » sans transformation | `isWereWolf()` = `infected` (faux par défaut) |
+| `RoleWereWolf` | Rôle loup-garou natif | `isWereWolf()` = `true` (hardcodé) |
+| `RoleNeutral` | Rôle neutre (victoire solo) | `isNeutral()` = `!isWereWolf() && !isTransformedToVillager()` |
+| `RoleWithLimitedSelectionDuration` | Pouvoir unique avec durée de sélection | Gère déjà `IPower` + intercepte `SelectionEndEvent` |
+
+#### Interfaces-marqueurs (à implémenter sur la classe concrète)
+
+Interfaces **vides ou quasi-vides** qui signalent au framework (et aux commandes)
+une capacité du rôle. Détectées par `instanceof` partout dans le cœur ; le simple
+fait d'implémenter suffit, **aucun enregistrement**.
+
+| Interface | Méthodes | Effet framework |
+|---|---|---|
+| `IPower` | `hasPower()` / `setPower(boolean)` | Permet `@RoleCommand(requiredPower = true)` (le dispatcher refuse la commande si `hasPower()` est faux). |
+| `IAffectedPlayers` | `add/remove/clearAffectedPlayer`, `getAffectedPlayers()` | Active `@PlayerArg(rejectIfAlreadyAffected = true)` (§10.4) et expose les cibles mémorisées. |
+| `ILimitedUse` | `getUse()` / `setUse(int)` | Compteur d'utilisations ; `@RoleCommand(requiredLimitedUse = N)` couvre les limites fixes. |
+| `IProgress` | `getProgress()` / `setProgress(float)` | Progression 0..1 (ex. Braconnier). |
+| `ITransformed` | `isTransformed()` / `setTransformed(boolean)` | Ajoute la ligne « Transformé : oui/non » dans la description (`DescriptionBuilder`). |
+| `IInvisible` | `isInvisible()` / `setInvisible(boolean)` | Masque le joueur des rôles à infos (BearTrainer, Fox, …). |
+| `IGuesser` | `canGuess`, `resolveGuess`, `getAvailableCategories` | Rôle « devineur » (Corbeau/Sœur). |
+
+#### Cycle de vie d'un rôle
+
+```
+RoleDuration.onRepartition (RepartitionEvent)        ← RoleDuration.java:101
+   │  role = clazz.getConstructor(WereWolfAPI, IPlayerWW).newInstance(game, playerWW)
+   │  BukkitUtils.registerListener(role)             ← le rôle écoute ses propres @EventHandler
+   │  playerWW.setRole(role)
+   │  Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW))
+   ▼
+roleAnnouncement(playerWW)                           ← RoleDuration.java:50
+   │  playerWW.sendMessage( role.getDescription() )
+   │  role.recoverPotionEffects()                    ← RoleDuration.java:58 (force/night vision pour loups)
+   │  role.recoverPower()                             ← RoleDuration.java:59 (init du pouvoir, bonus PV, ...)
+   ▼
+runtime : les @EventHandler du rôle réagissent aux events Bukkit
+   │   (garder `isAbilityEnabled()` / `isState(ALIVE)` en tête de chaque handler)
+   └─ role.disableAbilities() / enableAbilities()    ← isAbilityEnabled() coupe l'effet des handlers
+```
+
+`recoverPower()` / `recoverPotionEffects()` sont aussi rappelés après un
+changement de rôle : Thief (`:190`), Scammer (`:169`), Imitator (`:177`),
+DevotedServant (`:193`), Swap (`:82-85`).
+
+#### Camp, `isWereWolf()` et couche d'affichage
+
+- `getCamp()` (`RoleImpl.java:111`) est **dérivé** : `NEUTRAL` si `isNeutral()`,
+  sinon `WEREWOLF` si `isWereWolf()`, sinon `VILLAGER`. **Ne pas l'override** ;
+  overrider plutôt `isWereWolf()` / `isNeutral()`.
+- `isWereWolf()` (`RoleImpl.java:144`) vaut `this.infected` par défaut.
+  `RoleWereWolf` le force à `true`. Un rôle peut l'override pour une
+  transformation conditionnelle (ex. `WhiteWereWolf.java:43`,
+  `AmnesicWerewolf.java:148`, `RomulusRemus.java:129`).
+- **Affichage menteur** : `getDisplayCamp()` / `getDisplayRole()`
+  (`RoleImpl.java:226` / `:239`) permettent de mentir à un rôle à info **sans**
+  changer le camp réel.
+- **Liste des loups** : l'event `AppearInWereWolfListEvent`
+  (`events/werewolf/AppearInWereWolfListEvent.java:8`) décide si un joueur
+  **apparaît** dans la liste des loups (vue `/ww list` des loups, tab). Le
+  handler par défaut `WerewolfListener.onAppearInWereWolfList`
+  (`WerewolfListener.java:82`, priorité `LOWEST`) met `appear = isWereWolf()`.
+  Un rôle qui veut faire apparaître un **faux loup** surcharge l'event en
+  priorité `NORMAL` (donc **après**) via `event.setAppear(true)` — c'est
+  exactement la technique de l'Illusionniste (§8.6).
+
+#### Rôle d'affichage vs rôle de mort
+
+« Mentir » sur le rôle d'un joueur se fait sur **deux couches indépendantes**,
+qu'il faut distinguer :
+
+| Couche | API | Vue par | Défaut |
+|---|---|---|---|
+| **Affichage vivant** | `getDisplayRole()` / `setDisplayRole(key)`, `getDisplayCamp()` / `setDisplayCamp(key)` (`IDisplay`) | rôles à info (Voyante, Renifleur, …), `getDescription`, tab | `getKey()` / `getCamp().getKey()` si non surchargé |
+| **Rôle de mort** | `getDeathRole()` / `addDeathRole(key)` / `removeDeathRole(key)` (`IPlayerWW`) | message de mort (`AnnouncementDeathEvent`) | `role.getKey()` si la liste `deathRoles` est vide, sinon `deathRoles.get(0)` |
+
+> ⚠️ `setDisplayRole(...)` **ne change pas** le rôle affiché à la mort :
+> `AnnouncementDeathEvent` lit `getDeathRole()`, pas `getDisplayRole()`. Pour
+> falsifier le message de mort, il faut soit `addDeathRole(facade)` (la façade
+> devient `getDeathRole()`), soit intercepter `AnnouncementDeathEvent` et faire
+> `event.setRole(facade)`.
+
+**`AnnouncementDeathEvent`** (`events/game/life_cycle/AnnouncementDeathEvent.java`)
+est fire **une fois par spectateur** par `DeathListener.onFinalDeath`
+(`DeathListener.java:198`) avec un champ `role` (défaut = `getDeathRole()`),
+modifiable via `setRole(String)`. Des configs/rôles le modifient en `HIGH` :
+`Honor.onAnnouncementDeathEvent` (`Honor.java:130`) et `Priestess`
+(`Priestess.java:137`) remplacent aléatoirement le rôle par « magic ». Pour
+qu'une falsification **prime** sur ces masques aléatoires, intercepter en
+`EventPriority.HIGHEST` (après `HIGH`) — technique du Faussaire.
+
+**Save/restore de l'affichage** : `getDisplayRole()` renvoie `getKey()` quand le
+champ interne est `null` (non distinguable d'une valeur fixée à `getKey()`). Pour
+restaurer fidèlement un joueur dont on a temporairement changé l'affichage, on
+sauvegarde la valeur **effective** (`getDisplayRole()`) et on la réinjecte via
+`setDisplayRole(...)` — le résultat observable est identique à l'état `null`
+d'origine. `clearDisplay()` remet les deux champs à `null` (retour au réel).
+
+#### Modificateurs d'aura nommés
+
+`getAura()` (`RoleImpl.java:252`) renvoie l'aura du modificateur de **plus haute
+priorité**, sinon `getDefaultAura()`. Les modificateurs se gèrent par **nom** :
+
+```java
+role.addAuraModifier(new AuraModifier("mon_role_facade", Aura.DARK, 1, false));  // priorité 1
+role.removeAuraModifier("mon_role_facade");                                       // retrait par nom
+```
+
+`addAuraModifier` retire d'abord tout modificateur de même nom (donc l'ajout est
+idempotent). `removeTemporaryAuras()` ne retire que ceux marqués `temporary =
+true`. Un rôle qui modifie temporairement l'aura d'un **autre** joueur utilise un
+nom de modificateur qui lui est propre (ex. `"counterfeiter_werewolf_facade"`)
+pour ne pas interférer avec les autres auras de la cible.
+
 ### 5.2 Scénarios — `@Scenario`
 
 **Localisation** : `WereWolfPlugin/.../werewolfplugin/scenarios/` (~30 classes).
@@ -568,6 +692,88 @@ public class LoverImpl extends AbstractLover { ... }
 Lecture réflexive (côté API) dans `lovers/impl/LoverBaseImpl.java` :
 `getKey()` (L14) et `getColor()` (L27) utilisent
 `getClass().getAnnotation(Lover.class)`.
+
+#### Hiérarchie & classes
+
+```
+ILoverBase (interface, extends Listener)   ← API
+   └── ILover (interface)                  ← getLovers(), isAlive(), swap(), second(), dissolve()
+         ↑
+LoverBaseImpl (abstraite, API)             ← getKey()/getColor() réflexifs
+   └── AbstractLover (abstraite, plugin)   ← champs lovers/death/game, action bar, dissolve()
+         ├── LoverImpl        (couple classique, @Lover LOVER)
+         ├── FakeLover / FakeLoverCharmer  (couples « factices »)
+         └── (CursedLover, AmnesiacLover étendent LoverBaseImpl directement, pas AbstractLover)
+```
+
+> ⚠️ `AmnesiacLover` et `CursedLover` **n'étendent pas** `AbstractLover` : elles
+> étendent `LoverBaseImpl` directement et portent leurs propres champs
+> (`death`, `amnesiacLover1/2`, `find`). Toute nouvelle méthode de couple à
+> implémenter doit donc l'être **dans chaque classe concrète** (ou via une
+> `default` no-op sur `ILover` surchargée dans chaque implé).
+
+#### Cycle de vie & enregistrement
+
+- Au `RepartitionEvent`, les couples sont créés et enregistrés via
+  `ILoverManager.addLover(ILover)` ; chaque membre est lié côté joueur par
+  `IPlayerWW.addLover(ILover)` (cf. `AbstractLover` constructeur).
+- Accès : `game.getLoversManager().getLovers()`, `playerWW.getLovers()`.
+- `second()` est appelé chaque seconde par `GameTask` (comme les rôles) — utilisé
+  par `AmnesiacLover` pour révéler le couple à la proximité.
+
+#### Mort liée (suicide du couple)
+
+Mécanique centrale : **quand un membre meurt, l'autre meurt aussi**. Chaque couple
+concret écoute `FinalDeathEvent` en `HIGH` :
+
+- `LoverImpl.onFinalDeath` (`LoverImpl.java:36`) : si le mort est un membre et
+  `!death` → `death=true`, annonce, puis `game.death(survivant)` (suicide) +
+  `LoverDeathEvent`.
+- `AmnesiacLover.onFinalDeath` (`AmnesiacLover.java:73`) : idem (suicide seulement
+  si le couple s'est « trouvé » via `find`), fire `AmnesiacLoverDeathEvent`.
+
+Le gardien est le champ `death` (testé **en tête** du handler) : une fois `death=true`,
+le handler retourne immédiatement — **pas de suicide, pas d'annonce**.
+
+#### Manipuler un couple : `swap` vs `dissolve`
+
+| Méthode | Effet | Annonce ? | Usage |
+|---|---|---|---|
+| `swap(old, new)` | remplace `old` par `new` dans le couple | **oui** (`announceLovers()` → révèle le nouveau membre) | remplacer un amoureux mort par un vivant (ex. ancien Rival) |
+| `dissolve()` | **dissout** le couple : `death=true` + `HandlerList.unregisterAll(this)` + `removeLover` sur chaque membre + `manager.removeLover(this)` | **non** (le handler HIGH retourne avant l'annonce) | briser un couple sans tuer le survivant, sans fuite de nom |
+
+`dissolve()` est une `default` no-op sur `ILover`, implémentée dans `AbstractLover`
+(couvre `LoverImpl`/`FakeLover`) et `AmnesiacLover`. Elle s'appuie sur :
+- `death=true` → fiable pour **l'event en cours** (le handler HIGH teste `death` en
+  premier, donc le suicide est annulé même si l'event est déjà en propagation) ;
+- `HandlerList.unregisterAll(this)` → désactive **pour le futur** tous les handlers
+  du couple (action bar, message de fin, suicide) ;
+- `IPlayerWW.removeLover(ILover)` côté membre + `ILoverManager.removeLover(ILover)`
+  côté registre → le survivant joue alors **solo**.
+
+> `ILoverManager.removeLover(ILover)` ne fait que retirer de la liste — il ne
+> désenregistre **pas** le listener. Pour neutraliser un couple vivant, il faut
+> donc `dissolve()` (ou `HandlerList.unregisterAll` + `death=true` manuels), pas
+> seulement `removeLover`.
+
+#### Don de vie entre amoureux — `DonEvent`
+
+Le `/ww don` (commande `CommandLovers`) permet d'envoyer un % de vie à son
+partenaire. Fire `DonEvent(playerWW, receiverWW, don)` (`events/lovers/DonEvent.java`),
+**cancellable** : un rôle peut bloquer les dons d'un amoureux en annulant l'event
+si l'expéditeur **ou** le destinataire est sa cible (technique utilisée par le
+Rival `isoler`).
+
+#### Événements clés (package `events/lovers/`)
+
+| Event | Rôle |
+|---|---|
+| `RevealLoversEvent` / `RevealNormal/Cursed/AmnesiacLoversEvent` | révélation des couples (le Rival y cible le sien) |
+| `LoverDeathEvent` | fin du couple classique (après suicide) — déclenche la pénalité du Rival |
+| `AmnesiacLoverDeathEvent` | fin du couple amnésique |
+| `AnnouncementLoverDeathEvent` | annonce de mort liée (cancellable) |
+| `AroundLoverEvent` | détection de proximité autour d'un amoureux |
+| `DonEvent` | don de vie (cancellable) |
 
 ### 5.6 Événements aléatoires — `@RandomEvent`
 
@@ -749,6 +955,106 @@ Les recherches balaient **tous les registres**, y compris les valeurs
 > **aucun enregistrement supplémentaire n'est nécessaire**, le simple fait de
 > déclarer l'annotation suffit.
 
+### 6.7 Cycle des events de mort
+
+La mort n'est pas instantanée : elle traverse une chaîne d'events Bukkit
+orchestrés par `DeathListener` (`DeathListener.java`). Connaître cet enchaînement
+(et les délais) est indispensable pour réagir au bon moment.
+
+```
+PlayerDeathEvent                     (DeathListener.onPlayerDeath:64)
+  │  état → JUDGEMENT, setDeathLocation, addKiller, PlayerWWKillEvent
+  │  scheduleSyncDelayedTask(20L) ↓
+  ▼
+FirstDeathEvent  (L120)             ← « frappeurs » récents (getLastMinutesDamagedPlayer)
+  │  onFirstDeath (L127, HIGHEST) → si JUDGEMENT ↓
+  ▼
+SecondDeathEvent  (L136)            ← fenêtre de résurrection (1 tick)
+  │  onSecondDeathEvent (L140, HIGHEST) → scheduleSyncDelayedTask(7*20L) ↓
+  ▼
+ThirdDeathEvent  (L148)             ← 2e fenêtre de résurrection (7 s)
+  │  onThirdDeath (L154, HIGHEST) → scheduleSyncDelayedTask(7*20L) ↓
+  ▼
+FinalDeathEvent  (L161)             ← mort définitive (14 s après le décès)
+  │  DeathListener.onFinalDeath (L167) :
+  │    état → DEATH, setDeathTime, ...
+  │    └─ pour chaque spectateur : AnnouncementDeathEvent (L198)  ← message de mort
+  │       UpdateCompositionEvent (L229)
+```
+
+**Points clés pour un rôle** :
+- `FinalDeathEvent` est l'event « le joueur est bel et bien mort » — c'est lui
+  qu'on écoute pour les effets de mort (perte de PV, transfert de rôle, etc.).
+  `event.getPlayerWW()` = le mort ; `event.getPlayerWW().getLastKiller()` =
+  tueur éventuel (`Optional<IPlayerWW>`).
+- `AnnouncementDeathEvent` est fire **à l'intérieur** du handler
+  `DeathListener.onFinalDeath` (donc pendant la propagation de `FinalDeathEvent`).
+  Un rôle qui consomme un état dans `onFinalDeath` et qui falsifie le message via
+  `onAnnouncementDeath` doit veiller à **ne pas** consommer cet état avant
+  l'annonce (cf. §5.1 « Rôle d'affichage vs rôle de mort »).
+- Pour détecter un kill par le rôle : `FinalDeathEvent` + `event.getPlayerWW()
+  .getLastKiller()` filtré sur `this.getPlayerWW()`. Les loups reçoivent déjà
+  automatiquement Speed I + Absorption I (2❤) pendant 60 s sur kill via
+  `WerewolfListener` (`WerewolfListener.java:65-66`) — inutile de le recoder pour
+  un rôle loup.
+
+### 6.8 Système de Force/Résistance custom — `RequestStrengthRateEvent`
+
+Le plugin **remplace le comportement vanilla de Force/Résistance** par un
+**scaling de dégâts en pourcentage** (au lieu des +3 dégâts fixes par niveau de
+Minecraft). `RequestStrengthRateEvent` est l'event **par attaque** qui permet à
+d'autres mécaniques d'ajuster le taux pour un attaquant précis.
+
+**Émetteur** — `PatchPotions.onPatchPotion` (`PatchPotions.java:35`), déclenché sur
+**chaque coup PvP** où l'attaquant porte l'effet Force :
+
+```java
+RequestStrengthRateEvent e =
+    new RequestStrengthRateEvent(damagerWW, game.getConfig().getStrengthRate());
+Bukkit.getPluginManager().callEvent(e);
+event.setDamage(event.getDamage() / 2.3f * (1 + e.getStrengthRate() / 100f));  // amp 0
+```
+
+Le taux initial = la valeur globale de config `strengthRate` (défaut **30** = +30 %,
+ajustable par l'hôte via `AdvancedSettingsGUI`).
+
+**Listeners** — mutent le taux pour **cette** attaque via
+`event.setStrengthRate(...)` :
+
+| Listener | Condition | Effet |
+|---|---|---|
+| `Honor.onPatchPotion` (`Honor.java:307`) | attaquant loup | honneur 1→×11/12, 2→×5/6, 3→×3/4 (les loups à fort honneur frappent plus faiblement) |
+
+**Formules** (`PatchPotions.java:54-65`) :
+
+| Effet | Formule |
+|---|---|
+| Force amp 0 (niveau I) | `dégâts / 2.3 × (1 + taux/100)` — la division par 2.3 neutralise le bonus vanilla Force I (~×2.3 déjà appliqué par Bukkit), puis on reapplique le taux custom |
+| Force amp ≥1 (niveau II+) | `dégâts × (1 + taux/100)` |
+| Résistance (victime) | `dégâts × (100 − resistanceRate)/80` ; si `resistanceRate ≥ 100` → event annulé (immunité) |
+
+**Conséquences clés** :
+
+1. **L'amplificateur de Force est forcé à -1** dans `PotionModifier`
+   (`PotionModifier.java:21`) → l'amplificateur affiché est **sans signification**.
+   La Force est **binaire** (présente/absente) ; le % réel vient du **taux**, pas du
+   niveau. C'est pourquoi « Strength 0.5 » vs « Strength I » ne se distingue **pas**
+   par potion : pour différencier deux niveaux de Force, il faut jouer sur le
+   **taux** en écoutant `RequestStrengthRateEvent` (ex. `setStrengthRate(rate/2)`
+   pour un « demi-Force »).
+2. Le taux est **par attaque et par attaquant** (l'event porte le `playerWW`).
+3. Un rôle qui veut un Force **personnalisé** écoute l'event, filtre
+   `event.getPlayerWW().equals(this.getPlayerWW())`, et ajuste le taux. Le sort de
+   l'effet lui-même (présent/absent) reste géré par `PotionModifier.add(STRENGTH, key)`.
+4. `Auramancer` (`Auramancer.java:236,250`) lit le taux **directement**
+   (`game.getConfig().getStrengthRate()`) **sans** fire l'event → il ignore les
+   ajustements d'Honneur (×1 pour aura Ténébreuse attaquant le Lumineux,
+   ×1/2 pour l'aura Lumineuse renvoyant le dégât).
+
+> ⚠️ Ne pas confondre : `PotionModifier.add(STRENGTH, key)` **active** l'effet Force
+> (binaire, amp -1) ; `RequestStrengthRateEvent` **ajuste le %** de cet effet pour
+> une attaque donnée. Les deux sont orthogonaux.
+
 ---
 
 ## 7. Imbrication des annotations
@@ -786,14 +1092,70 @@ Cette imbrication est **entièrement résolue à l'exécution** par
 
 ### 8.1 Ajouter un rôle
 
-1. Créer une classe dans `roles/<camp>/` qui étend `RoleWereWolf`, `RoleNeutral`
-   ou directement `RoleImpl`.
+**Check-list rapide**
+
+1. Créer une classe dans `roles/<camp>/` qui étend `RoleWereWolf`, `RoleNeutral`,
+   `RoleWithLimitedSelectionDuration` ou directement `RoleImpl` (cf. §5.1 pour le
+   choix de la classe de base).
 2. Exposer un **constructeur public `(WereWolfAPI, IPlayerWW)`**.
 3. Annoter avec `@Role(key = RoleBase.VOTRE_ROLE, category = ..., attribute = ...)`.
 4. Ajouter la constante de clé i18n dans `RoleBase` et la traduction dans les
-   fichiers de langue.
+   fichiers de langue (`fr_FR.json`, `en_EN.json`, …).
 5. Les configs/timers/IntValues propres au rôle peuvent être déclarés
    directement dans l'annotation (imbrication) — aucune autre inscription.
+
+**Choix de la classe de base & interfaces**
+
+- Loup-garou natif → `RoleWereWolf`.
+- Neutre (victoire solo) → `RoleNeutral`.
+- Villageois avec pouvoir unique à durée de sélection → `RoleWithLimitedSelectionDuration` (gère déjà `IPower` + `SelectionEndEvent`).
+- Villageois « pur » → `RoleImpl` direct ; implémenter `IPower` si pouvoir unique.
+- Mémoriser des cibles → implémenter `IAffectedPlayers` (active aussi `rejectIfAlreadyAffected` côté commande, §10.4).
+- Limite d'utilisations → `ILimitedUse` (+ `@RoleCommand(requiredLimitedUse = N)` pour les limites fixes).
+
+**Pattern événementiel (recommandé)**
+
+Pour un pouvoir non-trivial, déclarer **vos propres events** dans
+`WereWolfAPI/.../events/roles/<votre_role>/` :
+
+- Hériter de `SelectionEvent` (joueur acteur + cible) si pertinent, sinon `Event`.
+- Annoter `@StatisticsEvent(key = "...")` pour le suivi stats.
+- Ajouter `@TellableStoryEvent` si l'action doit être racontable par le StoryTeller,
+  `@SpyEvent` si elle doit être visible par le Spy.
+- Rendre l'event `Cancellable` quand une autre mécanique peut le bloquer.
+
+Le rôle fire l'event (`Bukkit.getPluginManager().callEvent(...)`) **avant**
+d'appliquer l'effet, vérifie `isCancelled()`, puis applique. D'autres
+rôles/configs peuvent réagir ou bloquer.
+
+**Côté commande**
+
+Si le pouvoir s'active par commande :
+
+- Créer une classe dans `commands/roles/<camp>/<rôle>/` annotée `@RoleCommand`.
+- `roleKeys = RoleBase.VOTRE_ROLE` lie la commande au rôle.
+- `requiredPower = true` exige `IPower.hasPower()` (consommer via `setPower(false)` dans `execute`).
+- Préférer `IParameterizedCommandRole` + `@Params` (§10) : cibles/poids résolus
+  par le dispatcher ; signature `execute(WereWolfAPI, IPlayerWW, CommandContext)`.
+- Constructeur public **sans argument** (§6.3).
+
+**Conventions i18n**
+
+Clés d'un rôle `werewolf.roles.<rôle_key_stem>.*` :
+
+| Clé | Rôle |
+|---|---|
+| `display` | Nom affiché. **Cette clé est la `key` du `@Role`** et la valeur de la constante `RoleBase`. |
+| `description` | Texte de description (passé à `DescriptionBuilder.setDescription`). |
+| `power` | Description du pouvoir (`setPower`). |
+| `command` | **Nom de la sous-commande** tapée après `/ww` (ex. `activate`). |
+| `activate` / `already_activate` | Aide à la commande selon `hasPower()`. |
+| `perform` / `reveal` / … | Messages métier. |
+
+**Vérification** : au démarrage, un warning dans la console signale toute classe
+annotée skipée (mauvais préfixe de clé, type attendu non respecté). Vérifier que
+le rôle apparaît dans le menu de composition. Un exemple complet commenté est
+donné en §8.6.
 
 ### 8.2 Ajouter un scénario
 
@@ -833,6 +1195,176 @@ Cette imbrication est **entièrement résolue à l'exécution** par
 
 > Opt-out : annoter une classe avec `@DisableAutoLoad` pour qu'elle ne soit pas
 > chargée réflexivement par le module.
+
+### 8.6 Exemple complet — l'Illusionniste (pouvoir unique + faux loup)
+
+Cet exemple retrace l'implémentation **réelle** de l'Illusionniste (camp
+villageois) pour illustrer tous les points de la §8.1 : choix de la classe de
+base, interfaces `IPower` + `IAffectedPlayers`, events dédiés, commande
+paramétrée, et interception de `AppearInWereWolfListEvent` (§5.1).
+
+**Mécanique** : une fois dans la partie, l'Illusionniste active son pouvoir
+(`/ww activate`). À la prochaine mort, un joueur vivant **non-loup** aléatoire
+est ajouté à la liste des loups — les loups le voient comme l'un des leurs, mais
+il garde son rôle et **gagne avec son camp d'origine**. 1 minute plus tard, la
+cible est notifiée et l'Illusionniste reçoit une liste de 3 pseudos contenant la
+cible.
+
+#### Étape 1 — Clé i18n & constante
+
+`WereWolfAPI/.../basekeys/RoleBase.java:80` :
+```java
+public final static String ILLUSIONIST = "werewolf.roles.illusionist.display";
+```
+
+`WereWolfPlugin/src/main/resources/fr_FR.json` (extrait) :
+```json
+"illusionist": {
+  "display": "Illusionniste",
+  "description": "À la première mort suivant l'activation de votre pouvoir, le pseudo d'un joueur aléatoire sera ajouté à la liste des Loups",
+  "power": "Une minute plus tard, le joueur le saura et vous recevrez une liste de trois pseudos contenant celui-ci.",
+  "activate": "Pour activer votre pouvoir §b/ww activate",
+  "already_activate": "Votre pouvoir est §aactivé",
+  "reveal": "L'§bIllusioniste§f vous a ajouté à la liste des Loups Garous",
+  "reveal_pseudos": "Le pseudo du joueur que vous avez ajouté à la liste des Loups est parmi : §b&names&",
+  "command": "activate",
+  "perform": "Votre pouvoir a été activé"
+}
+```
+
+#### Étape 2 — Events dédiés (`WereWolfAPI/.../events/roles/illusionist/`)
+
+Trois events, tous `@StatisticsEvent` pour les stats :
+
+| Event | Rôle | Marqueurs |
+|---|---|---|
+| `IllusionistActivatePowerEvent` | activation, `Cancellable` | `@StatisticsPlayer` |
+| `IllusionistAddPlayerOnWerewolfListEvent` | ajout de la cible | `@TellableStoryEvent`, extends `SelectionEvent` |
+| `IllusionistGetNamesEvent` | remise des 3 pseudos, `Cancellable` | `@StatisticsPlayer` + `@StatisticsTargets` |
+
+```java
+@StatisticsEvent(key = "werewolf.illusionist_add_player_event")
+@TellableStoryEvent
+public class IllusionistAddPlayerOnWerewolfListEvent extends SelectionEvent {
+    public IllusionistAddPlayerOnWerewolfListEvent(IPlayerWW playerWW, IPlayerWW target) {
+        super(playerWW, target);
+    }
+    // HandlerList standard...
+}
+```
+
+#### Étape 3 — La classe de rôle
+
+`WereWolfPlugin/.../roles/villagers/Illusionist.java:39` :
+```java
+@Role(key = RoleBase.ILLUSIONIST,
+        category = Category.VILLAGER,
+        attribute = RoleAttribute.VILLAGER)
+public class Illusionist extends RoleImpl implements IPower, IAffectedPlayers {
+
+    private boolean power = true;   // IPower
+    private boolean wait = false;   // pouvoir armé, en attente de la prochaine mort
+    private IPlayerWW playerWW;     // IAffectedPlayers : la cible « faux loup »
+
+    public Illusionist(WereWolfAPI game, IPlayerWW playerWW) {
+        super(game, playerWW);      // constructeur canonique
+    }
+    // ...
+}
+```
+
+`RoleImpl` (villageois) + `IPower` (pouvoir unique → `requiredPower`) +
+`IAffectedPlayers` (mémorise la cible). Trois responsabilités :
+
+**R1 — déclenchement à la prochaine mort** (`Illusionist.java:60`) : le handler
+`onFinalDeathEvent` garde-fous `isAbilityEnabled()` / `ALIVE` / `isWait()`, tire
+un non-loup aléatoire, fire `IllusionistAddPlayerOnWerewolfListEvent`
+(cancellable), puis `addAffectedPlayer(cible)` + `UpdateNameTagEvent` + message
+`new_werewolf` et `WOLF_HOWL` aux loups.
+
+**R2 — révélation différée 60 s** (`Illusionist.java:111`) :
+`BukkitUtils.scheduleSyncDelayedTask(game, runnable, 20*60L)` notifie la cible
+(`illusionist.reveal`) et envoie à l'Illusionniste une liste mélangée de 3
+pseudos (cible + 2 leurres) via `illusionist.reveal_pseudos`.
+
+**R3 — faux loup** (`Illusionist.java:152`) :
+```java
+@EventHandler
+public void onWerewolfListRequest(AppearInWereWolfListEvent event) {
+    if (event.getTargetWW().equals(this.playerWW)) {
+        event.setAppear(true);   // surcharge le isWereWolf() par défaut
+    }
+}
+```
+Priorité `NORMAL` (défaut) → s'exécute **après** `WerewolfListener` (`LOWEST`)
+qui avait mis `appear = isWereWolf()`. La cible apparaît loup **sans** l'être.
+
+#### Étape 4 — La commande
+
+`WereWolfPlugin/.../commands/roles/villager/illusionist/CommandIllusionist.java:14` :
+```java
+@RoleCommand(key = "werewolf.roles.illusionist.command",
+        roleKeys = RoleBase.ILLUSIONIST,
+        argNumbers = 0,
+        requiredPower = true)
+public class CommandIllusionist implements IParameterizedCommandRole {
+
+    @Override
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
+        Illusionist illusionist = (Illusionist) playerWW.getRole();
+        illusionist.setPower(false);                          // consomme IPower
+
+        IllusionistActivatePowerEvent event = new IllusionistActivatePowerEvent(playerWW);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
+            return;
+        }
+        illusionist.setWait(true);                            // armé pour la prochaine mort
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.illusionist.perform");
+    }
+}
+```
+
+`requiredPower = true` → le dispatcher refuse la commande si `hasPower()` est
+faux (message automatique). La commande ne fait qu'**armer** ; l'effet réel se
+produit au prochain `FinalDeathEvent`.
+
+#### Étape 5 — Connexion des pièces au runtime
+
+```
+Joueur tape /ww activate
+   └─ dispatcher vérifie roleKeys + requiredPower (hasPower) → CommandIllusionist.execute
+        ├─ setPower(false)              (IPower consommé)
+        ├─ fire IllusionistActivatePowerEvent
+        └─ setWait(true)
+
+Prochaine FinalDeathEvent
+   └─ Illusionist.onFinalDeathEvent (wait==true)
+        ├─ tire cible non-loup aléatoire
+        ├─ fire IllusionistAddPlayerOnWerewolfListEvent (cancellable, @TellableStoryEvent)
+        ├─ addAffectedPlayer(cible) + UpdateNameTagEvent
+        ├─ message new_werewolf + WOLF_HOWL aux loups
+        └─ scheduleSyncDelayedTask(60s)
+             ├─ cible ← illusionist.reveal
+             └─ Illusionniste ← illusionist.reveal_pseudos (3 pseudos mélangés)
+
+Un loup consulte sa liste (/ww list)
+   └─ CommandWereWolf → AppearInWereWolfListEvent pour chaque joueur
+        ├─ WerewolfListener (LOWEST) : appear = isWereWolf()
+        └─ Illusionist.onWerewolfListRequest (NORMAL) : appear = true pour la cible
+   → la cible s'affiche comme loup (mais getCamp()/isWereWolf() inchangés → gagne village)
+```
+
+**Leçons clés** :
+- Un rôle = une classe `@Role` + constructeur canonique + (option) interfaces-marqueurs
+  + (option) events dédiés + (option) commande `@RoleCommand`.
+- « Faire apparaître quelqu'un comme loup » ne nécessite **pas** de changer son
+  rôle : intercepter `AppearInWereWolfListEvent` suffit (couche d'affichage,
+  §5.1).
+- Les effets différés passent par `BukkitUtils.scheduleSyncDelayedTask(game, runnable, ticks)`.
+- Toujours fire un event `Cancellable` avant l'effet (pour laisser les autres
+  mécaniques s'y opposer) et un event `@StatisticsEvent` (pour les stats).
 
 ---
 
@@ -972,6 +1504,28 @@ public class CommandHunter implements IParameterizedCommandRole {
 | **Messages** | Toutes les clés `werewolf.check.*` sont réutilisées (aucune nouvelle clé i18n). |
 | **`argNumbers`** | Reste le garde-fou validé en premier ; `index >= args.length` est aussi défendu par le résolveur. |
 
+#### Gardes-fous de classe (`@RoleCommand`)
+
+Validés par le dispatcher **avant** `execute()` (et avant la résolution des
+`@Params`), dans `Command.checkCommand` (`Command.java:155-171`). Aucun code à
+écrire dans `execute` — poser le flag suffit.
+
+| Membre | Défaut | Condition | Échec → message |
+|---|---|---|---|
+| `requiredPower` | `false` | `role instanceof IPower && hasPower()` | `werewolf.check.power` |
+| `requiredAbilityEnabled` | **`true`** | `role.isAbilityEnabled()` | `werewolf.check.ability_disabled` |
+| `requiredLimitedUse` | `-1` (désactivé) | si `>= 0` : `role instanceof ILimitedUse && getUse() < requiredLimitedUse` | `werewolf.check.power` |
+
+> ⚠️ `requiredAbilityEnabled` vaut `true` par défaut : toute `@RoleCommand` est
+> bloquée tant que le rôle est désactivé (`disableAbilities()`), **sans rien
+> faire**. Ne pas recoder ce check dans `execute`.
+>
+> Pour consommer un pouvoir unique, poser `requiredPower = true` sur la commande
+> et appeler `setPower(false)` dans `execute`. Pour une limite fixe de N usages,
+> implémenter `ILimitedUse` et poser `requiredLimitedUse = N` (le dispatcher
+> bloque la N+1ᵉ fois). Pour une limite **dynamique** (ex. via un `@IntValue`),
+> garder un check manuel (`CommandCheck.rejectIfNoUseLeft` ou un test explicite).
+
 ### 10.5 Limites v1
 
 `@PlayerArg` exige que la cible soit un `IPlayerWW` dans la partie (résolu via
@@ -1054,6 +1608,15 @@ comme implémentation de référence (et `rejectIfNoUseLeft` est toujours utilis
 | Lecteur réflexif rôles | `WereWolfAPI/.../role/impl/RoleImpl.java:87` et `:263` |
 | Lecteur réflexif lovers | `WereWolfAPI/.../lovers/impl/LoverBaseImpl.java:14` et `:27` |
 | Description de rôle | `WereWolfAPI/.../role/utils/DescriptionBuilder.java:72` |
+| Interfaces-marqueurs de rôle | `WereWolfAPI/.../role/interfaces/` (`IPower`, `IAffectedPlayers`, `ILimitedUse`, `IProgress`, `ITransformed`, `IInvisible`, `IGuesser`) |
+| Classes de base de rôle | `WereWolfAPI/.../role/impl/` (`RoleImpl`, `RoleWereWolf`, `RoleNeutral`, `RoleWithLimitedSelectionDuration`) |
+| Event « faux loup » | `WereWolfAPI/.../events/werewolf/AppearInWereWolfListEvent.java:8` |
+| Event de taux de Force | `WereWolfAPI/.../events/werewolf/RequestStrengthRateEvent.java:8` (cf. §6.8) |
+| Event message de mort | `WereWolfAPI/.../events/game/life_cycle/AnnouncementDeathEvent.java:13` (`setRole` override) |
+| Rôle de mort (`IPlayerWW`) | `WereWolfPlugin/.../game/PlayerWW.java:699` (`getDeathRole`/`addDeathRole`/`removeDeathRole`) |
+| Modificateur d'aura | `WereWolfAPI/.../player/impl/AuraModifier.java:10` + `role/interfaces/IAura.java` |
+| Contrat des couples | `WereWolfAPI/.../lovers/ILover.java` (`getLovers`, `swap`, `dissolve`), `ILoverManager.java` (`addLover`/`removeLover`) (cf. §5.5) |
+| Events de couple | `WereWolfAPI/.../events/lovers/` (`DonEvent` cancellable, `LoverDeathEvent`, `RevealLoversEvent`, `AroundLoverEvent`) |
 | Point d'entrée API | `WereWolfAPI/.../GetWereWolfAPI.java:16` |
 | Enums référencés | `WereWolfAPI/.../enums/` (`Category`, `RoleAttribute`, `Aura`, `StateGame`, `StatePlayer`, `UniversalMaterial`) |
 | Constantes de clés i18n | `WereWolfAPI/.../basekeys/*.java` (`RoleBase`, `LoverBase`, `TimerBase`, `ConfigBase`, `ScenarioBase`, `IntValueBase`, `EventBase`, `Prefix`) |
@@ -1079,3 +1642,10 @@ comme implémentation de référence (et `rejectIfNoUseLeft` est toujours utilis
 | Canal de message commande | `WereWolfPlugin/.../commands/MessageSender.java` |
 | Contexte de commande (impl) | `WereWolfPlugin/.../commands/CommandContextImpl.java` |
 | Helpers de checks métier commande | `WereWolfPlugin/.../commands/CommandCheck.java` |
+| Exemple de rôle complet (Illusionniste) | `WereWolfPlugin/.../roles/villagers/Illusionist.java:39` + `commands/roles/villager/illusionist/CommandIllusionist.java:14` (cf. §8.6) |
+| Exemple rôle falsifiant affichage + mort (Faussaire) | `WereWolfPlugin/.../roles/werewolfs/CounterfeiterWereWolf.java:38` + `commands/roles/werewolf/counterfeiter/` (cf. §5.1, §6.7) |
+| Cycle des events de mort | `WereWolfPlugin/.../listeners/DeathListener.java:64` (`onPlayerDeath` → `FinalDeathEvent` `:161` → `AnnouncementDeathEvent` `:198`) |
+| Scaling Force/Résistance (PvP) | `WereWolfPlugin/.../listeners/PatchPotions.java:35` (`onPatchPotion` fire `RequestStrengthRateEvent`) + `configs/Honor.java:307` (cf. §6.8) |
+| Handler par défaut « liste des loups » | `WereWolfPlugin/.../listeners/WerewolfListener.java:82` (`onAppearInWereWolfList`, priorité `LOWEST`) |
+| Couples : base & dissolution | `WereWolfPlugin/.../roles/lovers/AbstractLover.java` (`dissolve`), `LoverImpl.java:36` (suicide), `AmnesiacLover.java:73` (cf. §5.5) |
+| Don de vie entre amoureux | `WereWolfPlugin/.../commands/roles/lovers/CommandLovers.java` (fire `DonEvent`) |
