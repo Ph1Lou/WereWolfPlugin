@@ -2,7 +2,9 @@ package fr.ph1lou.werewolfplugin.commands;
 
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
 import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommand;
 import fr.ph1lou.werewolfapi.game.IModerationManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -18,9 +20,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -30,6 +34,7 @@ public class Admin implements TabExecutor {
     private static Admin instance;
     private final Main main;
     private final Map<String, ICommand> commands = new HashMap<>();
+    private final ArgumentResolver argumentResolver = new ArgumentResolver();
 
     public Admin(Main main) {
         this.main = main;
@@ -89,8 +94,20 @@ public class Admin implements TabExecutor {
                 .filter(iCommandAdminCommandWrapper -> accessCommand(iCommandAdminCommandWrapper.getMetaDatas(), player, args.length, true))
                 .filter(iCommandAdminCommandWrapper -> this.commands.containsKey(iCommandAdminCommandWrapper.getMetaDatas().key()))
                 .forEach(iCommandAdminCommandWrapper -> {
-                    this.commands.get(iCommandAdminCommandWrapper.getMetaDatas().key()).execute(game, player, args);
-                    found.set(true);
+                    ICommand cmd = this.commands.get(iCommandAdminCommandWrapper.getMetaDatas().key());
+                    if (cmd instanceof IParameterizedCommand) {
+                        Optional<CommandContext> ctx = argumentResolver.resolve(
+                                game, game.getPlayerWW(player.getUniqueId()).orElse(null),
+                                MessageSender.forPlayer(game, player),
+                                iCommandAdminCommandWrapper.getMetaDatas().args(), args);
+                        if (ctx.isPresent()) {
+                            ((IParameterizedCommand) cmd).execute(game, player, ctx.get());
+                            found.set(true);
+                        }
+                    } else {
+                        cmd.execute(game, player, args);
+                        found.set(true);
+                    }
                 });
 
         if (!found.get() && game.getModerationManager().isStaff(player.getUniqueId())) {
@@ -171,7 +188,15 @@ public class Admin implements TabExecutor {
         WereWolfAPI game = main.getWereWolfAPI();
 
         if (args.length > 1) {
-            return null;
+            final String subName = args[0];
+            final String partial = args[args.length - 1];
+            final int paramIndex = args.length - 2;
+            for (Wrapper<ICommand, AdminCommand> w : main.getRegisterManager().getAdminCommandsRegister()) {
+                if (game.translate(w.getMetaDatas().key()).equalsIgnoreCase(subName)) {
+                    return argumentResolver.complete(game, w.getMetaDatas().args(), paramIndex, partial);
+                }
+            }
+            return Collections.emptyList();
         }
 
         return main.getRegisterManager().getAdminCommandsRegister().stream()

@@ -1,9 +1,13 @@
 package fr.ph1lou.werewolfplugin.commands.roles.lovers;
 
+import fr.ph1lou.werewolfapi.annotations.IntArg;
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommand;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -25,11 +29,15 @@ import java.util.stream.Collectors;
 @PlayerCommand(key = "werewolf.lovers.lover.command", descriptionKey = "",
         argNumbers = {1, 2},
         statesGame = StateGame.GAME,
-        statesPlayer = StatePlayer.ALIVE)
-public class CommandLovers implements ICommand {
+        statesPlayer = StatePlayer.ALIVE,
+        args = @Params(
+                integers = @IntArg(index = 0),
+                players = @PlayerArg(index = 1, states = { StatePlayer.ALIVE },
+                        excludeSelf = true, required = false)))
+public class CommandLovers implements IParameterizedCommand {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, CommandContext ctx) {
 
         String playerName = player.getName();
         UUID uuid = player.getUniqueId();
@@ -42,14 +50,7 @@ public class CommandLovers implements ICommand {
             return;
         }
 
-        int heart;
-
-        try {
-            heart = Integer.parseInt(args[0]);
-        } catch (NumberFormatException ignored) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.number_required");
-            return;
-        }
+        int heart = ctx.intValue(0);
 
         if (heart >= 100) {
             playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.lovers.lover.100");
@@ -60,7 +61,7 @@ public class CommandLovers implements ICommand {
             return;
         }
 
-        if (args.length == 1) {
+        if (ctx.args().length == 1) {
 
             List<ILover> lovers = playerWW.getLovers().stream()
                     .filter(loverAPI1 -> !loverAPI1.isKey(LoverBase.CURSED_LOVER))
@@ -120,26 +121,8 @@ public class CommandLovers implements ICommand {
                 player.setHealth(player.getHealth() - temp.get());
             });
         } else {
-            if (args[1].equals(playerName)) {
-                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
-                return;
-            }
-            Player playerCouple = Bukkit.getPlayer(args[1]);
-
-            if (playerCouple == null) {
-                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
-                return;
-            }
-
-            UUID argUUID = playerCouple.getUniqueId();
-            IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
-
-            if (playerWW1 == null) return;
-
-            if (!playerWW1.isState(StatePlayer.ALIVE)) {
-                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
-                return;
-            }
+            IPlayerWW playerWW1 = ctx.player(1);
+            Player playerCouple = Bukkit.getPlayer(playerWW1.getUUID());
 
             double don = player.getHealth() * heart / 100f;
 

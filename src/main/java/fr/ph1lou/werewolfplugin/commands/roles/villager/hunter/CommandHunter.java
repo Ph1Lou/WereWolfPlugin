@@ -1,9 +1,12 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.hunter;
 
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.hunter.HunterShotEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -11,34 +14,19 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 @RoleCommand(key = "werewolf.roles.hunter.command",
         roleKeys = RoleBase.HUNTER,
         requiredPower = true,
         statesPlayer = StatePlayer.DEATH,
-        argNumbers = 1)
-public class CommandHunter implements ICommandRole {
+        argNumbers = 1,
+        args = @Params(players = @PlayerArg(index = 0, states = { StatePlayer.ALIVE })))
+public class CommandHunter implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
-        Player playerArg = Bukkit.getPlayer(args[0]);
-
-        if (playerArg == null) {
-            playerWW.sendMessageWithKey("werewolf.check.offline_player");
-            return;
-        }
-
-        UUID argUUID = playerArg.getUniqueId();
-        IPlayerWW targetWW = game.getPlayerWW(argUUID).orElse(null);
-
-        if (targetWW == null || !targetWW.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
-            return;
-        }
+        IPlayerWW targetWW = ctx.player(0);
 
         if (playerWW.getLastKiller().isPresent() && playerWW.getLastKiller().get().equals(targetWW)) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.hunter.invalid_target");

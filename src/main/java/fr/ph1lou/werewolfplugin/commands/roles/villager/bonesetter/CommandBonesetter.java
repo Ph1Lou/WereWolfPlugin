@@ -1,9 +1,12 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.bonesetter;
 
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.bonesetter.BonesetterChooseEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -12,14 +15,14 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfplugin.roles.villagers.Bonesetter;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 @RoleCommand(key = "werewolf.roles.bonesetter.command",
         roleKeys = RoleBase.BONESETTER,
-        argNumbers = 1)
-public class CommandBonesetter implements ICommandRole {
+        argNumbers = 1,
+        args = @Params(players = @PlayerArg(index = 0, states = { StatePlayer.ALIVE }, excludeSelf = true)))
+public class CommandBonesetter implements IParameterizedCommandRole {
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
         IRole role = playerWW.getRole();
         if (!(role instanceof Bonesetter)) {
             return;
@@ -31,23 +34,7 @@ public class CommandBonesetter implements ICommandRole {
             return;
         }
 
-        Player target = Bukkit.getPlayer(args[0]);
-        if (target == null) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
-            return;
-        }
-
-        IPlayerWW targetWW = game.getPlayerWW(target.getUniqueId()).orElse(null);
-
-        if (targetWW == null || !targetWW.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
-            return;
-        }
-
-        if (playerWW.getUUID().equals(targetWW.getUUID())) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
-            return;
-        }
+        IPlayerWW targetWW = ctx.player(0);
 
         if (bonesetter.getAlreadyUsed().contains(targetWW)) {
             playerWW.sendMessageWithKey(Prefix.RED,

@@ -1,10 +1,14 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.witch;
 
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -21,36 +25,26 @@ import java.util.UUID;
         roleKeys = RoleBase.WITCH,
         argNumbers = 1,
         requiredPower = true,
-        autoCompletion = false)
-public class CommandWitch implements ICommandRole {
+        autoCompletion = false,
+        args = @Params(players = @PlayerArg(index = 0, byUuid = true,
+                states = { StatePlayer.JUDGEMENT },
+                stateMessageKey = "werewolf.check.not_in_judgement")))
+public class CommandWitch implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
-
-        UUID uuid = playerWW.getUUID();
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
         IRole witch = playerWW.getRole();
 
-
-        if (Bukkit.getPlayer(UUID.fromString(args[0])) == null) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
-            return;
-        }
-        UUID argUUID = UUID.fromString(args[0]);
-        IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
+        IPlayerWW playerWW1 = ctx.player(0);
 
         if (playerWW1 == null) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
-        if (!game.getConfig().isConfigActive(ConfigBase.WITCH_AUTO_RESURRECTION) && argUUID.equals(uuid)) {
+        if (!game.getConfig().isConfigActive(ConfigBase.WITCH_AUTO_RESURRECTION) && playerWW.equals(playerWW1)) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
-            return;
-        }
-
-        if (!playerWW1.isState(StatePlayer.JUDGEMENT)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_in_judgement");
             return;
         }
 

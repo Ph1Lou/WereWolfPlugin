@@ -1,0 +1,1081 @@
+# Architecture du système d'annotation — WereWolfAPI / WereWolfPlugin
+
+Ce document décrit comment fonctionne le **système d'annotation** qui permet
+d'enregistrer les éléments constitutifs du jeu : rôles, scénarios, timers,
+configurations, amoureux (lovers), événements aléatoires (random events),
+commandes, modules/addons et événements de statistiques.
+
+Il couvre les deux projets :
+
+- **WereWolfAPI** (`fr.ph1lou.werewolfapi`, v1.12) — module *API pur* qui définit
+  les **contrats** : annotations, interfaces de registre, classes abstraites de
+  base. Ne contient **aucune** classe annotée concrète (à l'exception de ses
+  propres events de statistiques).
+- **WereWolfPlugin** (`fr.ph1lou.werewolfplugin`, v1.13.1) — plugin
+  Minecraft (Spigot/Paper 1.21.4, Java 8) qui **implémente** l'API : il fournit
+  toutes les classes annotées concrètes (rôles, scénarios, etc.), le **scanning**
+  du classpath et l'implémentation du registre.
+
+> Le plugin ne définit **aucune** annotation : il **consomme** uniquement celles
+> de l'API. Le système d'annotation vit donc dans l'API ; son exécution (scan,
+> registre, instanciation) vit dans le plugin.
+
+---
+
+## 1. Vue d'ensemble — les 3 couches
+
+Le système repose sur trois couches distinctes :
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  COUCHE 1 — DÉCLARATION (WereWolfAPI)                                   │
+│  fr.ph1lou.werewolfapi.annotations                                      │
+│  22 annotations @Retention(RUNTIME) : @Role, @Scenario, @Timer,         │
+│  @Configuration, @ConfigurationBasic, @IntValue, @Lover, @RandomEvent,  │
+│  @AdminCommand, @PlayerCommand, @RoleCommand, @ModuleWerewolf, ...      │
+└─────────────────────────────────────────────────────────────────────────┘
+                                   │
+                                   │ posées sur des classes concrètes
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  COUCHE 2 — ENREGISTREMENT (WereWolfPlugin)                             │
+│  Register.java  +  ReflectionUtils.java                                 │
+│  Au démarrage (Main.onEnable) : scan de tous les jars Bukkit annotés    │
+│  @ModuleWerewolf, lecture des .class via JarFile, introspection,        │
+│  stockage dans Set<Wrapper<Classe, Annotation>> indexés par type.       │
+└─────────────────────────────────────────────────────────────────────────┘
+                                   │
+                                   │ accès via GetWereWolfAPI.getRegisterManager()
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  COUCHE 3 — RUNTIME (WereWolfPlugin)                                    │
+│  Instanciation + lecture réflexive au moment voulu :                    │
+│   • ListenersManager   → scenarios / timers / configs / random events    │
+│   • RoleDuration       → rôles (assignation aux joueurs)                 │
+│   • Admin / Command    → commandes admin / joueur / rôle                 │
+│   • GameTask           → décrément des timers + fire des events onZero   │
+│   • StatisticsEvents   → lecture des @Statistics* sur les events reçus   │
+│   • StorageConfiguration → valeurs par défaut des timers/configs/IntVals │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+L'usage intensif de la réflexion est masqué derrière le conteneur
+`Wrapper<T, U>` et l'interface `IRegisterManager`, ce qui permet à un **addon
+tiers** de définir ses propres rôles/scénarios/etc. simplement en annotant ses
+classes dans un plugin Bukkit décoré de `@ModuleWerewolf`.
+
+---
+
+## 2. Le flux d'enregistrement au démarrage
+
+### 2.1 Point d'entrée
+
+`WereWolfPlugin/src/main/java/fr/ph1lou/werewolfplugin/Main.java` est la classe
+principale. Elle est elle-même annotée `@ModuleWerewolf` (donc le plugin
+principal se scanne lui-même comme un module) :
+
+```java
+@ModuleWerewolf(key = Main.KEY,
+        loreKeys = "werewolf.description_plugin",
+        item = UniversalMaterial.ANVIL,
+        defaultLanguage = "fr_FR",
+        authors = @Author(uuid = "056be797-2a0b-4807-9af5-37faf5384396", name = "Ph1Lou"))
+public class Main extends JavaPlugin implements GetWereWolfAPI { ... }
+```
+
+Dans `onEnable()` (`Main.java:64-89`), un `scheduleSyncDelayedTask` construit
+le registre :
+
+```java
+Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+    this.registerManager = new Register(this);   // scan complet du classpath
+    ...
+});
+```
+
+Le plugin publie ensuite l'instance d'API dans le `ServicesManager` Bukkit
+(`Main.java:66-70`), ce qui permet aux addons tiers de la récupérer :
+
+```java
+Bukkit.getServicesManager().register(GetWereWolfAPI.class, this, this, ServicePriority.Normal);
+```
+
+### 2.2 Le scan — `Register.java`
+
+`WereWolfPlugin/src/main/java/fr/ph1lou/werewolfplugin/Register.java` (~470 lignes)
+est la classe centrale de l'enregistrement. Elle implémente l'interface
+`IRegisterManager` de l'API.
+
+**Étape 1 — `scanPlugins(Main)` (L59-97)** : itère sur **tous les plugins
+Bukkit chargés** (`Bukkit.getPluginManager().getPlugins()`), ne retient que
+ceux annotés `@ModuleWerewolf`. Vérifie que la `key` ne commence pas par
+`werewolf.` (préfixe réservé au plugin officiel) et que le préfixe avant le `.`
+est unique entre modules.
+
+**Étape 2 — `register(packageName, moduleWerewolf, plugin, prefix)` (L103-295)** :
+appelle `ReflectionUtils.findAllClasses(plugin, packageName)` puis, pour chaque
+classe, applique cet enchaînement (`if/else if`) :
+
+```java
+if (clazz.getAnnotation(DisableAutoLoad.class) != null) { return; }      // opt-out
+
+if (clazz.getAnnotation(Role.class) != null && IRole.class.isAssignableFrom(clazz))
+    this.roles.add(new Wrapper<>((Class<IRole>) clazz, role, addon.key()));
+else if (clazz.getAnnotation(Scenario.class) != null && ListenerWerewolf.class.isAssignableFrom(clazz))
+    this.scenarios.add(...);
+else if (clazz.getAnnotation(RandomEvent.class) != null) ...
+else if (clazz.getAnnotation(Configuration.class) != null) ...
+else if (clazz.getAnnotation(Timer.class) != null) ...
+else if (clazz.getAnnotation(PlayerCommand.class) != null) ...
+else if (clazz.getAnnotation(RoleCommand.class) != null) ...
+else if (clazz.getAnnotation(AdminCommand.class) != null) ...
+else if (clazz.getAnnotation(Lover.class) != null) ...
+else if (clazz.getAnnotation(StatisticsEvent.class) != null) ...
+```
+
+**Deux conditions obligatoires** pour qu'une classe soit enregistrée :
+
+1. la `key` (ou `config().key()`) commence par le **préfixe du module** (sinon
+   warning + skip) ;
+2. la classe **implémente/étend le type attendu** (ex. `IRole` pour `@Role`,
+   `ListenerWerewolf` pour `@Scenario`, `Event` pour `@StatisticsEvent`).
+   Sinon : warning + skip.
+
+Le résultat est stocké dans dix `Set<Wrapper<T, Annotation>>` (un par type,
+déclarés L41-52) puis exposés via `IRegisterManager`.
+
+> Particularité : pour le plugin principal, le package `fr.ph1lou.werewolfapi`
+> est **aussi** scanné en plus du package du plugin (L89-94), afin que l'API
+> puisse enregistrer ses propres events de statistiques.
+
+### 2.3 Le scan de jar — `ReflectionUtils.java`
+
+`WereWolfPlugin/src/main/java/fr/ph1lou/werewolfplugin/utils/ReflectionUtils.java`
+
+**Aucune librairie tierce** (pas de Reflections, ClassGraph, ASM…). Le scan lit
+directement le jar via `java.util.jar.JarFile` :
+
+```java
+URL jarUrl = plugin.getClass().getProtectionDomain().getCodeSource().getLocation();
+JarURLConnection jarConnection = (JarURLConnection)
+        new URL("jar", "", "file:" + jarUrl.getPath() + "!/").openConnection();
+try (JarFile jarFile = jarConnection.getJarFile()) {
+    for (JarEntry entry : Collections.list(jarFile.entries())) {
+        if (name.endsWith(".class") && name.startsWith(path)) {
+            classes.add(Class.forName(className, false, plugin.getClass().getClassLoader()));
+        }
+    }
+}
+```
+
+`Class.forName(..., /*initialize=*/ false, ...)` : l'initialisation statique
+des classes scannées est **différée** jusqu'à leur instanciation effective.
+
+---
+
+## 3. Le registre — `IRegisterManager` & `Wrapper`
+
+### 3.1 Le conteneur `Wrapper<T, U>`
+
+`WereWolfAPI/src/main/java/fr/ph1lou/werewolfapi/utils/Wrapper.java`
+
+Paire immutable `(Class<T> clazz, U annotation, String addonKey)` :
+
+| Getter | Renvoie |
+|---|---|
+| `getClazz()` | la classe concrète annotée (à instancier par réflexion) |
+| `getMetaDatas()` | l'annotation (métadonnées déclarées : key, valeurs par défaut, etc.) |
+| `getAddonKey()` | la clé du module/addon propriétaire |
+
+### 3.2 L'interface `IRegisterManager`
+
+`WereWolfAPI/src/main/java/fr/ph1lou/werewolfapi/registers/IRegisterManager.java`
+
+C'est le **contrat central** du registre. Chaque genre d'élément expose un
+`Set<Wrapper<TypeConcret, TypeAnnotation>>` :
+
+| Méthode | Type retourné | Annotation |
+|---|---|---|
+| `getRolesRegister()` | `Set<Wrapper<IRole, Role>>` | `@Role` |
+| `getLoversRegister()` | `Set<Wrapper<ILover, Lover>>` | `@Lover` |
+| `getScenariosRegister()` | `Set<Wrapper<ListenerWerewolf, Scenario>>` | `@Scenario` |
+| `getConfigsRegister()` | `Set<Wrapper<?, Configuration>>` | `@Configuration` |
+| `getTimersRegister()` | `Set<Wrapper<?, Timer>>` | `@Timer` |
+| `getPlayerCommandsRegister()` | `Set<Wrapper<ICommand, PlayerCommand>>` | `@PlayerCommand` |
+| `getRoleCommandsRegister()` | `Set<Wrapper<ICommandRole, RoleCommand>>` | `@RoleCommand` |
+| `getAdminCommandsRegister()` | `Set<Wrapper<ICommand, AdminCommand>>` | `@AdminCommand` |
+| `getModulesRegister()` | `Set<Wrapper<JavaPlugin, ModuleWerewolf>>` | `@ModuleWerewolf` |
+| `getRandomEventsRegister()` | `Set<Wrapper<ListenerWerewolf, RandomEvent>>` | `@RandomEvent` |
+| `getEventsClass()` | `Set<Wrapper<Event, StatisticsEvent>>` | `@StatisticsEvent` |
+
+### 3.3 Accès au registre
+
+Depuis n'importe quel addon tiers :
+
+```java
+GetWereWolfAPI api = Bukkit.getServer().getServicesManager().load(GetWereWolfAPI.class);
+IRegisterManager registry = api.getRegisterManager();
+Set<Wrapper<IRole, Role>> roles = registry.getRolesRegister();
+```
+
+`GetWereWolfAPI` (`WereWolfAPI/.../GetWereWolfAPI.java:16`) est l'interface
+implémentée par `Main`, obtenue via `BukkitUtils.loadAPI()`
+(`WereWolfAPI/.../utils/BukkitUtils.java:22`).
+
+---
+
+## 4. Les annotations — référence exhaustive
+
+Toutes définies dans `WereWolfAPI/src/main/java/fr/ph1lou/werewolfapi/annotations/`
+(sous-package `statistics/` pour les 6 dernières). Sauf mention contraire :
+`@Retention(RUNTIME)` et `@Target(TYPE)`.
+
+### 4.1 Annotations d'enregistrement d'éléments de jeu
+
+#### `@Role` — `annotations/Role.java:14`
+
+```java
+public @interface Role {
+    String key();                              // obligatoire (clé i18n)
+    String[] loreKey() default {};
+    Category category();                       // WEREWOLF | VILLAGER | NEUTRAL
+    RoleAttribute attribute();                 // VILLAGER | MINOR_INFORMATION | INFORMATION | WEREWOLF | HYBRID | NEUTRAL
+    float weight() default 1;
+    boolean requireDouble() default false;
+    String[] requireRoles() default {};
+    String[] incompatibleRoles() default {};
+    IntValue[] configValues() default {};      // configs entières propres au rôle
+    Configuration[] configurations() default {}; // configs booléennes propres au rôle
+    Timer[] timers() default {};               // timers propres au rôle
+    String auraDescriptionSpecialUseCase() default "";
+    Aura defaultAura() default Aura.LIGHT;     // LIGHT | NEUTRAL | DARK
+    int powerModifier() default 0;
+    int sharpnessIronModifier() default 0;
+    int sharpnessDiamondModifier() default 0;
+    int protectionIronModifier() default 0;
+    int protectionDiamondModifier() default 0;
+}
+```
+
+> `@Role` peut **imbriquer** ses propres `@IntValue`/`@Configuration`/`@Timer` :
+> un rôle est donc *self-contained*.
+
+#### `@Scenario` — `annotations/Scenario.java:10`
+
+```java
+public @interface Scenario {
+    String key();
+    String[] loreKey() default {};
+    boolean defaultValue() default false;
+    boolean meetUpValue() default false;
+    String[] incompatibleScenarios() default {};
+    IntValue[] configValues() default {};
+    Configuration[] configurations() default {};
+    Timer[] timers() default {};
+}
+```
+
+#### `@Timer` — `annotations/Timer.java:12`
+
+```java
+public @interface Timer {
+    String key();
+    int defaultValue();
+    int meetUpValue();
+    String[] loreKey() default {};
+    boolean decrementAfterRole() default false;
+    String decrementAfterTimer() default "";
+    boolean decrement() default false;
+    int step() default 5;
+    Class<? extends Event> onZero() default Event.class;   // event Bukkit fire à 0
+}
+```
+
+> `@Timer` sert à la fois d'annotation top-level (sur une classe) et de
+> **membre imbriqué** dans `@Role` / `@Scenario` / `@Configuration` /
+> `@RandomEvent` / `@Lover`.
+
+#### `@Configuration` + `@ConfigurationBasic` — `annotations/Configuration.java:10` & `ConfigurationBasic.java:10`
+
+```java
+public @interface Configuration {
+    ConfigurationBasic config();              // obligatoire
+    IntValue[] configValues() default {};
+    Timer[] timers() default {};
+    ConfigurationBasic[] configurations() default {};   // sous-configs
+}
+
+public @interface ConfigurationBasic {
+    String key();
+    String[] loreKey() default {};
+    boolean defaultValue() default false;
+    boolean meetUpValue() default false;
+    boolean appearInMenu() default true;
+    boolean appearInConfigurationList() default true;
+    String[] incompatibleConfigs() default {};
+}
+```
+
+#### `@IntValue` — `annotations/IntValue.java:12`
+
+```java
+public @interface IntValue {
+    String key();
+    int defaultValue();
+    int meetUpValue();
+    int step();
+    UniversalMaterial item();                  // icône de menu
+}
+```
+
+#### `@Lover` — `annotations/Lover.java:10`
+
+```java
+public @interface Lover {
+    String key();
+    String color();
+    String[] loreKey() default {};
+    String[] requireRoles() default {};
+    String[] incompatibleRoles() default {};
+    IntValue[] configValues() default {};
+    Configuration[] configurations() default {};
+    Timer[] timers() default {};
+}
+```
+
+#### `@RandomEvent` — `annotations/RandomEvent.java:10`
+
+```java
+public @interface RandomEvent {
+    String key();
+    String[] loreKey() default {};
+    int defaultValue() default 1;
+    int meetUpValue() default 1;
+    IntValue[] configValues() default {};
+    Timer[] timers() default {};
+    Configuration[] configurations() default {};
+}
+```
+
+#### `@ModuleWerewolf` — `annotations/ModuleWerewolf.java:12`
+
+Déclare un plugin Bukkit comme **module / addon** werewolf (c'est la racine
+nécessaire pour qu'un plugin soit scanné).
+
+```java
+public @interface ModuleWerewolf {
+    String key();
+    String[] loreKeys();
+    UniversalMaterial item();
+    String defaultLanguage();
+    Author[] authors();
+    IntValue[] configValues();
+}
+```
+
+#### `@Author` — `annotations/Author.java`
+
+Membre imbriqué de `@ModuleWerewolf` : `String uuid()`, `String name()`.
+(Pas de `@Retention`/`@Target` explicites.)
+
+#### `@DisableAutoLoad` — `annotations/DisableAutoLoad.java:10`
+
+`boolean isDisable() default true`. Opt-out : la classe annotée ne sera **pas**
+scannée/enregistrée.
+
+### 4.2 Annotations de commandes
+
+| Annotation | Fichier | Membres principaux |
+|---|---|---|
+| `@AdminCommand` | `AdminCommand.java:12` | `key`, `descriptionKey`, `statesGame`, `argNumbers`, `moderatorAccess`, `hostAccess`, `autoCompletion` |
+| `@PlayerCommand` | `PlayerCommand.java:13` | `key`, `descriptionKey`, `statesPlayer`, `statesGame`, `argNumbers`, `autoCompletion` |
+| `@RoleCommand` | `RoleCommand.java:13` | `key`, `roleKeys`, `statesPlayer`, `statesGame`, `argNumbers`, `autoCompletion`, `requiredPower`, `requiredAbilityEnabled` |
+
+### 4.3 Marqueurs d'events (annotations vides)
+
+| Annotation | Fichier | Rôle |
+|---|---|---|
+| `@SpyEvent` | `SpyEvent.java:11` | Marque un event éligible au replay du rôle Spy → déclenche `SpyInfoEvent` |
+| `@TellableStoryEvent` | `TellableStoryEvent.java:11` | Marque un event éligible au StoryTeller → déclenche `ActionableStoryEvent` |
+
+### 4.4 Annotations de statistiques (package `annotations/statistics/`)
+
+Toutes `@Retention(RUNTIME)`, cibles `METHOD` (sauf `@StatisticsEvent` qui vise `TYPE`).
+Posées sur des **méthodes** de classes d'event Bukkit.
+
+| Annotation | Cible | Rôle |
+|---|---|---|
+| `@StatisticsEvent` | TYPE | `String key()` — clé de l'event pour les stats |
+| `@StatisticsPlayer` | METHOD | getter renvoyant l'`IPlayerWW` acteur (1 max/classe) |
+| `@StatisticsTarget` | METHOD | getter renvoyant un `IPlayerWW` cible unique |
+| `@StatisticsTargets` | METHOD | getter renvoyant un `Set<IPlayerWW>` de cibles (exclusif avec la précédente) |
+| `@StatisticsExtraInfo` | METHOD | getter renvoyant un `String` complémentaire |
+| `@StatisticsExtraInt` | METHOD | getter renvoyant un `int` complémentaire |
+
+---
+
+## 5. Détail par type d'élément enregistré
+
+### 5.1 Rôles — `@Role`
+
+**Hiérarchie** (côté API) : `IRole` → `RoleImpl` (abstraite) →
+`RoleWereWolf` / `RoleNeutral` (abstraites) → **classe concrète du plugin**.
+
+**Localisation** :
+`WereWolfPlugin/src/main/java/fr/ph1lou/werewolfplugin/roles/` avec sous-dossiers
+`werewolfs/`, `villagers/`, `neutrals/`, `lovers/`, `specials/`.
+
+**Exemple simple** — `roles/werewolfs/WereWolf.java:15` :
+
+```java
+@Role(key = RoleBase.WEREWOLF,
+        defaultAura = Aura.DARK,
+        category = Category.WEREWOLF,
+        attribute = RoleAttribute.WEREWOLF)
+public class WereWolf extends RoleWereWolf { ... }
+```
+
+**Exemple avec configs imbriquées** — `roles/villagers/Seer.java:30` :
+
+```java
+@Role(key = RoleBase.SEER,
+        category = Category.VILLAGER,
+        attribute = RoleAttribute.INFORMATION,
+        configurations = {
+            @Configuration(config = @ConfigurationBasic(key = ConfigBase.SEER_EVERY_OTHER_DAY)),
+            @Configuration(config = @ConfigurationBasic(key = ConfigBase.CHATTY_SEER))
+        })
+public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedPlayers { ... }
+```
+
+**Exemple avec timer + IntValue imbriqués** — `roles/villagers/Poacher.java:40` :
+
+```java
+@Role(key = RoleBase.POACHER, category = Category.VILLAGER,
+        defaultAura = Aura.NEUTRAL,
+        attribute = RoleAttribute.VILLAGER,
+        timers = { @Timer(key = TimerBase.POACHER_PROGRESS, defaultValue = 10, meetUpValue = 10) },
+        configValues = {
+            @IntValue(key = IntValueBase.POACHER_DISTANCE, defaultValue = 10,
+                      meetUpValue = 10, step = 1, item = UniversalMaterial.ARROW)
+        })
+public class Poacher extends ... { ... }
+```
+
+**Lecture réflexive (côté API)** — `RoleImpl` relit l'annotation sur
+`this.getClass()` :
+
+- `getKey()` (`role/impl/RoleImpl.java:87`) :
+  ```java
+  Role role = this.getClass().getAnnotation(Role.class);
+  if (role == null) {
+      Bukkit.getLogger().severe("The class " + this.getClass().getName()
+          + " has not been annotated by the role annotation");
+      return this.getClass().getName();
+  }
+  return role.key();
+  ```
+- `getDefaultAura()` (`role/impl/RoleImpl.java:263`) : `role.defaultAura()`.
+- `DescriptionBuilder` (`role/utils/DescriptionBuilder.java:72`) lit
+  `powerModifier`, `sharpnessIron/DiamondModifier`, `protectionIron/DiamondModifier`.
+
+**Instanciation (côté plugin)** — `timers/RoleDuration.java:99` (assignation
+des rôles aux joueurs au début de partie) : constructeur réflexif
+`(WereWolfAPI, IPlayerWW)` :
+
+```java
+role = roleRegister.getClazz()
+        .getConstructor(WereWolfAPI.class, IPlayerWW.class)
+        .newInstance(game, playerWW);
+BukkitUtils.registerListener(role);
+playerWW.setRole(role);
+```
+
+> ⚠️ **Convention de constructeur** : toute classe de rôle doit exposer un
+> constructeur public `(WereWolfAPI game, IPlayerWW playerWW)`.
+
+### 5.2 Scénarios — `@Scenario`
+
+**Localisation** : `WereWolfPlugin/.../werewolfplugin/scenarios/` (~30 classes).
+Une classe de scénario étend `ListenerWerewolf`.
+
+**Exemple simple** — `scenarios/CutClean.java:21` :
+
+```java
+@Scenario(key = ScenarioBase.CUT_CLEAN, defaultValue = true, meetUpValue = true)
+public class CutClean extends ListenerWerewolf { ... }
+```
+
+**Avec IntValue imbriquée** — `scenarios/DiamondLimit.java:23` :
+
+```java
+@Scenario(key = ScenarioBase.DIAMOND_LIMIT, defaultValue = true,
+        configValues = @IntValue(key = IntValueBase.DIAMOND_LIMIT, defaultValue = 17,
+                meetUpValue = 0, step = 1, item = UniversalMaterial.DIAMOND))
+public class DiamondLimit extends ListenerWerewolf { ... }
+```
+
+### 5.3 Timers — `@Timer`
+
+**Localisation** : `WereWolfPlugin/.../werewolfplugin/timers/` (10 classes :
+`Pvp`, `Invulnerability`, `DayDuration`, `RoleDuration`, `BorderBegin`,
+`DiggingEnd`, `WerewolfList`, `AutoStartDuration`, `PowerDuration`, `LoverDuration`).
+
+**Exemple** — `timers/Pvp.java:13` :
+
+```java
+@Timer(key = TimerBase.PVP,
+        defaultValue = 25 * 60,
+        meetUpValue = 3 * 60,
+        decrement = true,
+        onZero = PVPEvent.class)
+public class Pvp extends ListenerWerewolf { ... }
+```
+
+Le membre `onZero` désigne la classe d'`Event` Bukkit qui sera **instanciée par
+réflexion et déclenchée** quand le timer atteint 0 (voir §6.4).
+
+### 5.4 Configurations — `@Configuration` / `@ConfigurationBasic` / `@IntValue`
+
+**Localisation** : `WereWolfPlugin/.../werewolfplugin/configs/` (~21 classes).
+
+Trois usages distincts :
+
+- **Config booléenne top-level** (classe souvent vide) — `configs/HideComposition.java:7` :
+  ```java
+  @Configuration(config = @ConfigurationBasic(key = ConfigBase.HIDE_COMPOSITION))
+  public class HideComposition { }
+  ```
+- **Config booléenne avec timer imbriqué** — `configs/LoneWolf.java:22` :
+  ```java
+  @Configuration(config = @ConfigurationBasic(key = ConfigBase.LONE_WOLF),
+        timers = @Timer(key = TimerBase.LONE_WOLF_DURATION,
+                        defaultValue = 60 * 60, meetUpValue = 20 * 60))
+  public class LoneWolf extends ListenerWerewolf { ... }
+  ```
+- **Valeur entière** (`@IntValue`) : généralement **imbriquée** dans un `@Role`,
+  `@Scenario`, etc. plutôt que top-level (voir Poacher/DiamondLimit ci-dessus).
+
+### 5.5 Amoureux (lovers) — `@Lover`
+
+**Localisation** : `WereWolfPlugin/.../werewolfplugin/roles/lovers/`.
+
+```java
+@Lover(key = LoverBase.LOVER, color = LoverImpl.COLOR)
+public class LoverImpl extends AbstractLover { ... }
+```
+
+Lecture réflexive (côté API) dans `lovers/impl/LoverBaseImpl.java` :
+`getKey()` (L14) et `getColor()` (L27) utilisent
+`getClass().getAnnotation(Lover.class)`.
+
+### 5.6 Événements aléatoires — `@RandomEvent`
+
+**Localisation** : `WereWolfPlugin/.../werewolfplugin/random_events/` (`GodMiracle`,
+`Putrefaction`, `BearingRitual`, `Rumors`, `Swap`, `Triple`, `WolfFleas`,
+`Infection`, `Exposed`, `Discord`, `NotAllWereWolfs`).
+
+```java
+@RandomEvent(key = EventBase.GOD_MIRACLE,
+             loreKey = "werewolf.random_events.god_miracle.description")
+public class GodMiracle extends ListenerWerewolf { ... }
+```
+
+### 5.7 Commandes — `@AdminCommand` / `@PlayerCommand` / `@RoleCommand`
+
+| Type | Dossier | Interface | Exemple |
+|---|---|---|---|
+| Admin | `commands/admin/ingame/`, `commands/admin/` | `ICommand` | `CommandRevive` (L19) |
+| Joueur | `commands/utilities/` | `ICommand` | `CommandRank` (L14) |
+| Rôle | `commands/roles/<camp>/<rôle>/` | `ICommandRole` | `CommandHunter` (L18) |
+
+```java
+// Admin
+@AdminCommand(key = "werewolf.commands.admin.revive.command",
+        descriptionKey = "werewolf.commands.admin.revive.description",
+        statesGame = StateGame.GAME, argNumbers = 1)
+public class CommandRevive implements ICommand { ... }
+
+// Joueur
+@PlayerCommand(key = "werewolf.commands.player.rank.command",
+        descriptionKey = "werewolf.commands.player.rank.description",
+        statesGame = StateGame.LOBBY, argNumbers = 0)
+public class CommandRank implements ICommand { ... }
+
+// Rôle
+@RoleCommand(key = "werewolf.roles.hunter.command",
+        roleKeys = RoleBase.HUNTER, requiredPower = true,
+        statesPlayer = StatePlayer.DEATH, argNumbers = 1)
+public class CommandHunter implements ICommandRole { ... }
+```
+
+### 5.8 Modules / addons — `@ModuleWerewolf`
+
+Annotation **racine obligatoire** sur la classe principale (`JavaPlugin`) de
+tout module. Voir §2.1 pour le plugin officiel ; un addon tiers suit exactement
+la même convention (voir §8).
+
+### 5.9 Événements de statistiques — `@StatisticsEvent` + marqueurs
+
+**Localisation** : côté API, `WereWolfAPI/.../werewolfapi/events/**`.
+
+```java
+@StatisticsEvent(key = "werewolf.designed_lover")
+public class CupidLoversEvent extends Event {
+    @StatisticsPlayer
+    public IPlayerWW getPlayerWW() { return playerWW; }
+
+    @StatisticsTargets
+    public Set<IPlayerWW> getPlayerWWS() { return playerWWS; }
+}
+```
+
+Marqueurs simples : `@SpyEvent` (ex. `events/roles/bear_trainer/GrowlEvent.java:16`)
+et `@TellableStoryEvent` (ex. `events/roles/angel/RegenerationEvent.java:11`).
+
+---
+
+## 6. Couche runtime — instanciation & lecture réflexive
+
+### 6.1 `ListenersManager` — scenarios / timers / configs / random events
+
+`WereWolfPlugin/src/main/java/fr/ph1lou/werewolfplugin/game/ListenersManager.java`
+
+Le constructeur (L44-86) instancie par réflexion (constructeur `(WereWolfAPI)`)
+toutes les classes des registres timers / random events / scenarios / configs
+et les indexe par clé dans des maps. Les **timers** sont enregistrés d'office
+(`register(true)`), les autres sont activés plus tard selon la configuration.
+
+`instantiate(Class<?>)` (L120-130) :
+
+```java
+return Optional.of((ListenerWerewolf)
+        clazz.getConstructor(WereWolfAPI.class).newInstance(game));
+```
+
+> ⚠️ **Convention de constructeur** : toute classe de scenario / timer / config /
+> random event doit exposer un constructeur public `(WereWolfAPI game)`.
+
+**Activation dynamique** — `updateListeners()` (L153-173) active/désactive les
+listeners selon l'état courant lu dans `StorageConfiguration` :
+
+```java
+listenerWerewolf.register(game.getConfig().isScenarioActive(
+        scenarioRegister.getMetaDatas().key()));
+```
+
+C'est ce qui fait qu'un scenario désactivé ne reçoit plus les events Bukkit.
+`ListenerWerewolf.register(boolean)`
+(`WereWolfAPI/.../listeners/impl/ListenerWerewolf.java:29`)
+wrappe `BukkitUtils.registerListener(this)` / `HandlerList.unregisterAll(this)`.
+
+### 6.2 `RoleDuration` — rôles
+
+Voir §5.1. Constructeur réflexif `(WereWolfAPI, IPlayerWW)`.
+
+### 6.3 `Admin` / `Command` — commandes
+
+- `commands/Admin.java` (L37-58) : instancie chaque `@AdminCommand` par
+  **constructeur par défaut** et les range dans une `Map<String, ICommand>`.
+- `commands/Command.java` (L41-67) : idem pour `@PlayerCommand` et
+  `@RoleCommand`. Dispatch dans `execute(...)`.
+
+> ⚠️ **Convention de constructeur** : toute classe de commande doit exposer un
+> constructeur public **sans argument**.
+
+### 6.4 `GameTask` — décrément des timers & events `onZero`
+
+`WereWolfPlugin/.../tasks/GameTask.java` (L139-176)
+
+À chaque tick (1 tick = 1 seconde de jeu), tous les timers connus sont
+rassemblés — top-level **et imbriqués** dans `@Configuration`, `@Role`,
+`@RandomEvent`, `@Scenario`. Pour chaque timer dont `decrement()` /
+`decrementAfterRole()` / `decrementAfterTimer()` est actif :
+
+- si la valeur atteint 0 → instanciation par réflexion de l'event déclaré dans
+  `onZero` puis `Bukkit.getPluginManager().callEvent(...)` :
+  ```java
+  timerRegister.onZero().getConstructor().newInstance()   // event Bukkit fire
+  ```
+- décrément via `((Configuration) game.getConfig()).decreaseTimer(...)`.
+
+Exemple : à la fin du timer `PVP`, `PVPEvent` est déclenchée, ce qui active le
+PVP dans le monde via le listener associé.
+
+### 6.5 `StatisticsEvents` — lecture des `@Statistics*`
+
+`WereWolfPlugin/.../statistiks/StatisticsEvents.java` (L48-128)
+
+Enregistre dynamiquement un listener Bukkit pour chaque classe annotée
+`@StatisticsEvent`. Pour chaque event reçu, lit par réflexion les méthodes
+marquées `@StatisticsPlayer`, `@StatisticsTargets`/`@StatisticsTarget`,
+`@StatisticsExtraInfo`, `@StatisticsExtraInt`, et détecte les marqueurs
+`@TellableStoryEvent` / `@SpyEvent` (L98-99) pour déclencher les events dérivés
+(`ActionableStoryEvent`, `SpyInfoEvent`). Le résultat est sérialisé via
+`RegisteredAction` (`WereWolfAPI/.../statistics/impl/RegisteredAction.java`).
+
+### 6.6 `StorageConfiguration` — valeurs par défaut des timers/configs/IntValues
+
+`WereWolfPlugin/.../game/StorageConfiguration.java` (implémente
+`IStorageConfiguration`).
+
+Holder de maps (`timerValues`, `configValues`, `scenarioValues`, `values`,
+`randomEventsValues`, `roleCount`, `loverCount`).
+
+**Comportement clé** : quand une clé n'est pas dans la map (l'hôte n'a rien
+personnalisé), `StorageConfiguration` interroge `Register.get()` pour récupérer
+la **valeur par défaut déclarée dans l'annotation**, en respectant le mode
+`meetUp` (L317-322) :
+
+```java
+private <T> T getDefaultValue(T value, T meetupValue) {
+    if (game.getConfig().isMeetUp()) return meetupValue;
+    return value;
+}
+```
+
+Les recherches balaient **tous les registres**, y compris les valeurs
+**imbriquées** :
+
+- `getTimerValue(key)` (L151-195) → `timersRegister` puis `.timers()` de
+  `rolesRegister`, `randomEventsRegister`, `loversRegister`, `configsRegister`,
+  `scenariosRegister`.
+- `isConfigActive(key)` (L198-252) → `.configurations()` de tous les registres.
+- `getValue(key)` (L266-311) → `.configValues()` de tous les registres, y
+  compris `modulesRegister`.
+
+> Conséquence : un `@IntValue` imbriqué dans un `@Role` est automatiquement
+> accessible via `game.getConfig().getValue(IntValueBase.POACHER_DISTANCE)` —
+> **aucun enregistrement supplémentaire n'est nécessaire**, le simple fait de
+> déclarer l'annotation suffit.
+
+---
+
+## 7. Imbrication des annotations
+
+La structure est hiérarchique : les annotations `@Role`, `@Scenario`,
+`@RandomEvent`, `@Lover` et `@Configuration` acceptent toutes les membres
+`IntValue[] configValues()`, `Timer[] timers()`, `Configuration[] configurations()`
+(`@Configuration` ayant en plus un membre obligatoire `config()` vers une
+`@ConfigurationBasic`). `@Timer` référence une `Class<? extends Event>` via
+`onZero`.
+
+```
+@Role / @Scenario / @RandomEvent / @Lover
+   ├── IntValue[]      configValues      (valeur entière, ex. distance, taux)
+   ├── Timer[]         timers            (timer propre à l'élément)
+   └── Configuration[] configurations    (config booléenne)
+                          └── @ConfigurationBasic
+
+@Configuration
+   ├── ConfigurationBasic config         (obligatoire)
+   ├── IntValue[]      configValues
+   ├── Timer[]         timers
+   └── ConfigurationBasic[] configurations
+
+@Timer
+   └── Class<? extends Event> onZero      (event fire à 0)
+```
+
+Cette imbrication est **entièrement résolue à l'exécution** par
+`StorageConfiguration` et `GameTask` (cf. §6.4 et §6.6).
+
+---
+
+## 8. Créer un nouvel élément — guides pratiques
+
+### 8.1 Ajouter un rôle
+
+1. Créer une classe dans `roles/<camp>/` qui étend `RoleWereWolf`, `RoleNeutral`
+   ou directement `RoleImpl`.
+2. Exposer un **constructeur public `(WereWolfAPI, IPlayerWW)`**.
+3. Annoter avec `@Role(key = RoleBase.VOTRE_ROLE, category = ..., attribute = ...)`.
+4. Ajouter la constante de clé i18n dans `RoleBase` et la traduction dans les
+   fichiers de langue.
+5. Les configs/timers/IntValues propres au rôle peuvent être déclarés
+   directement dans l'annotation (imbrication) — aucune autre inscription.
+
+### 8.2 Ajouter un scénario
+
+1. Créer une classe dans `scenarios/` qui étend `ListenerWerewolf`.
+2. Exposer un **constructeur public `(WereWolfAPI)`**.
+3. Annoter avec `@Scenario(key = ScenarioBase.VOTRE_SCENARIO, defaultValue = ...)`.
+4. Implémenter les handlers d'events Bukkit voulus.
+
+### 8.3 Ajouter un timer
+
+1. Créer une classe dans `timers/` qui étend `ListenerWerewolf`.
+2. Exposer un **constructeur public `(WereWolfAPI)`**.
+3. Annoter avec `@Timer(key = ..., defaultValue = ..., meetUpValue = ...,
+   decrement = true, onZero = VotreEvent.class)`.
+4. Créer la classe d'`Event` Bukkit référencée par `onZero` (déclenchée à 0).
+
+### 8.4 Ajouter une configuration
+
+- **Booléenne** : classe annotée `@Configuration(config = @ConfigurationBasic(key = ...))`.
+  Peut être une classe vide si elle ne porte aucun listener, sinon étendre
+  `ListenerWerewolf` avec un constructeur `(WereWolfAPI)`.
+- **Entière** : imbriquer un `@IntValue(...)` dans l'annotation de l'élément
+  auquel elle se rattache (rôle, scénario, config). Pas de classe dédiée.
+
+### 8.5 Créer un addon tiers (nouveau module)
+
+1. Créer un plugin Bukkit dépendant de `werewolfapi` (v1.12).
+2. Annoter la classe principale avec `@ModuleWerewolf(key = "votreprefixe....",
+   item = ..., defaultLanguage = ..., authors = @Author(...))`.
+3. La `key` **ne doit pas** commencer par `werewolf.` (réservé) et son préfixe
+   (avant le premier `.`) doit être **unique** parmi les modules chargés.
+4. Déposer les classes annotées dans le package du plugin ; au démarrage, le
+   `Register` du plugin officiel scannera automatiquement le jar de l'addon et
+   enregistrera ses rôles/scénarios/etc. au même titre que ceux du cœur.
+5. Récupérer l'API si besoin via
+   `Bukkit.getServicesManager().load(GetWereWolfAPI.class)`.
+
+> Opt-out : annoter une classe avec `@DisableAutoLoad` pour qu'elle ne soit pas
+> chargée réflexivement par le module.
+
+---
+
+## 9. Conventions & pièges
+
+| Règle | Détail |
+|---|---|
+| **Préfixe de clé** | Toute `key` doit commencer par le préfixe du module propriétaire ; `werewolf.` est réservé au plugin officiel. |
+| **Unicité du préfixe** | Le préfixe (avant le premier `.`) d'un `@ModuleWerewolf` doit être unique entre modules. |
+| **Constructeur attendu** | Rôles : `(WereWolfAPI, IPlayerWW)` — Scenario/Timer/Config/RandomEvent : `(WereWolfAPI)` — Commandes : sans argument. |
+| **Type attendu** | La classe annotée doit implémenter/étendre le bon type (`IRole`, `ListenerWerewolf`, `Event`, `ICommand`…), sinon skip silencieux + warning. |
+| **Rétention** | Toutes les annotations sont `RUNTIME` (sauf `@Author` sans rétention explicite). |
+| **Initialisation statique différée** | Les classes sont chargées via `Class.forName(..., false, ...)` ; les blocs `static` ne tournent qu'à l'instanciation. |
+| **Aucune lib de scan** | Le scanning repose uniquement sur `java.util.jar.JarFile` (maison). |
+
+---
+
+## 10. Système d'annotation de paramètres de commandes
+
+Le dispatcher valide déjà au niveau **classe** (avant `execute`) les contraintes de
+haut niveau : `statesGame`, `argNumbers`, `statesPlayer` (joueur exécutant),
+permissions, `roleKeys`, `requiredPower`, `requiredAbilityEnabled` (cf. §2.2 et §6.3).
+Mais la **résolution des arguments d'entrée** (joueur cible, entier…) était refaite
+manuellement dans chaque `execute()` — un bloc « `Bukkit.getPlayer` → check null →
+`getPlayerWW` → check null → `isState` → message » répété ~40 fois. Le système
+ci-dessous élimine cette répétition : les paramètres sont **déclarés** via une
+annotation, **validés et résolus** par le dispatcher, puis passés dans un
+`CommandContext`. **Approche additive** : l'ancienne signature et le chemin hérité
+restent fonctionnels (API publique et addons préservés).
+
+### 10.1 Types introduits
+
+**API** — `fr.ph1lou.werewolfapi` :
+
+- `annotations/Params.java` — conteneur des paramètres d'entrée (membre `args()` des
+  annotations de commande) ; regroupe 6 tableaux typés : `players`, `bukkitPlayers`,
+  `integers`, `strings`, `enums`, `choices`.
+- `annotations/PlayerArg.java`, `PlayerBukkitArg.java`, `IntArg.java`, `StringArg.java`,
+  `EnumArg.java`, `ChoiceArg.java` — une annotation par type, avec **uniquement ses champs
+  pertinents** (ex. `PlayerArg` : `index`, `states`, `excludeSelf`, `stateMessageKey`,
+  `required` ; `PlayerBukkitArg` : `index`, `required` ; `IntArg` : `index`, `min`, `max`,
+  `required` ; `EnumArg` : `index`, `enumClass`).
+- `commands/CommandContext.java` — contexte résolu : `player(i)`, `bukkitPlayer(i)`,
+  `intValue(i)`, `string(i)`, `enumValue(i, Class)`, `has(i)`, `args()`.
+- `commands/IParameterizedCommand.java` — `extends ICommand`, ajoute
+  `execute(WereWolfAPI, Player, CommandContext)` ; l'ancienne `execute(..., String[])`
+  reçoit un `default` qui lève (jamais appelé car le dispatcher branche sur `instanceof`).
+- `commands/IParameterizedCommandRole.java` — variante pour `ICommandRole`.
+
+Le membre `Params args() default @Params;` est présent sur `@AdminCommand`,
+`@PlayerCommand`, `@RoleCommand`. Chaque type expose uniquement ses propres champs
+(type-safe : impossible d'écrire un champ incohérent avec le type).
+
+**Plugin** — `fr.ph1lou.werewolfplugin.commands` :
+
+- `ArgumentResolver.java` — valide + résout les `@Params` (fusionne les 5 tableaux par
+  `index`, un handler par type) contre `args[]`, envoie les messages `werewolf.check.*`
+  existants via un `MessageSender`, retourne un `Optional<CommandContext>` (vide = échec,
+  commande non appelée). Fournit aussi l'autocomplétion (`complete(game, params, index, partial)`).
+- `MessageSender.java` — canal abstrait (`forPlayer` / `forPlayerWW`) pour envoyer
+  indifféremment à un `Player` Bukkit ou un `IPlayerWW`.
+- `CommandContextImpl.java` — implémentation prérésolue (valeurs en `Map<Integer,Object>`).
+
+### 10.2 Flux de résolution
+
+```
+/ww <sous-commande> <arg0> <arg1>
+        │  Admin.onCommand / Command.onCommand
+        ▼
+   accessCommand / checkCommand(s)   ← validations de classe (statesGame, argNumbers,
+        │                               statesPlayer, permissions, roleKeys…)
+        ▼
+   cmd instanceof IParameterizedCommand(IRole) ?
+        │  non → execute(..., String[])            (chemin hérité, inchangé)
+        │  oui ▼
+        │   ArgumentResolver.resolve(game, senderUuid, MessageSender, args(), args)
+        │       ├─ PLAYER : Bukkit.getPlayer → offline_player ; getPlayerWW →
+        │       │           player_not_found ; excludeSelf → not_yourself ;
+        │       │           states → state_player (ou stateMessageKey)
+        │       ├─ PLAYER_BUKKIT : Bukkit.getPlayer → offline_player (aucune vérification
+        │       │                   de partie/état — pour les cibles admin arbitraires)
+        │       ├─ INT    : parseInt → number_required ; bornes min/max
+        │       ├─ STRING : choices / maxLength
+        │       ├─ ENUM   : Enum.valueOf(enumClass, …)
+        │       └─ CHOICE : parmi choices
+        │       → Optional<CommandContext>  (empty = message déjà envoyé)
+        ▼
+   execute(game, player|playerWW, ctx)   ← métier uniquement, ctx.player(0)…
+```
+
+Le dispatcher branche sur `instanceof` aux points d'appel `Admin.java:92`,
+`Command.java:172` (rôles) et `Command.java:203` (joueurs) : chemin contextualisé si
+la commande implémente `IParameterizedCommand`/`IParameterizedCommandRole`, chemin
+hérité sinon. `onTabComplete` (`Admin.java`, `Command.java`) complète désormais les
+paramètres : PLAYER → noms des `IPlayerWW` dans un état autorisé ; CHOICE/ENUM →
+valeurs autorisées. L'index du paramètre en cours de frappe = `args.length - 2`
+(le tableau tab-complete inclut le nom de sous-commande en position 0).
+
+### 10.3 Exemple (avant / après)
+
+Avant — bloc répétitif dans `execute()` :
+```java
+public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    Player p = Bukkit.getPlayer(args[0]);
+    if (p == null) { playerWW.sendMessageWithKey("werewolf.check.offline_player"); return; }
+    IPlayerWW target = game.getPlayerWW(p.getUniqueId()).orElse(null);
+    if (target == null || !target.isState(StatePlayer.ALIVE)) {
+        playerWW.sendMessageWithKey("werewolf.check.player_not_found"); return; }
+    // ... métier
+}
+```
+Après — déclaration + accès direct :
+```java
+@RoleCommand(key = "...", roleKeys = RoleBase.HUNTER, requiredPower = true,
+        statesPlayer = StatePlayer.DEATH, argNumbers = 1,
+        args = @Params(players = @PlayerArg(index = 0, states = { StatePlayer.ALIVE })))
+public class CommandHunter implements IParameterizedCommandRole {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
+        IPlayerWW target = ctx.player(0);   // résolu + validé par le dispatcher
+        // ... métier uniquement
+    }
+}
+```
+
+### 10.4 Conventions spécifiques
+
+| Règle | Détail |
+|---|---|
+| **`index`** | Position dans le tableau `args` reçu par `execute`, **post-sous-commande** (le nom de sous-commande est déjà retiré par le dispatcher) : `index = 0` = 1er vrai paramètre. |
+| **`byUuid`** (PLAYER) | Résout l'argument comme une UUID textuelle (`game.getPlayerWW(UUID.fromString(raw))`) au lieu d'un nom (`Bukkit.getPlayer`). Pour les cibles **mortes/hors-ligne** (ex. `CommandShaman`, `CommandScapeGoat`, `CommandBarbarian`). Échec → `werewolf.check.not_in_game_player`. L'autocomplétion est désactivée pour ce mode (un UUID ne se tape pas). |
+| **`states`** (PLAYER) | États autorisés de la cible. Vide = aucun état requis. Pour « non-mort » (rejeter seulement `DEATH`), utiliser `{ALIVE, JUDGEMENT}`. |
+| **`excludeSelf`** | Interdit la self-cible → `werewolf.check.not_yourself`. |
+| **`stateMessageKey`** | Surcharge le message d'échec d'état (sinon générique `werewolf.check.state_player`). Préserve un message métier spécifique. |
+| **`rejectIfAlreadyAffected`** (PLAYER) | Rejette si la cible est déjà dans `getAffectedPlayers()` du rôle exécuteur (`IAffectedPlayers`). Sans effet si l'exécuteur n'a pas de rôle ou si celui-ci n'implémente pas `IAffectedPlayers`. Même catégorie que `excludeSelf`/`maxDistanceKey` (dépend de l'exécuteur). |
+| **`alreadyAffectedMessageKey`** | Surcharge le message « déjà affecté » (vide → `werewolf.check.already_get_power`). |
+| **`required = false`** | Paramètre optionnel (ignoré si `args` trop court) ; testable via `ctx.has(index)`. |
+| **Messages** | Toutes les clés `werewolf.check.*` sont réutilisées (aucune nouvelle clé i18n). |
+| **`argNumbers`** | Reste le garde-fou validé en premier ; `index >= args.length` est aussi défendu par le résolveur. |
+
+### 10.5 Limites v1
+
+`@PlayerArg` exige que la cible soit un `IPlayerWW` dans la partie (résolu via
+`Bukkit.getPlayer` + `getPlayerWW` + `isState`). Pour les commandes admin ciblant un
+joueur **en ligne arbitraire** (pas nécessairement dans la partie), `@PlayerBukkitArg`
+résout la cible en `Player` via `Bukkit.getPlayer` **sans** aucun `getPlayerWW` ni
+vérification d'état — c'est le cas pour `CommandHost`, `CommandModerator`,
+`CommandWhitelist`, `CommandInventory`, `CommandLate`.
+
+Deux commandes admin restent sur le chemin hérité `ICommand` :
+- `CommandTP` — utilise le sélecteur `@a` (tous les joueurs en ligne) et accepte 1 **ou** 2
+  cibles (`argNumbers = {1, 2}`), ce qui ne se déclare pas via un paramètre typé ;
+- `CommandKill` — résout la cible **par nom dans la partie** (`getPlayersWW().filter(name)`)
+  puis, en phase `GAME`, **rejette les joueurs en ligne** (`Bukkit.getPlayer != null` → refus) :
+  logique métier contradictoire avec tout argument « joueur résolu ».
+
+### 10.6 Couverture
+
+42 commandes migrées (rôles, lovers, utilities, admin joueur-dans-la-partie, entiers,
+5 admin joueur-en-ligne via `@PlayerBukkitArg`, et 3 rôles en UUID via `byUuid` :
+`CommandShaman`, `CommandScapeGoat`, `CommandBarbarian`). 2 commandes admin restent sur le
+chemin hérité : `CommandTP`, `CommandKill` (cf. §10.5).
+
+### 10.7 Helpers métier — `CommandCheck`
+
+`commands/CommandCheck.java` factorise des **checks métier récurrents** à appeler depuis
+`execute(...)` (chemin hérité, ou checks non-déclarables). Trois helpers :
+
+| Méthode | Rôle | Équivalent déclaratif ? |
+|---|---|---|
+| `rejectIfAlreadyAffected(sender, role, target, messageKey)` | Rejette si la cible est dans `role.getAffectedPlayers()` (`instanceof IAffectedPlayers` géré). | **Oui** — `@PlayerArg(rejectIfAlreadyAffected = true, alreadyAffectedMessageKey = …)` (cf. §10.4). Le helper ne reste que pour les commandes non-paramétrées (`CommandShaman`). |
+| `rejectIfTooFar(game, sender, target, distanceKey, messageKey)` | Rejette si distance exécuteur↔cible > `IntValue` `distanceKey`. | **Oui** — `@PlayerArg(maxDistanceKey = …, maxDistanceMessageKey = …)`. |
+| `rejectIfNoUseLeft(sender, role, limit)` | Rejette si le rôle (`ILimitedUse`) a épuisé ses utilisations. | Partiel — `@RoleCommand(requiredLimitedUse = N)` couvre les limites fixes ; le helper reste pour les limites **dynamiques** (ex. `CommandFox` via `IntValue`). |
+
+Le check « déjà affecté » est désormais **déclaratif** : 11 commandes paramétrées
+(`Guard`, `Thug`, `Raven`, `Protector`, `Spy`, `Trapper`, `Librarian`, `Benefactor`,
+`Croupier`, `Detective`, `Shaman`) portent `rejectIfAlreadyAffected = true` sur leur
+`@PlayerArg`, et le résolveur effectue la vérification pendant la résolution (après
+`states`, avant `maxDistance`). `CommandDetective` (2 cibles) déclare le flag sur ses deux
+`@PlayerArg` ; `CommandShaman` (cible en UUID) est désormais paramétrée via `byUuid`.
+**Aucune commande n'appelle plus `rejectIfAlreadyAffected` manuellement** — le helper reste
+comme implémentation de référence (et `rejectIfNoUseLeft` est toujours utilisé par
+`CommandFox` pour une limite dynamique).
+
+> **Différences d'ordre/message (bénignes) à connaître.** Déplacer ces checks dans le
+> résolveur les fait s'exécuter **avant** `execute()`, ce qui peut inverser leur priorité
+> vs. des checks restés dans `execute()`, ou ajouter un message là où il y avait retour
+> silencieux :
+> - `CommandCroupier` — `repeated_target` reçoit désormais le préfixe `Prefix.RED` ;
+> - `CommandBenefactor` — liste pleine (≥3) **et** cible déjà présente → `already_use_on_player`
+>   au lieu de `too_many_players` ;
+> - `CommandDetective` — même cible twice **et** déjà inspectée → `already_inspect` au lieu
+>   de `two_distinct_player` ;
+> - `CommandShaman` / `CommandScapeGoat` — cible absente → message `not_in_game_player`
+>   (auparavant retour silencieux) ; de plus `Shaman` voit `already_get_power` primer sur
+>   `not_enough_life` / `cannot_use` en cas de chevauchement ;
+> - `CommandBarbarian` — cible absente → `not_in_game_player` au lieu de `player_not_found`
+>   (le cas hors-`JUDGEMENT` conserve `player_not_found` via `stateMessageKey`).
+>
+> Dans tous les cas le comportement métier (rejet) est inchangé ; seul le message (ou son
+> ordre) diffère dans ces cas limites.
+
+> **Groupe UUID + « en ligne » requis (non couvert).** `CommandInfect`,
+> `CommandDevotedServant`, `CommandWitch` résolvent une cible par UUID **mais exigent en
+> plus qu'elle soit en ligne** (`Bukkit.getPlayer(uuid) != null`). `byUuid` seul ne suffit
+> pas (pas de vérification de présence en ligne) ; une future option
+> `@PlayerArg(byUuid = true, requireOnline = true)` les couvrirait.
+
+---
+
+## 11. Annexe — fichiers clés
+
+### WereWolfAPI (contrats)
+
+| Rôle | Fichier |
+|---|---|
+| Définitions d'annotations | `WereWolfAPI/src/main/java/fr/ph1lou/werewolfapi/annotations/*.java` (+ `statistics/*.java`) |
+| Contrat du registre | `WereWolfAPI/.../registers/IRegisterManager.java:28` |
+| Conteneur `Wrapper` | `WereWolfAPI/.../utils/Wrapper.java:3` |
+| Lecteur réflexif rôles | `WereWolfAPI/.../role/impl/RoleImpl.java:87` et `:263` |
+| Lecteur réflexif lovers | `WereWolfAPI/.../lovers/impl/LoverBaseImpl.java:14` et `:27` |
+| Description de rôle | `WereWolfAPI/.../role/utils/DescriptionBuilder.java:72` |
+| Point d'entrée API | `WereWolfAPI/.../GetWereWolfAPI.java:16` |
+| Enums référencés | `WereWolfAPI/.../enums/` (`Category`, `RoleAttribute`, `Aura`, `StateGame`, `StatePlayer`, `UniversalMaterial`) |
+| Constantes de clés i18n | `WereWolfAPI/.../basekeys/*.java` (`RoleBase`, `LoverBase`, `TimerBase`, `ConfigBase`, `ScenarioBase`, `IntValueBase`, `EventBase`, `Prefix`) |
+| Annotations de paramètres de commande | `WereWolfAPI/.../annotations/Params.java`, `PlayerArg.java`, `PlayerBukkitArg.java`, `IntArg.java`, `StringArg.java`, `EnumArg.java`, `ChoiceArg.java` |
+| Contexte de commande résolu | `WereWolfAPI/.../commands/CommandContext.java` |
+| Interfaces de commande paramétrées | `WereWolfAPI/.../commands/IParameterizedCommand.java`, `IParameterizedCommandRole.java` |
+
+### WereWolfPlugin (exécution)
+
+| Rôle | Fichier |
+|---|---|
+| Classe principale + `@ModuleWerewolf` | `WereWolfPlugin/src/main/java/fr/ph1lou/werewolfplugin/Main.java:32` |
+| Démarrage du registre | `WereWolfPlugin/.../Main.java:64` (`onEnable`) |
+| Scan / registre | `WereWolfPlugin/.../Register.java` |
+| Scan de jar (maison) | `WereWolfPlugin/.../utils/ReflectionUtils.java` |
+| Instanciation scenarios/timers/configs/events | `WereWolfPlugin/.../game/ListenersManager.java` |
+| Assignation des rôles | `WereWolfPlugin/.../timers/RoleDuration.java:99` |
+| Commandes admin / joueur | `WereWolfPlugin/.../commands/Admin.java`, `commands/Command.java` |
+| Décrément timers + `onZero` | `WereWolfPlugin/.../tasks/GameTask.java:139` |
+| Lecture stats sur events | `WereWolfPlugin/.../statistiks/StatisticsEvents.java:48` |
+| Valeurs par défaut timers/configs | `WereWolfPlugin/.../game/StorageConfiguration.java` |
+| Résolveur d'arguments de commande | `WereWolfPlugin/.../commands/ArgumentResolver.java` |
+| Canal de message commande | `WereWolfPlugin/.../commands/MessageSender.java` |
+| Contexte de commande (impl) | `WereWolfPlugin/.../commands/CommandContextImpl.java` |
+| Helpers de checks métier commande | `WereWolfPlugin/.../commands/CommandCheck.java` |

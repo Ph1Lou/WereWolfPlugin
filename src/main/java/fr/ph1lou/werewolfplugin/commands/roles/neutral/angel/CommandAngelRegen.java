@@ -19,7 +19,8 @@ import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 
 @RoleCommand(key = "werewolf.roles.guardian_angel.command",
         roleKeys = {RoleBase.ANGEL, RoleBase.GUARDIAN_ANGEL},
-        argNumbers = 0)
+        argNumbers = 0,
+        requiredLimitedUse = 3)
 public class CommandAngelRegen implements ICommandRole {
 
     @Override
@@ -34,11 +35,6 @@ public class CommandAngelRegen implements ICommandRole {
             return;
         }
 
-
-        if (((ILimitedUse) guardianAngel).getUse() >= 3) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
-            return;
-        }
 
         if (((IAffectedPlayers) guardianAngel)
                 .getAffectedPlayers().isEmpty()) {
@@ -56,7 +52,7 @@ public class CommandAngelRegen implements ICommandRole {
         }
 
 
-        ((ILimitedUse) guardianAngel).setUse(((ILimitedUse) guardianAngel).getUse() + 1);
+        guardianAngel.setUse(guardianAngel.getUse() + 1);
 
         RegenerationEvent event = new RegenerationEvent(playerWW, ((IAffectedPlayers) guardianAngel)
                 .getAffectedPlayers().get(0));

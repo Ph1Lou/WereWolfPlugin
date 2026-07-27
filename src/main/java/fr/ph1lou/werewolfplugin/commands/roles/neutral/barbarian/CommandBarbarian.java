@@ -1,9 +1,12 @@
 package fr.ph1lou.werewolfplugin.commands.roles.neutral.barbarian;
 
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.barbarian.BarbarianEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -14,34 +17,22 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import org.bukkit.Bukkit;
 
-import java.util.UUID;
-
 @RoleCommand(key = "werewolf.roles.barbarian.command",
         roleKeys = RoleBase.BARBARIAN,
         autoCompletion = false,
         requiredPower = true,
-        argNumbers = 1)
-public class CommandBarbarian implements ICommandRole {
+        argNumbers = 1,
+        args = @Params(players = @PlayerArg(index = 0, byUuid = true,
+                states = { StatePlayer.JUDGEMENT },
+                stateMessageKey = "werewolf.check.player_not_found")))
+public class CommandBarbarian implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
         IRole barbarian = playerWW.getRole();
 
-        UUID uuid1;
-
-        try {
-            uuid1 = UUID.fromString(args[0]);
-        } catch (Exception ignored) {
-            return;
-        }
-
-        IPlayerWW playerWW1 = game.getPlayerWW(uuid1).orElse(null);
-
-        if (playerWW1 == null || !playerWW1.isState(StatePlayer.JUDGEMENT)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
-            return;
-        }
+        IPlayerWW playerWW1 = ctx.player(0);
 
         ((IPower) barbarian).setPower(false);
 

@@ -35,7 +35,7 @@ public class ChatListener implements Listener {
     @EventHandler
     private void onCommand(PlayerCommandPreprocessEvent event) {
 
-        if(event.isCancelled()){
+        if (event.isCancelled()) {
             return;
         }
 
@@ -44,23 +44,23 @@ public class ChatListener implements Listener {
         IModerationManager moderationManager = game.getModerationManager();
 
         if (args[0].equalsIgnoreCase("/rl") ||
-                args[0].equalsIgnoreCase("/reload") ||
-                args[0].equalsIgnoreCase("/bukkit:rl") ||
-                args[0].equalsIgnoreCase("/bukkit:reload")) {
+            args[0].equalsIgnoreCase("/reload") ||
+            args[0].equalsIgnoreCase("/bukkit:rl") ||
+            args[0].equalsIgnoreCase("/bukkit:reload")) {
             event.setCancelled(true);
             player.sendMessage(game.translate(Prefix.RED, "werewolf.check.disabled_command"));
         } else if (args[0].equalsIgnoreCase("/stop") ||
-                args[0].equalsIgnoreCase("/bukkit:stop")) {
+                   args[0].equalsIgnoreCase("/bukkit:stop")) {
             event.setCancelled(true);
             player.performCommand(String.format("a %s", game.translate("werewolf.commands.admin.stop.command")));
         } else if (args[0].equalsIgnoreCase("/me") ||
-                args[0].equalsIgnoreCase("/minecraft:me")) {
+                   args[0].equalsIgnoreCase("/minecraft:me")) {
             event.setCancelled(true);
             player.sendMessage(game.translate(Prefix.RED, "werewolf.check.disabled_command"));
         } else if (args[0].equalsIgnoreCase("/tellRaw") ||
-                args[0].equalsIgnoreCase("/msg") ||
-                args[0].equalsIgnoreCase("/tell") ||
-                args[0].equalsIgnoreCase("/minecraft:tell")) {
+                   args[0].equalsIgnoreCase("/msg") ||
+                   args[0].equalsIgnoreCase("/tell") ||
+                   args[0].equalsIgnoreCase("/minecraft:tell")) {
 
             event.setCancelled(true);
             if (args.length <= 2) return;
@@ -76,12 +76,11 @@ public class ChatListener implements Listener {
             if (!recipient.hasPermission("a.tell") && !player.hasPermission("a.tell")) {
 
                 if (!moderationManager.isStaff(recipient.getUniqueId()) &&
-                        !moderationManager.isStaff(player.getUniqueId())) {
+                    !moderationManager.isStaff(player.getUniqueId())) {
                     player.sendMessage(game.translate(Prefix.RED, "werewolf.check.permission_denied"));
                     return;
                 }
             }
-
             StringBuilder sb = new StringBuilder();
             for (String w : args) {
                 sb.append(w).append(" ");
@@ -108,8 +107,8 @@ public class ChatListener implements Listener {
         Contributor contributor = this.contributors
                 .stream()
                 .filter(contributor1 -> contributor1.getUuid().equals(player.getUniqueId()) ||
-                        (playerWW != null &&
-                                contributor1.getUuid().equals(playerWW.getReviewUUID())))
+                                        (playerWW != null &&
+                                         contributor1.getUuid().equals(playerWW.getReviewUUID())))
                 .findFirst()
                 .orElse(null);
 
@@ -159,7 +158,7 @@ public class ChatListener implements Listener {
             event.getPlayer().sendMessage(game.translate(Prefix.RED, "werewolf.commands.admin.chat.off"));
 
         } else if (game.getConfig().isConfigActive(ConfigBase.PROXIMITY_CHAT) &&
-                !game.isState(StateGame.LOBBY)) {
+                   !game.isState(StateGame.LOBBY)) {
             event.setCancelled(true);
 
             for (Player p : Bukkit.getOnlinePlayers()) {

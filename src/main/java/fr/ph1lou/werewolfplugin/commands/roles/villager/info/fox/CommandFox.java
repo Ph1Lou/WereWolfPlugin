@@ -1,10 +1,13 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.info.fox;
 
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.fox.BeginSniffEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -15,50 +18,26 @@ import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IProgress;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfplugin.commands.CommandCheck;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 @RoleCommand(key = "werewolf.roles.fox.command",
         roleKeys = RoleBase.FOX,
         requiredPower = true,
-        argNumbers = 1)
-public class CommandFox implements ICommandRole {
+        argNumbers = 1,
+        args = @Params(players = @PlayerArg(index = 0, states = { StatePlayer.ALIVE }, excludeSelf = true,
+                maxDistanceKey = IntValueBase.FOX_DISTANCE,
+                maxDistanceMessageKey = "werewolf.roles.fox.not_enough_near")))
+public class CommandFox implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
-
-        UUID uuid = playerWW.getUUID();
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
         IRole fox = playerWW.getRole();
 
-        Player playerArg = Bukkit.getPlayer(args[0]);
+        IPlayerWW playerWW1 = ctx.player(0);
 
-        if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
-            return;
-        }
-        UUID argUUID = playerArg.getUniqueId();
-        IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
-
-        if (argUUID.equals(uuid)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
-            return;
-        }
-
-        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
-            return;
-        }
-
-        if (((ILimitedUse) fox).getUse() >= game.getConfig().getValue(IntValueBase.FOX_SMELL_NUMBER)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
-            return;
-        }
-
-        if (playerWW.distance(playerWW1) > game.getConfig().getValue(IntValueBase.FOX_DISTANCE)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.fox.not_enough_near");
+        if (CommandCheck.rejectIfNoUseLeft(playerWW, fox, game.getConfig().getValue(IntValueBase.FOX_SMELL_NUMBER))) {
             return;
         }
 
@@ -78,6 +57,6 @@ public class CommandFox implements ICommandRole {
         ((IProgress) fox).setProgress(0f);
 
         playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fox.smell_beginning",
-                Formatter.player(playerArg.getName()));
+                Formatter.player(playerWW1.getName()));
     }
 }

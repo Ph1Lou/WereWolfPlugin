@@ -1,8 +1,11 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommand;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -15,41 +18,20 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AdminCommand(key = "werewolf.commands.admin.group.command",
         descriptionKey = "werewolf.commands.admin.group.description",
         moderatorAccess = true,
-        argNumbers = {0,1},
-        statesGame = StateGame.GAME)
-public class CommandGroup implements ICommand {
+        argNumbers = {0, 1},
+        statesGame = StateGame.GAME,
+        args = @Params(players = @PlayerArg(index = 0, states = { StatePlayer.ALIVE }, required = false)))
+public class CommandGroup implements IParameterizedCommand {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
-        Player playerArg;
+    public void execute(WereWolfAPI game, Player player, CommandContext ctx) {
 
-        if (args.length == 1) {
-            playerArg = Bukkit.getPlayer(args[0]);
-            if (playerArg == null) {
-                player.sendMessage(game.translate(Prefix.RED, "werewolf.check.offline_player"));
-                return;
-            }
-            UUID argUUID = playerArg.getUniqueId();
-            IPlayerWW playerWW = game.getPlayerWW(argUUID).orElse(null);
-
-            if (playerWW == null) {
-                player.sendMessage(game.translate(Prefix.RED, "werewolf.check.player_not_found"));
-                return;
-            }
-
-            if (!playerWW.isState(StatePlayer.ALIVE)) {
-                player.sendMessage(game.translate(Prefix.RED, "werewolf.check.player_not_found"));
-                return;
-            }
-        } else {
-            playerArg = null;
-        }
+        Player playerArg = ctx.has(0) ? Bukkit.getPlayer(ctx.player(0).getUUID()) : null;
 
         List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 
@@ -58,8 +40,7 @@ public class CommandGroup implements ICommand {
             Location location = playerArg.getLocation();
 
             players = players.stream().filter(p -> {
-                UUID uuid = p.getUniqueId();
-                IPlayerWW playerWW1 = game.getPlayerWW(uuid).orElse(null);
+                IPlayerWW playerWW1 = game.getPlayerWW(p.getUniqueId()).orElse(null);
 
                 if (playerWW1 != null && playerWW1.isState(StatePlayer.ALIVE)) {
                     if (p.getWorld().equals(playerArg.getWorld())) {

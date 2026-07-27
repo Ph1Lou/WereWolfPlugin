@@ -1,10 +1,13 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.info.seer;
 
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.seer.SeerEvent;
@@ -16,33 +19,19 @@ import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfplugin.roles.villagers.Seer;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 @RoleCommand(key = "werewolf.roles.seer.command", roleKeys = RoleBase.SEER,
         argNumbers = 1,
-        requiredPower = true)
-public class CommandSeer implements ICommandRole {
+        requiredPower = true,
+        args = @Params(players = @PlayerArg(index = 0, states = { StatePlayer.ALIVE })))
+public class CommandSeer implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
         IRole seer = playerWW.getRole();
 
-        Player playerArg = Bukkit.getPlayer(args[0]);
-
-        if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
-            return;
-        }
-        UUID argUUID = playerArg.getUniqueId();
-        IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
-
-        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
-            return;
-        }
+        IPlayerWW playerWW1 = ctx.player(0);
 
         if (playerWW.getHealth() < 7) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.seer.not_enough_life");

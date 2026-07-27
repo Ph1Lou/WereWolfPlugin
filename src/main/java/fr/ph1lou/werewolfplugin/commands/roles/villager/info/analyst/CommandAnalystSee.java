@@ -1,10 +1,13 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.info.analyst;
 
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.roles.analyst.AnalystEvent;
@@ -19,39 +22,26 @@ import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfplugin.roles.villagers.Analyst;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 @RoleCommand(key = "werewolf.roles.analyst.command_see",
         roleKeys = RoleBase.ANALYST,
-        argNumbers = 1)
-public class CommandAnalystSee implements ICommandRole {
+        argNumbers = 1,
+        requiredLimitedUse = 5,
+        args = @Params(players = @PlayerArg(index = 0, states = { StatePlayer.ALIVE })))
+public class CommandAnalystSee implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
         IRole analyst = playerWW.getRole();
 
-        Player playerArg = Bukkit.getPlayer(args[0]);
-
-        if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
-            return;
-        }
+        IPlayerWW playerWW1 = ctx.player(0);
 
         if (game.getConfig().getTimerValue(TimerBase.ANALYSE_DURATION) > 0) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.analyst.timers.analyse_duration", Formatter.timer(Utils.conversion(game.getConfig().getTimerValue(TimerBase.ANALYSE_DURATION))));
-            return;
-        }
-
-        UUID argUUID = playerArg.getUniqueId();
-        IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
-
-        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
@@ -69,10 +59,6 @@ public class CommandAnalystSee implements ICommandRole {
                 game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 20L);
 
 
-        if (((ILimitedUse) analyst).getUse() >= 5) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
-            return;
-        }
         ((ILimitedUse) analyst).setUse(((ILimitedUse) analyst).getUse() + 1);
 
         AnalystEvent analystEvent = new AnalystEvent(playerWW, playerWW1, playerWW1.getPotionModifiers()

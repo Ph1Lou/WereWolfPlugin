@@ -1,8 +1,11 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerBukkitArg;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommand;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
@@ -20,21 +23,17 @@ import java.util.UUID;
 
 @AdminCommand(key = "werewolf.commands.admin.moderator.command",
         descriptionKey = "",
-        argNumbers = 1)
-public class CommandModerator implements ICommand {
+        argNumbers = 1,
+        args = @Params(bukkitPlayers = @PlayerBukkitArg(index = 0)))
+public class CommandModerator implements IParameterizedCommand {
 
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, CommandContext ctx) {
 
 
         IModerationManager moderationManager = game.getModerationManager();
-        Player moderator = Bukkit.getPlayer(args[0]);
-
-        if (moderator == null) {
-            player.sendMessage(game.translate(Prefix.RED, "werewolf.check.offline_player"));
-            return;
-        }
+        Player moderator = ctx.bukkitPlayer(0);
 
         UUID argUUID = moderator.getUniqueId();
         IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);

@@ -996,7 +996,6 @@
         "command": "distribuer",
         "perform": "Vous pouvez distribuer des informations à un joueur avec §b/ww distribuer§r vous avez §b&timer&",
         "not_enough_players": "Il ne reste pas assez de joueurs pour utiliser cette commande",
-        "yourself": "Vous ne pouvez pas vous sélectionner vous-même",
         "repeated_target": "Vous ne pouvez sélectionner qu'une seule fois le même joueur",
         "card": "Grâce au §bCroupier§f, vous savez que le role de §b&player&§r se trouve parmi les suivants: §b&role1&§r, §b&role2&§r, §b&role3&",
         "confirm": "Le message a été envoyé",

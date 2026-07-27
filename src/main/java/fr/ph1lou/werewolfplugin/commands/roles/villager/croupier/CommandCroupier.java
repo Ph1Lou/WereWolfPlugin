@@ -1,59 +1,44 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.croupier;
 
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.croupier.CroupierChooseEventEvent;
 import fr.ph1lou.werewolfapi.events.roles.croupier.CroupierEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfplugin.roles.villagers.Croupier;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RoleCommand(key = "werewolf.roles.croupier.command",
         roleKeys = RoleBase.CROUPIER,
         argNumbers = 1,
-        requiredPower = true)
-public class CommandCroupier implements ICommandRole {
+        requiredPower = true,
+        args = @Params(players = @PlayerArg(index = 0, states = { StatePlayer.ALIVE }, excludeSelf = true,
+                rejectIfAlreadyAffected = true,
+                alreadyAffectedMessageKey = "werewolf.roles.croupier.repeated_target")))
+public class CommandCroupier implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
         Croupier croupier = (Croupier) playerWW.getRole();
-        Player playerArg = Bukkit.getPlayer(args[0]);
-
-        if (playerArg == null) {
-            playerWW.sendMessageWithKey("werewolf.check.offline_player");
-            return;
-        }
-
-        UUID argUUID = playerArg.getUniqueId();
-        IPlayerWW targetWW = game.getPlayerWW(argUUID).orElse(null);
-
-        if (targetWW == null || !targetWW.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey("werewolf.check.player_not_found");
-            return;
-        }
-
-        if (targetWW.equals(playerWW)) {
-            playerWW.sendMessageWithKey("werewolf.roles.croupier.yourself");
-            return;
-        }
+        IPlayerWW targetWW = ctx.player(0);
 
         List<IPlayerWW> playerWWS = game.getAlivePlayersWW()
                 .stream()
@@ -66,14 +51,9 @@ public class CommandCroupier implements ICommandRole {
             return;
         }
 
-        if (croupier.getAffectedPlayers().contains(targetWW)) {
-            playerWW.sendMessageWithKey("werewolf.roles.croupier.repeated_target");
-            return;
-        }
+        croupier.addAffectedPlayer(targetWW);
 
-        ((IAffectedPlayers) croupier).addAffectedPlayer(targetWW);
-
-        ((IPower) croupier).setPower(false);
+        croupier.setPower(false);
 
         IPlayerWW playerRevealed = playerWWS.get((int) Math.floor(game.getRandom().nextDouble() * playerWWS.size()));
 

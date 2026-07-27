@@ -1,17 +1,19 @@
 package fr.ph1lou.werewolfplugin.commands.utilities;
 
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.commands.ICommand;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommand;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.VoteStatus;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfplugin.guis.VoteGui;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -20,11 +22,13 @@ import java.util.UUID;
         descriptionKey = "werewolf.commands.player.vote.description",
         statesPlayer = StatePlayer.ALIVE,
         statesGame = StateGame.GAME,
-        argNumbers = { 0, 1 })
-public class CommandVote implements ICommand {
+        argNumbers = {0, 1},
+        args = @Params(players = @PlayerArg(index = 0,
+                states = {StatePlayer.ALIVE, StatePlayer.JUDGEMENT}, excludeSelf = true, required = false)))
+public class CommandVote implements IParameterizedCommand {
 
     @Override
-    public void execute(WereWolfAPI game, Player player, String[] args) {
+    public void execute(WereWolfAPI game, Player player, CommandContext ctx) {
 
         UUID uuid = player.getUniqueId();
 
@@ -52,35 +56,12 @@ public class CommandVote implements ICommand {
             return;
         }
 
-        if (args.length == 0) {
+        if (!ctx.has(0)) {
             VoteGui.getInventory(player).open(player);
             return;
         }
 
-        Player playerArg = Bukkit.getPlayer(args[0]);
-
-
-        if (playerArg == null) {
-            player.sendMessage(game.translate(Prefix.RED, "werewolf.check.offline_player"));
-            return;
-        }
-        UUID argUUID = playerArg.getUniqueId();
-        IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
-
-        if (argUUID.equals(uuid)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
-            return;
-        }
-
-        if (playerWW1 == null) {
-            player.sendMessage(game.translate(Prefix.RED, "werewolf.check.player_not_found"));
-            return;
-        }
-
-        if (playerWW1.isState(StatePlayer.DEATH)) {
-            player.sendMessage(game.translate(Prefix.RED, "werewolf.check.player_not_found"));
-            return;
-        }
+        IPlayerWW playerWW1 = ctx.player(0);
 
         game.getVoteManager().setOneVote(playerWW, playerWW1);
     }

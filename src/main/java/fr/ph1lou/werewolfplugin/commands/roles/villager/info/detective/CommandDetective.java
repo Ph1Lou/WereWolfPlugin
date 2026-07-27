@@ -1,10 +1,13 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.info.detective;
 
 import com.google.common.collect.Sets;
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.detective.InvestigateEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -14,75 +17,33 @@ import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 @RoleCommand(key = "werewolf.roles.detective.command",
         roleKeys = RoleBase.DETECTIVE,
         requiredPower = true,
-        argNumbers = 2
-)
-public class CommandDetective implements ICommandRole {
+        argNumbers = 2,
+        args = @Params(players = {
+                @PlayerArg(index = 0, states = { StatePlayer.ALIVE, StatePlayer.JUDGEMENT }, excludeSelf = true,
+                        rejectIfAlreadyAffected = true,
+                        alreadyAffectedMessageKey = "werewolf.roles.detective.already_inspect"),
+                @PlayerArg(index = 1, states = { StatePlayer.ALIVE, StatePlayer.JUDGEMENT }, excludeSelf = true,
+                        rejectIfAlreadyAffected = true,
+                        alreadyAffectedMessageKey = "werewolf.roles.detective.already_inspect")
+        }))
+public class CommandDetective implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
-
-        UUID uuid = playerWW.getUUID();
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
         IRole detective = playerWW.getRole();
 
-        if (args.length != 2) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.parameters",
-                    Formatter.number(2));
-            return;
-        }
+        IPlayerWW playerWW1 = ctx.player(0);
+        IPlayerWW playerWW2 = ctx.player(1);
 
-        if (args[0].equalsIgnoreCase(args[1])) {
+        if (playerWW1.getUUID().equals(playerWW2.getUUID())) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.two_distinct_player");
             return;
         }
-
-        for (String p : args) {
-
-            Player playerArg = Bukkit.getPlayer(p);
-
-            if (playerArg == null) {
-                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
-                return;
-            }
-
-            UUID uuid1 = playerArg.getUniqueId();
-            IPlayerWW playerWW1 = game.getPlayerWW(uuid1).orElse(null);
-
-            if (playerWW1 == null || playerWW1.isState(StatePlayer.DEATH)) {
-                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
-                return;
-            }
-
-            if (uuid.equals(uuid1)) {
-                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
-                return;
-            }
-
-            if (((IAffectedPlayers) detective).getAffectedPlayers().contains(playerWW1)) {
-                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.detective.already_inspect");
-                return;
-            }
-        }
-
-        Player player1 = Bukkit.getPlayer(args[0]);
-        Player player2 = Bukkit.getPlayer(args[1]);
-
-        if (player1 == null || player2 == null) return;
-
-        UUID uuid1 = player1.getUniqueId();
-        UUID uuid2 = player2.getUniqueId();
-
-        IPlayerWW playerWW1 = game.getPlayerWW(uuid1).orElse(null);
-        IPlayerWW playerWW2 = game.getPlayerWW(uuid2).orElse(null);
-
-        if (playerWW1 == null || playerWW2 == null) return;
 
         String isLG1 = playerWW1.getRole().getDisplayCamp();
         String isLG2 = playerWW2.getRole().getDisplayCamp();
@@ -102,11 +63,11 @@ public class CommandDetective implements ICommandRole {
 
         if (event.isSameCamp()) {
             playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.detective.same_camp",
-                    Formatter.format("&player1&", player1.getName()),
-                    Formatter.format("&player2&", player2.getName()));
+                    Formatter.format("&player1&", playerWW1.getName()),
+                    Formatter.format("&player2&", playerWW2.getName()));
         } else
             playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.detective.opposing_camp",
-                    Formatter.format("&player1&", player1.getName()),
-                    Formatter.format("&player2&", player2.getName()));
+                    Formatter.format("&player1&", playerWW1.getName()),
+                    Formatter.format("&player2&", playerWW2.getName()));
     }
 }

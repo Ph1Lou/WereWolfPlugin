@@ -1,11 +1,15 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.protector;
 
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.roles.protector.ProtectionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
@@ -16,40 +20,21 @@ import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
-
-import java.util.UUID;
 
 @RoleCommand(key = "werewolf.roles.protector.command",
         roleKeys = RoleBase.PROTECTOR,
         requiredPower = true,
-        argNumbers = 1)
-public class CommandProtector implements ICommandRole {
+        argNumbers = 1,
+        args = @Params(players = @PlayerArg(index = 0, states = { StatePlayer.ALIVE },
+                rejectIfAlreadyAffected = true)))
+public class CommandProtector implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
         IRole protector = playerWW.getRole();
 
-        Player playerArg = Bukkit.getPlayer(args[0]);
-
-        if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
-            return;
-        }
-        UUID argUUID = playerArg.getUniqueId();
-        IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
-
-        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
-            return;
-        }
-
-        if (((IAffectedPlayers) protector).getAffectedPlayers().contains(playerWW1)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.already_get_power");
-            return;
-        }
+        IPlayerWW playerWW1 = ctx.player(0);
 
 
         ((IPower) protector).setPower(false);
@@ -70,6 +55,6 @@ public class CommandProtector implements ICommandRole {
         playerWW1.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.LIGHT, 40, true));
         playerWW1.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.protector.get_protection");
         playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.protector.protection_perform",
-                Formatter.player(playerArg.getName()));
+                Formatter.player(playerWW1.getName()));
     }
 }

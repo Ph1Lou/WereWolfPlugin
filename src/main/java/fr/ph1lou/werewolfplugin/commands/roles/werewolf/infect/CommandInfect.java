@@ -1,9 +1,12 @@
 package fr.ph1lou.werewolfplugin.commands.roles.werewolf.infect;
 
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.infect_father_of_the_wolves.InfectionEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
@@ -16,43 +19,23 @@ import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import org.bukkit.Bukkit;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @RoleCommand(key = "werewolf.roles.infect_father_of_the_wolves.command",
         roleKeys = RoleBase.INFECT,
         requiredPower = true,
         autoCompletion = false,
-        argNumbers = 1)
-public class CommandInfect implements ICommandRole {
+        argNumbers = 1,
+        args = @Params(players = @PlayerArg(index = 0, byUuid = true, excludeSelf = true,
+                states = { StatePlayer.JUDGEMENT },
+                stateMessageKey = "werewolf.check.not_in_judgement")))
+public class CommandInfect implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
-
-        UUID uuid = playerWW.getUUID();
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
         IRole infect = playerWW.getRole();
 
-        if (Bukkit.getPlayer(UUID.fromString(args[0])) == null) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
-            return;
-        }
-        UUID argUUID = UUID.fromString(args[0]);
-        IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
-
-        if (argUUID.equals(uuid)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
-            return;
-        }
-
-        if (playerWW1 == null) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
-            return;
-        }
-
-        if (!playerWW1.isState(StatePlayer.JUDGEMENT)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_in_judgement");
-            return;
-        }
+        IPlayerWW playerWW1 = ctx.player(0);
 
 
         Optional<IPlayerWW> killerWW = playerWW1.getLastKiller();

@@ -4,11 +4,15 @@ package fr.ph1lou.werewolfplugin.commands;
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
 import fr.ph1lou.werewolfapi.commands.ICommand;
 import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommand;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.Register;
@@ -21,9 +25,11 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -34,6 +40,7 @@ public class Command implements TabExecutor {
     private final Main main;
     private final Map<String, ICommand> commands = new HashMap<>();
     private final Map<String, ICommandRole> commandsRoles = new HashMap<>();
+    private final ArgumentResolver argumentResolver = new ArgumentResolver();
 
 
     public Command(Main main) {
@@ -156,6 +163,13 @@ public class Command implements TabExecutor {
             }
         }
 
+        if (command.requiredLimitedUse() >= 0) {
+            if (!(playerWW.getRole() instanceof ILimitedUse)
+                    || ((ILimitedUse) playerWW.getRole()).getUse() >= command.requiredLimitedUse()) {
+                return game.translate(Prefix.RED, "werewolf.check.power");
+            }
+        }
+
         if (command.statesGame().length > 0) {
             if (Arrays.stream(command.statesGame()).noneMatch(stateGame -> stateGame == game.getState())) {
                 return game.translate(Prefix.RED, "werewolf.check.state");
@@ -167,6 +181,18 @@ public class Command implements TabExecutor {
                 return game.translate(Prefix.RED, "werewolf.check.parameters",
                         Formatter.number(Arrays.stream(command.argNumbers()).min().orElse(0)));
             }
+        }
+
+        if (commandRole instanceof IParameterizedCommandRole) {
+            Optional<CommandContext> ctx = argumentResolver.resolve(
+                    game, playerWW,
+                    MessageSender.forPlayerWW(playerWW),
+                    command.args(), args);
+            if (ctx.isEmpty()) {
+                return "";
+            }
+            ((IParameterizedCommandRole) commandRole).execute(game, playerWW, ctx.get());
+            return "";
         }
 
         commandRole.execute(game, playerWW, args);
@@ -200,6 +226,18 @@ public class Command implements TabExecutor {
                         Formatter.number(Arrays.stream(command.argNumbers()).min().orElse(0)));
             }
         }
+        if (commandPlayer instanceof IParameterizedCommand) {
+            Optional<CommandContext> ctx = argumentResolver.resolve(
+                    game, game.getPlayerWW(player.getUniqueId()).orElse(null),
+                    MessageSender.forPlayer(game, player),
+                    command.args(), args);
+            if (ctx.isEmpty()) {
+                return "";
+            }
+            ((IParameterizedCommand) commandPlayer).execute(game, player, ctx.get());
+            return "";
+        }
+
         commandPlayer.execute(game, player, args);
         return "";
     }
@@ -216,7 +254,21 @@ public class Command implements TabExecutor {
         IPlayerWW playerWW = game.getPlayerWW(uuid).orElse(null);
 
         if (args.length > 1) {
-            return null;
+            final String subName = args[0];
+            final String partial = args[args.length - 1];
+            final int paramIndex = args.length - 2;
+            List<String> suggestions = new ArrayList<>();
+            main.getRegisterManager().getRoleCommandsRegister().stream()
+                    .filter(w -> game.translate(w.getMetaDatas().key()).equalsIgnoreCase(subName))
+                    .findFirst()
+                    .ifPresent(w -> suggestions.addAll(argumentResolver.complete(game,
+                            w.getMetaDatas().args(), paramIndex, partial)));
+            main.getRegisterManager().getPlayerCommandsRegister().stream()
+                    .filter(w -> game.translate(w.getMetaDatas().key()).equalsIgnoreCase(subName))
+                    .findFirst()
+                    .ifPresent(w -> suggestions.addAll(argumentResolver.complete(game,
+                            w.getMetaDatas().args(), paramIndex, partial)));
+            return suggestions;
         }
 
         return Stream.concat(main.getRegisterManager().getRoleCommandsRegister().stream()

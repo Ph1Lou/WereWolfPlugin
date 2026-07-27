@@ -1,10 +1,13 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.priestess;
 
+import fr.ph1lou.werewolfapi.annotations.Params;
+import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
+import fr.ph1lou.werewolfapi.commands.CommandContext;
+import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.priestess.PriestessEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -14,34 +17,20 @@ import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 @RoleCommand(key = "werewolf.roles.priestess.command",
         roleKeys = RoleBase.PRIESTESS,
         requiredPower = true,
-        argNumbers = 1)
-public class CommandPriestess implements ICommandRole {
+        argNumbers = 1,
+        args = @Params(players = @PlayerArg(index = 0, states = { StatePlayer.ALIVE })))
+public class CommandPriestess implements IParameterizedCommandRole {
 
     @Override
-    public void execute(WereWolfAPI game, IPlayerWW playerWW, String[] args) {
+    public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
         IRole priestess = playerWW.getRole();
 
-        Player playerArg = Bukkit.getPlayer(args[0]);
-
-        if (playerArg == null) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.offline_player");
-            return;
-        }
-        UUID argUUID = playerArg.getUniqueId();
-        IPlayerWW playerWW1 = game.getPlayerWW(argUUID).orElse(null);
-
-        if (playerWW1 == null || !playerWW1.isState(StatePlayer.ALIVE)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
-            return;
-        }
+        IPlayerWW playerWW1 = ctx.player(0);
 
         if (playerWW.distance(playerWW1) >
             game.getConfig().getValue(IntValueBase.PRIESTESS_DISTANCE)) {
@@ -69,7 +58,7 @@ public class CommandPriestess implements ICommandRole {
             playerWW.removePlayerMaxHealth(4);
 
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.priestess.message",
-                    Formatter.player(playerArg.getName()),
+                    Formatter.player(playerWW1.getName()),
                     Formatter.format("&camp&", game.translate(priestessEvent.getCamp())));
 
         }
