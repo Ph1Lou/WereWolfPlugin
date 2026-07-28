@@ -5,6 +5,7 @@ import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -13,6 +14,7 @@ import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.guard.GuardResurrectionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Role(key = RoleBase.GUARD, category = Category.VILLAGER,
+        defaultAura = Aura.NEUTRAL,
         auraDescriptionSpecialUseCase = "werewolf.roles.guard.aura",
         attribute = RoleAttribute.VILLAGER)
 public class Guard extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
@@ -76,8 +79,10 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
         this.game.resurrection(this.last);
 
         this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.RESISTANCE,
-                4 * game.getConfig().getTimerValue(TimerBase.DAY_DURATION) * 20,
+                20 * 60 * 20,
                 0, this.getKey()));
+
+        this.addAuraModifier(new AuraModifier("guard_save", Aura.DARK, 1, false));
 
         this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.guard.resurrection");
 
@@ -140,5 +145,13 @@ public class Guard extends RoleWithLimitedSelectionDuration implements IAffected
 
     public boolean isPowerFinal() {
         return powerFinal;
+    }
+
+    public IPlayerWW getLast() {
+        return this.last;
+    }
+
+    public void clearLast() {
+        this.last = null;
     }
 }

@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Role(key = RoleBase.BONESETTER,
-        defaultAura = Aura.NEUTRAL,
+        defaultAura = Aura.LIGHT,
         category = Category.VILLAGER,
         attribute = RoleAttribute.VILLAGER)
 public class Bonesetter extends RoleImpl implements IAffectedPlayers, ILimitedUse {
@@ -81,7 +81,6 @@ public class Bonesetter extends RoleImpl implements IAffectedPlayers, ILimitedUs
         if (!bonesetterHealEvent.isCancelled()) {
             //25 ticks = 1/2 heart
             playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.REGENERATION, 6 * 25, 1, getKey()));
-            playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.bonesetter.receive_heal");
             getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.bonesetter.activate");
             affectedPlayers.remove(playerWW);
         }

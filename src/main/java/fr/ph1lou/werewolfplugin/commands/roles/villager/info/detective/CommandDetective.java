@@ -16,6 +16,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfplugin.roles.villagers.Detective;
 import org.bukkit.Bukkit;
 
 @RoleCommand(key = "werewolf.roles.detective.command",
@@ -45,6 +46,11 @@ public class CommandDetective implements IParameterizedCommandRole {
             return;
         }
 
+        if (!detective.getPlayersMet().contains(playerWW1) || !detective.getPlayersMet().contains(playerWW2)) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.detective.not_met");
+            return;
+        }
+
         String isLG1 = playerWW1.getRole().getDisplayCamp();
         String isLG2 = playerWW2.getRole().getDisplayCamp();
 
@@ -61,13 +67,16 @@ public class CommandDetective implements IParameterizedCommandRole {
         ((IAffectedPlayers) detective).addAffectedPlayer(playerWW1);
         ((IAffectedPlayers) detective).addAffectedPlayer(playerWW2);
 
-        if (event.isSameCamp()) {
-            playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.detective.same_camp",
-                    Formatter.format("&player1&", playerWW1.getName()),
-                    Formatter.format("&player2&", playerWW2.getName()));
-        } else
-            playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.detective.opposing_camp",
-                    Formatter.format("&player1&", playerWW1.getName()),
-                    Formatter.format("&player2&", playerWW2.getName()));
+        Detective detectiveRole = (Detective) detective;
+        String code = detectiveRole.getCode(event.isSameCamp());
+
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.detective.code",
+                Formatter.format("&code&", game.translate("werewolf.roles.detective.color_" + code)));
+
+        detectiveRole.onInvestigated();
+        if (detectiveRole.canGuess()) {
+            playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.detective.guess_available",
+                    Formatter.format("&command&", game.translate("werewolf.roles.detective.command_guess")));
+        }
     }
 }

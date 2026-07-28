@@ -24,13 +24,18 @@ import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Role(key = RoleBase.INFECT, defaultAura = Aura.DARK, category = Category.WEREWOLF,
         attribute = RoleAttribute.WEREWOLF,
@@ -38,11 +43,17 @@ import java.util.Optional;
         configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.INFECT_AUTO_RESURRECTION)))
 public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPlayers, IPower {
 
+    private static final double CORRUPTION_DISTANCE = 20d;
+    private static final double INFECT_CORRUPTION_RATE = 1.0 / 5;
+    private static final double WOLF_CORRUPTION_RATE = 1.0 / 20;
+    private static final double CORRUPTION_THRESHOLD = 100.0;
+
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
+    private final Map<UUID, Double> corruption = new HashMap<>();
     private boolean power = true;
 
     public InfectFatherOfTheWolves(WereWolfAPI api,
-                                   IPlayerWW playerWW) {
+                                    IPlayerWW playerWW) {
         super(api, playerWW);
     }
 
@@ -76,6 +87,54 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
         return (this.affectedPlayer);
     }
 
+    public boolean isCorrupted(UUID playerUUID) {
+        return this.corruption.getOrDefault(playerUUID, 0.0) >= CORRUPTION_THRESHOLD;
+    }
+
+    @Override
+    public void second() {
+
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
+
+        if (!this.isAbilityEnabled()) {
+            return;
+        }
+
+        IPlayerWW self = this.getPlayerWW();
+        Location selfLoc = self.getLocation();
+
+        List<IPlayerWW> wolves = game.getAlivePlayersWW().stream()
+                .filter(p -> !p.equals(self))
+                .filter(p -> p.getRole().isWereWolf())
+                .collect(Collectors.toList());
+
+        for (IPlayerWW p : game.getAlivePlayersWW()) {
+            if (p.equals(self) || p.getRole().isWereWolf()) {
+                continue;
+            }
+
+            double rate = 0;
+            Location pLoc = p.getLocation();
+
+            if (pLoc.getWorld() == selfLoc.getWorld() && pLoc.distance(selfLoc) < CORRUPTION_DISTANCE) {
+                rate += INFECT_CORRUPTION_RATE;
+            }
+
+            for (IPlayerWW wolf : wolves) {
+                Location wolfLoc = wolf.getLocation();
+                if (pLoc.getWorld() == wolfLoc.getWorld() && pLoc.distance(wolfLoc) < CORRUPTION_DISTANCE) {
+                    rate += WOLF_CORRUPTION_RATE;
+                }
+            }
+
+            if (rate > 0) {
+                double current = Math.min(this.corruption.getOrDefault(p.getUUID(), 0.0) + rate, CORRUPTION_THRESHOLD);
+                this.corruption.put(p.getUUID(), current);
+            }
+        }
+    }
 
     @Override
     public @NotNull String getDescription() {
@@ -121,6 +180,8 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
         }
 
         if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (!this.isCorrupted(playerWW.getUUID())) return;
 
         TextComponent infectMessage = VersionUtils.getVersionUtils().createClickableText(
                 game.translate(

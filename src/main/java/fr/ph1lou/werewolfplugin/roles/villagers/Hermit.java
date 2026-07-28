@@ -4,6 +4,7 @@ import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
@@ -35,6 +36,7 @@ import java.util.Optional;
 
 @Role(key = RoleBase.HERMIT,
         category = Category.VILLAGER, attribute = RoleAttribute.VILLAGER,
+        defaultAura = Aura.NEUTRAL,
         configValues = @IntValue(key = IntValueBase.HERMIT_DISTANCE, defaultValue = 20,
                 meetUpValue = 20, step = 4, item = UniversalMaterial.WHITE_WOOL))
 public class Hermit extends RoleImpl {
@@ -173,7 +175,7 @@ public class Hermit extends RoleImpl {
                             this.getKey(), 0));
         }
 
-        if (number >= 5) {
+        if (number >= 4) {
             this.getPlayerWW()
                     .addPotionModifier(PotionModifier.add(UniversalPotionEffectType.WEAKNESS,
                             this.getKey()));

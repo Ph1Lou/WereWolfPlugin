@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -17,9 +18,14 @@ import java.util.List;
 
 @Role(key = RoleBase.BENEFACTOR,
         category = Category.VILLAGER,
-        attribute = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER,
+        defaultAura = Aura.LIGHT)
 public class Benefactor extends RoleImpl implements IAffectedPlayers {
+
+    private static final int COOLDOWN = 5 * 60;
+
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
+    private int lastUseTimer = -COOLDOWN;
 
     public Benefactor(WereWolfAPI game, IPlayerWW playerWW) {
         super(game, playerWW);
@@ -50,6 +56,14 @@ public class Benefactor extends RoleImpl implements IAffectedPlayers {
     @Override
     public void recoverPower() {
 
+    }
+
+    public boolean canGive() {
+        return this.game.getTimer() - this.lastUseTimer >= COOLDOWN;
+    }
+
+    public void onGiven() {
+        this.lastUseTimer = this.game.getTimer();
     }
 
     @Override

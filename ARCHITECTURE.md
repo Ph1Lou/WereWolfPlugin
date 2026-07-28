@@ -618,6 +618,454 @@ true`. Un rôle qui modifie temporairement l'aura d'un **autre** joueur utilise 
 nom de modificateur qui lui est propre (ex. `"counterfeiter_werewolf_facade"`)
 pour ne pas interférer avec les autres auras de la cible.
 
+#### `isWereWolf()` vs death role — asymétries clés
+
+`isWereWolf()` peut valoir `true` alors que le **rôle affiché à la mort**
+(`getDeathRole()` / `AnnouncementDeathEvent.getRole()`) reste le rôle **original**
+(non-loup). Seuls `addDeathRole(key)` (façade persistante) ou
+`AnnouncementDeathEvent.setRole(key)` (override par-message) changent vraiment le
+rôle de mort ; les drapeaux `transformed` / `infected` **ne le font pas**.
+
+| Rôle | `isWereWolf()` | `getDeathRole()` (message de mort) | `addDeathRole` ? |
+|---|---|---|---|
+| WereWolf natif (`RoleWereWolf`) | `true` (hardcodé) | clé réelle (ex. `WEREWOLF`) | non |
+| **Enfant Sauvage** (transformé) | `true` (`transformed`) | `wild_child` (**Enfant Sauvage**) | non |
+| **Joueur infecté** (non-loup d'origine) | `true` (`infected`) | rôle **original** (non-loup) | non |
+| **Loup-Garou Grimeur** | `true` | `grimy_werewolf` (sa propre clé) | non |
+| Chien-Loup (`WolfDog`) | `true` si `transformed` | `wolf_dog` (Chien-Loup) | non |
+
+> ⚠️ Conséquence : un rôle qui veut réagir aux morts « apparaissant comme
+> Loup-Garou » doit lire **`AnnouncementDeathEvent.getRole()`** (le rôle annoncé),
+> **pas** `isWereWolf()` — sinon il inclurait à tort l'Enfant Sauvage transformé et
+> le joueur infecté, et manquerait la victime grimée (voir ci-dessous).
+
+#### Grime du Loup-Garou Grimeur — swap d'affichage de mort
+
+Quand le Grimeur **tue** un joueur, il reçoit un **message cliquable** à la
+`SecondDeathEvent` (`onSecondDeathEvent`, `HIGH`) — comme l'Infect. S'il clique
+dans les 7 s (`CommandGrimy`, `/ww grimer <uuid>`, `requiredPower = true`,
+`byUuid = true`, `states = { JUDGEMENT }`), il « grimme » sa victime via
+`grime(victim)` (le grime est donc **optionnel**). Au moment du grime, le Grimeur
+tire **un Loup-Garou aléatoire encore en vie** (exclu lui-même) et stocke sa clé
+de rôle dans `grimedRoleKey` (fallback `RoleBase.WEREWOLF` si aucun loup). Effets :
+
+- **Victime grimée** : son message de mort affiche `grimedRoleKey` (override via
+  `event.setRole(...)` à `HIGH` dans `onDeathAnnounce`) — donc un loup **spécifique
+  aléatoire**, pas le `WEREWOLF` de base. Sa `getDeathRole()` persistante reste
+  inchangée — seul le message est maquillé. Le grime étant posé pendant la fenêtre
+  de mort (≤ 7 s), il est effectif **avant** la `FinalDeathEvent` (14 s) qui fire
+  l'annonce.
+- **Grimeur lui-même** : son propre message de mort est réécrit à `HIGHEST`
+  (`onSelfDeathAnnounce`) — **après** `NotAllWereWolfs` (`HIGH`) qui l'aurait
+  réduit à `WEREWOLF`. S'il a grimé un joueur → affiche le **rôle réel de la
+  victime** (`affectedPlayer.get(0).getRole().getKey()`) ; s'il n'a grimé personne
+  → affiche sa propre clé (`grimy_werewolf`). Le « swap » complet (victime → loup
+  aléatoire, Grimeur → rôle de la victime) masque l'identité du Grimeur et
+  incrimine un loup aléatoire.
+- Le **compteur de composition** suit le même swap (`removeOneRole(WEREWOLF)` au
+  grime, report du retrait du rôle réel de la victime à la mort du Grimeur).
+
+> ⚠️ Comme le Grimeur réécrit son propre rôle de mort à `HIGHEST`, un rôle qui lit
+> le death role à `HIGHEST` (ex. Braconnier) peut le lire **avant ou après**
+> l'override (ordre non garanti entre handlers de même priorité). C'est une
+> limitation inhérente — pour une lecture fiable, le Grimeur serait à `MONITOR`
+> (interdit ici par convention).
+
+
+#### Échelle de priorités de `AnnouncementDeathEvent`
+
+`AnnouncementDeathEvent` est fire par-spectateur dans `DeathListener.onFinalDeath`
+(`FinalDeathEvent` `NORMAL`). Les writers de `setRole(...)` / `setCancelled(...)`
+se répartissent ainsi :
+
+| Priorité | Action | Exemples |
+|---|---|---|
+| `LOW` | `setRole(camp.getKey())` (config « show category ») | `ShowDeathCategoryRole` |
+| `HIGH` | `setRole(RoleBase.WEREWOLF)` (loups par défaut **et** victime grimée) | `NotAllWereWolfs`, `GrimyWereWolf` |
+| `HIGH` | `setRole("...magic")` (masque aléatoire) | `Honor`, `Priestess`, `HiddenRoles` |
+| `HIGHEST` | `setRole(real getKey())` (vérité) ou `setRole(falsifié)` ou `setCancelled(true)` (deferral) | `Priestess`, `Shaman`, `CounterfeiterWereWolf`, `BloodMoon`, `Thiercelieux` |
+| `MONITOR` | **aucun writer** (convention Bukkit : lecture seule) | — |
+
+**`NotAllWereWolfs`** (`random_events/NotAllWereWolfs.java`) réécrit à `HIGH` le
+rôle de mort de **tout rôle de catégorie `WEREWOLF`** (via `isDefaultWereWolf` =
+`category == WEREWOLF || key == WHITE_WEREWOLF`) vers `RoleBase.WEREWOLF` — mais
+**uniquement si l'event aléatoire est actif**. Sinon, chaque loup garde sa clé
+spécifique dans le message de mort.
+
+> **Pour lire le rôle de mort « final »** : `HIGHEST` suffit dans la plupart des
+> cas (les writers `HIGH` — Grimeur, NotAllWereWolfs — ont déjà tourné, et les
+> writers `HIGHEST` qui « disent la vérité » — Priestess, Shaman — ne s'appliquent
+> qu'au spectateur qui les incarne, donc n'affectent pas un autre spectateur).
+> `MONITOR` est réservé à l'**observation** (jamais de `setRole`/`setCancelled`),
+> conformément à la convention Bukkit ; ne pas l'utiliser pour de la logique de
+> jeu. **Attention** à `BloodMoon`/`Thiercelieux` (`HIGHEST`,
+> `ignoreCancelled=true`) qui `setCancelled(true)` pour **déporter** l'annonce au
+> jour — sans `ignoreCancelled`, un handler `HIGHEST` s'exécute quand même sur
+> l'event annulé (le rôle est déjà final, posé à `HIGH`), ce qui permet de suivre
+> ces morts différées sans attendre la ré-émission (qui n'a pas lieu : `BloodMoon`
+> renvoie le message directement, sans re-fire l'event).
+
+#### Accéder au registre depuis un rôle — ne pas utiliser `Register.get()`
+
+`Register.get()` est un accès **statique côté plugin**
+(`fr.ph1lou.werewolfplugin.Register`) ; l'appeler dans un rôle couple le rôle au
+plugin et l'empêche d'être déplacé dans un addon. `WereWolfAPI` (l'objet `game`
+passé au rôle) **n'expose pas** `getRegisterManager()` — c'est `GetWereWolfAPI`
+(l'API publiée via le `ServicesManager`) qui le fait. Voie API :
+
+```java
+GetWereWolfAPI api = Bukkit.getServer().getServicesManager().load(GetWereWolfAPI.class);
+IRegisterManager registry = api.getRegisterManager();   // getCategory(key), getRolesRegister(), ...
+```
+
+Le `IRegisterManager` peut être mis en cache dans un champ du rôle (le
+`ServicesManager` est peuplé dès `onEnable`, donc toujours disponible pendant la
+partie).
+
+> Cas d'usage du Braconnier : pour savoir si un cadavre donne une fourrure, le
+> rôle résout la **catégorie du rôle annoncé à la mort** (`event.getRole()`) via
+> `registry.getCategory(deathRole)`. Donne fourrure si `category == WEREWOLF` ou
+> si `deathRole` est `RoleBase.WOLF_DOG` (le Chien-Loup est catégorie `VILLAGER`)
+> ou `RoleBase.WHITE_WEREWOLF` (le Loup-Garou Blanc est catégorie `NEUTRAL`) —
+> d'où ces deux cas spéciaux en plus de la catégorie. Cette lookup registre est
+> **scopée à la mort uniquement** — le reste du rôle n'y touche pas. Le
+> `event.getRole()` lu à `HIGHEST` reflète déjà les maquillages posés à `HIGH`
+> (Grimeur sur sa victime, `NotAllWereWolfs` sur les loups par défaut).
+
+#### Time-tracking : `WereWolfAPI.getTimer()` & `IPlayerWW.getDeathTime()`
+
+`game.getTimer()` (`WereWolfAPI.java:229`) renvoie le temps de jeu courant (int,
+secondes). `IPlayerWW.getDeathTime()` renvoie le timer au moment de la mort. Pour
+une mécanique « fenêtre de X minutes après la mort » (ex. particules pendant 15
+min), on peut soit compter en décrémentant dans `second()` (mis en pause tant que
+le rôle est mort, car `second()` retourne tôt), soit calculer
+`game.getTimer() - playerWW.getDeathTime()` (temps réel, indépendant de l'état du
+rôle).
+
+#### Coloration d'écran via l'action bar (vignette Lunar Client)
+
+L'action bar colorée (`ActionBarEvent`) est rendue par **Lunar Client** comme une
+**vignette** (dégradé coloré sur les bords de l'écran), pas seulement comme du
+texte. Un rôle qui veut « colorer l'écran en rouge » insère du texte `§c...` dans
+l'action bar (ex. `§c========` alterné avec `§6========`) ; le joueur Lunar voit
+alors un liseré rouge. Sans Lunar, l'effet se limite au texte de l'action bar. Le
+réglage Lunar requis : `Video Settings > Details > Vignette > Fancy`. Technique
+utilisée par le Braconnier (détection de cadavre à courte distance).
+
+#### Suivi des épisodes — `DayEvent.getNumber()` / `NightEvent.getNumber()`
+
+`WereWolfAPI` **n'expose pas** le numéro d'épisode courant (jour). `getTimer()`
+renvoie le temps de jeu en secondes, pas le n° de jour. Les events
+`DayEvent` / `NightEvent` (`events/game/day_cycle/`) portent un `int number`
+(démarré à 1, incrémenté à chaque cycle dans `CycleListener`). Un rôle qui gâte
+par épisode capture ce numéro dans un champ via `@EventHandler onDay(DayEvent)` :
+
+```java
+@EventHandler
+public void onDay(DayEvent event) {
+    if (event.getNumber() < FIRST_EPISODE) return;   // gate « à partir de l'épisode N »
+    dayNumber = event.getNumber();
+    setPower(true);                                  // réarmement quotidien
+}
+```
+
+Ne **pas** maintenir un compteur incrémenté à la main — lire `event.getNumber()`.
+
+#### Pouvoir récurrent « une fois par épisode » + pouvoir perdable
+
+Le pattern canonique (Voyante, Corbeau, Salvateur, Gardien, Détective) :
+`RoleWithLimitedSelectionDuration` (fournit `IPower` + fenêtre `POWER_DURATION`)
++ `setPower(false)` au constructeur + `setPower(true)` dans `onDay` + commande en
+`requiredPower = true` qui `setPower(false)` après usage. Pour un pouvoir qui peut
+être **perdu définitivement** (mauvaise devinette), ajouter un booléen séparé
+(`powerLost`) qui court-circuite le réarmement (`if (powerLost) return;` avant
+`setPower(true)`), à l'image de `Guard.powerFinal` (`Guard.java:39,119`).
+
+#### Pouvoir à cooldown temporel (ex. 1x/10min)
+
+`game.getTimer()` (secondes) sert d'horloge. Stocker `lastUseTimer` (init à
+`-COOLDOWN` pour autoriser le 1er usage) et vérifier
+`game.getTimer() - lastUseTimer >= COOLDOWN`. Aucun `@Timer` ni `second()`
+nécessaire. Contrairement au pouvoir « une fois par épisode », celui-ci n'est PAS
+un `IPower` (pas de `requiredPower`) — la commande vérifie le cooldown
+manuellement dans `execute`.
+
+#### Tracking des actions ciblantes — `SpyInfoEvent` & `ActionableStoryEvent`
+
+Il n'existe **pas** d'event unique « un joueur a été ciblé par une commande ».
+Chaque event d'abilité (87 sous-classes de `SelectionEvent`) a son **propre**
+`HandlerList` — on ne peut pas écouter la classe de base pour toutes les
+attraper. En revanche, `StatisticsEvents` fire deux events **dérivés centraux**
+pour les events annotés :
+
+| Event dérivé | Annotation source | Porte | `getPlayer()` = |
+|---|---|---|---|
+| `ActionableStoryEvent(player, eventKey)` | `@TellableStoryEvent` | l'**acteur** + la clé | acteur |
+| `SpyInfoEvent(actor, target, eventKey)` | `@SpyEvent` | acteur **+ cible** + clé | acteur (`getTargetWW()` = cible) |
+
+Pour compter « combien de fois un joueur a été ciblé par une ability » (et la
+nature de la dernière), écouter **`SpyInfoEvent`** et indexer par
+`event.getTargetWW()` (couvre les abilities `@SpyEvent` : Voyante, Renifleur,
+Grognement, etc.). C'est la base utilisée par le Spy (`Spy.onActionableStory`
+compte par acteur) et par `Honor.onSpyInfo` (avertit le neutre ciblé). La « nature
+» = `event.getEvent()` (la clé `@StatisticsEvent`, à `game.translate(...)`).
+
+#### Système d'Honneur
+
+L'honneur est un attribut **par joueur** (`IPlayerWW.getHonor()` / `modifyHonor(int)`),
+**additif uniquement** (pas de `setHonor`), **clampé à [-3, 3]**, initialisé
+aléatoirement dans `{-1, 0, 1}` (`PlayerWW` constructeur). Le config `HONOR`
+(`configs/Honor.java`, `@Configuration`) active le listener qui fait varier
+l'honneur (kill d'un loup +1, neutre +2, villageois -1 ; être voté -2 ; voter +1 ;
+abstention -1) et applique les effets (scaling Force des loups, masquage de
+l'annonce de mort, poids de vote, ±2 PV à ±3, etc.). Un rôle qui veut un honneur
+de départ fixe calcule le delta dans `recoverPower()` :
+`modifyHonor(target - getHonor())` (avec un flag `initialized` car `recoverPower`
+est aussi rappelé après un changement de rôle). L'honneur existe comme champ
+indépendamment du config `HONOR` — un rôle peut le lire/consommer même si le
+config est inactif (mais il ne variera plus alors).
+
+#### Camp réel vs camp affiché — `getCamp()` vs `getDisplayCamp()`
+
+`IRole.getCamp()` renvoie le `Camp` **dérivé réel** (`NEUTRAL` si `isNeutral()`,
+sinon `WEREWOLF` si `isWereWolf()`, sinon `VILLAGER`). `getDisplayCamp()` renvoie
+le camp **affiché** aux rôles à information (par défaut = `getCamp().getKey()`,
+mais surchargeable via `setDisplayCamp(...)` ou override — ex. Braconnier avec
+fourrure, Chien-Loup en forme chien). Pour un rôle à information qui doit
+respecter les déguisements, utiliser **`getDisplayCamp()`** (et
+`getDisplayRole()` pour le rôle). `Camp` est l'énumération
+`WEREWOLF` / `NEUTRAL` / `VILLAGER` (clés `werewolf.categories.*`).
+
+#### Paramètres de commande multi-types — `@Params`
+
+`@Params` combine librement plusieurs types d'arguments résolus par index :
+`players` (`@PlayerArg`), `integers` (`@IntArg`), `bukkitPlayers`, `strings`,
+`enums`, `choices`. Ex. `/ww boheme [Pseudo] [1-2-3]` :
+
+```java
+@RoleCommand(key = "...", roleKeys = RoleBase.BOHEMIAN, argNumbers = 2,
+        args = @Params(
+                players = @PlayerArg(index = 0, states = { StatePlayer.ALIVE }, excludeSelf = true),
+                integers = @IntArg(index = 1, min = 1, max = 3)))
+```
+
+Récupération : `ctx.player(0)` / `ctx.intValue(1)`. Le résolveur valide bornes,
+états, excludeSelf avant `execute`. `ChoiceArg` (ex. `choices = {"bleu","jaune"}`)
+résout en `ctx.string(index)` (comparaison case-insensitive).
+
+#### Hurlement — feature générique du camp des Loups-Garous
+
+Le hurlement est une **mécanique transverse au camp loup** (pas un pouvoir
+role-specific). C'est une `@Configuration` (`ConfigBase.WEREWOLF_HOWLING`,
+`configs/WerewolfHowling.java`) + une commande générique
+(`commands/.../werewolf/CommandWereWolfHowling.java`, `roleKeys = {}` → disponible
+à tous, mot `hurler`).
+
+**Flux** : le loup tape `/ww hurler` → fire `WereWolfCanHowlingEvent` (peut-il
+hurler ?) → si oui, fire un `WereWolfHowlingEvent(player, target, location)` par
+joueur vivant → le loup reçoit le nombre de loups dans un rayon de 50 blocs.
+
+**Gating** (`WerewolfHowling.onWerewolfRequestHowling`, `LOWEST`) :
+`isWereWolf()` + `|honor| > 1` + pas déjà hurlé (`playerWhoHaveHowling`) + config
+`WEREWOLF_HOWLING` active (vérifiée à `HIGHEST`). Le once-per-game est tracé par
+un `Set<IPlayerWW>`.
+
+**Effets** (`WerewolfHowling.onWerewolfHowling`, `HIGHEST`) : pour chaque cible
+**loup** (le `WereWolfHowlingEvent` est annulé à `LOWEST` si la cible n'est pas
+loup) → `Sound.WOLF_HOWL` + message warn + stockage de la position du hurleur
+pour afficher une **flèche directionnelle** dans l'action bar pendant 1 minute
+(`event.getDuration()` = 1200 ticks).
+
+**Cas spéciaux** (via `WereWolfCanHowlingEvent` / `WereWolfHowlingEvent`) :
+
+| Rôle | Comportement | Mécanisme |
+|---|---|---|
+| Chaque loup | 1 hurlement/partie | `playerWhoHaveHowling` |
+| **Loup-Garou Hurleur** | 3 hurlements | `HowlingWerewolf.onRequestHowling` (default) : `setCanHowling(true)` + compteur `power++` tant que `< 3` (bypass le once-per-game). Réagit aussi aux hurlements d'autrui : Regeneration II 7s + apprend le pseudo du hurleur. |
+| **Loup-Garou Craintif** | ne peut **pas** hurler (mais entend) | `FearFulWerewolf.onRequestHowling` (default) : `setCanHowling(false)`. Reçoit quand même les hurlements (c'est un loup). |
+| **Petite Fille** | entend + voit la direction, **quelques secondes** et **si invisible** | `LittleGirl.onWerewolfHowling` (default) : le `WereWolfHowlingEvent` est annulé pour elle (non-loup) à `LOWEST`, mais elle le **décancelle** (`setCancelled(false)`) si `isInvisible()`, avec une durée réduite `20*(5+3*compteur)` ticks (croît avec le nombre de hurlements entendus). |
+
+> ⚠️ Certains rôles (AmnesicWerewolf, CounterfeiterWereWolf) ont leur **propre**
+> commande `/ww hurler` role-specific (`@RoleCommand(requiredPower = true)` +
+> `howl()` + `setPower(false)`), indépendante du système générique (non gated par
+> le config ni l'honneur). Ne pas dupliquer ce pattern pour un nouveau rôle loup
+> — utiliser le hurlement générique (gratuit via `RoleWereWolf` + config
+> `WEREWOLF_HOWLING`).
+
+#### Commandes cliquables en fenêtre de mort — pattern Infect / Grimeur / Assassin
+
+Plusieurs rôles réagissent à la mort d'un joueur **tué par eux** via un message
+cliquable envoyé pendant la fenêtre de mort (`SecondDeathEvent`, ~1 tick après le
+décès, avant la `FinalDeathEvent` à 14 s). Le clic exécute une commande role avec
+UUID :
+
+```java
+// Rôle : onSecondDeathEvent (HIGH, ignoreCancelled=true)
+if (!hasPower()) return;                              // pouvoir dispo
+if (!killer.equals(this.getPlayerWW())) return;       // le tueur est ce rôle
+TextComponent msg = VersionUtils.getVersionUtils().createClickableText(
+        game.translate(Prefix.YELLOW, "...", Formatter.player(victim.getName())),
+        String.format("/ww %s %s", game.translate("...command"), victim.getUUID()),
+        ClickEvent.Action.RUN_COMMAND);
+this.getPlayerWW().sendMessage(msg);
+
+// Commande : @RoleCommand(requiredPower=true, autoCompletion=false, argNumbers=1,
+//   args=@Params(players=@PlayerArg(index=0, byUuid=true, excludeSelf=true,
+//       states={StatePlayer.JUDGEMENT}, stateMessageKey="werewolf.check.not_in_judgement")))
+if (game.getTimer() - victim.getDeathTime() > 7) { ... }   // fenêtre 7 s
+```
+
+La fenêtre de 7 s (`getTimer() - getDeathTime() > 7`) garantit que l'action est
+pendant la `SecondDeathEvent` (avant `FinalDeathEvent` à 14 s). L'effet (infecter /
+grimer / supprimer) est posé pendant cette fenêtre, donc **avant** l'annonce de
+mort (`AnnouncementDeathEvent` à `FinalDeathEvent`). Utilisé par : Infect
+(résurrection + infection), Grimeur (grime du rôle de mort), Assassin
+(suppression de l'annonce + révélation du rôle).
+
+#### Mort silencieuse — pattern Ermite / Craintif
+
+Un rôle dont la mort ne doit **rien révéler** (pas de message, pas de composition,
+pas de résurrection possible) combine plusieurs handlers :
+
+| Event | Action | Effet |
+|---|---|---|
+| `FirstDeathEvent` (LOWEST) | `setCancelled(true)` + `scheduleSyncDelayedTask(14s, () -> game.death(player))` | Skip les fenêtres de mort (Second/ThirdDeath) → la Sorcière ne peut pas ressusciter, l'Infect ne peut pas infecter (pas de SecondDeathEvent). Mort directe à 14 s. |
+| `AnnouncementDeathEvent` | `setCancelled(true)` | Pas de message de mort. |
+| `AnnouncementLoverDeathEvent` | `setCancelled(true)` | Pas de message de mort lié (couple). |
+| `UpdateCompositionEvent` (DEATH) | `setCancelled(true)` si `key == role` | La composition ne décrémente pas (le rôle "disparaît" sans trace). |
+| `UpdatePlayerNameTagEvent` (HIGH) | `setTabVisibility(false)` | Masqué du tab quand mort. |
+| `VoteEvent` | `setCancelled(true)` | Vote blanc uniquement (ne peut pas voter). |
+
+#### PotionModifier — effets par identifiant
+
+Les effets de potion se gèrent par **identifiant** (clé string) via
+`IPlayerWW.addPotionModifier(PotionModifier)` :
+
+```java
+// Ajouter (durée infinie, amp 0) — ex. Speed la nuit
+playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED, roleKey));
+// Ajouter (durée limitée, amp custom)
+playerWW.addPotionModifier(PotionModifier.add(TYPE, durationTicks, amplifier, roleKey));
+// Retirer (par identifiant)
+playerWW.addPotionModifier(PotionModifier.remove(TYPE, roleKey, 0));
+```
+
+L'identifiant (généralement `this.getKey()`) permet d'ajouter/retirer
+idempotemment. **Force** et **Résistance** sont spéciales : l'amplificateur est
+forcé à -1 (binaire), le % réel vient du taux global (`getStrengthRate()` /
+`getResistanceRate()`) via `PatchPotions` + `RequestStrengthRateEvent`. Pour une
+Force/Résistance **fractionnaire** (ex. "0.5"), il faut un handler custom sur
+`EntityDamageByEntityEvent` (cf. Braconnier) — l'effet vanilla ne peut pas
+représenter un niveau fractionnaire.
+
+#### Cycle des effets — `recoverPotionEffect()` / `disableAbilitiesRole()`
+
+- **`recoverPotionEffect()`** : rappelé au démarrage (RoleDuration) **et** après
+  chaque changement de rôle (Voleur, Escroc, Imitateur, etc.). C'est ici qu'on
+  ré-applique les effets persistants (Vision Nocturne, Speed la nuit, etc.). Pour
+  un effet conditionnel (ex. Speed seulement la nuit), vérifier `game.isDay(Day.NIGHT)`.
+- **`disableAbilitiesRole()`** : appelé quand les abilities du rôle sont
+  désactivées (`disableAbilities()`). Retirer ici les effets actifs (Speed,
+  Invisibility, etc.).
+- **`recoverPower()`** : init du pouvoir (bonus PV, randomisation, etc.).
+  Attention : rappelé après un changement de rôle — utiliser un flag `initialized`
+  pour les inits à usage unique (ex. honneur de départ, tirage aléatoire).
+
+#### Résurrection / mort directe
+
+- **`game.resurrection(playerWW)`** — ressuscite un joueur (Infect, Garde).
+  Le joueur revient à la vie avec son rôle.
+- **`game.death(playerWW)`** — tue directement un joueur (Ermite/Craintif : mort
+  silencieuse différée). Déclenche le cycle de mort normal.
+
+#### `game.isDay(Day)` / `game.getRandom()` / autres utilitaires `WereWolfAPI`
+
+| Méthode | Rôle |
+|---|---|
+| `game.isDay(Day.DAY)` / `Day.NIGHT` | Vérifie le moment du cycle (jour/nuit) |
+| `game.getRandom()` | `Random` du jeu (tirages aléatoires : couleur, loup aléatoire, etc.) |
+| `game.getAlivePlayersWW()` | `Collection<? extends IPlayerWW>` des joueurs vivants |
+| `game.getPlayersWW()` | Tous les joueurs (vivants + morts) |
+| `game.getPlayerWW(uuid)` | `Optional<IPlayerWW>` par UUID |
+| `game.getTimer()` | Temps de jeu en secondes (horloge pour cooldowns) |
+| `game.checkVictory()` | Vérifie les conditions de victoire (à appeler après un changement de camp) |
+| `game.translate(key, Formatter...)` | Traduit une clé i18n avec formateurs |
+
+#### `IPlayerWW.distance(IPlayerWW)` — attention aux mondes
+
+`distance()` appelle `getLocation().distance(other.getLocation())` qui **lève une
+exception** si les joueurs sont dans des mondes différents. Toujours vérifier
+`getLocation().getWorld() == other.getLocation().getWorld()` (identité, pas
+`equals`) avant d'appeler `distance()`.
+
+#### Messages cliquables — `VersionUtils.createClickableText`
+
+```java
+TextComponent msg = VersionUtils.getVersionUtils().createClickableText(
+        text,                            // texte affiché
+        "/ww " + commandWord + " " + uuid, // commande exécutée au clic
+        ClickEvent.Action.RUN_COMMAND);
+playerWW.sendMessage(msg);
+```
+
+Utilisé pour les actions en fenêtre de mort (Infect, Grimeur, Assassin). Le joueur
+clique → la commande s'exécute. La commande doit être `@RoleCommand` avec
+`autoCompletion = false` (pas d'autocomplétion pour une commande UUID) et
+`byUuid = true` sur le `@PlayerArg`.
+
+#### Stuff rôle — `stuffRole.yml`
+
+Les objets de départ d'un rôle sont définis dans
+`WereWolfPlugin/src/main/resources/stuffRole.yml`, keyée par
+`werewolf.roles.<role>.display`. Format sérialisation Bukkit `ItemStack` :
+
+```yaml
+werewolf.roles.assassin.display:
+  0:
+    ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+    meta:
+      ==: ItemMeta
+      meta-type: ENCHANTED
+      stored-enchants:
+        DAMAGE_ALL: 3           # Sharpness III
+```
+
+Les slots 0-35 = inventaire, 36-39 = armor. Le stuff est donné au démarrage
+(StuffManager). La traduction `items` décrit le contenu pour la description.
+
+#### Modificateurs d'enchantement `@Role` — `sharpness/protection/powerModifier` + `weight`
+
+L'annotation `@Role` accepte des modificateurs d'enchantement qui **relèvent les
+caps** d'enchantement pour le rôle ( lus par le système d'enchantement +
+affichés par `DescriptionBuilder`) :
+
+| Membre | Effet |
+|---|---|
+| `sharpnessDiamondModifier` / `sharpnessIronModifier` | +N au cap Sharpness (épée diamant/fer) |
+| `protectionDiamondModifier` / `protectionIronModifier` | +N au cap Protection (armure) |
+| `powerModifier` | +N au cap Power (arc) |
+| `weight` | Poids du rôle dans la répartition (ex. Infect `1.5f`) |
+
+Ex. l'Assassin (`sharpnessDiamondModifier=1`, `protectionDiamondModifier=1`) peut
+appliquer Sharpness IV (cap III + 1) et Protection III sur diamant (cap II + 1) —
+le seul rôle à pouvoir appliquer Protection III sur diamant.
+
+#### `Formatter.format(pattern, value)` — formateur custom
+
+En plus des formateurs standards (`Formatter.player`, `.timer`, `.number`,
+`.role`), `Formatter.format("&custom&", value)` crée un formateur avec un
+pattern arbitraire. Utile pour les placeholders non-standards (ex. `&role1&`,
+`&role2&`, `&text&`, `&camp&`, `&nature&`, `&code&`).
+
+#### `auraDescriptionSpecialUseCase` — description d'aura spéciale
+
+Le membre `@Role(auraDescriptionSpecialUseCase = "...")` fournit une clé de
+traduction affichée dans la description quand l'aura du rôle a un comportement
+spécial non-évident (ex. Garde : "être protégé donne une aura Lumineuse" ;
+Chien-Loup : "forme chien = Lumineuse, forme loup = Obscure"). Si absent, aucune
+ligne d'aura spéciale n'est affichée.
+
 ### 5.2 Scénarios — `@Scenario`
 
 **Localisation** : `WereWolfPlugin/.../werewolfplugin/scenarios/` (~30 classes).
@@ -1103,6 +1551,10 @@ Cette imbrication est **entièrement résolue à l'exécution** par
    fichiers de langue (`fr_FR.json`, `en_EN.json`, …).
 5. Les configs/timers/IntValues propres au rôle peuvent être déclarés
    directement dans l'annotation (imbrication) — aucune autre inscription.
+6. **Ne pas appeler `Register.get()`** (couplage plugin) ; si une lookup registre
+   est nécessaire (ex. catégorie d'une clé de rôle), passer par le
+   `ServicesManager` (cf. §5.1 « Accéder au registre depuis un rôle ») et la
+   scoper au strict minimum.
 
 **Choix de la classe de base & interfaces**
 

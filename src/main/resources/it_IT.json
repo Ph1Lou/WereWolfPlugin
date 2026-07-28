@@ -4,6 +4,7 @@
     "description_plugin": "Plugin di base",
     "lovers": {
       "lover": {
+        "100": "Non puoi mandare 100% o dipiù dei tuoi cuori",
         "display": "Innamorati",
         "random": " Casuale",
         "description": "§6LUPI-MANNARI §7➽§d Ad un tratto ti innamori di §b&player&§d.\n§d Se uno muore, l'altro lo raggiungerà per amore.\n§d Puoi mandare dei cuori alla tua anima gemella con §b/ww dono §d[% di vita da mandare]",
@@ -15,25 +16,28 @@
         "received": "Stai ricevendo §b&number&§ % dei cuori di §b&player&",
         "disconnected": "Il vostro amante non è connesso",
         "complete": "Hai appena mandato §b&number&§r % dei tuoi cuori a §b&player&",
-        "100": "Non puoi mandare 100% o dipiù dei tuoi cuori",
         "command": "dono",
-        "too_many_heart": "§b&player&§r ha troppi cuori"
+        "too_many_heart": "§b&player&§r ha troppi cuori",
+        "color": "§d"
       },
       "cursed_lover": {
         "display": "Coppia maledetta",
         "description": "§6LLUPI MANNARI §7➽§c Una connessione distruttiva tra §6&player&§c e voi è appena nata, anche se siete nello stesso campo, non potete vincere insieme.\n§c Possedete un cuore in più permanente e niente danni di caduta mentre siete tutti e due vivi.",
         "death_cursed_lover": "La vostra coppia maledetta è morta, perdete i vostri bonus associati",
-        "not_enough_players": "Non ci sono abbastanza persone per formare una coppia maledetta"
+        "not_enough_players": "Non ci sono abbastanza persone per formare una coppia maledetta",
+        "color": "§0"
       },
       "amnesiac_lover": {
         "display": "Coppia Amnesica",
         "not_enough_players": "Non ci sono abbastanza persone per formare una coppia amnesica",
         "configurations": {
           "distance": "Raggio d'azzione della copia amnesica §b&numero&"
-        }
+        },
+        "color": "§5"
       },
       "fake_lover": {
-        "display": "Coppia"
+        "display": "Coppia",
+        "color": "§7"
       }
     },
     "roles": {
@@ -58,7 +62,12 @@
       },
       "amnesiac_werewolf": {
         "display": "Lupo Mannaro Amnesico",
-        "description": "Non hai accesso alla lista dei Lupi e gli altri Lupi non potranno vederti nella loro lista ma ti vedranno solo quando avrai ucciso un abitante. Attenzione non sei nel campo del Lupi Mannari ma solo quando avrai ucciso un abitante"
+        "description": "Non hai accesso alla lista dei Lupi e gli altri Lupi non potranno vederti nella loro lista ma ti vedranno solo quando avrai ucciso un abitante. Attenzione non sei nel campo del Lupi Mannari ma solo quando avrai ucciso un abitante",
+        "power": "Vous êtes un Loup-Garou caché : vous n'apparaissez pas dans la liste des Loups avant 70-90 min, et votre liste de Loups connus se constitue par proximité (10 blocs).",
+        "command": "§b/ww hurler§f pour hurler une fois dans la partie.",
+        "howl_command": "hurler",
+        "howl_warn": "Un §cLoup-Garou§f hurle non loin...",
+        "howl_perform": "Vous avez hurlé. §b&number&§f Loup-Garou(s) à proximité."
       },
       "werewolf": {
         "display": "Lupo Mannaro\n",
@@ -74,7 +83,10 @@
         "display": "Lupo Mannaro Sporco",
         "description": "La prima persona che ucciderete apparira come Lupo Mannaro all'annuncio della sua morte",
         "perform": "Il giocatore §b&player&§f era §b&role&§f. Con il vostro potere, il suo ruolo all'annuncio della sua morte è stato cambiato in Lupo Mannaro",
-        "actualize": "Un Lupo Mannaro Sporco è appena morto. Aveva trasformati la morte di un §b&role&"
+        "actualize": "Un Lupo Mannaro Sporco è appena morto. Aveva trasformati la morte di un §b&role&",
+        "command": "grimer",
+        "grime_message": "§b&player&§r est mort de vos mains, pour grimer son rôle §6Cliquez ici §r(Vous avez §b7sec§r)",
+        "player_cannot_be_grimed": "Le joueur ne peut pas (plus) être grimé"
       },
       "wild_child": {
         "display": "Bambino Selvaggio",
@@ -89,7 +101,9 @@
         "model_end": " modello &player&",
         "timers": {
           "model_duration": "Durata della scelta di un Modello (§b&timer&§r)"
-        }
+        },
+        "howl_distance": "Un hurlement retentit à §b&number&§f blocs de vous",
+        "howl_count": "Le hurlement provient d'un loup entouré de §b&number&§f Loup(s)-Garou(s)"
       },
       "sister": {
         "display": "Sorella",
@@ -120,7 +134,8 @@
         "transform": "Potete passare nella forma Lupo Mannaro con il commando §b/ww cambiare§f (irreversibile) avete §b&timer&",
         "time_over": "Non potete più scegliere la vostra forma, tenete quindo la forma Abitante",
         "perform": "Avete appena scelto la forma Lupo Mannaro",
-        "description_2": "Forma §cLupo Mannaro§f : I Lupi Mannari non vi vedono nella loro lista. Però, conoscete i Lupi Mannari. I ruoli a informazione vi vedono nel campo degli Abitanti. Non avete Forza di notte."
+        "description_2": "Forma §cLupo Mannaro§f : I Lupi Mannari non vi vedono nella loro lista. Però, conoscete i Lupi Mannari. I ruoli a informazione vi vedono nel campo degli Abitanti. Non avete Forza di notte.",
+        "aura": "Chien Loup Forme chien : Aura §2Lumineuse§f, Forme Loup : Aura §cObscure§f"
       },
       "stud": {
         "display": "Becchino",
@@ -182,7 +197,14 @@
         "hide_composition": "Ci sono &number& ruoli nella composizione tra : &role1&, &role2&, &role3&",
         "werewolf_new_vote": "Nessun giocatore è stato votato dai Lupi Mannari",
         "click_to_see_werewolf.configurations.vote": "Clicca qui per vedere il risultato dei voti Lupo Mannaro",
-        "rumor": "Il giocatore §b&player&§f ha scritto la voce &message&"
+        "rumor": "Il giocatore §b&player&§f ha scritto la voce &message&",
+        "change_vote_message": "Vous pouvez encore changer le vote §b&number&§r fois",
+        "change": "Changer le §bVote pour §b&player&",
+        "change_vote_perform": "Vous venez de changer le vote pour §b&player&",
+        "command_change": "change_citizen",
+        "configurations": {
+          "vote_see_number": "Nombre de dépouillements §b&number&§r"
+        }
       },
       "angel": {
         "display": "Angelo",
@@ -204,7 +226,8 @@
         },
         "configurations": {
           "sweet_angel": "L'angelo Custode vince con il Villaggio quando il suo protetto muore"
-        }
+        },
+        "aura": "L'§aAnge§f garde TOUJOURS une aura Lumineuse"
       },
       "fallen_angel": {
         "display": "Angelo Caduto",
@@ -252,7 +275,30 @@
         "lover_death": "La coppia è morta, dovete ora vincere da solo, la vostra barra di cuori è ridotta di 2 cuori.",
         "timers": {
           "rival_duration": "Attesa delle informazioni del rivale (§b&timer&§r)"
-        }
+        },
+        "power": "Tuer un Amoureux → bonus. Sinon −5❤ (regen 1❤/5min). Commandes : analyser (3 joueurs/15min), deviner (le couple/30min), isoler (coupe les dons d'un Amoureux 3min), bonus.",
+        "commands": "§b/ww analyser [P1] [P2] [P3]§f (15min) — §b/ww deviner [P1] [P2]§f (30min) — §b/ww isoler§f — §b/ww bonus <1-4>§f.",
+        "analyser_command": "analyser",
+        "deviner_command": "deviner",
+        "isoler_command": "isoler",
+        "bonus_command": "bonus",
+        "no_couple": "Aucun couple ne vous est associé.",
+        "cooldown": "Vous devez attendre §b&number&§f minute(s) avant de réutiliser cette commande.",
+        "analyse_result": "Parmi les 3 joueurs analysés, §b&number&§f font partie du couple.",
+        "already_guessed": "Vous avez déjà deviné le couple.",
+        "deviner_success": "Vous avez deviné le couple ! Vous subissez §b30% de dégâts en moins§f face à chaque Amoureux et votre boussole pointe désormais vers eux.",
+        "deviner_fail": "Mauvaise réponse. Réessayez plus tard.",
+        "isolate_need_guess": "Vous devez d'abord deviner le couple avec §b/ww deviner§f.",
+        "isolate_no_target": "Aucun Amoureux à moins de §b15 blocs§f.",
+        "isolate_perform": "Vous isolez §b&player&§f : il ne peut plus envoyer ni recevoir de vie pendant §b3 minutes§f.",
+        "bonus_need_kill": "Vous devez d'abord tuer un Amoureux pour choisir un bonus.",
+        "bonus_already": "Vous avez déjà choisi votre bonus.",
+        "bonus_invalid": "Choix invalide. Utilisez un numéro entre 1 et 4.",
+        "bonus_perform": "Vous avez choisi le bonus §b&number&§f.",
+        "kill_success": "Vous avez tué un Amoureux ! Choisissez votre bonus avec §b/ww bonus <1-4>§f (1 : 25 pommes en or, 2 : Speed II, 3 : Force I, 4 : Régénération I).",
+        "survivor_alone": "Votre Amoureux a été tué par le Rival. Votre couple est brisé, vous devez désormais gagner seul.",
+        "penalty": "Le couple est mort sans vous : vous perdez §c5❤ permanents§f mais regagnez §b1❤ toutes les 5 minutes§f.",
+        "lover_arrow": "Amoureux"
       },
       "fox": {
         "display": "Volpe",
@@ -273,7 +319,10 @@
         "configurations": {
           "fox_smell_number": "Numero di Annusi della Volpe §b&number&",
           "distance": "Campo di azione della Volpe §b&number&"
-        }
+        },
+        "smell_perform": "Vous avez flairé §b&player&§f.",
+        "result": "Parmi les joueurs flairés, §b&number&§f sont des Loups-Garous",
+        "aura": "Quand le §bRenard§f renifle un Loup-Garou, son aura devient Obscure"
       },
       "raven": {
         "display": "Corvo",
@@ -284,7 +333,9 @@
         "curse_perform": "Avete appena maledetto §b&player&",
         "get_curse": "Siete appena stato maledetto dal corvo. Ottenete Jump Boost fino al mattino",
         "no_longer_curse": "Non siete più maledetto",
-        "command": "maledire"
+        "command": "maledire",
+        "raven_player_voted": "Vous obtenez une minutes de Force et de Vitesse car le joueur le plus voté est celui que vous aviez voté",
+        "aura": "Se faire maudire par le §bCorbeau§f donne une aura Obscure"
       },
       "village_idiot": {
         "display": "Idiota del Villaggio",
@@ -316,13 +367,19 @@
         "display": "Assassino",
         "effect": "Forza di Giorno",
         "items": "un libbro Affilatezza III, un libbro Protezione III e un libbro Potenza III",
-        "limit": "limite di armatura, di arco e di spada (+1)"
+        "limit": "limite di armatura, di arco e di spada (+1)",
+        "description": "Vous disposez de l'effet Force I le jour, ainsi que de 3 livres (Protection III, Sharpness III, Power III). Vous êtes le seul à pouvoir appliquer Protection III sur une pièce en diamant et Sharpness IV sur votre épée. Deux fois dans la partie, vous pouvez supprimer votre victime via un message cliquable : son message de mort ne sera pas affiché et vous seul en connaîtrez le rôle.",
+        "command": "assassiner",
+        "assassinate_message": "§b&player&§r est mort de vos mains, pour supprimer sa mort §6Cliquez ici §r(Vous avez §b7sec§r)",
+        "assassinate_perform": "Vous avez supprimé la mort de §b&player&§f. Son rôle était §b&role&§f.",
+        "player_cannot_be_assassinated": "Le joueur ne peut pas (plus) être supprimé"
       },
       "falsifier_werewolf": {
         "display": "Lupo Mannaro Feltro",
         "description": "§fAvete un ruolo di display diverso ogni giorno tra quelli ancora vivi per fare che il Villaggio si sbagli.",
         "role": "§fRuolo di Display Attuale : §b&role&\n",
-        "display_role_message": "Il vostro ruolo di display oggi è §b&role&"
+        "display_role_message": "Il vostro ruolo di display oggi è §b&role&",
+        "aura": "Le §cLoup-Garou Feutré§f obtient l'aura par défaut de son rôle de façade"
       },
       "thief": {
         "display": "Ladro",
@@ -330,12 +387,14 @@
         "details": "Per vedere i dettagli del vostro ruolo §b/ww ruolo",
         "description": "Ricuperate il ruolo della prima persona che uccidete e dovrete vincere con il suo Campo.",
         "effect": "Resistenza fino al suo primo kill",
-        "realized_theft": "Diventate §b&role&"
+        "realized_theft": "Diventate §b&role&",
+        "aura": "Le §6Voleur§f obtient l'aura du joueur qu'il vole"
       },
       "imitator": {
         "display": "Imitatore",
         "effect": "Forza fino al suo primo kill",
-        "description": "Ricuperate il ruolo della prima persona che uccidete."
+        "description": "Ricuperate il ruolo della prima persona che uccidete.",
+        "aura": "L'§6Imitateur§f obtient l'aura du joueur qu'il vole"
       },
       "detective": {
         "display": "Detective",
@@ -347,7 +406,16 @@
         "command": "inspettare",
         "configurations": {
           "detective_every_other_day": "Detective tutti i due giorni"
-        }
+        },
+        "code": "Vous recevez le code : &code&",
+        "color_bleu": "§bBleu§r",
+        "color_jaune": "§eJaune§r",
+        "not_met": "Au moins un de ces joueurs n'a pas encore été rencontré",
+        "command_guess": "deviner",
+        "guess_available": "Vous pouvez tenter de deviner la signification du code avec §b/ww &command&§r",
+        "guess_correct": "Vous avez deviné correctement ! Le code &code& signifie bien que les deux joueurs sont du même camp. Vous conservez votre pouvoir.",
+        "guess_wrong": "Vous vous êtes trompé. Le code &code& ne signifie pas que les deux joueurs sont du même camp. Vous perdez l'utilisation de votre pouvoir.",
+        "guess_unavailable": "Vous ne pouvez pas deviner maintenant"
       },
       "naughty_little_wolf": {
         "display": "Piccolo Lupo Cattivo",
@@ -356,7 +424,8 @@
       "chatty_seer": {
         "display": "Chiromante Chiacchierone",
         "description": "La Mattina, Potete conoscere il campo di un giocatore. Però se è un Abitante, perdete 3 cuori e non potete usare il vostro potere il giro seguente. Il messaggio sarà messo nella chat globale.",
-        "see_perform": "Un Chiromante Chiacchierone ha appena spiato un membro del campo dei §b&camp&"
+        "see_perform": "Un Chiromante Chiacchierone ha appena spiato un membro del campo dei §b&camp&",
+        "extra_description": " Le message sera affiché dans le chat global."
       },
       "infect_father_of_the_wolves": {
         "display": "Infect Padre dei Lupi",
@@ -370,7 +439,8 @@
         "command": "infettare_infect",
         "configurations": {
           "auto_rez": "L'Infect può rinascersi da solo"
-        }
+        },
+        "player_not_corrupted": "Ce joueur n'est pas corrompu"
       },
       "seer": {
         "display": "Chiromante",
@@ -384,7 +454,8 @@
         "see_villager": "Avete appena spiato un membro del Villaggio perdete 3 cuori e non potete usare il vostro potere la prossima volta",
         "command": "vedere",
         "configurations": {
-          "seer_every_other_day": "Chiromante tutti i due giorni"
+          "seer_every_other_day": "Chiromante tutti i due giorni",
+          "chatty_seer": "Voyante bavarde"
         }
       },
       "priestess": {
@@ -399,7 +470,9 @@
         "distance": "Dovete essere a meno di &number& blocchi dal giocatore",
         "configurations": {
           "distance": "Campo di azione della Sacerdotessa §b&number&"
-        }
+        },
+        "description_with_honor": "Le Jour, Vous pouvez connaître le camp d'un joueur en échange de deux coeurs permanents. Si vous mourrez, les probabilités de voir les rôles s'inversent. Les Neutres ont 95% de chance de le voir",
+        "aura": "La §bPrêtresse§f garde TOUJOURS une aura Lumineuse"
       },
       "oracle": {
         "display": "Oracolo",
@@ -423,7 +496,8 @@
         "protection_perform": "Avete appena protetto §b&player&",
         "get_protection": "Il Salvatore vi ha protetto per la giornata, avete Resistenza e Nofall",
         "no_longer_protected": "Non avete più la salvazione",
-        "command": "proteggere"
+        "command": "proteggere",
+        "aura": "Se faire protéger par le §bSalvateur§f donne une aura §bLumineuse"
       },
       "guard": {
         "display": "Guardiano",
@@ -433,7 +507,9 @@
         "perform": "Avete appena protetto §b&player&",
         "protect": "La guardia vi ha protetto, di questo fatto rinascete",
         "resurrection": "La persona che avete protetto è rinata. Non avete più poteri",
-        "message": "Proteggere un giocatore per la giornata §b/ww proteggere§r avete §b&timer&"
+        "message": "Proteggere un giocatore per la giornata §b/ww proteggere§r avete §b&timer&",
+        "protected": "Le garde vient de vous protéger, si vous vous faites tuer par un §aLoup Garou§f vous ressusciterez",
+        "aura": "Se faire protéger par le §bGarde§f donne une aura §bLumineuse"
       },
       "bear_trainer": {
         "display": "Mostratore di Orsi",
@@ -441,8 +517,11 @@
         "growling_message": "&growling&",
         "growling": "Grrrr ",
         "configurations": {
-          "distance": "Campo di azione del Mostratore di Orsi §b&number&"
-        }
+          "distance": "Campo di azione del Mostratore di Orsi §b&number&",
+          "bear_trainer_every_other_day": "Grognement tous les deux jours"
+        },
+        "no_growl": "Il n'y a pas de Loups Garous autour de vous",
+        "aura": "Le §bMontreur d’Ours§f change d’aura en fonction du nombre de “Grrrrr” (§b0§f / §71§f / §c2+§f)"
       },
       "avenger_werewolf": {
         "display": "Lupo Mannaro Vendicatore",
@@ -452,7 +531,8 @@
         "remove": "§b&player&§f era nella vostra lista di registrazione, ricuperate un cuore permanente supplementare",
         "configurations": {
           "distance": "Campo di azione del Lupo Mannaro Vendicatore §b&number&"
-        }
+        },
+        "aura": "Quand le §cLoup-Garou Vengeur§f atteint 10 ♥, son aura devient Obscure"
       },
       "white_werewolf": {
         "display": "Lupo Mannaro Bianco",
@@ -472,7 +552,8 @@
         "wait": "Annuncio degli innamorati tra §b&timer&",
         "random_cupid_message": "L'impostazione Cupido casuale è attivata",
         "configurations": {
-          "random_cupid": "Cupido Casuale"
+          "random_cupid": "Cupido Casuale",
+          "amnesiac_lovers": "Couple Amnésique"
         }
       },
       "siamese_twin": {
@@ -524,7 +605,9 @@
         },
         "configurations": {
           "distance": "Campo di azione del Giocatore di Flauti §b&number&"
-        }
+        },
+        "hit_progress": "Vos coups accélèrent le charme de §b&player&§f (+10%).",
+        "fluted_notify": "Vous avez reçu une §bflûte§f sans le savoir. Tant qu'elle est sur vous, vous charmez les joueurs autour de vous §bà votre insu§f. Vous ne pouvez pas vous en débarrasser."
       },
       "librarian": {
         "display": "Bibliotecario",
@@ -542,6 +625,9 @@
         "command": "libro"
       },
       "comedian": {
+        "1": "Resistenza",
+        "2": "Velocità",
+        "3": "Forza",
         "display": "Comediano",
         "masks": "Maschere usate : §b&mask&",
         "none": "Nessuno",
@@ -550,9 +636,6 @@
         "wear_mask_perform": "Avete appena messo la maschera di §b&mask&",
         "used_mask": "Avete già usato questa maschera",
         "mask_unknown": "Maschera sconosciuta",
-        "1": "Resistenza",
-        "2": "Velocità",
-        "3": "Forza",
         "command": "maschera"
       },
       "trapper": {
@@ -593,7 +676,8 @@
         "choice_message": "Un giocatore è morto. §bClicca qui§r per ottenere un informazioni su di lui in cambio di un cuore permanente. Avete §b30§r secondi.",
         "victim_name": "§b&player&§r è morto",
         "victim_role": "Un §b&role&§r è morto",
-        "command": "cammand_shaman"
+        "command": "cammand_shaman",
+        "aura": "Quand le §bChaman§f utilisent son pouvoir, son aura devient Obscure"
       },
       "charmer": {
         "display": "Incantatrice",
@@ -631,7 +715,8 @@
       "big_bad_werewolf": {
         "display": "Grande Lupo Cattivo",
         "effects": "Forza di Giorno mentre nessun lupo è morto",
-        "werewolf_death": "Un Lupo Mannaro è appena morto, perdete la vostra forza di giorno"
+        "werewolf_death": "Un Lupo Mannaro è appena morto, perdete la vostra forza di giorno",
+        "aura": "Le §cGrand Méchant Loup§f garde TOUJOURS une aura Obscure"
       },
       "will_o_the_wisp": {
         "display": "Fuoco Folletto",
@@ -643,8 +728,18 @@
         "role_reveal": "Un giocatore situato a meno di §b&number&§f blocchi è §b&role&",
         "use_tp": "Potete ancora usare §b&number&§f volte il vostro commando §b/ww tp§f ",
         "configurations": {
-          "distance": "Campo di azione del Fuoco Folletto §b&number&"
-        }
+          "distance": "Campo di azione del Fuoco Folletto §b&number&",
+          "cooldown_tp": "Cooldown téléportation (§b&timer&§r)",
+          "duration_madness": "Durée folie incendiaire (§b&timer&§r)",
+          "cooldown_madness": "Cooldown folie incendiaire (§b&timer&§r)"
+        },
+        "command_incendiary": "folie",
+        "feather": "Pouvoir : Vous pouvez vous téléporter de &number& blocs toutes les §b&timer&§f en faisant clique droit sur une plume\n",
+        "incendiary_madness": "Vous pouvez déclencher ure folie incendiaire toutes les §b&timer&§f avec §b/ww folie§f. Elle vous procure Vitesse I et mets le feu au joueur que vous tapez pendant §b&timer2&§f",
+        "perform_madness": "Vous venez de déclencher votre folie incendiaire. Elle vous procure Vitesse I pendant §b&timer& et mets en feu les joueurs que vous tapez ",
+        "colldown_end": "Vous pouvez de nouveau déclencher votre folie incendiaire avec §b/ww folie",
+        "colldown_end_tp": "Vous pouvez de nouveau vous téléporter avec votre plume",
+        "wait_cooldown_tp": "Vous devez attendre la fin du cooldown"
       },
       "howling_werewolf": {
         "display": "Lupo Mannaro Urlatore",
@@ -652,7 +747,8 @@
         "message": "C'erano §b&number&§f persone non Lupi Mannari intorno a voi. Guadagnate allora §b&heart&§f cuori suplementari durante 5 minuti",
         "configurations": {
           "distance": "Campo di azione del Lupo Mannaro Urlatore §b&number&"
-        }
+        },
+        "pseudo": "Le joueur qui a hurlé est §b&player&§f"
       },
       "twin": {
         "display": "Gemello",
@@ -685,7 +781,9 @@
         "not_affected": "Non potete effetuare questo commando solo su un giocatore osservato precedamente con §b/ww osservare§f",
         "timers": {
           "analyse_duration": "Inizio del potere Analista (§b&timer&§r)"
-        }
+        },
+        "cooldown": "Il y a un cooldown de §b&timer&",
+        "aura": "Quand l’§bAnalyste§f utilise son pouvoir d’analyse, son aura devient Obscure"
       },
       "servitor": {
         "display": "Servitore",
@@ -760,7 +858,8 @@
         },
         "configurations": {
           "darkness_distance": "Campo di azione delle tenebri: §b&number&§r blocchi"
-        }
+        },
+        "aura": "Quand le §cLoup-Garou Ténébreux§f utilise son pouvoir, son aura devient Obscure"
       },
       "gravedigger": {
         "display": "Scavatore di tombe",
@@ -838,7 +937,10 @@
         "necromancer_death": "Il §bNegromante§f è appena morto, ricuperate un cuore permanente tutti i tre minuti",
         "configurations": {
           "distance": "Campo di azione del Negromante §b&number&§f blocchi"
-        }
+        },
+        "progress": "§fVol de coeur : (§b&number&§f / 600)",
+        "pve": "Votre mort vivant est mort §aPVE§f, vous récuperez votre pouvoir",
+        "mark": "§6☠§f"
       },
       "devoted_servant": {
         "display": "Serva dedicata",
@@ -862,7 +964,8 @@
         "description": "Al quinto giorno, potete spiare un giocatore. Riceverete il numeri di azioni raccontabili effetuate dal giocatore il giorno dopo",
         "use_power": "Potete spiare un nuovo giocatore §b/ww spy",
         "result": "Il giocatore &player& ha effetuato &number& azioni racontabili",
-        "perform": "Comminciate a spiare §b&player&"
+        "perform": "Comminciate a spiare §b&player&",
+        "day": "Pouvoir activé Jour §b&number&"
       },
       "benefactor": {
         "display": "Benefattore",
@@ -874,7 +977,8 @@
         "too_many_players": "Avete già usato il vostro potere su §b3 §fgiocatori",
         "already_use_on_player": "Avete già usato il vostro potere su questo giocatore",
         "perform": "Avete dato §b1 ♥ §f a §b&player& §f!",
-        "target_message": "Il benefattore vi ha fatto dono di §b1 ♥ §f!"
+        "target_message": "Il benefattore vi ha fatto dono di §b1 ♥ §f!",
+        "cooldown": "Vous devez attendre avant de pouvoir utiliser votre pouvoir à nouveau"
       },
       "rabbit": {
         "display": "Coniglio",
@@ -914,7 +1018,228 @@
         },
         "configurations": {
           "distance": "Champ d'action du Braconnier §b&number&§f blocs"
+        },
+        "actionbar_distance": "§6&text&§r"
+      },
+      "innkeeper": {
+        "display": "Aubergiste",
+        "effect": "Speed quand toutes les chambres sont fermées",
+        "available": "Votre pouvoir est de nouveau disponible",
+        "description": "Le jour, vous pouvez clic-droit sur un joueur pour l’héberger.\nLe jour suivant, vous pouvez à nouveau clic-droit sur le client pour savoir le nombre de joueurs croisés pendant la nuit et le nom de l’un d’eux.\nSi un client a fait un kill, vous le savez mais tous les clients sont expulsés.\nSi un client meurt, vous obtenez le rôle du tueur et la chambre ferme.\nQuand vous n'avez plus de chambre, vous obtenez Speed 0.5.",
+        "available_room": "Vous avez &number& chambre(s) disponible(s)",
+        "dead": "Un de vos clients est mort, son tueur était &role&",
+        "kill": "Un de vos clients a tué quelqu'un, tous vos clients sont éjectés",
+        "seen_players": "Ce client (&player1&) a vu &number& personne(s) dont &player&",
+        "no_seen_players": "Ce client n'a vu personne",
+        "already_seen": "Vous avez déjà reçu les informations de ce client",
+        "add_client": "Vous allez héberger §b&player&§f",
+        "no_more_room": "Vous n'avez plus de chambre, vous ne pouvez pas héberger ce client",
+        "list": "§bJoueur(s) hébergé(s)§f : &list&\n §bJoueur(s) hébergé(s)§f précedemment : &list2&\n",
+        "speed": "Vous n'avez plus de chambre, vous avez maintenant la vitesse 0.5",
+        "already": "Vous hébergez déjà ce client",
+        "configurations": {
+          "detection_radius": "Rayon de détection pour les joueurs rencontrés §b&number&§r"
         }
+      },
+      "counterfeiter_werewolf": {
+        "display": "Loup-Garou Faussaire",
+        "description": "§fVous gagnez avec les §cLoups-Garous§f. La nuit, vous bénéficiez de §bForce I§f (dont le pourcentage dépend de votre §bHonneur§f). Si vous tuez un joueur, vous gagnez §bSpeed I§f et §b2❤ d'Absorption§f pendant 1 minute.\nUne fois par épisode, vous pouvez donner un §brôle de façade§f à un joueur de votre choix (sauf vous-même) via §b/ww fausser [Pseudo]§f. Le rôle de façade dépend du camp de la cible et change son aura :\n§b•§f Cible Loup-Garou : rôle de façade villageois ou solitaire, aura §aLumineuse§f.\n§b•§f Cible villageois/solitaire : rôle de façade Loup-Garou ou solitaire, aura §8Obscure§f.\nLa façade dure jusqu'à la fin de l'épisode. Si un joueur faussé meurt pendant ce délai, c'est le §brôle de façade§f qui s'affiche dans le message de mort, mais vous perdez §c2❤ permanents§f.",
+        "power": "Vous pouvez pousser un hurlement une fois dans la partie avec §b/ww hurler§f.",
+        "commands": "§b/ww fausser [Pseudo]§f pour fausser un rôle — §b/ww hurler§f pour hurler (1x).",
+        "aura": "Le §cLoup-Garou Faussaire§f a une aura initiale §7Neutre§f.",
+        "falsify_command": "fausser",
+        "howl_command": "hurler",
+        "perform": "Vous avez donné le rôle de façade §b&role&§f à §b&player&§f.",
+        "already_use_on_player": "Vous faussez déjà le rôle de ce joueur.",
+        "no_role_available": "Aucun rôle de façade disponible parmi les joueurs en vie.",
+        "lose_health": "Un joueur au rôle faussé est mort : vous perdez §c&number&❤ permanents§f.",
+        "howl_warn": "Un §cLoup-Garou§f hurle non loin...",
+        "howl_perform": "Vous avez hurlé. §b&number&§f Loup-Garou(s) à proximité.",
+        "howl_already_used": "Vous avez déjà utilisé votre hurlement."
+      },
+      "vaudouiste": {
+        "display": "Vaudouiste",
+        "description": "§fVous gagnez avec le §aVillage§f. Vous pouvez créer une §bpoupée vaudou§f d'un joueur dont vous avez été à moins de §b20 blocs§f pendant §b2 minutes§f (cumulé), via §b/ww vaudou [Pseudo]§f. §b3 poupées maximum§f simultanées.\nLes poupées durent §b15 minutes§f. Pendant ce temps, vous recevez un message dès que le joueur ciblé subit des dégâts (PvP ou PvE).\nQuand un joueur dont vous avez créé la poupée meurt, vous pouvez §csacrifier 1❤ permanent§f avec §b/ww sacrifier§f pour connaître le rôle de son tueur.",
+        "power": "Poupées vaudou : §b/ww vaudou [Pseudo]§f (3 max, 15 min). Sacrifice : §b/ww sacrifier§f (-1❤ → rôle du tueur).",
+        "commands": "§b/ww vaudou [Pseudo]§f pour créer une poupée — §b/ww sacrifier§f pour révéler le tueur.",
+        "vaudou_command": "vaudou",
+        "sacrifice_command": "sacrifier",
+        "perform": "Vous avez créé une poupée vaudou de §b&player&§f.",
+        "already_doll": "Vous avez déjà une poupée active de ce joueur.",
+        "not_enough_proximity": "Vous n'avez pas été assez longtemps à proximité de §b&player&§f (2 minutes à moins de 20 blocs requises).",
+        "too_many_dolls": "Vous avez déjà atteint le maximum de §b&number&§f poupées.",
+        "doll_expired": "Votre poupée de §b&player&§f a expiré.",
+        "doll_damaged": "Votre poupée §b&player&§f subit §c&number&❤§f de dégâts.",
+        "doll_dead": "Votre poupée §b&player&§f est morte. Utilisez §b/ww sacrifier§f pour perdre 1❤ et connaître le rôle du tueur.",
+        "doll_dead_no_killer": "Votre poupée §b&player&§f est morte, mais aucun tueur n'a été identifié.",
+        "sacrifice_reveal": "Vous sacrifiez §c1❤§f : §b&player&§f a été tué par §b&killer&§f (§c&role&§f).",
+        "no_pending_sacrifice": "Aucune poupée morte en attente de sacrifice.",
+        "proximity_reached": "Vous avez été assez longtemps près de §b&player&§f : vous pouvez désormais créer une poupée vaudou."
+      },
+      "astronomer": {
+        "display": "Astronome",
+        "description": "Une fois par nuit, vous pouvez créer une trajectoire infinie entre vous et un joueur aléatoire présent dans la partie (se trouvant à plus de 20 blocs de lui) qui n'appartient pas au camp du Village. \nLa trajectoire entre le joueur et l'Astronome dure 2 minutes et ne s'actualise pas si le joueur se déplace. ",
+        "command_description": "§b/ww telescope",
+        "effect": "Vision Nocturne",
+        "tracking_perform": "Vous commencez à pister un joueur §cqui n'est pas Villageois§f pour 2 minutes",
+        "command": "telescope",
+        "aura": "l'Astronome a une aura §2Lumineuse§f la nuit et §1Obscure§f le jour"
+      },
+      "bonesetter": {
+        "display": "Rebouteux",
+        "description": "Vous pouvez accorder votre protection à 3 joueurs dans la partie (sauf vous-même) via §b/ww guerir§r. Les joueurs ciblés ne sont pas avertis. Lorsqu'un joueur protégé passe en-dessous de §b4♥§f, il est automatiquement soigné de §b3♥§f. Vous recevez un message lorsqu'une guérison s'active (sans savoir qui). Vous régénérez §b3♥§f (au lieu de 2) lorsque vous mangez une pomme en or.",
+        "command": "guerir",
+        "command_description": "/ww guerir",
+        "too_many_players": "Vous avez déja utilisé votre pouvoir sur §b3§f joueurs",
+        "already_use_on_player": "Vous avez déjà utilisé votre pouvoir sur ce joueur",
+        "perform": "§b&player& sera guéri si il perd trop de vie!",
+        "target_message": "Le rebouteux vous guérira de §b3 ♥ §f si vous tombez en dessous de §b4 ♥!",
+        "activate": "Un joueur a été guéri grâce à vous",
+        "receive_heal": "Vous recevez les soins du §bRebouteux"
+      },
+      "witness": {
+        "display": "Témoin",
+        "description": "A l'annonce de la liste des loups, vous connaitrez le pseudo d'un coupable, membre du camp des loups. Toutefois, si le coupable venait a mourir, vous perdrez 2 coeurs permanents. De plus, vous infligez 30%% de dégats en moins au coupable.",
+        "culprit_name": "Le coupable est §b&player&",
+        "culprit_unknown": "Le coupable est dévoilé dans &time&",
+        "culprit_dead": "Le coupable est Mort",
+        "item": "Role par havwila",
+        "reveal_culprit": "Le joueur §b&player&§r appartient au camp des loup-garous",
+        "culprit_death": "Le coupable est mort, vous perdez donc 2 coeurs permanents",
+        "change": "L'identité du coupable a changée, il s'agit désormais de §b&player&§r"
+      },
+      "croupier": {
+        "display": "Croupier",
+        "description": "Chaque jour, vous pouvez sélectionner un joueur qui recevra un message contenant le pseudo d'un joueur aléatoire ainsi que 3 roles, parmis lesquels se trouve le role de ce joueur.",
+        "command": "distribuer",
+        "perform": "Vous pouvez distribuer des informations à un joueur avec §b/ww distribuer§r vous avez §b&timer&",
+        "not_enough_players": "Il ne reste pas assez de joueurs pour utiliser cette commande",
+        "repeated_target": "Vous ne pouvez sélectionner qu'une seule fois le même joueur",
+        "card": "Grâce au §bCroupier§f, vous savez que le role de §b&player&§r se trouve parmi les suivants: §b&role1&§r, §b&role2&§r, §b&role3&",
+        "confirm": "Le message a été envoyé",
+        "problem": "Il n'y a pas assez de joueurs pour faire la liste des rôles",
+        "configurations": {
+          "croupier_every_other_day": "Croupier tous les deux jours"
+        }
+      },
+      "romulus_remus": {
+        "display": "Romulus ou Remus",
+        "description_naive": "Pour l'instant, vous pouvez gagner avec votre frère et votre mère adoptive. \nToutefois, si l'un de vous trois meurt, votre objectif changera. \nVous ne connaissez que le rôle de votre mère. \nSi vous passez a coté d'elle, elle saura §b2§f minutes plus tard qu'elle a rencontré un de ces fils.",
+        "power_naive": "Resistance lorsque vous êtes à plus de &number& blocs de votre frère",
+        "mother_role": "Votre mère est un §b&role&§r\n",
+        "brother_name": "Votre frère est §b&name&§r\n",
+        "description_romulus": "Vous êtes Romulus. Vous obtiendrez un effet de force permanent si vous parvenez à tuer votre frère",
+        "description_remus": "Vous êtes Remus. Vous obtiendrez un effet de force permanent si vous tuez votre frère. Les Loups vous verront avec eux dès que vous aurez tué votre frère",
+        "strength": "Force permanente\n",
+        "mother_message": "Vous sentez l'odeur d'un de vos fils adoptifs. Vous étiez proches de lui il y a §b2§f minutes",
+        "killed_brother_strength": "Vous êtes parvenu à tuer votre frère. Vous avez désormais §4Force§r pour le restant de la partie",
+        "mother_dead": "Votre mère est morte. Votre rôle a changé. §b/ww role§r pour en savoir plus.",
+        "family_change": "Un membre de votre famille a changé. §b/ww role§r pour en savoir plus.",
+        "family_init": "Vous connaissez désormais votre famille. §b/ww role§r pour en savoir plus.",
+        "configuration": {
+          "distance_brother": "Distance séparant les frères §b&number&§f blocs"
+        }
+      },
+      "inquisitor": {
+        "display": "Inquisiteur",
+        "description": "Au début du jour, vous pouvez châtier un joueur. Si le joueur est un §cLoup§f, il perd ses pouvoirs et effets. Si le joueur ciblé n'est pas un Loup, vous perdez votre pouvoir",
+        "smite_message": "Châtiez un joueur avec §b/ww chatiment joueur§r, vous avez §b&timer&",
+        "command": "chatiment",
+        "smite_disable": "L'§bInquisiteur§f vous a châtié. Vous perdez vos effets et pouvoirs définitivement",
+        "smite_success": "Votre cible est un Loup, il perd donc définitivement tous ses pouvoirs et effets",
+        "smite_fail": "Le joueur ciblé n'est pas un Loup. Vous perdez donc votre pouvoir définitivement"
+      },
+      "auramancer": {
+        "display": "Auramancien",
+        "description": "Vous possédez des effets différents en fonction de l'aura que vous avez. Lorsque vous êtes affectés par un modificateur d'aura, votre aura devient l'aura du modificateur. Quand vous tuez un joueur avec une aura &dark&§r, votre aura s'améliore d'un cran.",
+        "passive_light": "§bPassif§r: Les joueurs proches à l'aura &light&§r disposent de 0.5 de force.\n",
+        "passive_neutral": "§bPassif§r: Lorsque un joueur est tué proche de vous (50 blocs), vous apprenez quelles sont les auras du mort et du tueur\n",
+        "passive_dark": "§bPassif§r: Vous devez gagner §cseul§r. Vous infligez des dégâts de force aux joueurs avec une aura &light&§r. Vous disposez du pseudo d'un joueur à l'aura &light&. S'il ne reste plus de joueurs à l'aura &light&§r, votre aura ne change plus et vous obtenez speed permanent.\n",
+        "aura_sense": "Un joueur proche avec une aura &auraVictim&§r a été tué par un joueur avec une aura &auraKiller&",
+        "aura_kill": "Vous avez tué un joueur avec une aura &aura_dead&§r. Votre aura est désormais &aura_new&",
+        "aura_change": "Votre aura a changé. Elle est désormais &aura&",
+        "aura_locked": "Plus aucun autre joueur ne possède une aura &aura_light&§r. Vous gardez votre aura &aura&§r pour le restant de la partie.",
+        "light_player": "Le joueur §b&player&§r a une aura &light&.",
+        "no_light": "Il n'y a plus de joueurs avec l'aura &light&.",
+        "configurations": {
+          "distance": "Champ d'action de l'Auramancien §b&number&§f blocs"
+        }
+      },
+      "mastermind": {
+        "display": "Mastermind",
+        "description": "Vous pouvez deviner les roles des joueurs avec §b/ww deviner joueur§r. Si vous devinez correctement, vous gagnez un coeur permanent, autrement vous en perdez un.",
+        "command": "§b/ww mindsilence joueur§r pour un coeur permanent, desactivez le rôle d'un joueur que vous avez deviné",
+        "repeat_target": "Vous avez déja tenté de deviner le role de ce joueur",
+        "guess_success": "Vous avez deviné le role de &player&. Vous obtenez un coeur permanent supplémentaire",
+        "guess_fail": "Vous vous êtes trompé de rôle. Vous perdez donc un coeur permanent",
+        "not_guessed": "Vous n'avez pas deviné le role de &player&. Vous ne pouvez pas effectuer cette action",
+        "command_disable": "mindsilence",
+        "disable_perform": "Vous avez désactivé les compétences de &player&",
+        "disable_target": "Vos compétences ont été désactivés. Vous perdez vos effets et pouvoirs définitivement"
+      },
+      "silencer_werewolf": {
+        "display": "Loup Muselant",
+        "description": "Une fois par nuit, tant qu'il reste plus de villageois que de loups, vous pouvez tentez de deviner le role d'un villageois. Si vous réussissez, il perdra ses pouvoirs. Si vous vous trompez, vous ne pourrez plus utiliser cette commande jusqu'à la fin de la partie",
+        "desc_command": "/ww deviner joueur",
+        "guess_success": "Vous avez deviné le role de &player&. Il perd ses pouvoirs",
+        "guess_fail": "Vous vous êtes trompé de rôle. Vous ne pouvez désormais plus utiliser cette commande",
+        "disable_target": "Le Loup muselant a trouvé votre role et a désactivé vos pouvoirs jusqu'à la fin de la game",
+        "power": "Vous pouvez à nouveau utiliser votre pouvoir",
+        "more_wolves": "Il y a moins de villageois que de loups. Vous ne pouvez pas utiliser votre pouvoir"
+      },
+      "bloodthirsty_werewolf": {
+        "display": "Loup Sanguinaire",
+        "description_command": "/ww traquer",
+        "command": "traquer",
+        "description": "Vous pouvez traquer des joueurs avec §c/ww traquer§f. Vous obtenez §b&speed&%§f de speed supplémentaire lorsque vous vous dirigez vers le joueur traqué. Vous pouvez traquer un nouveau joueur §b&time&§r après la mort de votre cible précédente. \nA partir du jour &damage_day& et tous les deux jours, vous perdez 4 coeurs si vous n'avez pas infligé de dégat à un joueur non loup durant les 2 jours précédents. \nA partir du jour &list_day& et tous les deux jours, vous recevez une liste contenant tous les joueurs ayant moins de §b&number&%§f de leur vie maximale.",
+        "power_enable": "Vous pouvez traquer un joueur",
+        "power_disable": "Vous ne pouvez pas traquer de joueur pour le moment",
+        "power_already_used": "Vous traquez déjà le joueur §b&player&§f",
+        "hunt_down_confirm": "Vous traquez désormais le joueur §c&player&",
+        "player_cant_be_traqued": "Vous ne pouvez pas traquer le joueur §b&player&§r",
+        "player_death": "Votre cible est morte, vous pourrez traquer un autre joueur dans §b&time&§f",
+        "have_deal_damage": "Vous avez infligé des dégâts à un joueur non loup durant l'épisode précédent, vous ne perdez pas de vie à cet épisode",
+        "havent_deal_damage": "Vous n'avez pas infligé de dégât à un joueur non loup, vous perdez donc 4 coeurs",
+        "low_life_players_list": "Voici la liste des joueurs qui ont moins de §b&number&%§f de vie\n§b&names&",
+        "recover_power": "Vous pouvez à nouveau traquer un joueur",
+        "timers": {
+          "cooldown": "Durée du cooldown: §b&timer&§f"
+        },
+        "configurations": {
+          "max_life": "Vie maximale de §b&number&%§f de la détection du sanguinaire",
+          "speed": "Speed augmentée de §b&number&%§f",
+          "life_detect_day": "Vous commencez à détecter les joueurs avec peu de vie dès le jour §b&number&§f",
+          "take_damage_day": "Vous prendrez des dégats dès le jour §b&number&§f"
+        }
+      },
+      "scape_goat": {
+        "display": "Bouc émissaire",
+        "description": "Vous devez choisir le joueur qui sera désigné lorsqu'une égalité survient sans quoi vous serez désigné à sa place. Dans les cas où il n'y a pas d'égalité, vous recevez §b1§f pomme en or et obtiendrez le rôle d'un joueur en vie aléatoire que n'est §4PAS§f le joueur désigné par les votes.",
+        "select": "§l§bCliquez§f§r ici pour votez pour §b&player&§f",
+        "command_name": "scape_command",
+        "multi_vote_equality": "Des personnes ont le même nombre de votes, c'est à vous de trancher :",
+        "vote_no_equality": "Le vote a été clair, vous n'aurez pas à trancher.\nVous recever §b1§f pomme d'or et l'information suivante : \n le joueur désigné par le vote n'est §cpas§f §b&role&",
+        "vote_no_result": "Aucun joueur n'a été voté plus d'une fois, vous n'aurez pas à trancher. Vous recevez §b1§f pomme d'or.",
+        "perform": "Vous avez tranché pour §b&player&"
+      },
+      "bohemian": {
+        "display": "Bohémienne",
+        "description": "Vous commencez la partie avec un niveau d'Honneur de §b1§f. Vous pouvez sacrifier vos niveaux d'Honneur via §b/ww boheme§r [Pseudo] [1-2-3] (1 fois toutes les 10 minutes) pour obtenir une information sur le joueur visé :\n§b1§f : Niveau d'Honneur du joueur\n§b2§f : Nombre de commandes dont le joueur a été la cible et nature de la dernière\n§b3§f : Camp du joueur (Villageois, Loups-Garous ou autre)\nÀ chaque début d'épisode, vous êtes informée de votre niveau d'Honneur actuel (actuel : §b&number&§f).",
+        "command": "boheme",
+        "honor_level": "Votre niveau d'Honneur actuel est de §b&number&§f",
+        "cooldown": "Vous devez attendre avant de pouvoir réutiliser votre pouvoir",
+        "not_enough_honor": "Vous n'avez pas assez d'Honneur (actuel : §b&number&§f)",
+        "info_honor": "§b&player&§f a un niveau d'Honneur de §b&number&§f",
+        "info_commands": "§b&player&§f a été la cible de §b&number&§f commande(s). La dernière était : &nature&",
+        "info_camp": "§b&player&§f fait partie du camp : &camp&",
+        "no_command": "Aucune"
+      },
+      "disloyal_werewolf": {
+        "display": "Loup-Garou Déloyal",
+        "description": "Vous possédez l'effet Force I la nuit (dont le % dépend de votre Honneur). Deux fois par partie, vous pouvez réduire de 1 le niveau d'Honneur des joueurs à moins de §b30§f blocs de vous via §b/ww nuire§r (vous n'êtes pas affecté, les Loups-Garous affectés en sont notifiés). Une fois par partie, vous pouvez pousser un hurlement via §b/ww hurler§r. Vous gagnez Speed I et §b2♥§f d'Absorption pendant 1 minute si vous tuez un joueur.",
+        "nuire_command": "nuire",
+        "nuire_perform": "Vous avez réduit l'Honneur de §b&number&§f joueur(s) à proximité",
+        "nuire_warn": "§b&player&§f (Loup-Garou Déloyal) a réduit votre Honneur de 1"
       }
     },
     "announcement": {
@@ -1035,7 +1360,8 @@
           "role": "§b&player&§r è §b&role&",
           "transformed": "Trasformato : §b&on&",
           "yes": "sì",
-          "no": "no"
+          "no": "no",
+          "honor": "Son honneur est de : §b&number&"
         },
         "final_heal": {
           "command": "fh",
@@ -1134,7 +1460,8 @@
           "command": "late",
           "description": "Per raggiungere un giocatore in una partita in corso",
           "in_game": "Il giocatore è già nella partita",
-          "launch": "§b&player&§r è appena stato aggiunto alla partita"
+          "launch": "§b&player&§r è appena stato aggiunto alla partita",
+          "teleportation": "Attendez la fin de la téléportation avant de rajouter un nouveau joueur"
         },
         "config": {
           "command": "config",
@@ -1203,7 +1530,13 @@
             "La §bSacerdotessa§f e l'§aAngelo§f tengono SEMPRE un aura Luminosa",
             "Il §cGrande Lupo Cattivo§f tiene SEMPRE un aura Oscura"
           ],
-          "prefix": "Descrizione delle Aura :"
+          "prefix": "Descrizione delle Aura :",
+          "specific_use_cases": [
+            "§6Cas particuliers§f :",
+            "Tuer un joueur (qui ne se fait pas ressusciter) donne une aura §bObscure",
+            "Se faire ressusciter donne une aura §bNeutre"
+          ],
+          "menu_role": "Aura : &aura&"
         },
         "doc": {
           "command": "documento",
@@ -1271,6 +1604,16 @@
         "vote": {
           "command": "voto",
           "description": "Permette di Votare"
+        },
+        "guess": {
+          "command": "deviner",
+          "title": "Devinez le role de §b&player&"
+        },
+        "color": {
+          "command": "color",
+          "description": "Permet de coloriser le pseudo d'un joueur",
+          "player_choice": "Marquage du §bjoueur",
+          "color_choice": "Choix de la §bcouleur"
         }
       }
     },
@@ -1321,7 +1664,12 @@
         "dependant_load": "§cRuolo dipendente caricato (§f&role&§c)",
         "name": "Configurazione §bRuoli",
         "zero": "Tutto mettere a zero",
-        "incompatible": "§cRuolo incompatibile caricato : §b&role&"
+        "incompatible": "§cRuolo incompatibile caricato : §b&role&",
+        "filters": {
+          "aura": "Filtre par aura",
+          "category": "Filtre par catégorie",
+          "attribute": "Filtre par attribut"
+        }
       },
       "whitelist": {
         "name": "Configurazione §bListaBianca",
@@ -1347,14 +1695,16 @@
         "knock_back": "Contraccolpo §b&number&",
         "knock_back_invisible": "§cContraccolpo§f soltanto per i giocatori §ainvisibili",
         "punch": "Impatto : §b&number&",
-        "depth_rider": "Passo delle profondità : §b&number&"
+        "depth_rider": "Passo delle profondità : §b&number&",
+        "depth_strider": "Agilité aquatique : §b&number&"
       },
       "timers": {
         "name": "Configurazione §bTimers"
       },
       "random_events": {
         "name": "Configurazione §bEventi",
-        "probability": "§fProbabilità : §b&number&§f%"
+        "probability": "§fProbabilità : §b&number&§f%",
+        "name_fix": "Conf §bEvents aléatoires"
       },
       "save": {
         "name": "Configurazione §bBackup",
@@ -1366,7 +1716,8 @@
         "delete_message": "Configurazione §b&save&§r cancellata",
         "success": "Configurazione §bsalvata",
         "failure": "Slot di configurazione pieno",
-        "save_menu": "Menu di §bBackup"
+        "save_menu": "Menu di §bBackup",
+        "save_name": "sauvegarde"
       },
       "stuff": {
         "name": "Configurazione §bRoba di inizio e di morte",
@@ -1525,7 +1876,8 @@
         },
         "configurations": {
           "vote_end": "Fine del voto a §b&number&§r persone",
-          "vote_every_other_day": "Voto un giorno su due"
+          "vote_every_other_day": "Voto un giorno su due",
+          "distance": "Distance de rencontre : §b &number& bloc(s)"
         },
         "already_voted": "Avete già votato oggi",
         "not_vote_time": "Non è più l'ora del voto",
@@ -1541,7 +1893,9 @@
         "new_voted": "Siete quello che ha preso più voti nell ultimo voto, non potete votare questa volta",
         "neutral": "I ruoli solitari non possono votare",
         "new_vote_villager": "§b&player&§f è quello che ha perso più voti dagli abitanti",
-        "new_vote_werewolf": "§b&player&§f è quello che ha perso più voti dai Lupi Mannari"
+        "new_vote_werewolf": "§b&player&§f è quello che ha perso più voti dai Lupi Mannari",
+        "not_met": "Vous ne pouvez pas voter un joueur que vous n'avez pas rencontrer à moins de §b&number& blocs",
+        "distance_voted": "Le joueur voté est à §b&number&§f blocs +- 100"
       },
       "hide_composition": {
         "name": "Composizione Nascosta"
@@ -1583,6 +1937,22 @@
       "thiercelieux": {
         "name": "Thiercelieux",
         "description": "I morti sono annunciati la mattina"
+      },
+      "werewolf_howling": {
+        "name": "Hurlement des Loups Garous",
+        "action_bar": "§cHurlement§f : ",
+        "message": "Il y a §b&number&§f loups à §b50 blocs§f de vous",
+        "command": "hurler",
+        "not_allowed": "Vous n'avez pas le droit d'utiliser le §cHurlement",
+        "disabled": "Hurlement désactivé",
+        "warn": "Un joueur vient d'utiliser le §cHurlement",
+        "can_use": "Vous pouvez utiliser le §cHurlement§f avec §b/ww hurler"
+      },
+      "honor": {
+        "name": "Honneur",
+        "description": "Active le système d'honneur",
+        "list_near_player": "Les joueurs à moins de §b80 blocs§f sont : §b&list&",
+        "spy_info": "Un joueur a eu une info sur votre §brôle§f"
       }
     },
     "scenarios": {
@@ -1680,6 +2050,9 @@
       },
       "beta_zombies": {
         "name": "Beta Zombies"
+      },
+      "auto_break": {
+        "name": "Auto Break"
       }
     },
     "random_events": {
@@ -1791,6 +2164,26 @@
       "incomplete_list": {
         "name": "Liste à Trous",
         "description": "Les membres du camp des Loups n’ont dans leur liste \nque le pseudo de la moitié de leurs coéquipiers. \nTout joueur qui rejoint le camp des Loups par la suite\n aura accès à l’intégralité de la liste\n et fera partie de la liste chez tous ses coéquipiers."
+      },
+      "vaccination": {
+        "name": "Vaccination",
+        "description": "Le joueur infecté par l'Infect Père des Loups\n est mis au courant qu'exceptionnellement \nil ne rejoint pas le camps des Loups\n Les Loups seront néanmoins informés que ce joueur \na bien rejoint leur camp.",
+        "infection_cancelled": "Vous avez été infecté par l'Infect Père des Loups mais exceptionnellement, vous ne rejoignez pas le camp des Loups. Ces derniers vous verront comme appartenant à leur camp."
+      },
+      "love_at_first_sight": {
+        "name": "Coup de foudre",
+        "description": "Le couple associé au Cupidon devient un couple amnésique"
+      },
+      "cupid_indecisive": {
+        "name": "Cupidon Indécis",
+        "description": "Lorsque cet événement est activé, il affecte la configuration de la partie \n: si le Couple est censé être aléatoire, il sera choisi par le Cupidon,\n s’il est censé être choisi, il sera aléatoire."
+      },
+      "blood_moon": {
+        "name": "Lune de Sang",
+        "description": "Pendant cette nuit, les Loups-Garous ont des particules rouges à leurs pieds \nvisibles uniquement par les autres Loups-Garous.\n Les messages de mort des joueurs qui meurent pendant cette nuit\n ne sont envoyés qu'au petit matin le jour suivant",
+        "start": "Début d'une Lune de §cSang",
+        "end": "Fin de la Lune de §cSang",
+        "count": "Début de la Lune au bout de §b&number&§f jour(s)"
       }
     },
     "check": {
@@ -1819,7 +2212,8 @@
       "cancel": "Il vostro potere è stato annullato",
       "transformation": "La vostra trasformazione è stata annullata",
       "invalid_key": "Chiave non valida",
-      "state": "Non potete fare questo commando a questo momento della partita"
+      "state": "Non potete fare questo commando a questo momento della partita",
+      "night": "Cette commande ne peut être effectuée que la nuit"
     },
     "update": {
       "up_to_date": "Il plugin LM UHC è aggiornato",
@@ -1842,7 +2236,12 @@
       "villager": "Abitanti",
       "werewolf": "Lupi Mannari",
       "neutral": "Solitari",
-      "addons": "Ruoli Addons"
+      "addons": "Ruoli Addons",
+      "colors": {
+        "villager": "§a",
+        "werewolf": "§c",
+        "neutral": "§7"
+      }
     },
     "description": {
       "_": "§b================================",
@@ -1861,7 +2260,14 @@
       "no": "No",
       "yes": "Sì",
       "description_message": "&description&",
-      "werewolf": "Forza (di notte), Visione Notturna. 1 minuto di velocità e 2 cuori di assorbimento dopo ogni kill"
+      "werewolf": "Forza (di notte), Visione Notturna. 1 minuto di velocità e 2 cuori di assorbimento dopo ogni kill",
+      "equipments_attribut": {
+        "sharpness_iron": "Limite d'épée en fer (§b+&number&§f)",
+        "sharpness_diamond": "Limite d'épée en diamant (§b+&number&§f)",
+        "protection_iron": "Limite de protection équipements en fer (§b+&number&§f)",
+        "protection_diamond": "Limite de protection équipements en diamant (§b+&number&§f)",
+        "power": "Limite de puissance de l'arc (§b+&number&§f)"
+      }
     },
     "statistics": {
       "message": "Scopri il repilogo della partita precedente §bCliccando qui"
@@ -1873,6 +2279,59 @@
       "orange": "[§6LM UHC§r] ",
       "blue": "[§9LM UHC§r] ",
       "light_blue": "[§3LM UHC§r] "
+    },
+    "attributes": {
+      "menu": "Attribut : &attribute&",
+      "villager": "§aVillageois",
+      "minor_information": "§eInformations mineures",
+      "information": "§6Informations majeures",
+      "werewolf": "§cLoup Garou",
+      "hybrid": "§1Hybride",
+      "neutral": "§7Neutre"
+    },
+    "elections": {
+      "name": "§fLes Elections",
+      "lore": "Permet l'élection d'un §bMaire",
+      "election": {
+        "command": "election",
+        "star": "§6⭐ ",
+        "name": "Élections",
+        "regime": {
+          "doctor": {
+            "name": "Docteur",
+            "description": "Vous avez une seconde vie",
+            "resurrection": "Vous ressuscitez avec votre pouvoir de Maire §bMedecin"
+          },
+          "farmer": {
+            "name": "Fermier",
+            "description": "Vous n'avez plus besoin de vous nourrir pendant la partie, vous avez 20% de chance lorsque vous craftez une pomme d'or d'en avoir une en plus"
+          },
+          "undertaker": {
+            "name": "Croque Mort",
+            "description": "Dès que une personne de votre camp meurt, vous gagnez une pomme d'or",
+            "message": "Une personne de votre camp vient de mourir, vous gagnez une pomme d'or"
+          },
+          "black_smith": {
+            "name": "Forgeron",
+            "description": "Vous prenez 10% de dégâts en moins"
+          }
+        },
+        "death": "Le maire est mort",
+        "disable": "Les élections sont désactivées",
+        "not_begin": "Les élections n'ont pas encore commencé",
+        "empty": "Votre message est vide",
+        "register": "Votre participation a été enregistrée",
+        "change": "Votre participation a été changée",
+        "finish": "Les élections sont finies",
+        "menu_title": "Menu des §bVotes",
+        "timer": "Début des élections (§b&timer&§f)",
+        "timer_application": "Durée des candidatures (§b&timer&§f)",
+        "timer_vote_mayor": "Durée du vote pour le Maire (§b&timer&§f)",
+        "application": "Candidature : §b&application&",
+        "begin": "C'est le début des elections du maire, pour vous présenter §b/ww election§f <message pour convaincre les électeurs>, vous avez §b&timer&",
+        "vote": "C'est le moment du vote. Votez pour votre maire avec §b/ww election§f, vous avez §b&timer&",
+        "result": "Le maire &forme& §b&name&§f a été élu avec §b&votes&§f votes. Il a un double vote en plus du pouvoir de sa forme"
+      }
     }
   }
 }

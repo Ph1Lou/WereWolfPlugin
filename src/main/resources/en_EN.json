@@ -99,20 +99,25 @@
       },
       "grimy_werewolf": {
         "display": "Grimy Werewolf",
-        "description": "The first player you kill will appear as a Werewolf on his death",
+        "description": "The first player you kill will appear as a random alive Werewolf on his death. On your own death, if you have grimed a player, you will appear with their role; otherwise, you will appear as a Grimy Werewolf.",
         "perform": "The player §b&player&§f was a §b&role&§f. Due to your power, his role has been disguised as a Werewolf",
-        "actualize": "A Grimy Werewolf died. He did disguise the death of a §b&role&"
+        "actualize": "A Grimy Werewolf died. He did disguise the death of a §b&role&",
+        "command": "grime",
+        "grime_message": "§b&player&§r died by your hand, to grime his role §6Click here §r(You have §b7sec§r)",
+        "player_cannot_be_grimed": "The player can't (anymore) be grimed"
       },
       "wild_child": {
         "display": "Wild Child",
-        "model_none": "§cNone§f select a master §b/ww master",
-        "description": "After receiving your role, you chose a master. If he dies, you become a member of the Werewolves.",
-        "design_model": "You have to choose a master §b/ww master§r. You have §b&timer&",
-        "reveal_model": "Your master is §b&player&",
+        "model_none": "§cNone§f select a model §b/ww choisir",
+        "description": "At the start of the game, you choose a model via §b/ww choisir§r [Player]. As long as your model is alive, you win with the Village. If they die, you transform and win with the Werewolves. After transformation, you gain an advantage based on your late model's Honor: if their Honor is >0, you know the distance of each howl; if ≤0, the number of Werewolves around the howler.",
+        "design_model": "You have to choose a model §b/ww choisir§r. You have §b&timer&",
+        "reveal_model": "Your model is §b&player&",
         "model_death": "§cDead§f",
-        "model": "§bMaster§f : &player&\n",
-        "command": "master",
-        "model_end": " master &player&",
+        "model": "§bModel§f : &player&\n",
+        "command": "choisir",
+        "model_end": " model &player&",
+        "howl_distance": "A howl sounds §b&number&§f blocks away from you",
+        "howl_count": "The howl comes from a wolf surrounded by §b&number&§f Werewolf(s)",
         "timers": {
           "model_duration": "Time for choosing a Master (§b&timer&§r)"
         }
@@ -300,10 +305,12 @@
       },
       "fox": {
         "display": "Fox",
-        "effect": "Three minutes of speed after each kill",
-        "description": "You are able to sniff other players in order to know if they are a Werewolf or not. You can only sniff players who are less than §b&number&§f blocks away from you for §b&timer&§f.\nYou have §b&number1&§f sniff(s). An arrow guides you to the last sniffed player",
+        "effect": "Speed at night",
+        "description": "You have Speed at night. You can sniff 3 players in the game (only at night, once per night max) via §b/ww sniff§f [Player]. You must stay within §b&number&§f blocks of the target for §b&timer&§f. After sniffing §b&number1&§f player(s), you will know the number of Werewolves among the sniffed players.",
         "smell_message": "You may sniff a player §b/ww sniff§. If you are already sniffing someone, he will be replaced by the new target and progression will be reset to 0. You have §b&number&§r sniffs remaining",
         "smell_beginning": "You started smelling §b&player&",
+        "smell_perform": "You sniffed §b&player&§f.",
+        "result": "Among the sniffed players, §b&number&§f are Werewolves",
         "not_werewolf": "&player& §2isn't in the Werewolf team",
         "warn": "He will be informed in 5 minutes that you sniffed him",
         "werewolf": "&player&§4 is a membre of the Werewolves.§f He will be informed that he has ben sniffed in 5 minutes",
@@ -363,7 +370,12 @@
         "display": "Assassin",
         "effect": "Strength during daytime",
         "items": "A Sharpness III book, a Protection III book and a Power III book",
-        "limit": "armor, bow and sword enchantement limit (+1)"
+        "limit": "armor, bow and sword enchantement limit (+1)",
+        "description": "You have Strength I during the day, as well as 3 books (Protection III, Sharpness III, Power III). You are the only one who can apply Protection III on a diamond piece and Sharpness IV on your sword. Twice per game, you can suppress your victim via a clickable message: their death message will not be shown and only you will know their role.",
+        "command": "assassinate",
+        "assassinate_message": "§b&player&§r died by your hand, to suppress their death §6Click here §r(You have §b7sec§r)",
+        "assassinate_perform": "You suppressed the death of §b&player&§f. Their role was §b&role&§f.",
+        "player_cannot_be_assassinated": "The player can't (anymore) be suppressed"
       },
       "falsifier_werewolf": {
         "display": "Falsifier Wolf",
@@ -424,12 +436,21 @@
       },
       "detective": {
         "display": "Detective",
-        "description": "Every morning, you may examine two players to know if they are or not in the same team.",
-        "inspection_message": "Inspect two players §b/ww inspect§r you have §b&timer&",
+        "description": "Once per episode (from episode 3), you can investigate two previously met players via §b/ww inspect§r. You receive a §bblue§r or §eyellow§r code: one means both players are in the same camp, the other that they are not. This meaning is fixed for the whole game but unknown. From episode 5, after each investigation, you may try to guess its meaning via §b/ww guess§r. Correct: you keep your power. Wrong: you lose it. You may choose to never guess.",
+        "inspection_message": "Investigate two met players §b/ww inspect§r you have §b&timer&",
+        "code": "You receive the code: &code&",
+        "color_bleu": "§bBlue§r",
+        "color_jaune": "§eYellow§r",
         "same_camp": "&player1& and &player2& §2are in the same team",
         "opposing_camp": "&player1& and &player2& §2are not in the same team",
         "already_inspect": "At least one of the players has already been inspected",
+        "not_met": "At least one of these players has not been met yet",
         "command": "inspect",
+        "command_guess": "guess",
+        "guess_available": "You may try to guess the meaning of the code with §b/ww &command&§r",
+        "guess_correct": "You guessed correctly! The &code& code does mean both players are in the same camp. You keep your power.",
+        "guess_wrong": "You were wrong. The &code& code does not mean both players are in the same camp. You lose the use of your power.",
+        "guess_unavailable": "You cannot guess right now",
         "configurations": {
           "detective_every_other_day": "Detective every other day"
         }
@@ -440,17 +461,18 @@
       },
       "chatty_seer": {
         "extra_description": " The message will be displayed in the global chat.",
-        "see_perform": "A Chatty Seer has spied on a member of the §b&camp& camp"
+        "see_perform": "A Chatty Seer has spied on a §b&role1&§f or a §b&role2&§f"
       },
       "infect_father_of_the_wolves": {
         "display": "Infect Father of the Wolves",
         "items": "Two splash potions of healing",
         "power_available": "You may §astill§f use your power",
         "power_not_available": "You have §calready§f used your power",
-        "description": "You may bring back to life a player who was killed by a werewolf. This player will become a part of the werewolves while keeping his original powers.",
+        "description": "You corrupt nearby players (1%/5s). Nearby Werewolves also contribute (1%/20s). Once per game, you may infect a corrupted player killed by a Werewolf via a clickable message (5 sec). They resurrect with their powers and join the Werewolves. You may howl once per game via §b/ww hurler§r.",
         "infection_message": "§b&player&§r is dead, to infect §6Click here §r(You have §b7sec§r)",
         "infection_perform": "You infected §b&player&",
         "player_cannot_be_infected": "The player can't (anymore) be infected",
+        "player_not_corrupted": "This player is not corrupted",
         "command": "infecter_infect",
         "configurations": {
           "auto_rez": "The infect father of the Wolves can resurrect himself"
@@ -461,9 +483,9 @@
         "items": "4 blocks of Obsidian and 4Libraries",
         "effect": "Night Vision",
         "disable": "You have spied on a Villager yesterday. Your power will be available again tomorrow",
-        "description": "In the morning, you may see the team a player belongs to. However, if it's a villager, you lose 3 Hearts and won't be able to use your power the next day.",
-        "see_camp_message": "Discover a player's team §b/ww see§r you have §b&timer&",
-        "see_perform": "You have spied on a member of the §b&camp& camp",
+        "description": "Once per episode, you may use §b/ww see§r [Player] to obtain two roles: the player's role as well as another role present in the composition. You get at least 1 village role each time.",
+        "see_camp_message": "Discover a player's roles §b/ww see§r you have §b&timer&",
+        "see_perform": "You obtain two roles: §b&role1&§f or §b&role2&§f",
         "not_enough_life": "You don't have enough life to spy on someone",
         "see_villager": "You just spied on a villager and thus lose 3 hearts and cannot use your power the next time",
         "command": "see",
@@ -505,7 +527,7 @@
       "protector": {
         "display": "Protector",
         "items": "Three splash potions of healing",
-        "description": "Every morning, you may decide to protect a player. He will receive resistance and NoFall until dawn",
+        "description": "Once per episode, you may protect a player until the end of the current episode via §b/ww protect§r [Player]. The protected player gains Resistance I as well as a 50% fall damage reduction. The protected player is not informed of this protection.",
         "protection_message": "Protect a player for the day §b/ww protect§r you have §b&timer&",
         "protection_perform": "You just protected §b&player&",
         "get_protection": "The Protector is protecting today, you now have Resistance and NoFall",
@@ -515,13 +537,13 @@
       },
       "guard": {
         "display": "Guard",
-        "description": "Every morning, you can chose to protect a player. If he is killed by a Werewolf, he'll come back to life, but you won't be able to use your power anymore. You may protect each player only once",
-        "command": "protect",
+        "description": "You can protect each player once per game for 10 minutes via §b/ww garder§r [Player]. You cannot protect yourself. If the protected player is killed by a Werewolf, they will resurrect. However, you will lose your power and gain Resistance for 20 minutes. Your aura becomes Dark if you save a player.",
+        "command": "garder",
         "perform": "You just protected §b&player&",
         "protected": "The guard just protected you, if you get killed by a §aWolf Garou§f you will resurrect",
         "protect": "The guard is protecting you. As such, you come back to life",
-        "resurrection": "The person you protected just resurrected. You no longer have powers, but you get resistance for two days",
-        "message": "Protect a player for the day §b/ww protect§r you have §b&timer&",
+        "resurrection": "The person you protected just resurrected. You no longer have powers, but you get Resistance for 20 minutes and your aura becomes Dark",
+        "message": "Protect a player §b/ww garder§r you have §b&timer&",
         "aura": "Being protected by the §bGuard§f grants a §bBright§f aura"
       },
       "bear_trainer": {
@@ -719,16 +741,16 @@
       },
       "fearful_werewolf": {
         "display": "Fearful Werewolf",
-        "description": "You have effects depending on the number of werewolves in a range of &number& blocs. You cannot vote, and your death will not be announced in the chat You cannot use the §cHowl§f",
-        "effects": "4 or more WW : Weakness, 2 WW or less: Daily Resistance, Night Strength, Alone : Speed",
+        "description": "Your effects depend on the number of Werewolves within §b&number&§f blocks of you (including yourself). You can only cast a blank vote and your death produces no message: you can neither be resurrected by the Witch nor infected by the Infect Father of the Wolves. You cannot howl.",
+        "effects": "More than 4 WW: Weakness; 2 WW or less: Resistance by day, Strength by night; Alone: Speed",
         "configurations": {
           "distance": "Fearful Werewolf action field §b&number&"
         }
       },
       "hermit": {
         "display": "Hermit",
-        "description": "You have effects depending on the number of players in a range of &number& blocs. You cannot vote, and your death will not be announced in the chat",
-        "effects": "5 or more people : Weakness otherwise Resists Night, Force Day, Alone : Speed",
+        "description": "Your powers evolve based on the number of players within §b&number&§f blocks of you (including yourself). You can only cast a blank vote and your death produces no message: you can neither be resurrected by the Witch nor infected by the Infect Father of the Wolves.",
+        "effects": "5 players or more: Weakness; 4 players or less: Strength I by day, Resistance I by night; Alone: Speed",
         "configurations": {
           "distance": "Hermit Field Action §b&number&"
         }
@@ -977,11 +999,12 @@
       },
       "benefactor": {
         "display": "Benefactor",
-        "description": "3 times during the game, you may grant a heart container to a player of your choice (excluding yourself).",
-        "effect": "You obtain a slow Regeneration effect (1 ♥ every 3 minutes) once you have used your power",
+        "description": "3 times during the game (once every 5 minutes), you may grant 1 permanent ♥ to a player of your choice (excluding yourself) via §b/ww conferer§r. The targeted player will receive the gift §b3 minutes§f after the command is executed.",
+        "effect": "You obtain a slow Regeneration effect (1 ♥/min) once you have fully used your power",
         "items": "2 Books Protection II",
-        "command": "life",
-        "command_description": "/ww life",
+        "command": "conferer",
+        "command_description": "/ww conferer",
+        "cooldown": "You must wait before using your power again",
         "too_many_players": "You have already used your power on §b3§fplayers",
         "already_use_on_player": "You have already used your power over this player",
         "perform": "You gave §b1 ♥️ §f to §b&player& §f!",
@@ -1016,8 +1039,9 @@
         "display": "Poacher",
         "actionbar_1": "§c========§r",
         "actionbar_2": "§6========§r",
-        "description": "Your bar action colors in red less than §b&number&§f blocks of a Wolf corpse.\nBy staying there §b&timer&§f, you can take their fur.\nThe first fur, you will appear Werewolf for all info roles.",
-        "effects": "Fur : Resistance §b10%§f then §b+3%§f Fur Resistance",
+        "actionbar_distance": "§6&text&§r",
+        "description": "You win with the §aVillage§f. You sense Werewolf corpses: within §b50§f blocks, you get the distance (by tiers) to them. Within §b&number&§f blocks, your screen turns §cred§f; by staying there §b&timer&§f, you recover its fur. From the first fur on, you appear as a §cWerewolf§f to info roles and your aura becomes §cDark§f. Corpses are marked by an §6orange§f particle for 15 minutes.",
+        "effects": "First fur: Resistance §b0.5§f. Each additional fur: §b+0.1§f Resistance.",
         "fur_numbers": "Number of furs: §b&number&",
         "recover": "You retrieve the fur from §b&player&",
         "timers": {
@@ -1029,9 +1053,9 @@
       },
       "bonesetter": {
         "display": "Bonesetter",
-        "description": "You can apply an automatic pride to 3 players in the game except yourself (targets are aware of): when these players fall below 4 ♥️, they will receive 7 seconds of Regebration II (3 ♥️ de heal).\nYou receive a message when one of the targets activates pride (without knowing who).\nYou also have 3 ♥️ Gold apple regeneration.",
-        "command": "auto_heal",
-        "command_description": "/ww auto_heal",
+        "description": "You can grant your protection to 3 players in the game (except yourself) via §b/ww guerir§r. Targeted players are not notified. When a protected player falls below §b4♥️§f, they are automatically healed for §b3♥️§f. You receive a message when a heal triggers (without knowing who). You regenerate §b3♥️§f (instead of 2) when eating a golden apple.",
+        "command": "guerir",
+        "command_description": "/ww guerir",
         "too_many_players": "You have already used your power on §b3§fplayers",
         "already_use_on_player": "You have already used your power over this player",
         "perform": "§b&player& will be healed if he loses too much health!",
@@ -1164,6 +1188,25 @@
         "vote_no_equality": "The vote was clear, you will not have to decide.\nYou receive §b1§f gold apple and the following information: \n the player assigned by vote is §cnot§f §b&role&",
         "vote_no_result": "No player voted more than once, you won't have to decide. You receive §b1§f Golden Apple.",
         "perform": "You have selected for §b&player&"
+      },
+      "bohemian": {
+        "display": "Bohemian",
+        "description": "You start the game with an Honor level of §b1§f. You may sacrifice your Honor levels via §b/ww boheme§r [Player] [1-2-3] (once every 10 minutes) to gain information about the targeted player:\n§b1§f: Target's Honor level\n§b2§f: Number of commands the target has been the target of, and the nature of the last one\n§b3§f: Target's camp (Villager, Werewolves or other)\nAt each episode start, you are informed of your current Honor level (current: §b&number&§f).",
+        "command": "boheme",
+        "honor_level": "Your current Honor level is §b&number&§f",
+        "cooldown": "You must wait before using your power again",
+        "not_enough_honor": "You don't have enough Honor (current: §b&number&§f)",
+        "info_honor": "§b&player&§f has an Honor level of §b&number&§f",
+        "info_commands": "§b&player&§f has been the target of §b&number&§f command(s). The last one was: &nature&",
+        "info_camp": "§b&player&§f belongs to the camp: &camp&",
+        "no_command": "None"
+      },
+      "disloyal_werewolf": {
+        "display": "Disloyal Werewolf",
+        "description": "You have Strength I at night (its % depends on your Honor). Twice per game, you can reduce by 1 the Honor of players within §b30§f blocks via §b/ww nuire§r (you are not affected, affected Werewolves are notified). Once per game, you can howl via §b/ww hurler§r. You gain Speed I and §b2♥§f Absorption for 1 minute if you kill a player.",
+        "nuire_command": "nuire",
+        "nuire_perform": "You reduced the Honor of §b&number&§f nearby player(s)",
+        "nuire_warn": "§b&player&§f (Disloyal Werewolf) reduced your Honor by 1"
       }
     },
     "announcement": {

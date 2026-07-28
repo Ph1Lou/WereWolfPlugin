@@ -17,6 +17,7 @@ import fr.ph1lou.werewolfapi.events.roles.wild_child.AutoModelEvent;
 import fr.ph1lou.werewolfapi.events.roles.wild_child.ModelEvent;
 import fr.ph1lou.werewolfapi.events.roles.wild_child.WildChildTransformationEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.NewWereWolfEvent;
+import fr.ph1lou.werewolfapi.events.werewolf.WereWolfHowlingEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -178,9 +179,39 @@ public class WildChild extends RoleImpl implements IAffectedPlayers, ITransforme
         }
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onHowling(WereWolfHowlingEvent event) {
+
+        if (!this.transformed) return;
+
+        if (!event.getTargetWW().equals(this.getPlayerWW())) return;
+
+        if (this.affectedPlayer.isEmpty()) return;
+
+        IPlayerWW model = this.affectedPlayer.get(0);
+
+        if (model.getHonor() > 0) {
+            IPlayerWW self = this.getPlayerWW();
+            if (self.getLocation().getWorld() == event.getLocation().getWorld()) {
+                int distance = (int) self.getLocation().distance(event.getLocation());
+                this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.wild_child.howl_distance",
+                        Formatter.number(distance));
+            }
+        } else {
+            IPlayerWW howler = event.getPlayerWW();
+            long count = game.getAlivePlayersWW().stream()
+                    .filter(p -> !p.equals(howler))
+                    .filter(p -> p.getRole().isWereWolf())
+                    .filter(p -> p.getLocation().getWorld() == howler.getLocation().getWorld())
+                    .filter(p -> p.distance(howler) < 50)
+                    .count();
+            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.wild_child.howl_count",
+                    Formatter.number((int) count));
+        }
+    }
+
     @EventHandler
     public void onEndPlayerMessage(EndPlayerMessageEvent event) {
-
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         StringBuilder sb = event.getEndMessage();

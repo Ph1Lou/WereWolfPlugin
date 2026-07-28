@@ -99,20 +99,25 @@
       },
       "grimy_werewolf": {
         "display": "Loup Garou Grimeur",
-        "description": "La première personne que vous tuerez apparaîtra comme étant Loup Garou à l'annonce de sa mort",
+        "description": "La première personne que vous tuerez apparaîtra comme un Loup-Garou aléatoire encore en vie à l'annonce de sa mort. À votre propre mort, si vous avez grimé un joueur, vous apparaîtrez avec son rôle ; sinon, vous apparaîtrez comme Loup-Garou Grimeur.",
         "perform": "Le joueur §b&player&§f était §b&role&§f. Grâce à votre pouvoir, son rôle à l'annonce de sa mort a été maquillé en Loup Garou",
-        "actualize": "Un Loup Garou Grimeur vient de mourir. Il avait maquillé la mort d'un §b&role&"
+        "actualize": "Un Loup Garou Grimeur vient de mourir. Il avait maquillé la mort d'un §b&role&",
+        "command": "grimer",
+        "grime_message": "§b&player&§r est mort de vos mains, pour grimer son rôle §6Cliquez ici §r(Vous avez §b7sec§r)",
+        "player_cannot_be_grimed": "Le joueur ne peut pas (plus) être grimé"
       },
       "wild_child": {
         "display": "Enfant Sauvage",
-        "model_none": "§cAucun§f désigner un modèle §b/ww modele",
-        "description": "En début de partie, vous choisissez un modèle. Si celui-ci meurt, vous passez dans le camp des Loups Garous.",
-        "design_model": "Vous devez désigner un modèle §b/ww modele§r. Vous avez §b&timer&",
+        "model_none": "§cAucun§f désigner un modèle §b/ww choisir",
+        "description": "En début de partie, vous choisissez un modèle via §b/ww choisir§r [Pseudo]. Tant que votre modèle est en vie, vous gagnez avec le Village. S'il meurt, vous vous transformez et gagnez avec les Loups-Garous. Après transformation, vous obtenez un avantage selon l'Honneur de votre feu modèle : si son Honneur est >0, vous connaissez la distance de chaque hurlement ; si ≤0, le nombre de Loups-Garous autour du hurleur.",
+        "design_model": "Vous devez désigner un modèle §b/ww choisir§r. Vous avez §b&timer&",
         "reveal_model": "Votre modèle est §b&player&",
         "model_death": "§cMort§f",
         "model": "§bModele§f : &player&\n",
-        "command": "modele",
+        "command": "choisir",
         "model_end": " modèle &player&",
+        "howl_distance": "Un hurlement retentit à §b&number&§f blocs de vous",
+        "howl_count": "Le hurlement provient d'un loup entouré de §b&number&§f Loup(s)-Garou(s)",
         "timers": {
           "model_duration": "Durée pour le choix d'un Modèle (§b&timer&§r)"
         }
@@ -300,10 +305,12 @@
       },
       "fox": {
         "display": "Renard",
-        "effect": "Trois minutes de Vitesse après chaque kill",
-        "description": "Vous pouvez flairer les joueurs pour savoir si ils sont Loup-Garou. Les joueurs devront se situer à moins de §b&number&§f blocs pendant §b&timer&§f. Vous disposez de §b&number1&§f flair(s). Une fleche vous amène au dernier joueur flairé",
+        "effect": "Vitesse la nuit",
+        "description": "Vous possédez l'effet Speed la nuit. Vous pouvez flairer 3 joueurs dans la partie (uniquement la nuit, 1 fois par nuit maximum) via §b/ww flairer§f [Pseudo]. Vous devez rester à moins de §b&number&§f blocs du joueur ciblé pendant §b&timer&§f. Après avoir flairé §b&number1&§f joueur(s), vous connaîtrez le nombre de Loups-Garous parmi les joueurs flairés.",
         "smell_message": "Vous pouvez flairer un joueur §b/ww flairer§f. Si vous êtes déjà en train de flairer quelqu'un, il sera remplacé par le nouveau joueur et la progression sera remise à 0. Il vous reste §b&number&§r flair(s)",
         "smell_beginning": "Vous commencez à flairer §b&player&",
+        "smell_perform": "Vous avez flairé §b&player&§f.",
+        "result": "Parmi les joueurs flairés, §b&number&§f sont des Loups-Garous",
         "not_werewolf": "&player& §an'est pas dans le camp des Loups Garous",
         "warn": "Il sera prévenu dans 5 minutes que vous l'avez flairé",
         "werewolf": "&player& §4est dans le camp des Loups Garous.§f Il sera prévenu qu'il a été flairé dans 5 minutes",
@@ -363,7 +370,12 @@
         "display": "Assassin",
         "effect": "Force le Jour",
         "items": "Un livre Sharpness III, un livre Protection III et un livre Puissance III",
-        "limit": "limite d'armure, d'arc et d'épée (+1)"
+        "limit": "limite d'armure, d'arc et d'épée (+1)",
+        "description": "Vous disposez de l'effet Force I le jour, ainsi que de 3 livres (Protection III, Sharpness III, Power III). Vous êtes le seul à pouvoir appliquer Protection III sur une pièce en diamant et Sharpness IV sur votre épée. Deux fois dans la partie, vous pouvez supprimer votre victime via un message cliquable : son message de mort ne sera pas affiché et vous seul en connaîtrez le rôle.",
+        "command": "assassiner",
+        "assassinate_message": "§b&player&§r est mort de vos mains, pour supprimer sa mort §6Cliquez ici §r(Vous avez §b7sec§r)",
+        "assassinate_perform": "Vous avez supprimé la mort de §b&player&§f. Son rôle était §b&role&§f.",
+        "player_cannot_be_assassinated": "Le joueur ne peut pas (plus) être supprimé"
       },
       "falsifier_werewolf": {
         "display": "Loup Garou Feutré",
@@ -424,12 +436,21 @@
       },
       "detective": {
         "display": "Détective",
-        "description": "Chaque matin, vous pouvez tester deux joueurs pour savoir s'ils appartiennent, ou non, au même camp.",
-        "inspection_message": "Inspectez deux joueurs §b/ww inspecter§r vous avez §b&timer&",
+        "description": "Une fois par épisode (à partir de l’épisode 3), vous pouvez enquêter sur deux joueurs rencontrés au préalable via §b/ww inspecter§r. Vous recevez un code §bbleu§r ou §ejaune§r : l’un signifie que les deux joueurs sont du même camp, l’autre qu’ils ne le sont pas. Cette signification est fixe durant toute la partie mais reste inconnue. À partir de l’épisode 5, après chaque enquête, vous pouvez tenter d’en deviner la signification via §b/ww deviner§r. Bonne réponse : vous conservez votre pouvoir. Mauvaise réponse : vous le perdez. Vous pouvez choisir de ne jamais deviner.",
+        "inspection_message": "Inspectez deux joueurs rencontrés §b/ww inspecter§r vous avez §b&timer&",
+        "code": "Vous recevez le code : &code&",
+        "color_bleu": "§bBleu§r",
+        "color_jaune": "§eJaune§r",
         "same_camp": "&player1& et &player2& §asont dans le même camp",
         "opposing_camp": "&player1& et &player2& §4ne sont pas dans le même camp",
         "already_inspect": "Au moins un de ces joueurs a déjà été inspecté",
+        "not_met": "Au moins un de ces joueurs n'a pas encore été rencontré",
         "command": "inspecter",
+        "command_guess": "deviner",
+        "guess_available": "Vous pouvez tenter de deviner la signification du code avec §b/ww &command&§r",
+        "guess_correct": "Vous avez deviné correctement ! Le code &code& signifie bien que les deux joueurs sont du même camp. Vous conservez votre pouvoir.",
+        "guess_wrong": "Vous vous êtes trompé. Le code &code& ne signifie pas que les deux joueurs sont du même camp. Vous perdez l'utilisation de votre pouvoir.",
+        "guess_unavailable": "Vous ne pouvez pas deviner maintenant",
         "configurations": {
           "detective_every_other_day": "Detective tous les deux jours"
         }
@@ -440,17 +461,18 @@
       },
       "chatty_seer": {
         "extra_description": " Le message sera affiché dans le chat global.",
-        "see_perform": "Une Voyante Bavarde vient d'espionner un membre du camp des §b&camp&"
+        "see_perform": "Une Voyante Bavarde vient d'espionner un §b&role1&§f ou un §b&role2&§f"
       },
       "infect_father_of_the_wolves": {
         "display": "Infect Père des Loups",
         "items": "Deux Potions Splash de Soin",
         "power_available": "Vous pouvez §aencore§f utiliser votre pouvoir",
         "power_not_available": "Vous avez §cdéjà§f utilisé votre pouvoir",
-        "description": "Vous pouvez ressusciter un joueur de votre choix, tué par les Loups-Garous. Ce joueur rejoindra votre Camp, tout en gardant ses pouvoirs d’origines.",
+        "description": "Vous corrompez les joueurs à proximité (1%/5s). Les Loups-Garous à proximité y participent également (1%/20s). Une fois dans la partie, vous pouvez infecter un joueur corrompu tué par un Loup-Garou via un message cliquable (5 sec). Il ressuscite avec ses pouvoirs et rejoint le camp des Loups-Garous. Vous pouvez hurler une fois par partie via §b/ww hurler§r.",
         "infection_message": "§b&player&§r est mort, pour l'infecter §6Cliquez ici §r(Vous avez §b7sec§r)",
         "infection_perform": "Vous venez d'infecter §b&player&",
         "player_cannot_be_infected": "Le joueur ne peut pas (plus) être infecté",
+        "player_not_corrupted": "Ce joueur n'est pas corrompu",
         "command": "infecter_infect",
         "configurations": {
           "auto_rez": "L'Infect peut se ressusciter"
@@ -461,9 +483,9 @@
         "items": "4 Obsidiennes et 4 Bibliothèques",
         "effect": "Vision Nocturne",
         "disable": "Vous avez espionné un Villageois la dernière fois. Votre pouvoir sera réactivé pour le prochain cycle",
-        "description": "Le Matin, Vous pouvez connaître le camp d'un joueur. Cependant si c'est un Villageois, vous perdrez 3 coeurs et ne pourrez pas utiliser votre pouvoir le tour suivant.",
-        "see_camp_message": "Découvrez le camp d'un joueur §b/ww voir§r vous avez §b&timer&",
-        "see_perform": "Vous venez d'espionner un membre du camp des §b&camp&",
+        "description": "Une fois par épisode, vous pouvez utiliser §b/ww voir§r [Pseudo] pour obtenir deux rôles : celui du joueur ainsi qu'un autre rôle présent dans la composition. Vous obtenez au moins 1 rôle du village à chaque fois.",
+        "see_camp_message": "Découvrez les rôles d'un joueur §b/ww voir§r vous avez §b&timer&",
+        "see_perform": "Vous obtenez deux rôles : §b&role1&§f ou §b&role2&§f",
         "not_enough_life": "Vous n'avez plus assez de vie pour espionner un joueur",
         "see_villager": "Vous venez d'espionner un membre du Village, vous perdez 3 coeurs et vous ne pourrez pas utiliser votre pouvoir pour la prochaine fois",
         "command": "voir",
@@ -505,7 +527,7 @@
       "protector": {
         "display": "Salvateur",
         "items": "Trois Potions Splash de Soin",
-        "description": "Chaque matin, vous pouvez décider de protéger un joueur, il recevra les effets Résistance et Chute Amortie jusqu'au prochain matin",
+        "description": "Une fois par épisode, vous pouvez protéger un joueur jusqu'à la fin de l'épisode courant via §b/ww proteger§r [Pseudo]. Le joueur protégé obtient l'effet Resistance I ainsi qu'une réduction des dégâts de chute de 50%. Le joueur protégé n'est pas informé de cette protection.",
         "protection_message": "Protégez un joueur pour la journée §b/ww proteger§r vous avez §b&timer&",
         "protection_perform": "Vous venez de protéger §b&player&",
         "get_protection": "Le Salvateur vous protège pour la journée, vous avez Résistance et Nofall",
@@ -515,13 +537,13 @@
       },
       "guard": {
         "display": "Garde",
-        "description": "Chaque matin, vous pouvez décider de protéger un joueur. S'il se fait tuer par un Loup Garou, il ressuscitera et vous ne pourrez plus utiliser votre pouvoir. Vous ne pouvez protéger qu'une fois chaque joueur",
-        "command": "proteger",
+        "description": "Vous pouvez protéger chaque joueur une seule fois dans la partie pendant 10 minutes via §b/ww garder§r [Pseudo]. Vous ne pouvez pas vous protéger vous-même. Si le joueur protégé est tué par un Loup-Garou, il ressuscitera. Cependant, vous perdrez votre pouvoir et bénéficierez de Resistance pendant 20 minutes. Votre aura devient Obscure si vous sauvez un joueur.",
+        "command": "garder",
         "perform": "Vous venez de protéger §b&player&",
         "protected": "Le garde vient de vous protéger, si vous vous faites tuer par un §aLoup Garou§f vous ressusciterez",
         "protect": "Le garde vous avait protégé, de ce fait vous ressuscitez",
-        "resurrection": "La personne que vous avez protégé vient de ressusciter. Vous n'avez plus de pouvoirs, mais vous obtenez résistance pendant deux jours",
-        "message": "Protégez un joueur pour la journée §b/ww proteger§r vous avez §b&timer&",
+        "resurrection": "La personne que vous avez protégé vient de ressusciter. Vous n'avez plus de pouvoirs, mais vous obtenez Resistance pendant 20 minutes et votre aura devient Obscure",
+        "message": "Protégez un joueur §b/ww garder§r vous avez §b&timer&",
         "aura": "Se faire protéger par le §bGarde§f donne une aura §bLumineuse"
       },
       "bear_trainer": {
@@ -719,16 +741,16 @@
       },
       "fearful_werewolf": {
         "display": "Loup Garou Craintif",
-        "description": "Vous disposez d'effets dépendants du nombre de loups garous présents à &number& blocs autour de vous. Vous ne pouvez pas voter, et votre mort ne sera pas annoncée dans le chat global.\n Vous ne pouvez pas utiliser le §cHurlement§f",
-        "effects": "4 LG ou plus : Faiblesse, 2 LG ou moins : Resistance le Jour, Force la nuit, Seul : Vitesse",
+        "description": "Vos effets dépendent du nombre de Loups-Garous présents à §b&number&§f blocs de vous (y compris vous-même). Vous ne pouvez que voter blanc et votre mort ne produit aucun message : vous ne pouvez ni être ressuscité par la Sorcière, ni infecté par l'Infect Père des Loups. Vous ne pouvez pas hurler.",
+        "effects": "+ de 4 LG : Faiblesse ; 2 LG ou moins : Résistance le jour, Force la nuit ; Seul : Vitesse",
         "configurations": {
           "distance": "Champ d'action du Loup-Garou Craintif §b&number&"
         }
       },
       "hermit": {
         "display": "Ermite",
-        "description": "Vous disposez d'effets dépendants du nombre de personnes présentes à &number& blocs autour de vous. Vous ne pouvez pas voter, et votre mort ne sera pas annoncée dans le chat global",
-        "effects": "5 personnes ou plus : Faiblesse sinon Resistance la Nuit, Force le Jour, Seul : Vitesse",
+        "description": "Vos pouvoirs évoluent selon le nombre de joueurs présents à §b&number&§f blocs de vous (y compris vous-même). Vous ne pouvez que voter blanc et votre mort ne produit aucun message : vous ne pouvez ni être ressuscité par la Sorcière, ni infecté par l'Infect Père des Loups.",
+        "effects": "5 joueurs ou + : Faiblesse ; 4 joueurs ou - : Force I le jour, Résistance I la nuit ; Seul : Vitesse",
         "configurations": {
           "distance": "Champ d'action de l'Ermite §b&number&"
         }
@@ -977,11 +999,12 @@
       },
       "benefactor": {
         "display": "Bienfaiteur",
-        "description": "3 fois dans la partie, vous pouvez donner au joueur de votre choix (excepté vous-même) 1 ♥ permanent.",
-        "effect": "Vous obtenez un effet Regeneration lent (1 ♥ toutes les 3 minutes) une fois votre pouvoir entièrement consommé",
+        "description": "3 fois dans la partie (1 fois toutes les 5 minutes), vous pouvez donner au joueur de votre choix (excepté vous-même) 1 ♥ permanent via §b/ww conferer§r. Le joueur visé recevra le don §b3 minutes§f après l'exécution de la commande.",
+        "effect": "Vous obtenez un effet Régénération ralenti (1 ♥/min) une fois votre pouvoir entièrement consommé",
         "items": "2 livres Protection II",
-        "command": "vie",
-        "command_description": "/ww vie",
+        "command": "conferer",
+        "command_description": "/ww conferer",
+        "cooldown": "Vous devez attendre avant de pouvoir utiliser votre pouvoir à nouveau",
         "too_many_players": "Vous avez déja utilisé votre pouvoir sur §b3 §fjoueurs",
         "already_use_on_player": "Vous avez déjà utilisé votre pouvoir sur ce joueur",
         "perform": "Vous avez donné §b1 ♥ §f à §b&player& §f!",
@@ -1016,8 +1039,9 @@
         "display": "Braconnier",
         "actionbar_1": "§c========§r",
         "actionbar_2": "§6========§r",
-        "description": "Votre action bar se colore en rouge à moins de §b&number&§f blocs d’un cadavre de Loup.\nEn y restant §b&timer&§f, vous pouvez prendre sa fourrure.\nDès la première fourrure récupérée, vous apparaissez Loup-Garou pour tous les rôles à infos.",
-        "effects": "Une fourrure : Resistance §b10%§f puis §b+3%§f de Resistance par fourrure",
+        "actionbar_distance": "§6&text&§r",
+        "description": "Vous gagnez avec le §aVillage§f. Vous ressentez les cadavres de Loups-Garous : à moins de §b50§f blocs, vous obtenez la distance (par paliers) qui vous en sépare. À moins de §b&number&§f blocs, votre écran se colore en §crouge§f ; en y restant §b&timer&§f, vous récupérez sa fourrure. Dès la première fourrure, vous apparaissez §cLoup-Garou§f aux rôles à informations et votre aura devient §cObscure§f. Les cadavres sont signalés par une particule §6orange§f pendant 15 minutes.",
+        "effects": "Première fourrure : Resistance §b0.5§f. Chaque fourrure supplémentaire : §b+0.1§f de Resistance.",
         "fur_numbers": "Nombre de fourrures : §b&number&",
         "recover": "Vous récuperez la fourrure de §b&player&",
         "timers": {
@@ -1029,9 +1053,9 @@
       },
       "bonesetter": {
         "display": "Rebouteux",
-        "description": "Vous pouvez appliquer une guérison automatique à 3 joueurs dans la partie sauf vous-même (les cibles sont au courant) : lorsque ces joueurs tomberont en-dessous de 4 ♥, ils recevront 7 secondes de Régénération II (3 ♥ de heal).\nVous recevez un message lorsqu'une des cibles active la guérison (sans savoir qui).\nVous disposez également de 3 ♥ de Régénération sur les pommes d'or.",
-        "command": "auto_heal",
-        "command_description": "/ww auto_heal",
+        "description": "Vous pouvez accorder votre protection à 3 joueurs dans la partie (sauf vous-même) via §b/ww guerir§r. Les joueurs ciblés ne sont pas avertis. Lorsqu'un joueur protégé passe en-dessous de §b4♥§f, il est automatiquement soigné de §b3♥§f. Vous recevez un message lorsqu'une guérison s'active (sans savoir qui). Vous régénérez §b3♥§f (au lieu de 2) lorsque vous mangez une pomme en or.",
+        "command": "guerir",
+        "command_description": "/ww guerir",
         "too_many_players": "Vous avez déja utilisé votre pouvoir sur §b3§f joueurs",
         "already_use_on_player": "Vous avez déjà utilisé votre pouvoir sur ce joueur",
         "perform": "§b&player& sera guéri si il perd trop de vie!",
@@ -1163,6 +1187,25 @@
         "vote_no_equality": "Le vote a été clair, vous n'aurez pas à trancher.\nVous recever §b1§f pomme d'or et l'information suivante : \n le joueur désigné par le vote n'est §cpas§f §b&role&",
         "vote_no_result": "Aucun joueur n'a été voté plus d'une fois, vous n'aurez pas à trancher. Vous recevez §b1§f pomme d'or.",
         "perform": "Vous avez tranché pour §b&player&"
+      },
+      "bohemian": {
+        "display": "Bohémienne",
+        "description": "Vous commencez la partie avec un niveau d'Honneur de §b1§f. Vous pouvez sacrifier vos niveaux d'Honneur via §b/ww boheme§r [Pseudo] [1-2-3] (1 fois toutes les 10 minutes) pour obtenir une information sur le joueur visé :\n§b1§f : Niveau d'Honneur du joueur\n§b2§f : Nombre de commandes dont le joueur a été la cible et nature de la dernière\n§b3§f : Camp du joueur (Villageois, Loups-Garous ou autre)\nÀ chaque début d'épisode, vous êtes informée de votre niveau d'Honneur actuel (actuel : §b&number&§f).",
+        "command": "boheme",
+        "honor_level": "Votre niveau d'Honneur actuel est de §b&number&§f",
+        "cooldown": "Vous devez attendre avant de pouvoir réutiliser votre pouvoir",
+        "not_enough_honor": "Vous n'avez pas assez d'Honneur (actuel : §b&number&§f)",
+        "info_honor": "§b&player&§f a un niveau d'Honneur de §b&number&§f",
+        "info_commands": "§b&player&§f a été la cible de §b&number&§f commande(s). La dernière était : &nature&",
+        "info_camp": "§b&player&§f fait partie du camp : &camp&",
+        "no_command": "Aucune"
+      },
+      "disloyal_werewolf": {
+        "display": "Loup-Garou Déloyal",
+        "description": "Vous possédez l'effet Force I la nuit (dont le % dépend de votre Honneur). Deux fois par partie, vous pouvez réduire de 1 le niveau d'Honneur des joueurs à moins de §b30§f blocs de vous via §b/ww nuire§r (vous n'êtes pas affecté, les Loups-Garous affectés en sont notifiés). Une fois par partie, vous pouvez pousser un hurlement via §b/ww hurler§r. Vous gagnez Speed I et §b2♥§f d'Absorption pendant 1 minute si vous tuez un joueur.",
+        "nuire_command": "nuire",
+        "nuire_perform": "Vous avez réduit l'Honneur de §b&number&§f joueur(s) à proximité",
+        "nuire_warn": "§b&player&§f (Loup-Garou Déloyal) a réduit votre Honneur de 1"
       }
     },
     "announcement": {

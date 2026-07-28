@@ -11,13 +11,13 @@ import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.Category;
+import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
-import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.roles.fox.SniffEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
@@ -30,34 +30,29 @@ import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IProgress;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
-import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Role(key = RoleBase.FOX, category = Category.VILLAGER,
+        defaultAura = Aura.LIGHT,
         auraDescriptionSpecialUseCase = "werewolf.roles.fox.aura",
-        attribute = RoleAttribute.INFORMATION,
+        attribute = RoleAttribute.MINOR_INFORMATION,
         timers = { @Timer(key = TimerBase.FOX_SMELL_DURATION, defaultValue = 90, meetUpValue = 30) },
         configValues = {
                 @IntValue(key = IntValueBase.FOX_SMELL_NUMBER, defaultValue = 3, meetUpValue = 3, step = 1, item = UniversalMaterial.CARROT),
-                @IntValue(key = IntValueBase.FOX_DISTANCE, defaultValue = 20, meetUpValue = 20, step = 5, item = UniversalMaterial.ORANGE_WOOL) })
+                @IntValue(key = IntValueBase.FOX_DISTANCE, defaultValue = 15, meetUpValue = 15, step = 5, item = UniversalMaterial.ORANGE_WOOL) })
 public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
+    private final List<IPlayerWW> sniffedPlayers = new ArrayList<>();
     private float progress = 0;
     private int use = 0;
     private boolean power = false;
-    @Nullable
-    private IPlayerWW lastPlayerSmell = null;
 
     public Fox(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -113,24 +108,8 @@ public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPl
         this.progress = progress;
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerDeathByFox(PlayerDeathEvent event) {
-
-        if (event.getEntity().getKiller() == null) return;
-
-        Player killer = event.getEntity().getKiller();
-
-        if (!getPlayerUUID().equals(killer.getUniqueId())) return;
-
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(
-                UniversalPotionEffectType.SPEED,
-                3600,
-                0,
-                this.getKey()));
-    }
-
     @EventHandler(priority = EventPriority.HIGH)
-    public void onDay(DayEvent event) {
+    public void onNight(NightEvent event) {
 
         if (getUse() >= game.getConfig().getValue(IntValueBase.FOX_SMELL_NUMBER)) {
             return;
@@ -138,12 +117,20 @@ public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPl
 
         setPower(true);
 
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
+        if (this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED, this.getKey()));
+            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fox.smell_message",
+                    Formatter.number(game.getConfig().getValue(IntValueBase.FOX_SMELL_NUMBER) - getUse()));
         }
+    }
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fox.smell_message",
-                Formatter.number(game.getConfig().getValue(IntValueBase.FOX_SMELL_NUMBER) - getUse()));
+    @EventHandler
+    public void onDay(DayEvent event) {
+
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.SPEED, this.getKey(), 0));
+
+        clearAffectedPlayer();
+        setProgress(0f);
     }
 
 
@@ -168,11 +155,30 @@ public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPl
     }
 
     @Override
+    public void recoverPotionEffect() {
+
+        if (game.isDay(Day.NIGHT) && this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+            this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED, this.getKey()));
+        }
+    }
+
+    @Override
+    public void disableAbilitiesRole() {
+
+        this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.SPEED, this.getKey(), 0));
+    }
+
+    @Override
     public void second() {
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
+
+        if (!game.isDay(Day.NIGHT)) {
+            return;
+        }
+
         if (getAffectedPlayers().isEmpty()) {
             return;
         }
@@ -212,27 +218,26 @@ public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPl
 
             if (!sniffEvent.isCancelled()) {
 
-                this.lastPlayerSmell = sniffEvent.getTargetWW();
+                this.sniffedPlayers.add(playerWW);
+                this.use++;
 
-                if (sniffEvent.isWereWolf()) {
-                    this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fox.werewolf",
-                            Formatter.player(playerWW.getName()));
-                    this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fox.warn");
+                this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fox.smell_perform",
+                        Formatter.player(playerWW.getName()));
 
-                    this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK, 1, false));
+                if (this.use >= game.getConfig().getValue(IntValueBase.FOX_SMELL_NUMBER)) {
 
-                } else {
-                    this.getPlayerWW().sendMessageWithKey(
-                            Prefix.YELLOW, "werewolf.roles.fox.not_werewolf",
-                            Formatter.player(playerWW.getName()));
-                }
+                    long wolfCount = this.sniffedPlayers.stream()
+                            .filter(p -> p.getRole().isDisplayCamp(Camp.WEREWOLF.getKey()) ||
+                                    (p.getRole().getDisplayCamp().equals(p.getRole().getCamp().getKey()) &&
+                                            p.getRole().isWereWolf()))
+                            .count();
 
+                    this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.fox.result",
+                            Formatter.number((int) wolfCount));
 
-                if (sniffEvent.isWereWolf()) {
-                    BukkitUtils.scheduleSyncDelayedTask(game, () -> {
-                        playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.fox.smell");
-                        playerWW.sendSound(Sound.DONKEY_ANGRY);
-                    }, 20 * 60 * 5);
+                    if (wolfCount > 0) {
+                        this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK, 1, false));
+                    }
                 }
 
             } else {
@@ -242,28 +247,5 @@ public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPl
             clearAffectedPlayer();
             setProgress(0f);
         }
-    }
-
-    @EventHandler
-    public void onActionBarRequest(ActionBarEvent event) {
-
-        if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
-
-        if (this.lastPlayerSmell == null) return;
-
-        if (!this.lastPlayerSmell.isState(StatePlayer.ALIVE)) return;
-
-        StringBuilder stringBuilder = event.getActionBar();
-
-        Player player = Bukkit.getPlayer(event.getPlayerUUID());
-
-        if (player == null) return;
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
-        stringBuilder.append("§b ")
-                .append(this.lastPlayerSmell.getName())
-                .append(" ")
-                .append(Utils.updateArrow(player, this.lastPlayerSmell.getLocation()));
     }
 }

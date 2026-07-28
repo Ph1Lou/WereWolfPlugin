@@ -49,7 +49,6 @@ public class CommandBonesetter implements IParameterizedCommandRole {
 
         bonesetter.setUse(bonesetter.getUse() + 1);
         bonesetter.addAffectedPlayer(targetWW);
-        targetWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.bonesetter.target_message");
         playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.bonesetter.perform", Formatter.player(targetWW.getName()));
     }
 }

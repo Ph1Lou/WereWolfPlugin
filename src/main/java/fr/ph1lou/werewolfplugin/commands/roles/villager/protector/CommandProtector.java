@@ -53,7 +53,6 @@ public class CommandProtector implements IParameterizedCommandRole {
 
         playerWW1.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.RESISTANCE, playerWW.getRole().getKey()));
         playerWW1.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.LIGHT, 40, true));
-        playerWW1.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.protector.get_protection");
         playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.protector.protection_perform",
                 Formatter.player(playerWW1.getName()));
     }

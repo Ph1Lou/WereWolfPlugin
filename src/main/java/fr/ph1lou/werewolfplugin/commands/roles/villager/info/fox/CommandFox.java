@@ -42,7 +42,6 @@ public class CommandFox implements IParameterizedCommandRole {
         }
 
         ((IPower) fox).setPower(false);
-        ((ILimitedUse) fox).setUse(((ILimitedUse) fox).getUse() + 1);
 
         BeginSniffEvent beginSniffEvent = new BeginSniffEvent(playerWW, playerWW1);
         Bukkit.getPluginManager().callEvent(beginSniffEvent);

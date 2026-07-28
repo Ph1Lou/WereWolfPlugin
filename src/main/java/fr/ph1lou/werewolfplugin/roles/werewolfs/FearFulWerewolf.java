@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 @Role(key = RoleBase.FEARFUL_WEREWOLF,
-        defaultAura = Aura.DARK,
+        defaultAura = Aura.NEUTRAL,
         category = Category.WEREWOLF,
         attribute = RoleAttribute.WEREWOLF,
         configValues = @IntValue(key = IntValueBase.FEARFUL_WEREWOLF_DISTANCE,
@@ -181,7 +181,7 @@ public class FearFulWerewolf extends RoleWereWolf {
                             this.getKey(), 0));
         }
 
-        if (number <= 2) {
+        if (number <= 1) {
             if (game.isDay(Day.DAY)) {
                 this.getPlayerWW()
                         .addPotionModifier(PotionModifier.add(UniversalPotionEffectType.RESISTANCE,

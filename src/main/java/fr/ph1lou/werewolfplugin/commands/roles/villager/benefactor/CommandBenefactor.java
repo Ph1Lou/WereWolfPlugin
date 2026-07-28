@@ -12,8 +12,8 @@ import fr.ph1lou.werewolfapi.events.roles.benefactor.BenefactorGiveHeartEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
-import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfplugin.roles.villagers.Benefactor;
 import org.bukkit.Bukkit;
 
 @RoleCommand(key = "werewolf.roles.benefactor.command",
@@ -24,14 +24,19 @@ import org.bukkit.Bukkit;
                 alreadyAffectedMessageKey = "werewolf.roles.benefactor.already_use_on_player")))
 public class CommandBenefactor implements IParameterizedCommandRole {
 
+    private static final long DELIVERY_DELAY = 3 * 60 * 20L;
+
     @Override
     public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
-        IRole benefactor = playerWW.getRole();
+        Benefactor benefactor = (Benefactor) playerWW.getRole();
 
-        if (!(benefactor instanceof IAffectedPlayers)) return;
+        if (!benefactor.canGive()) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.benefactor.cooldown");
+            return;
+        }
 
-        if (((IAffectedPlayers) benefactor).getAffectedPlayers().size() >= 3) {
+        if (benefactor.getAffectedPlayers().size() >= 3) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.benefactor.too_many_players");
             return;
         }
@@ -45,9 +50,15 @@ public class CommandBenefactor implements IParameterizedCommandRole {
             return;
         }
 
-        ((IAffectedPlayers) benefactor).addAffectedPlayer(targetWW);
-        targetWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.benefactor.target_message");
-        targetWW.addPlayerMaxHealth(2);
+        benefactor.addAffectedPlayer(targetWW);
+        benefactor.onGiven();
+
         playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.benefactor.perform", Formatter.player(targetWW.getName()));
+
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            if (!targetWW.isState(StatePlayer.ALIVE)) return;
+            targetWW.addPlayerMaxHealth(2);
+            targetWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.benefactor.target_message");
+        }, DELIVERY_DELAY);
     }
 }

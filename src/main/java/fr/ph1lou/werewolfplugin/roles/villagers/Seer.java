@@ -8,6 +8,7 @@ import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -30,6 +31,7 @@ import java.util.List;
 @Role(key = RoleBase.SEER,
         category = Category.VILLAGER,
         attribute = RoleAttribute.INFORMATION,
+        defaultAura = Aura.LIGHT,
         configurations = {
         @Configuration(config = @ConfigurationBasic(key = ConfigBase.SEER_EVERY_OTHER_DAY)),
         @Configuration(config = @ConfigurationBasic(key = ConfigBase.CHATTY_SEER))
@@ -38,7 +40,6 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private int dayNumber = -8;
-    private boolean disablePower = false;
 
     public Seer(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -79,12 +80,6 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
 
         dayNumber = event.getNumber();
 
-        if (disablePower) {
-            disablePower = false;
-            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.seer.disable");
-            return;
-        }
-
         setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(
@@ -115,9 +110,5 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
     public void recoverPotionEffect() {
 
         this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.NIGHT_VISION, this.getKey()));
-    }
-
-    public void setDisablePower() {
-        this.disablePower = true;
     }
 }

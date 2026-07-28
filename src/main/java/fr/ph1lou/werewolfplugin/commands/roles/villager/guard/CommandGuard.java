@@ -15,6 +15,7 @@ import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
+import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfplugin.roles.villagers.Guard;
 import org.bukkit.Bukkit;
 
@@ -22,7 +23,7 @@ import org.bukkit.Bukkit;
         roleKeys = RoleBase.GUARD,
         requiredPower = true,
         argNumbers = 1,
-        args = @Params(players = @PlayerArg(index = 0, states = { StatePlayer.ALIVE },
+        args = @Params(players = @PlayerArg(index = 0, states = { StatePlayer.ALIVE }, excludeSelf = true,
                 rejectIfAlreadyAffected = true)))
 public class CommandGuard implements IParameterizedCommandRole {
 
@@ -58,5 +59,14 @@ public class CommandGuard implements IParameterizedCommandRole {
         playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.guard.perform",
                 Formatter.player(playerWW1.getName()));
         playerWW1.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.guard.protected");
+
+        IPlayerWW protectedPlayer = playerWW1;
+        String guardKey = playerWW.getRole().getKey();
+        BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+            protectedPlayer.getRole().removeAuraModifier(guardKey);
+            if (protectedPlayer.equals(guard.getLast())) {
+                guard.clearLast();
+            }
+        }, 10 * 60 * 20L);
     }
 }

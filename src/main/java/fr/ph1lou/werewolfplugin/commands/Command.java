@@ -4,11 +4,7 @@ package fr.ph1lou.werewolfplugin.commands;
 import fr.ph1lou.werewolfapi.annotations.PlayerCommand;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.commands.CommandContext;
-import fr.ph1lou.werewolfapi.commands.ICommand;
-import fr.ph1lou.werewolfapi.commands.ICommandRole;
-import fr.ph1lou.werewolfapi.commands.IParameterizedCommand;
-import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
+import fr.ph1lou.werewolfapi.commands.*;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -23,14 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -188,7 +177,7 @@ public class Command implements TabExecutor {
                     game, playerWW,
                     MessageSender.forPlayerWW(playerWW),
                     command.args(), args);
-            if (ctx.isEmpty()) {
+            if (!ctx.isPresent()) {
                 return "";
             }
             ((IParameterizedCommandRole) commandRole).execute(game, playerWW, ctx.get());
@@ -231,7 +220,7 @@ public class Command implements TabExecutor {
                     game, game.getPlayerWW(player.getUniqueId()).orElse(null),
                     MessageSender.forPlayer(game, player),
                     command.args(), args);
-            if (ctx.isEmpty()) {
+            if (!ctx.isPresent()) {
                 return "";
             }
             ((IParameterizedCommand) commandPlayer).execute(game, player, ctx.get());

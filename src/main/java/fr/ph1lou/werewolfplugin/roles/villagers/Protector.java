@@ -5,6 +5,7 @@ import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Role(key = RoleBase.PROTECTOR,
+        defaultAura = Aura.LIGHT,
         auraDescriptionSpecialUseCase = "werewolf.roles.protector.aura",
         category = Category.VILLAGER,
         attribute = RoleAttribute.VILLAGER)
@@ -72,7 +74,6 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
 
             this.last.addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.RESISTANCE, this.getKey(), 0));
             this.last.getRole().removeAuraModifier(this.getKey());
-            this.last.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.protector.no_longer_protected");
             this.last = null;
         }
 
@@ -116,7 +117,7 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
 
         if (!event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) return;
 
-        event.setCancelled(true);
+        event.setDamage(event.getDamage() * 0.5);
 
     }
 }
