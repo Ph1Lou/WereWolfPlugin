@@ -1,10 +1,11 @@
 package fr.ph1lou.werewolfplugin.buildings;
 
 import fr.ph1lou.werewolfapi.buildings.BuildingType;
+import fr.ph1lou.werewolfapi.buildings.ICouncilChamber;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-public class CouncilChamber extends Building {
+public class CouncilChamber extends Building implements ICouncilChamber {
 
     private final Location plate1;
     private final Location plate2;

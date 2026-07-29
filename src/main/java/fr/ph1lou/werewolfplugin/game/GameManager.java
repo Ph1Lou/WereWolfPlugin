@@ -373,6 +373,7 @@ public class GameManager implements WereWolfAPI {
         return this.mapManager;
     }
 
+    @Override
     public BuildingsManager getBuildingsManager() {
         return this.buildingsManager;
     }

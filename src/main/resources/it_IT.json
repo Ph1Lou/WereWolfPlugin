@@ -177,33 +177,32 @@
         "command": "cambiare"
       },
       "citizen": {
-        "display": "Cittadino\n",
-        "description": "Potete, due volte nella partita, decidere di guardare i voti, e una volta sola, annullarli.",
-        "description_new_vote": "Potete una volta nella partita, conoscere il risultato del voto Lupo Mannaro",
-        "cancel_vote_message": "Potete ancora annullare il voto §b&number&§r volte.",
-        "description_extra": "Quando la composizione è nascosta, ricevete ogni mattina una lista di 3 ruoli esistenti con il numero di questi ruoli presenti nella partita",
-        "see_vote_message": "Potete ancora annullare il voto §b&number&§r volte.",
+        "display": "Cittadino",
+        "description": "Vinci con il Villaggio. Voto ad urna: puoi annullare i voti di un ufficio tramite §b/ww annuler§r (1x/sessione, devi essere vicino a un'urna). Alla fine, se hai votato, ottieni il numero di voti non-bianchi e la lista dei giocatori votati. Voto a mano alzata: §b&number&§f volte nella partita, puoi vedere i voti di ciascuno 30s prima del risultato. Puoi deviare il voto verso un giocatore tramite §b/ww detourner§r [Nome] (1x/partita, 30s prima del risultato).",
+        "description_extra": "Quando la composizione è nascosta, ricevi ogni mattina una lista di 3 ruoli: 1 presente nella partita e 2 assenti.\nSe l'evento Voci è attivo, vedi l'autore di ogni voce.",
+        "see_vote_message": "Puoi ancora esaminare i voti §b&number&§r volta/e. ",
         "click": "§bClicca qui ",
-        "cancel": "Annulla il §bVoto",
         "see": "Vedere i §bVoti",
-        "time_left": ", avete §b&timer&",
-        "cancelling_vote_perform": "Voto annullato, hai appena salvato §b&player&",
-        "cancelling_broadcast": "Un Cittadino ha annullato il voto",
-        "count_votes": "conteggio",
+        "time_left": ", hai §b&timer&",
+        "count_votes": "Conteggio ",
         "see_vote": "§b&votare&§r ha votato per §b&giocatore&§r",
-        "command_1": "conteggiare_cittadino",
-        "command_2": "annullare_cittadino",
-        "new_vote_count": "Il giocatore &player& ha ricevuto &number& voti.",
-        "hide_composition": "Ci sono &number& ruoli nella composizione tra : &role1&, &role2&, &role3&",
-        "werewolf_new_vote": "Nessun giocatore è stato votato dai Lupi Mannari",
-        "click_to_see_werewolf.configurations.vote": "Clicca qui per vedere il risultato dei voti Lupo Mannaro",
+        "command_1": "depouiller_citizen",
+        "detourner_command": "detourner",
+        "annuler_command": "annuler",
+        "redirect_window": "Puoi deviare il voto con §b/ww detourner§r [Nome]",
+        "redirect_set": "Il voto sarà deviato verso §b&player&§f al risultato",
+        "redirect_perform": "Il voto è stato deviato verso §b&player&§f",
+        "redirect_not_now": "Puoi deviare il voto solo nei 30 secondi prima del risultato",
+        "urn_info": "Ufficio di voto — Voti non-bianchi: §b&number&§f. Giocatori votati: §b&list&§f",
+        "urn_no_target": "Nessuno",
+        "urn_not_active": "Nessuna sessione di voto ad urna è attiva",
+        "urn_already_canceled": "Hai già annullato i voti di questa sessione",
+        "urn_not_near": "Devi essere vicino a un ufficio di voto",
+        "urn_cancel_perform": "I voti dell'ufficio di voto sono stati annullati",
+        "hide_composition": "Tra questi 3 ruoli, solo uno è presente nella partita: &role1&, &role2&, &role3&",
         "rumor": "Il giocatore §b&player&§f ha scritto la voce &message&",
-        "change_vote_message": "Vous pouvez encore changer le vote §b&number&§r fois",
-        "change": "Changer le §bVote pour §b&player&",
-        "change_vote_perform": "Vous venez de changer le vote pour §b&player&",
-        "command_change": "change_citizen",
         "configurations": {
-          "vote_see_number": "Nombre de dépouillements §b&number&§r"
+          "vote_see_number": "Numero di conteggi §b&number&§r"
         }
       },
       "angel": {
@@ -1240,6 +1239,69 @@
         "nuire_command": "nuire",
         "nuire_perform": "Vous avez réduit l'Honneur de §b&number&§f joueur(s) à proximité",
         "nuire_warn": "§b&player&§f (Loup-Garou Déloyal) a réduit votre Honneur de 1"
+      },
+      "avocat": {
+        "display": "Avvocato",
+        "description": "Una volta ogni 10 minuti, puoi impedire che l'Onore di un giocatore diminuisca per 10 minuti tramite §b/ww defendre§r [Nome]. L'Onore del giocatore difeso può comunque aumentare. Non puoi difendere lo stesso giocatore due volte di seguito. Al termine dei 10 minuti, vieni informato di quanto l'Onore del giocatore difeso sarebbe diminuito se non lo avessi difeso. Se il suo Onore non è variato affatto, ne ottieni il valore esatto.",
+        "command": "defendre",
+        "cooldown": "Devi aspettare §b&number&§f minuto/i prima di poter riutilizzare il tuo potere",
+        "same_target": "Non puoi difendere lo stesso giocatore due volte di seguito",
+        "perform": "Difendi §b&player&§f per 10 minuti. Il suo Onore non può diminuire.",
+        "defense_end_decrease": "La difesa di §b&player&§f è terminata. Senza la tua difesa, il suo Onore sarebbe diminuito di §b&number&§f.",
+        "defense_end_exact": "La difesa di §b&player&§f è terminata. Il suo Onore non è variato durante la difesa, è di §b&number&§f."
+      },
+      "prophetess": {
+        "display": "Profetessa",
+        "description": "All'inizio di ogni episodio, ricevi un elenco di tutti i giocatori la cui aura attuale è diversa dalla loro aura all'inizio dell'episodio precedente. Nel caso in cui l'aura cambi più volte, non ne vieni informata.",
+        "no_change": "Nessun giocatore ha visto la propria aura cambiare dall'inizio dell'episodio precedente.",
+        "list": "I seguenti giocatori hanno un'aura diversa da quella che avevano all'inizio dell'episodio precedente: §b&list&§f."
+      },
+      "renegade": {
+        "display": "Rinnegato",
+        "description": "Tutti i giocatori ricevono casualmente un colore (§9blu§f o §crosso§f) corrispondente a un campo tra Villaggio e Lupi Mannari. Puoi scoprire il colore di un giocatore restando a meno di §b&number&§f blocchi da lui per §b&timer&§f. Dopo la scoperta, puoi scambiare il tuo colore con il suo tramite §b/ww swap§r [Giocatore] (1x/episodio). Possiedi una barra di equilibrio riempita al 50% da ciascun colore. Restando vicino a un giocatore, il colore associato aumenta e l'altro diminuisce. Al 100% di un colore, unisciti al campo associato. All'inizio dell'episodio 6, ti unisci obbligatoriamente al campo del colore maggioritario. Una volta unito a un campo, scopri quanti giocatori del campo opposto si trovano tra quelli il cui colore corrispondente hai già scoperto. Ricevi l'effetto Resistenza 0.5: di notte se ti unisci al Villaggio, di giorno se ti unisci ai Lupi Mannari.",
+        "command": "swap",
+        "discover": "Hai scoperto che §b&player&§f ha il colore &color&.",
+        "blue": "§9Blu§f",
+        "red": "§cRosso§f",
+        "swap_perform": "Hai scambiato il tuo colore con quello di §b&player&§f.",
+        "not_discovered": "Non hai ancora scoperto il colore di §b&player&§f.",
+        "already_joined": "Ti sei già unito a un campo.",
+        "join": "Ti sei unito al campo §b&camp&§f. Tra i giocatori il cui colore corrispondente hai scoperto, §b&number&§f appartengono al campo opposto.",
+        "actionbar_joined": "Campo: §b&camp&§f"
+      },
+      "ronin": {
+        "display": "Ronin",
+        "description": "Devi vincere da solo. Inizi con Onore §b-4§f e hai una tua tabella d'Onore da §b-4§f a §b4§f. Ottieni i vantaggi del livello più alto raggiunto (attuale: §b&number&§f, record: §b&number1&§f). I tuoi guadagni d'Onore sono raddoppiati, le perdite invariate. Uccidere un ruolo solitario o visitare i 4 santuari ti dà §b+2§f. Il mancato rispetto dei gruppi ti costa §b-1§f. Vedi permanentemente la polarità dell'Onore dei giocatori tramite particelle (§fbianche§f = positivo, §crosse§f = negativo). Puoi sfidare un giocatore a duello tramite §b/ww duel§r [Giocatore] (1x/episodio). La potenza dipende dal tuo Onore, la natura dalla polarità del bersaglio: particelle bianche → Emorragia, particelle rosse → Silenzio. Emorragia: ogni colpo corpo a corpo infligge §c-0.5♥§f con un ritardo di 5 secondi. Silenzio: i poteri del bersaglio sono disattivati per la durata.",
+        "command": "duel",
+        "honor_change": "Il tuo Onore è ora §b&number&§f",
+        "hemorrhage_start": "Sfidi §b&player&§f a duello (Emorragia)!",
+        "hemorrhage_target": "§b&player&§f ti ha sfidato a duello (Emorragia)!",
+        "silence_start": "Riduci §b&player&§f al silenzio!",
+        "silence_target": "§b&player&§f ti ha ridotto al silenzio! I tuoi poteri sono disattivati.",
+        "silence_end": "Non sei più silenzziato. I tuoi poteri sono ripristinati.",
+        "actionbar": "Onore: §b&number&§f (record: §b&number1&§f)"
+      },
+      "pyromane": {
+        "display": "Piromane",
+        "description": "Devi vincere da solo. Puoi ricoprire d'olio 2 giocatori incontrati tramite §b/ww recouvrir§r [Nome1] [Nome2] (1x/10min). I bersagli vengono notificati. Puoi incendiare tutti i giocatori ricoperti d'olio tramite §b/ww enflammer§r (1x/episodio). I giocatori incendiati non sono più ricoperti, perdono §c2♥§f permanenti per 10 minuti, e hanno Resistenza -0.5 contro di te (permanente, +0.25 per bruciatura successiva, minimo -1.5). Puoi condannare un edificio tramite §b/ww condamner§r (1x/episodio, devi essere in un edificio). L'edificio prende fuoco in 3-5 minuti per 20 minuti. Qualsiasi giocatore che si avvicina all'edificio in fiamme viene ricoperto d'olio. Dopo l'incendio, la capacità dell'urna (se ufficio di voto) viene dimezzata. Puoi applicare Affilatezza IV sulla tua spada.",
+        "cover_command": "recouvrir",
+        "ignite_command": "enflammer",
+        "burn_command": "condamner",
+        "cooldown": "Devi aspettare §b&number&§f minuto/i prima di ricoprire di nuovo",
+        "same_target": "Devi mirare a due giocatori diversi",
+        "not_met": "Devi aver incontrato questi giocatori",
+        "cover_perform": "Hai ricoperto d'olio §b&player&§f e §b&player1&§f",
+        "covered_notify": "§b&player&§f ti ha ricoperto d'olio!",
+        "no_essence": "Nessun giocatore è ricoperto d'olio",
+        "ignited_perform": "Hai incendiato §b&number&§f giocatore/i ricoperto/i d'olio",
+        "ignited_target": "§b&player&§f ti ha incendiato! Perdi §c2♥§f per 10 minuti.",
+        "burn_pending": "L'edificio prenderà fuoco tra pochi minuti...",
+        "burn_start": "L'edificio è in fiamme!",
+        "burn_end": "L'incendio è terminato.",
+        "covered_by_fire": "Ti sei avvicinato a un edificio in fiamme e sei stato ricoperto d'olio!",
+        "fire_covered": "§b&player&§f si è avvicinato all'edificio in fiamme ed è stato ricoperto d'olio.",
+        "not_in_building": "Devi trovarti in un edificio",
+        "burn_used": "Hai già usato la tua condanna in questo episodio"
       }
     },
     "announcement": {
@@ -1862,7 +1924,8 @@
         "name": "Mette il campo del Ruolo alla Morte"
       },
       "vote": {
-        "name": "Voto",
+        "name": "Voto a mano alzata",
+        "description": "Classico voto a mano alzata (incompatibile con il voto ad urna)",
         "timers": {
           "vote_duration": {
             "name": "Durata del Voto (§b&timer&§r)"
@@ -1877,7 +1940,7 @@
         "configurations": {
           "vote_end": "Fine del voto a §b&number&§r persone",
           "vote_every_other_day": "Voto un giorno su due",
-          "distance": "Distance de rencontre : §b &number& bloc(s)"
+          "distance": "Distanza di incontro: §b &number& blocco(i)"
         },
         "already_voted": "Avete già votato oggi",
         "not_vote_time": "Non è più l'ora del voto",
@@ -1894,8 +1957,8 @@
         "neutral": "I ruoli solitari non possono votare",
         "new_vote_villager": "§b&player&§f è quello che ha perso più voti dagli abitanti",
         "new_vote_werewolf": "§b&player&§f è quello che ha perso più voti dai Lupi Mannari",
-        "not_met": "Vous ne pouvez pas voter un joueur que vous n'avez pas rencontrer à moins de §b&number& blocs",
-        "distance_voted": "Le joueur voté est à §b&number&§f blocs +- 100"
+        "not_met": "Non puoi votare un giocatore che non hai incontrato a meno di §b&number& blocchi",
+        "distance_voted": "Il giocatore votato è a §b&number&§f blocchi +- 100"
       },
       "hide_composition": {
         "name": "Composizione Nascosta"

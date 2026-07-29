@@ -39,7 +39,7 @@ public final class UrnVoteGuiHelper {
             voter.modifyHonor(1);
         }
 
-        urn.fireCastEvent(voter, target, false);
+        urn.fireCastEvent(voter, target, false, office);
 
         voter.sendMessageWithKey(Prefix.YELLOW, "werewolf.configurations.buildings.urn_voted_against",
                 Formatter.player(target.getName()));
@@ -74,7 +74,7 @@ public final class UrnVoteGuiHelper {
             voter.modifyHonor(-1);
         }
 
-        urn.fireCastEvent(voter, null, true);
+        urn.fireCastEvent(voter, null, true, office);
 
         voter.sendMessageWithKey(Prefix.YELLOW, "werewolf.configurations.buildings.urn_voted_blank");
     }

@@ -1,10 +1,11 @@
 package fr.ph1lou.werewolfplugin.buildings;
 
 import fr.ph1lou.werewolfapi.buildings.BuildingType;
+import fr.ph1lou.werewolfapi.buildings.IBuilding;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-public abstract class Building {
+public abstract class Building implements IBuilding {
 
     private final BuildingType type;
     private final World world;

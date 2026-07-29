@@ -1,120 +1,225 @@
 {
   "type": "COUNCIL_CHAMBER",
-  "width": 7,
-  "height": 8,
-  "length": 7,
+  "width": 9,
+  "height": 10,
+  "length": 9,
   "palette": {
     "B": "STONE_BRICKS",
     "L": "OAK_LOG",
-    "R": "OAK_PLANKS",
-    "G": "GLASS",
+    "Q": "BRICKS",
+    "I": "WHITE_STAINED_GLASS_PANE",
+    "K": "BOOKSHELF",
+    "E": "GLOWSTONE",
     "P": "STONE_PRESSURE_PLATE",
-    "s": { "material": "OAK_STAIRS", "facing": "EAST" },
-    "S": { "material": "OAK_STAIRS", "facing": "WEST" },
+    "G": "GLASS",
+    "V": "OAK_FENCE",
+    "M": "OAK_SLAB",
+    "W": "WHITE_CARPET",
+    "X": "COBWEB",
+    "D": {
+      "material": "OAK_DOOR",
+      "facing": "NORTH",
+      "half": "LOWER"
+    },
+    "d": {
+      "material": "OAK_DOOR",
+      "half": "UPPER",
+      "hinge": "LEFT"
+    },
+    "s": {
+      "material": "DARK_OAK_STAIRS",
+      "facing": "EAST"
+    },
+    "S": {
+      "material": "DARK_OAK_STAIRS",
+      "facing": "WEST"
+    },
+    "a": {
+      "material": "OAK_STAIRS",
+      "facing": "EAST"
+    },
+    "b": {
+      "material": "OAK_STAIRS",
+      "facing": "WEST"
+    },
+    "t": {
+      "material": "WALL_TORCH",
+      "facing": "EAST"
+    },
+    "g": {
+      "material": "WALL_TORCH",
+      "facing": "WEST"
+    },
+    "Z": {
+      "material": "OAK_TRAPDOOR",
+      "facing": "NORTH",
+      "half": "TOP",
+      "open": "true"
+    },
     ".": "AIR"
   },
   "layers": [
     {
       "y": 0,
       "rows": [
-        "BBBBBBB",
-        "BBBBBBB",
-        "BBBBBBB",
-        "BBBBBBB",
-        "BBBBBBB",
-        "BBBBBBB",
-        "BBBBBBB"
+        "BBBBBBBBB",
+        "BBBBBBBBB",
+        "BBBBBBBBB",
+        "BBBBBBBBB",
+        "BBBBBBBBB",
+        "BBBBBBBBB",
+        "BBBBBBBBB",
+        "BBBBBBBBB",
+        "BBBBBBBBB"
       ]
     },
     {
       "y": 1,
       "rows": [
-        "LBB.BBL",
-        "B.....B",
-        "G.....G",
-        "B.PGP.B",
-        "G.....G",
-        "B.....B",
-        "LBBBBBL"
+        "VLIBDBILV",
+        ".BK...KB.",
+        ".BK...KB.",
+        ".B.bVa.B.",
+        ".QKPGP.B.",
+        ".Q.....B.",
+        ".QWWWWWB.",
+        ".QWWWWWB.",
+        ".LIBBBIL."
       ]
     },
     {
       "y": 2,
       "rows": [
-        "LBB.BBL",
-        "B.....B",
-        "G.....G",
-        "B..G..B",
-        "G.....G",
-        "B.....B",
-        "LBBBBBL"
+        "VLIBdBILV",
+        ".B.....B.",
+        ".B.....B.",
+        ".B..M..B.",
+        ".Q..G..B.",
+        ".Bt...gB.",
+        ".B.....B.",
+        ".B.....B.",
+        ".LIBBBIL."
       ]
     },
     {
       "y": 3,
       "rows": [
-        "LBBBBBL",
-        "B.....B",
-        "B.....B",
-        "B..G..B",
-        "B.....B",
-        "B.....B",
-        "LBBBBBL"
+        ".LIBBBIL.",
+        ".B.....B.",
+        ".B.....B.",
+        ".B.....B.",
+        ".Q..E..B.",
+        ".B.....B.",
+        ".B.....B.",
+        ".B.....B.",
+        ".LIBBBIL."
       ]
     },
     {
       "y": 4,
       "rows": [
-        "sBBBBBS",
-        "s.....S",
-        "s.....S",
-        "s.....S",
-        "s.....S",
-        "s.....S",
-        "sBBBBBS"
+        "sBBBBBBBS",
+        "s.......S",
+        "s.......S",
+        "s.......S",
+        "sQ......S",
+        "s.......S",
+        "s.......S",
+        "s.......S",
+        "sBBBBBBBS"
       ]
     },
     {
       "y": 5,
       "rows": [
-        ".sBBBS.",
-        ".s...S.",
-        ".s...S.",
-        ".s...S.",
-        ".s...S.",
-        ".s...S.",
-        ".sBBBS."
+        ".sBBBBBS.",
+        ".s.....S.",
+        ".s.....S.",
+        ".s.....S.",
+        ".Q.....S.",
+        ".s.....S.",
+        ".s.....S.",
+        ".s.....S.",
+        ".sBBBBBS."
       ]
     },
     {
       "y": 6,
       "rows": [
-        "..sBS..",
-        "..s.S..",
-        "..s.S..",
-        "..s.S..",
-        "..s.S..",
-        "..s.S..",
-        "..sBS.."
+        "..sBIBS..",
+        "..s...S..",
+        "..s...S..",
+        "..s...S..",
+        ".Qs...S..",
+        "..s...S..",
+        "..s...S..",
+        "..s...S..",
+        "..sBBBS.."
       ]
     },
     {
       "y": 7,
       "rows": [
-        "...R...",
-        "...R...",
-        "...R...",
-        "...R...",
-        "...R...",
-        "...R...",
-        "...R..."
+        "...sBS...",
+        "...s.S...",
+        "...s.S...",
+        "...s.S...",
+        ".Q.s.S...",
+        "...s.S...",
+        "...s.S...",
+        "...s.S...",
+        "...sBS..."
+      ]
+    },
+    {
+      "y": 8,
+      "rows": [
+        "....L....",
+        "....L....",
+        "....L....",
+        "....L....",
+        ".Z..L....",
+        "....L....",
+        "....L....",
+        "....L....",
+        "....L...."
+      ]
+    },
+    {
+      "y": 9,
+      "rows": [
+        ".........",
+        ".........",
+        ".........",
+        ".........",
+        ".X.......",
+        ".........",
+        ".........",
+        ".........",
+        "........."
       ]
     }
   ],
   "functional": {
-    "banner": { "x": 3, "y": 7, "z": 0 },
-    "plate1": { "x": 2, "y": 1, "z": 3 },
-    "plate2": { "x": 4, "y": 1, "z": 3 },
-    "glass": { "x": 3, "y": 1, "z": 3 }
+    "banner": {
+      "x": 4,
+      "y": 8,
+      "z": 0
+    },
+    "plate1": {
+      "x": 3,
+      "y": 1,
+      "z": 4
+    },
+    "plate2": {
+      "x": 5,
+      "y": 1,
+      "z": 4
+    },
+    "glass": {
+      "x": 4,
+      "y": 1,
+      "z": 4
+    }
   }
 }

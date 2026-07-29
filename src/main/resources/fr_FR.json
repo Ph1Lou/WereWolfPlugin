@@ -195,21 +195,28 @@
       },
       "citizen": {
         "display": "Citoyen",
-        "description": "Vous pouvez, §b&number&§f fois dans la partie, décider de voir les Votes, et une fois seulement, les changer.",
-        "change_vote_message": "Vous pouvez encore changer le vote §b&number&§r fois",
-        "description_extra": "Lorsque la composition est cachée, vous recevez chaque matin une liste de 3 rôles existants avec le nombre de ces rôles présents dans la partie\n",
+        "description": "Vous gagnez avec le Village. En vote à urne : vous pouvez annuler les votes d'un bureau via §b/ww annuler§r (1x/session, doit être près d'une urne). À la fin du vote, si vous avez voté, vous obtenez le nombre de votes non-blancs et la liste des joueurs votés. En vote à main levée : §b&number&§f fois dans la partie, vous pouvez voir les votes de chacun 30s avant le résultat. Vous pouvez détourner le vote vers un joueur via §b/ww detourner§r [Pseudo] (1x/partie, 30s avant le résultat).",
+        "description_extra": "Lorsque la composition est cachée, vous recevez chaque matin une liste de 3 rôles dont 1 est présent dans la partie et 2 non-présents.\nSi l'événement Rumeurs est actif, vous voyez l'auteur de chaque rumeur.",
         "see_vote_message": "Vous pouvez encore dépouiller les votes §b&number&§r fois. ",
         "click": "§bCliquez ici ",
-        "change": "Changer le §bVote pour §b&player&",
         "see": "Voir les §bVotes",
         "time_left": ", vous avez §b&timer&",
-        "change_vote_perform": "Vous venez de changer le vote pour §b&player&",
         "count_votes": "Dépouillement ",
         "see_vote": "§b&voter&§r a voté pour §b&player&§r",
         "command_1": "depouiller_citizen",
-        "command_change": "change_citizen",
-        "new_vote_count": "Le joueur &player& a reçu &number& votes.",
-        "hide_composition": "Il y a &number& rôle dans la composition parmi : &role1&, &role2&, &role3&",
+        "detourner_command": "detourner",
+        "annuler_command": "annuler",
+        "redirect_window": "Vous pouvez détourner le vote avec §b/ww detourner§r [Pseudo]",
+        "redirect_set": "Vous détournerez le vote vers §b&player&§f au moment du résultat",
+        "redirect_perform": "Le vote a été détourné vers §b&player&§f",
+        "redirect_not_now": "Vous ne pouvez détourner le vote que dans les 30 secondes précédant le résultat",
+        "urn_info": "Bureau de vote — Votes non-blancs : §b&number&§f. Joueurs votés : §b&list&§f",
+        "urn_no_target": "Aucun",
+        "urn_not_active": "Aucune session de vote par urne n'est active",
+        "urn_already_canceled": "Vous avez déjà annulé les votes de cette session",
+        "urn_not_near": "Vous devez être près d'un bureau de vote",
+        "urn_cancel_perform": "Les votes du bureau de vote ont été annulés",
+        "hide_composition": "Parmi ces 3 rôles, un seul est présent dans la partie : &role1&, &role2&, &role3&",
         "rumor": "Le joueur §b&player&§f a écrit la rumeur &message&",
         "configurations": {
           "vote_see_number": "Nombre de dépouillements §b&number&§r"
@@ -1206,6 +1213,69 @@
         "nuire_command": "nuire",
         "nuire_perform": "Vous avez réduit l'Honneur de §b&number&§f joueur(s) à proximité",
         "nuire_warn": "§b&player&§f (Loup-Garou Déloyal) a réduit votre Honneur de 1"
+      },
+      "avocat": {
+        "display": "Avocat",
+        "description": "Vous pouvez, une fois toutes les 10 minutes, empêcher l'Honneur d'un joueur de descendre pendant 10 minutes via §b/ww defendre§r [Pseudo]. L'Honneur du joueur défendu peut tout de même augmenter. Vous ne pouvez pas défendre le même joueur deux fois d'affilée. À la fin des 10 minutes, vous êtes notifié de combien l'Honneur du joueur défendu aurait diminué si vous ne l'aviez pas défendu. Dans le cas où son Honneur n'a pas varié, vous en obtenez la valeur exacte.",
+        "command": "defendre",
+        "cooldown": "Vous devez attendre §b&number&§f minute(s) avant de pouvoir réutiliser votre pouvoir",
+        "same_target": "Vous ne pouvez pas défendre le même joueur deux fois d'affilée",
+        "perform": "Vous défendez §b&player&§f pendant 10 minutes. Son Honneur ne peut pas descendre.",
+        "defense_end_decrease": "La défense de §b&player&§f a pris fin. Sans votre défense, son Honneur aurait diminué de §b&number&§f.",
+        "defense_end_exact": "La défense de §b&player&§f a pris fin. Son Honneur n'a pas varié pendant la défense, il est de §b&number&§f."
+      },
+      "prophetess": {
+        "display": "Prophétesse",
+        "description": "Au début de chaque épisode, vous recevez une liste de tous les joueurs dont l'aura actuelle est différente de leur aura au début de l'épisode précédent. Dans le cas où l'aura change plusieurs fois, vous n'en êtes pas mise au courant.",
+        "no_change": "Aucun joueur n'a vu son aura changer depuis le début de l'épisode précédent.",
+        "list": "Les joueurs suivants ont une aura différente de celle qu'ils avaient au début de l'épisode précédent : §b&list&§f."
+      },
+      "renegade": {
+        "display": "Renégat",
+        "description": "Tous les joueurs reçoivent aléatoirement une couleur (§9bleu§f ou §crouge§f) correspondant à un camp entre Village et Loups-Garous. Vous pouvez découvrir la couleur d'un joueur en restant à moins de §b&number&§f blocs de lui pendant §b&timer&§f. Après découverte, vous pouvez échanger votre couleur avec la sienne via §b/ww swap§r [Joueur] (1x/épisode). Vous possédez une barre d'équilibre remplie à 50% de chaque couleur. En restant proche d'un joueur, la couleur associée augmente et l'autre diminue. À 100% d'une couleur, vous rejoignez le camp associé. Au début de l'épisode 6, vous rejoignez obligatoirement le camp de la couleur majoritaire. Une fois un camp rejoint, vous apprenez combien de joueurs du camp opposé se trouvent parmi ceux dont vous avez découvert la couleur correspondant à ce camp. Vous recevez l'effet Résistance 0.5 : la nuit si vous rejoignez le Village, le jour si vous rejoignez les Loups-Garous.",
+        "command": "swap",
+        "discover": "Vous avez découvert que §b&player&§f a la couleur &color&.",
+        "blue": "§9Bleue§f",
+        "red": "§cRouge§f",
+        "swap_perform": "Vous avez échangé votre couleur avec celle de §b&player&§f.",
+        "not_discovered": "Vous n'avez pas encore découvert la couleur de §b&player&§f.",
+        "already_joined": "Vous avez déjà rejoint un camp.",
+        "join": "Vous avez rejoint le camp §b&camp&§f. Parmi les joueurs dont vous avez découvert la couleur correspondant à ce camp, §b&number&§f appartiennent au camp opposé.",
+        "actionbar_joined": "Camp : §b&camp&§f"
+      },
+      "ronin": {
+        "display": "Ronin",
+        "description": "Vous devez gagner seul. Vous commencez avec un Honneur de §b-4§f et possédez votre propre tableau d'Honneur allant de §b-4§f à §b4§f. Vous obtenez les avantages du niveau le plus haut atteint (actuel : §b&number&§f, record : §b&number1&§f). Vos gains d'Honneur sont doublés, vos pertes inchangées. Tuer un rôle solitaire ou visiter les 4 sanctuaires vous donne §b+2§f. Le non-respect des groupes vous fait perdre §b-1§f. Vous voyez en permanence la polarité de l'Honneur des joueurs via des particules (§fblanches§f = positif, §crouges§f = négatif). Vous pouvez provoquer un joueur en duel via §b/ww duel§r [Pseudo] (1x/épisode). La puissance dépend de votre Honneur, la nature dépend de la polarité de la cible : particules blanches → Hémorragie, particules rouges → Silence. Hémorragie : chaque coup au corps-à-corps inflige §c-0.5♥§f avec un décalage de 5 secondes. Silence : les pouvoirs du joueur sont désactivés pendant la durée.",
+        "command": "duel",
+        "honor_change": "Votre Honneur est maintenant de §b&number&§f",
+        "hemorrhage_start": "Vous provoquez §b&player&§f en duel (Hémorragie) !",
+        "hemorrhage_target": "§b&player&§f vous a provoqué en duel (Hémorragie) !",
+        "silence_start": "Vous réduisez §b&player&§f au silence !",
+        "silence_target": "§b&player&§f vous a réduit au silence ! Vos pouvoirs sont désactivés.",
+        "silence_end": "Vous n'êtes plus réduit au silence. Vos pouvoirs sont réactivés.",
+        "actionbar": "Honneur : §b&number&§f (record : §b&number1&§f)"
+      },
+      "pyromane": {
+        "display": "Pyromane",
+        "description": "Vous devez gagner seul. Vous pouvez recouvrir d'essence 2 joueurs croisés via §b/ww recouvrir§r [Pseudo1] [Pseudo2] (1x/10min). Les joueurs visés en sont notifiés. Vous pouvez enflammer tous les joueurs recouverts via §b/ww enflammer§r (1x/épisode). Les joueurs enflammés ne sont plus recouverts, perdent §c2♥§f permanents pendant 10 minutes, et ont Resistance -0.5 face à vous (permanent, +0.25 par brûlure subséquente, minimum -1.5). Vous pouvez condamner un bâtiment via §b/ww condamner§r (1x/épisode, doit être dans un bâtiment). Le bâtiment s'enflamme en 3-5 minutes pendant 20 minutes. Tout joueur s'approchant du bâtiment en flammes est recouvert d'essence. Après l'incendie, la capacité de l'urne (si bureau de vote) est divisée par 2. Vous pouvez appliquer Sharpness IV sur votre épée.",
+        "cover_command": "recouvrir",
+        "ignite_command": "enflammer",
+        "burn_command": "condamner",
+        "cooldown": "Vous devez attendre §b&number&§f minute(s) avant de pouvoir recouvrir à nouveau",
+        "same_target": "Vous devez viser deux joueurs différents",
+        "not_met": "Vous devez avoir croisé ces joueurs",
+        "cover_perform": "Vous avez recouvert d'essence §b&player&§f et §b&player1&§f",
+        "covered_notify": "§b&player&§f vous a recouvert d'essence !",
+        "no_essence": "Aucun joueur n'est recouvert d'essence",
+        "ignited_perform": "Vous avez enflammé §b&number&§f joueur(s) recouvert(s) d'essence",
+        "ignited_target": "§b&player&§f vous a enflammé ! Vous perdez §c2♥§f pendant 10 minutes.",
+        "burn_pending": "Le bâtiment va s'enflammer dans quelques minutes...",
+        "burn_start": "Le bâtiment est en flammes !",
+        "burn_end": "L'incendie est terminé.",
+        "covered_by_fire": "Vous vous approchez d'un bâtiment en flammes et êtes recouvert d'essence !",
+        "fire_covered": "§b&player&§f s'est approché du bâtiment en flammes et a été recouvert d'essence.",
+        "not_in_building": "Vous devez vous trouver dans un bâtiment",
+        "burn_used": "Vous avez déjà utilisé votre condamnation cet épisode"
       }
     },
     "announcement": {
@@ -1807,7 +1877,8 @@
         "name": "Affiche le camp du Rôle à la Mort"
       },
       "vote": {
-        "name": "Vote",
+        "name": "Vote à main levée",
+        "description": "Vote classique à main levée (incompatible avec le vote à urne)",
         "timers": {
           "vote_duration": {
             "name": "Durée du Vote (§b&timer&§r)"
@@ -1885,7 +1956,7 @@
         "spy_info": "Un joueur a eu une info sur votre §brôle§f"
       },
       "urn_vote": {
-        "name": "Vote par urne",
+        "name": "Vote à urne",
         "description": "Vote via les bureaux de vote (incompatible avec le vote à main levée)"
       },
       "buildings": {

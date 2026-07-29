@@ -29,7 +29,8 @@ import org.bukkit.event.EventPriority;
 @Configuration(config = @ConfigurationBasic(key = ConfigBase.VOTE,
         defaultValue = false,
         meetUpValue = false,
-        incompatibleConfigs = {ConfigBase.URN_VOTE}),
+        incompatibleConfigs = {ConfigBase.URN_VOTE},
+        loreKey = "werewolf.configurations.vote.description"),
         timers = {
                 @Timer(key = TimerBase.VOTE_START,
                         defaultValue = 40 * 60,

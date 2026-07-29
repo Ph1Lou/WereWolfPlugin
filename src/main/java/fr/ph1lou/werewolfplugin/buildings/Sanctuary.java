@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.buildings;
 
 import fr.ph1lou.werewolfapi.buildings.BuildingType;
+import fr.ph1lou.werewolfapi.buildings.ISanctuary;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -10,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class Sanctuary extends Building {
+public class Sanctuary extends Building implements ISanctuary {
 
     private final DyeColor dyeColor;
     private final Color particleColor;

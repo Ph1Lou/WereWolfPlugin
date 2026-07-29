@@ -770,7 +770,11 @@ public class PlayerWW implements IPlayerWW {
         }
 
         if (oldHonor != this.honor) {
-            Bukkit.getPluginManager().callEvent(new HonorChangeEvent(this, oldHonor));
+            HonorChangeEvent event = new HonorChangeEvent(this, oldHonor);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                this.honor = oldHonor;
+            }
         }
     }
 }

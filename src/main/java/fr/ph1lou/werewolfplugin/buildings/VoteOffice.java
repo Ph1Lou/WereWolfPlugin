@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.buildings;
 
 import fr.ph1lou.werewolfapi.buildings.BuildingType;
+import fr.ph1lou.werewolfapi.buildings.IVoteOffice;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -10,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class VoteOffice extends Building {
+public class VoteOffice extends Building implements IVoteOffice {
 
     private final Location urnLocation;
     private final int baseCapacity;

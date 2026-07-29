@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.buildings;
 
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
+import fr.ph1lou.werewolfapi.buildings.IVoteOffice;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.buildings.UrnVoteCastEvent;
@@ -167,8 +168,8 @@ public class UrnVoteManager {
         });
     }
 
-    public void fireCastEvent(IPlayerWW voter, IPlayerWW target, boolean blank) {
-        UrnVoteCastEvent event = new UrnVoteCastEvent(voter, target, blank, session);
+    public void fireCastEvent(IPlayerWW voter, IPlayerWW target, boolean blank, IVoteOffice office) {
+        UrnVoteCastEvent event = new UrnVoteCastEvent(voter, target, blank, session, office);
         Bukkit.getPluginManager().callEvent(event);
     }
 }

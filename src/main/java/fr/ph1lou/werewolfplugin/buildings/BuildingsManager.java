@@ -5,6 +5,7 @@ import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.buildings.BuildingDefinition;
 import fr.ph1lou.werewolfapi.buildings.BuildingType;
+import fr.ph1lou.werewolfapi.buildings.IBuildingsManager;
 import fr.ph1lou.werewolfapi.buildings.StructurePaster;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.StateGame;
@@ -34,7 +35,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
-public class BuildingsManager {
+public class BuildingsManager implements IBuildingsManager {
 
     public static final int COUNCIL_MAX_USES = 3;
     public static final int COUNCIL_COOLDOWN = 10 * 60;
