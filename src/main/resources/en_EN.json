@@ -1884,6 +1884,66 @@
         "description": "Enable Honor System",
         "list_near_player": "Players under §b80 blocks§f are: §b&list&",
         "spy_info": "A player got a info about your §brole§f"
+      },
+      "urn_vote": {
+        "name": "Ballot Vote",
+        "description": "Vote via vote offices (incompatible with the hand-raised vote)"
+      },
+      "buildings": {
+        "name": "Buildings",
+        "description": "Generate buildings around the center of the map",
+        "council_chamber": {
+          "description": "Generate council chambers to consult Honor"
+        },
+        "sanctuary": {
+          "description": "Generate colored sanctuaries after the 2nd vote"
+        },
+        "configurations": {
+          "council_chamber": "Council Chambers",
+          "sanctuary": "Sanctuaries",
+          "radius": "Generation radius: §b&number&§r blocks",
+          "vote_office_count": "Number of vote offices: §b&number&",
+          "council_chamber_count": "Number of council chambers: §b&number&",
+          "decorative_count": "Number of decorative buildings: §b&number&",
+          "sanctuary_count": "Number of sanctuaries: §b&number&",
+          "urn_capacity": "Ballot box capacity: §b&number&§r votes"
+        },
+        "timers": {
+          "urn_vote_1_start": { "name": "1st ballot vote (§b&timer&§r)" },
+          "urn_vote_2_start": { "name": "2nd ballot vote (§b&timer&§r)" },
+          "urn_vote_3_start": { "name": "3rd ballot vote (§b&timer&§r)" },
+          "urn_vote_duration": { "name": "Ballot vote duration (§b&timer&§r)" }
+        },
+        "urn_menu": "Ballot Box",
+        "urn_full": "This ballot box is §cfull",
+        "urn_already_voted_against": "You have already voted against a player",
+        "urn_nothing": "Deposit nothing",
+        "urn_vote_against": "§cVote against a player",
+        "urn_vote_blank": "Cast a §fblank vote",
+        "urn_vote_blank_again": "Cast another §fblank vote",
+        "urn_target_menu": "Vote against a player",
+        "urn_target": "Vote against §b&player&",
+        "urn_voted_against": "You voted against §b&player&",
+        "urn_voted_blank": "You cast a §fblank vote",
+        "urn_vote_not_active": "No vote is currently running",
+        "urn_vote_begin": "§6Vote #&number&§f: ballot boxes are open, head to a vote office",
+        "urn_vote_time": "§6Vote #&number&§f ballot is open! You have §b&timer&",
+        "urn_vote_no_result": "Vote #&number& designated no one",
+        "urn_vote_result": "§b&player&§f received the most votes: §b&number&",
+        "urn_vote_result_role": "§b&player&§f received the most votes: §b&number&§f. They were a §c&role&",
+        "urn_vote_distance": "The voted player is §b&number&§f blocks away (±100)",
+        "urn_vote_exposed_you": "§cYou have been exposed by the vote",
+        "council_wait": "No one on the other plate. Please wait...",
+        "council_no_honor": "The Honor system is not active",
+        "council_no_use_left": "You have used all your council consultations",
+        "council_cooldown": "You must wait §b&timer&§r before consulting again",
+        "council_partner_unavailable": "§b&player&§f cannot consult the council right now",
+        "council_reveal": "§b&player&'s§f Honor is §b&number&",
+        "council_remaining": "Consultations left: §b&number&",
+        "sanctuary_spawn": "§6&number&§f sanctuaries have appeared on the map",
+        "sanctuary_progress": "Visiting... §b&number&§f seconds remaining",
+        "sanctuary_visited": "§aSanctuary visited!§f You receive a golden apple",
+        "sanctuary_reward": "§aYou have visited all sanctuaries!§f Your Honor changes by §b&number&"
       }
     },
     "scenarios": {

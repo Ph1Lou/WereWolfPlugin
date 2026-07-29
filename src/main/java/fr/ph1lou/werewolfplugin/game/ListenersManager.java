@@ -8,6 +8,7 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfplugin.Register;
 import fr.ph1lou.werewolfplugin.listeners.ActionBarListener;
+import fr.ph1lou.werewolfplugin.listeners.BuildingListener;
 import fr.ph1lou.werewolfplugin.listeners.ChatListener;
 import fr.ph1lou.werewolfplugin.listeners.CycleListener;
 import fr.ph1lou.werewolfplugin.listeners.DamagesListener;
@@ -57,6 +58,7 @@ public class ListenersManager implements IListenersManager {
         this.listeners.add(new DamagesListener(this.game));
         this.listeners.add(new InvisibleListener(this.game));
         this.listeners.add(new DebugListener(this.game));
+        this.listeners.add(new BuildingListener(this.game));
 
         VoteManager voteManager = new VoteManager(this.game);
         this.game.setVoteManager(voteManager);

@@ -1,0 +1,114 @@
+{
+  "type": "DECORATIVE",
+  "width": 7,
+  "height": 8,
+  "length": 7,
+  "palette": {
+    "C": "COBBLESTONE",
+    "F": "OAK_PLANKS",
+    "L": "OAK_LOG",
+    "R": "COBBLESTONE",
+    "G": "GLASS",
+    "s": { "material": "COBBLESTONE_STAIRS", "facing": "EAST" },
+    "S": { "material": "COBBLESTONE_STAIRS", "facing": "WEST" },
+    ".": "AIR"
+  },
+  "layers": [
+    {
+      "y": 0,
+      "rows": [
+        "CCCCCCC",
+        "CCCCCCC",
+        "CCCCCCC",
+        "CCCCCCC",
+        "CCCCCCC",
+        "CCCCCCC",
+        "CCCCCCC"
+      ]
+    },
+    {
+      "y": 1,
+      "rows": [
+        "LCCCCCL",
+        "C.....C",
+        "G.....G",
+        "C.....C",
+        "G.....G",
+        "C.....C",
+        "LCCCCCL"
+      ]
+    },
+    {
+      "y": 2,
+      "rows": [
+        "LFFFFFL",
+        "F.....F",
+        "G.....G",
+        "F.....F",
+        "G.....G",
+        "F.....F",
+        "LFFFFFL"
+      ]
+    },
+    {
+      "y": 3,
+      "rows": [
+        "LFFFFFL",
+        "F.....F",
+        "F.....F",
+        "F.....F",
+        "F.....F",
+        "F.....F",
+        "LFFFFFL"
+      ]
+    },
+    {
+      "y": 4,
+      "rows": [
+        "sFFFFFS",
+        "s.....S",
+        "s.....S",
+        "s.....S",
+        "s.....S",
+        "s.....S",
+        "sFFFFFS"
+      ]
+    },
+    {
+      "y": 5,
+      "rows": [
+        ".sFFFS.",
+        ".s...S.",
+        ".s...S.",
+        ".s...S.",
+        ".s...S.",
+        ".s...S.",
+        ".sFFFS."
+      ]
+    },
+    {
+      "y": 6,
+      "rows": [
+        "..sFS..",
+        "..s.S..",
+        "..s.S..",
+        "..s.S..",
+        "..s.S..",
+        "..s.S..",
+        "..sFS.."
+      ]
+    },
+    {
+      "y": 7,
+      "rows": [
+        "...R...",
+        "...R...",
+        "...R...",
+        "...R...",
+        "...R...",
+        "...R...",
+        "...R..."
+      ]
+    }
+  ]
+}

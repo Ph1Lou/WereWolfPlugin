@@ -1883,6 +1883,66 @@
         "description": "Active le système d'honneur",
         "list_near_player": "Les joueurs à moins de §b80 blocs§f sont : §b&list&",
         "spy_info": "Un joueur a eu une info sur votre §brôle§f"
+      },
+      "urn_vote": {
+        "name": "Vote par urne",
+        "description": "Vote via les bureaux de vote (incompatible avec le vote à main levée)"
+      },
+      "buildings": {
+        "name": "Bâtiments",
+        "description": "Génère des bâtiments autour du centre de la map",
+        "council_chamber": {
+          "description": "Génère des chambres du conseil pour consulter l'Honneur"
+        },
+        "sanctuary": {
+          "description": "Génère des sanctuaires colorés après le 2ème vote"
+        },
+        "configurations": {
+          "council_chamber": "Chambres du conseil",
+          "sanctuary": "Sanctuaires",
+          "radius": "Rayon de génération : §b&number&§r blocs",
+          "vote_office_count": "Nombre de bureaux de vote : §b&number&",
+          "council_chamber_count": "Nombre de chambres du conseil : §b&number&",
+          "decorative_count": "Nombre de bâtiments décoratifs : §b&number&",
+          "sanctuary_count": "Nombre de sanctuaires : §b&number&",
+          "urn_capacity": "Capacité des urnes : §b&number&§r votes"
+        },
+        "timers": {
+          "urn_vote_1_start": { "name": "1er vote par urne (§b&timer&§r)" },
+          "urn_vote_2_start": { "name": "2ème vote par urne (§b&timer&§r)" },
+          "urn_vote_3_start": { "name": "3ème vote par urne (§b&timer&§r)" },
+          "urn_vote_duration": { "name": "Durée d'un vote par urne (§b&timer&§r)" }
+        },
+        "urn_menu": "Urne de vote",
+        "urn_full": "Cette urne est §cpleine",
+        "urn_already_voted_against": "Vous avez déjà voté contre un joueur",
+        "urn_nothing": "Ne rien déposer",
+        "urn_vote_against": "§cVoter contre un joueur",
+        "urn_vote_blank": "Déposer un §fvote blanc",
+        "urn_vote_blank_again": "Déposer un autre §fvote blanc",
+        "urn_target_menu": "Voter contre un joueur",
+        "urn_target": "Voter contre §b&player&",
+        "urn_voted_against": "Vous avez voté contre §b&player&",
+        "urn_voted_blank": "Vous avez déposé un §fvote blanc",
+        "urn_vote_not_active": "Aucun vote n'est en cours",
+        "urn_vote_begin": "§6Vote n°&number&§f : les urnes sont ouvertes, rendez-vous dans un bureau de vote",
+        "urn_vote_time": "§6Vote n°&number&§f par urne ouvert ! Vous avez §b&timer&",
+        "urn_vote_no_result": "Le vote n°&number& n'a désigné personne",
+        "urn_vote_result": "§b&player&§f a recueilli le plus de votes : §b&number&",
+        "urn_vote_result_role": "§b&player&§f a recueilli le plus de votes : §b&number&§f. C'était un §c&role&",
+        "urn_vote_distance": "Le joueur voté est à §b&number&§f blocs (±100)",
+        "urn_vote_exposed_you": "§cVous avez été dénoncé par le vote",
+        "council_wait": "Personne sur l'autre plaque. Patientez...",
+        "council_no_honor": "Le système d'Honneur n'est pas actif",
+        "council_no_use_left": "Vous avez épuisé vos consultations du conseil",
+        "council_cooldown": "Vous devez attendre §b&timer&§r avant de pouvoir consulter à nouveau",
+        "council_partner_unavailable": "§b&player&§f ne peut pas consulter le conseil pour le moment",
+        "council_reveal": "L'Honneur de §b&player&§f est de §b&number&",
+        "council_remaining": "Consultations restantes : §b&number&",
+        "sanctuary_spawn": "§6&number&§f sanctuaires sont apparus sur la carte",
+        "sanctuary_progress": "Visite en cours... §b&number&§f secondes restantes",
+        "sanctuary_visited": "§aSanctuaire visité !§f Vous recevez une pomme d'or",
+        "sanctuary_reward": "§aVous avez visité tous les sanctuaires !§f Votre Honneur varie de §b&number&"
       }
     },
     "scenarios": {

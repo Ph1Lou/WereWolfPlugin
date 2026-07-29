@@ -2048,7 +2048,127 @@ comme implémentation de référence (et `rejectIfNoUseLeft` est toujours utilis
 
 ---
 
-## 11. Annexe — fichiers clés
+## 11. Système de bâtiments
+
+Le système de bâtiments génère, **à la création de la map** (cf. §6.1, `MapManager.generatePlatform`), des
+structures aléatoires dans un rayon configurable (`IntValueBase.BUILDINGS_RADIUS`, défaut **400** blocs)
+autour du spawn. Il s'agit d'une `@Configuration` classique (`ConfigBase.BUILDINGS`,
+`configs/Buildings.java`) avec des sous-configs booléennes par type de bâtiment, des `@IntValue` (rayon,
+comptes par type, capacité d'urne) et des `@Timer` imbriqués (déclenchement des 3 sessions de vote par
+urne). Activé par défaut ; entièrement toggleable par l'hôte.
+
+### 11.1 Structures data-driven (JSON)
+
+Les structures physiques sont définies par des **fichiers JSON** dans `resources/buildings/`
+(`vote_office.json`, `council_chamber.json`, `decorative_house.json`, `sanctuary.json`) — surchargeables
+par l'utilisateur via `plugins/WereWolfPlugin/buildings/*.json`. Format : palette de caractères
+(`W`, `J`, `P`, `G`, `.`…) mappée sur des noms `UniversalMaterial` ou des noms de `Material` 1.13+ avec
+fallback legacy (`STONE_PRESSURE_PLATE`→`STONE_PLATE`, `OAK_PLANKS`→`WOOD`…) pour la compatibilité
+**1.8.8 → 1.21.4**. Chaque couche `y` est un tableau de lignes (une par `z`), chaque caractère un bloc
+`x`. Les blocs « fonctionnels » (urne, plaques, vitre, bannière) sont déclarés dans une section
+`functional` de coordonnées relatives.
+
+- `BuildingDefinition` (parse minimal-json) → `StructurePaster.paste(definition, world, x, y, z, bannerColor)`
+  force-load les chunks puis pose les blocs. La **bannière colorée** est posée via
+  `UniversalMaterial.WHITE_BANNER` + `Banner.setBaseColor(DyeColor)` (cross-version).
+- `BuildingLoader` charge les fichiers bundled + externes, indexés par `BuildingType`.
+
+### 11.2 Types de bâtiments
+
+| Type | Config | Bannière | Fonction |
+|---|---|---|---|
+| `DECORATIVE` | — | aucune | purement décoratif |
+| `VOTE_OFFICE` | `ConfigBase.URN_VOTE` | rouge | contient une **urne** (jukebox) pour voter |
+| `COUNCIL_CHAMBER` | `ConfigBase.BUILDING_COUNCIL_CHAMBER` | bleu | 2 plaques de pression séparées par une vitre pour consulter l'Honneur |
+| `SANCTUARY` | `ConfigBase.BUILDING_SANCTUARY` | rouge/bleu/vert/jaune | apparaît après le 2ᵉ vote, visite 10 s → pomme d'or ; tous visités → regain de parole + Honneur |
+
+`BuildingsManager` est instancié par `GameManager` (champ `buildingsManager`), enregistré comme
+listener via `ListenersManager` (`BuildingListener`). `generate()` est appelé depuis
+`MapManager.generatePlatform` après la plateforme (garde `if (world.equals(this.world))`).
+
+### 11.3 Bureaux de vote — vote par urne (`UrnVote` + `UrnVoteManager`)
+
+Le vote par urne est une **config top-level** `ConfigBase.URN_VOTE` (`configs/UrnVote.java`),
+**incompatible avec `ConfigBase.VOTE`** (vote à main levée) via `incompatibleConfigs` — l'hôte ne peut
+activer que l'un des deux (cf. `ConfigurationsGUI` qui bloque l'activation tant que l'autre est active).
+Les bureaux de vote ne sont générés que si `URN_VOTE` est actif (et `BUILDINGS`). Par défaut `URN_VOTE`
+est actif et `VOTE` inactif (nouveau mode par défaut).
+
+3 **sessions** surviennent au cours de la partie, déclenchées par 3 `@Timer` décrémentaux (imbriqués dans
+la config `URN_VOTE`) dont `onZero` fire un event API dédié (`events/buildings/UrnVote{1,2,3}StartEvent`).
+Le listener `configs/UrnVote` réagit → `UrnVoteManager.startSession(n)` (ouvre le vote pour
+`TimerBase.URN_VOTE_DURATION` s) puis `endSession()` (sanctions). Côté joueur, clic-droit sur l'urne
+(jukebox) → `BuildingListener` ouvre `UrnChoiceGui` / `UrnTargetGui` (smart-invs).
+
+**3 façons de voter** (état par joueur tracé dans `UrnVoteManager`) :
+1. Voter contre un joueur — **une seule fois** au total, dans un seul bureau. Cible limitée aux
+   joueurs **déjà croisés** (`IPlayerWW.getRole().getPlayersMet()`, comme le vote à main levée).
+2. Vote blanc — une fois (première urne ouverte).
+3. Vote blanc supplémentaire — un par urne (`Set<Location>` par joueur).
+
+**Capacité décroissante** : chaque urne a une capacité (`IntValueBase.URN_CAPACITY`) qui **diminue de 1
+à chaque session** à partir de la 2ᵉ (`VoteOffice.reduceCapacity` + `resetSession` en début de session).
+Une urne pleine (`votesCast >= capacity`) est inutilisable.
+
+**Sanctions** (`endSession` → joueur le plus voté) :
+
+| Session | Sanction |
+|---|---|
+| 1 | -2 Honneur + **Exposed** réel |
+| 2 | -2❤ permanents + -2 Honneur + Exposed |
+| 3 | -2❤ + -2 Honneur + **silence** (Weakness+Slowness 5 min, id `werewolf.urn_vote_silence`) + révélation du rôle |
+
+L'**Exposed** est branché sur le vrai `ExposedEvent` (API) via `utils/ExposedHelper.expose(game, playerWW)`
+(réutilise la logique de `random_events/Exposed.announce()` : 2 rôles d'autres camps + rôle d'affichage,
+shuffle, fire cancellable, broadcast `werewolf.random_events.exposed.message`). Chaque vote fire aussi
+`events/buildings/UrnVoteCastEvent` (`@StatisticsEvent`, `@StatisticsPlayer` + `@StatisticsTarget`) pour
+les stats. Les variations d'Honneur (vote contre +1, vote blanc -1) ne s'appliquent que si
+`ConfigBase.HONOR` est actif.
+
+### 11.4 Chambres du conseil
+
+À tout moment, 2 joueurs se placent sur les 2 plaques de pression séparées par une vitre.
+`BuildingListener` écoute `Action.PHYSICAL` → détecte le partenaire sur l'autre plaque
+(`getNearbyEntities` y-radius 2.0) → révèle l'Honneur de chacun (`council_reveal`). Requiert
+`ConfigBase.HONOR` actif.
+
+**Limite par joueur** : 3 consultations / partie, 10 min de cooldown entre chacune
+(`BuildingsManager.COUNCIL_MAX_USES` / `COUNCIL_COOLDOWN`, tracé via `game.getTimer()`). Les 2 joueurs
+consomment chacun un usage. Vérifié via `canConsult(uuid)` avant la révélation.
+
+### 11.5 Sanctuaires
+
+`generateSanctuaries()` (planifié **60 s après la fin du 2ᵉ vote** par `Buildings.scheduleSanctuaries`)
+place 4 sanctuaires (`IntValueBase.BUILDINGS_SANCTUARY_COUNT`, défaut 4) en anneau externe (~80% du
+rayon), chacun d'une couleur unique (rouge/bleu/vert/jaune) avec sa bannière colorée.
+
+- **Particules** : tant qu'un joueur n'a pas visité un sanctuaire, `ParticleHelper.sendColored` lui
+  envoit des `Particle.REDSTONE` + `DustOptions` colorées (reflection pure → no-op sur 1.8-1.12, la
+  bannière colorée servant alors de repère).
+- **Visite** : rester ≤ 5 blocs pendant 10 s (`tickSanctuaries`, tâche répétée 1 s) →
+  `Sanctuary.markVisited`, pomme d'or, fire `events/buildings/SanctuaryVisitEvent`
+  (`@StatisticsEvent` + `@StatisticsPlayer`).
+- **Récompense** (tous visités) : `PotionModifier.remove(WEAKNESS/SLOWNESS, "werewolf.urn_vote_silence")`
+  (regain de parole si silencé) + variation d'Honneur : **+1** si `Camp.VILLAGER`, **0** sinon (loups /
+  solitaires).
+
+### 11.6 Contrats API ajoutés (`WereWolfAPI`)
+
+- `basekeys/ConfigBase` : `BUILDINGS`, `URN_VOTE`, `BUILDING_COUNCIL_CHAMBER`,
+  `BUILDING_SANCTUARY`. (`URN_VOTE` et `VOTE` sont mutuellement exclusifs via `incompatibleConfigs`.)
+- `basekeys/IntValueBase` : `BUILDINGS_RADIUS`, `BUILDINGS_VOTE_OFFICE_COUNT`,
+  `BUILDINGS_COUNCIL_CHAMBER_COUNT`, `BUILDINGS_DECORATIVE_COUNT`, `BUILDINGS_SANCTUARY_COUNT`,
+  `URN_CAPACITY`.
+- `basekeys/TimerBase` : `URN_VOTE_1_START`, `URN_VOTE_2_START`, `URN_VOTE_3_START`, `URN_VOTE_DURATION`.
+- `events/buildings/` : `UrnVote1StartEvent`, `UrnVote2StartEvent`, `UrnVote3StartEvent` (timers
+  `onZero`), `UrnVoteCastEvent` (`@StatisticsEvent`), `SanctuaryVisitEvent` (`@StatisticsEvent`).
+
+> Le vote à main levée existant (`/ww vote`, `configs/Vote.java`, `IVoteManager`) est inchangé et
+> coexiste avec le vote par urne.
+
+---
+
+## 12. Annexe — fichiers clés
 
 ### WereWolfAPI (contrats)
 
@@ -2101,3 +2221,9 @@ comme implémentation de référence (et `rejectIfNoUseLeft` est toujours utilis
 | Handler par défaut « liste des loups » | `WereWolfPlugin/.../listeners/WerewolfListener.java:82` (`onAppearInWereWolfList`, priorité `LOWEST`) |
 | Couples : base & dissolution | `WereWolfPlugin/.../roles/lovers/AbstractLover.java` (`dissolve`), `LoverImpl.java:36` (suicide), `AmnesiacLover.java:73` (cf. §5.5) |
 | Don de vie entre amoureux | `WereWolfPlugin/.../commands/roles/lovers/CommandLovers.java` (fire `DonEvent`) |
+| Système de bâtiments (génération + registre) | `WereWolfPlugin/.../buildings/BuildingsManager.java` (cf. §11) |
+| Structures JSON + paster cross-version | `WereWolfPlugin/.../buildings/BuildingLoader.java`, `StructurePaster.java`, `resources/buildings/*.json` |
+| Vote par urne (3 sessions, sanctions, Exposed) | `WereWolfPlugin/.../configs/UrnVote.java`, `buildings/UrnVoteManager.java`, `utils/ExposedHelper.java` (cf. §11.3) |
+| Sanctuaires (particules, visite, récompense) | `WereWolfPlugin/.../buildings/Sanctuary.java`, `ParticleHelper.java` |
+| Listener bâtiments (clic urne + plaques conseil) | `WereWolfPlugin/.../listeners/BuildingListener.java` |
+| GUI urne | `WereWolfPlugin/.../guis/UrnChoiceGui.java`, `UrnTargetGui.java`, `UrnVoteGuiHelper.java` |

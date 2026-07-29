@@ -1,0 +1,118 @@
+{
+  "type": "VOTE_OFFICE",
+  "width": 7,
+  "height": 8,
+  "length": 7,
+  "palette": {
+    "F": "OAK_PLANKS",
+    "L": "OAK_LOG",
+    "R": "STONE_BRICKS",
+    "G": "GLASS",
+    "J": "JUKEBOX",
+    "s": { "material": "STONE_BRICK_STAIRS", "facing": "EAST" },
+    "S": { "material": "STONE_BRICK_STAIRS", "facing": "WEST" },
+    ".": "AIR"
+  },
+  "layers": [
+    {
+      "y": 0,
+      "rows": [
+        "FFFFFFF",
+        "FFFFFFF",
+        "FFFFFFF",
+        "FFFFFFF",
+        "FFFFFFF",
+        "FFFFFFF",
+        "FFFFFFF"
+      ]
+    },
+    {
+      "y": 1,
+      "rows": [
+        "LFF.FFL",
+        "F.....F",
+        "G.....G",
+        "F..J..F",
+        "G.....G",
+        "F.....F",
+        "LFFFFFL"
+      ]
+    },
+    {
+      "y": 2,
+      "rows": [
+        "LFF.FFL",
+        "F.....F",
+        "G.....G",
+        "F.....F",
+        "G.....G",
+        "F.....F",
+        "LFFFFFL"
+      ]
+    },
+    {
+      "y": 3,
+      "rows": [
+        "LFFFFFL",
+        "F.....F",
+        "F.....F",
+        "F.....F",
+        "F.....F",
+        "F.....F",
+        "LFFFFFL"
+      ]
+    },
+    {
+      "y": 4,
+      "rows": [
+        "sFFFFFS",
+        "s.....S",
+        "s.....S",
+        "s.....S",
+        "s.....S",
+        "s.....S",
+        "sFFFFFS"
+      ]
+    },
+    {
+      "y": 5,
+      "rows": [
+        ".sFFFS.",
+        ".s...S.",
+        ".s...S.",
+        ".s...S.",
+        ".s...S.",
+        ".s...S.",
+        ".sFFFS."
+      ]
+    },
+    {
+      "y": 6,
+      "rows": [
+        "..sFS..",
+        "..s.S..",
+        "..s.S..",
+        "..s.S..",
+        "..s.S..",
+        "..s.S..",
+        "..sFS.."
+      ]
+    },
+    {
+      "y": 7,
+      "rows": [
+        "...R...",
+        "...R...",
+        "...R...",
+        "...R...",
+        "...R...",
+        "...R...",
+        "...R..."
+      ]
+    }
+  ],
+  "functional": {
+    "banner": { "x": 3, "y": 7, "z": 0 },
+    "urn": { "x": 3, "y": 1, "z": 3 }
+  }
+}

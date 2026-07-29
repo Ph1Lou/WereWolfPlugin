@@ -1,0 +1,120 @@
+{
+  "type": "COUNCIL_CHAMBER",
+  "width": 7,
+  "height": 8,
+  "length": 7,
+  "palette": {
+    "B": "STONE_BRICKS",
+    "L": "OAK_LOG",
+    "R": "OAK_PLANKS",
+    "G": "GLASS",
+    "P": "STONE_PRESSURE_PLATE",
+    "s": { "material": "OAK_STAIRS", "facing": "EAST" },
+    "S": { "material": "OAK_STAIRS", "facing": "WEST" },
+    ".": "AIR"
+  },
+  "layers": [
+    {
+      "y": 0,
+      "rows": [
+        "BBBBBBB",
+        "BBBBBBB",
+        "BBBBBBB",
+        "BBBBBBB",
+        "BBBBBBB",
+        "BBBBBBB",
+        "BBBBBBB"
+      ]
+    },
+    {
+      "y": 1,
+      "rows": [
+        "LBB.BBL",
+        "B.....B",
+        "G.....G",
+        "B.PGP.B",
+        "G.....G",
+        "B.....B",
+        "LBBBBBL"
+      ]
+    },
+    {
+      "y": 2,
+      "rows": [
+        "LBB.BBL",
+        "B.....B",
+        "G.....G",
+        "B..G..B",
+        "G.....G",
+        "B.....B",
+        "LBBBBBL"
+      ]
+    },
+    {
+      "y": 3,
+      "rows": [
+        "LBBBBBL",
+        "B.....B",
+        "B.....B",
+        "B..G..B",
+        "B.....B",
+        "B.....B",
+        "LBBBBBL"
+      ]
+    },
+    {
+      "y": 4,
+      "rows": [
+        "sBBBBBS",
+        "s.....S",
+        "s.....S",
+        "s.....S",
+        "s.....S",
+        "s.....S",
+        "sBBBBBS"
+      ]
+    },
+    {
+      "y": 5,
+      "rows": [
+        ".sBBBS.",
+        ".s...S.",
+        ".s...S.",
+        ".s...S.",
+        ".s...S.",
+        ".s...S.",
+        ".sBBBS."
+      ]
+    },
+    {
+      "y": 6,
+      "rows": [
+        "..sBS..",
+        "..s.S..",
+        "..s.S..",
+        "..s.S..",
+        "..s.S..",
+        "..s.S..",
+        "..sBS.."
+      ]
+    },
+    {
+      "y": 7,
+      "rows": [
+        "...R...",
+        "...R...",
+        "...R...",
+        "...R...",
+        "...R...",
+        "...R...",
+        "...R..."
+      ]
+    }
+  ],
+  "functional": {
+    "banner": { "x": 3, "y": 7, "z": 0 },
+    "plate1": { "x": 2, "y": 1, "z": 3 },
+    "plate2": { "x": 4, "y": 1, "z": 3 },
+    "glass": { "x": 3, "y": 1, "z": 3 }
+  }
+}

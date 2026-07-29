@@ -1,0 +1,89 @@
+{
+  "type": "SANCTUARY",
+  "width": 5,
+  "height": 8,
+  "length": 5,
+  "palette": {
+    "Q": "QUARTZ_BLOCK",
+    "s": { "material": "QUARTZ_STAIRS", "facing": "SOUTH" },
+    "n": { "material": "QUARTZ_STAIRS", "facing": "NORTH" },
+    "e": { "material": "QUARTZ_STAIRS", "facing": "EAST" },
+    "w": { "material": "QUARTZ_STAIRS", "facing": "WEST" },
+    ".": "AIR"
+  },
+  "layers": [
+    {
+      "y": 0,
+      "rows": [
+        "QQQQQ",
+        "QQQQQ",
+        "QQQQQ",
+        "QQQQQ",
+        "QQQQQ"
+      ]
+    },
+    {
+      "y": 1,
+      "rows": [
+        "Q...Q",
+        ".....",
+        ".....",
+        ".....",
+        "Q...Q"
+      ]
+    },
+    {
+      "y": 2,
+      "rows": [
+        "Q...Q",
+        ".....",
+        ".....",
+        ".....",
+        "Q...Q"
+      ]
+    },
+    {
+      "y": 3,
+      "rows": [
+        "Q...Q",
+        ".....",
+        ".....",
+        ".....",
+        "Q...Q"
+      ]
+    },
+    {
+      "y": 4,
+      "rows": [
+        "QsssQ",
+        "e...w",
+        "e...w",
+        "e...w",
+        "QnnnQ"
+      ]
+    },
+    {
+      "y": 5,
+      "rows": [
+        ".....",
+        ".sss.",
+        ".e.w.",
+        ".nnn.",
+        "....."
+      ]
+    },
+    {
+      "y": 6,
+      "rows": [
+        ".....",
+        ".....",
+        "..Q..",
+        ".....",
+        "....."
+      ]
+    }
+  ],
+  "functional": {
+    "banner": { "x": 2, "y": 7, "z": 2 }
+  }
+}

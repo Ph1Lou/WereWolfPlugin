@@ -12,21 +12,14 @@ import fr.ph1lou.werewolfapi.events.game.game_cycle.StopEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalJoinEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.ResurrectionEvent;
-import fr.ph1lou.werewolfapi.game.IConfiguration;
-import fr.ph1lou.werewolfapi.game.ILanguageManager;
-import fr.ph1lou.werewolfapi.game.IListenersManager;
-import fr.ph1lou.werewolfapi.game.IMapManager;
-import fr.ph1lou.werewolfapi.game.IModerationManager;
-import fr.ph1lou.werewolfapi.game.IScoreboard;
-import fr.ph1lou.werewolfapi.game.IStuffManager;
-import fr.ph1lou.werewolfapi.game.IWerewolfChatHandler;
-import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.game.*;
 import fr.ph1lou.werewolfapi.lovers.ILoverManager;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.vote.IVoteManager;
 import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.buildings.BuildingsManager;
 import fr.ph1lou.werewolfplugin.save.ConfigurationLoader;
 import fr.ph1lou.werewolfplugin.save.LanguageLoader;
 import fr.ph1lou.werewolfplugin.save.StuffLoader;
@@ -41,15 +34,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -67,6 +52,7 @@ public class GameManager implements WereWolfAPI {
     private final StuffManager stuff = new StuffManager();
     private final LanguageManager languageManager = new LanguageManager(this);
     private final ListenersManager listenersManager = new ListenersManager(this);
+    private final BuildingsManager buildingsManager = new BuildingsManager(this);
     private final Random r = new Random(System.currentTimeMillis());
     private final UUID gameUUID = UUID.randomUUID();
     private StateGame state;
@@ -385,6 +371,10 @@ public class GameManager implements WereWolfAPI {
     @Override
     public IMapManager getMapManager() {
         return this.mapManager;
+    }
+
+    public BuildingsManager getBuildingsManager() {
+        return this.buildingsManager;
     }
 
     @Override

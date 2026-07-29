@@ -27,8 +27,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
 @Configuration(config = @ConfigurationBasic(key = ConfigBase.VOTE,
-        defaultValue = true,
-        meetUpValue = true),
+        defaultValue = false,
+        meetUpValue = false,
+        incompatibleConfigs = {ConfigBase.URN_VOTE}),
         timers = {
                 @Timer(key = TimerBase.VOTE_START,
                         defaultValue = 40 * 60,
