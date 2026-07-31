@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
@@ -21,6 +23,8 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.flute_player.AllPlayerEnchantedEvent;
 import fr.ph1lou.werewolfapi.events.roles.flute_player.EnchantedEvent;
 import fr.ph1lou.werewolfapi.events.roles.flute_player.GiveFluteEvent;
+import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
+import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.RequestStrengthRateEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -43,7 +47,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -69,7 +72,8 @@ import java.util.Objects;
         sharpnessIronModifier = 1,
         timers = @Timer(key = TimerBase.FLUTE_PLAYER_PROGRESS, defaultValue = 6, meetUpValue = 3, step = 1),
         configValues = @IntValue(key = IntValueBase.FLUTE_PLAYER_DISTANCE,
-                defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.LIGHT_BLUE_WOOL))
+                defaultValue = 20, meetUpValue = 20, step = 4, item = UniversalMaterial.LIGHT_BLUE_WOOL),
+        configurations = {@Configuration(config = @ConfigurationBasic(key = "werewolf.roles.flute_player.configurations.flute_player_every_other_day", defaultValue = true))})
 
 public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers {
 
@@ -87,6 +91,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     private boolean bonus3Heart = false;
     private boolean bonus12Heart = false;
     private boolean all = false;
+    private int dayNumber = -8;
 
     public FlutePlayer(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -106,7 +111,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
         ShapedRecipe recipe = VersionUtils.getVersionUtils().registerCraft(flute, "recipe_flute_player");
 
-        recipe.shape("XOX", "OSO", "XOX");
+        recipe.shape("OOO", "OSO", "OOO");
         recipe.setIngredient('O', Material.GOLD_INGOT);
         recipe.setIngredient('S', Material.STICK);
         Bukkit.addRecipe(recipe);
@@ -154,11 +159,15 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             return;
         }
 
-        if (!event.getWhoClicked().getUniqueId().equals(this.getPlayerUUID())) {
+        if (!flute.equals(event.getCurrentItem())) {
             return;
         }
 
-        if (!flute.equals(event.getCurrentItem())) {
+        if (!event.getWhoClicked().getUniqueId().equals(this.getPlayerUUID())) {
+            IPlayerWW clickerWW = game.getPlayerWW(event.getWhoClicked().getUniqueId()).orElse(null);
+            if (clickerWW == null || !clickerWW.getRole().isKey(RoleBase.FLUTE_PLAYER)) {
+                event.setCancelled(true);
+            }
             return;
         }
 
@@ -196,24 +205,6 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     }
 
     @EventHandler
-    public void onFluteCraft(PrepareItemCraftEvent event) {
-
-        if (!flute.equals(event.getInventory().getResult())) {
-            return;
-        }
-        IPlayerWW playerWW = game.getPlayerWW(event.getView()
-                .getPlayer().getUniqueId()).orElse(null);
-
-        if (playerWW == null) {
-            return;
-        }
-
-        if (!playerWW.getRole().isKey(RoleBase.FLUTE_PLAYER)) {
-            event.getInventory().setResult(new ItemStack(Material.AIR));
-        }
-    }
-
-    @EventHandler
     public void onDay(DayEvent event) {
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
@@ -221,9 +212,13 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         }
 
         if (this.hasOwnFlute) {
-            this.power = true;
-            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.flute_player.day",
-                    Formatter.number(this.fluteInStore));
+            if (!(game.getConfig().isConfigActive("werewolf.roles.flute_player.configurations.flute_player_every_other_day")
+                    && event.getNumber() == dayNumber + 1)) {
+                dayNumber = event.getNumber();
+                this.power = true;
+                this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.flute_player.day",
+                        Formatter.number(this.fluteInStore));
+            }
         }
 
         new ArrayList<>(pendingNotify).forEach(playerWW ->
@@ -234,6 +229,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     @Override
     public void second() {
 
+        if (!this.isAbilityEnabled()) return;
         if (!this.hasOwnFlute) {
             return;
         }
@@ -271,6 +267,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
 
                     this.tryEnchant(playerWW);
                 });
+        this.refreshTab();
     }
 
     @EventHandler
@@ -299,6 +296,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
                 Formatter.player(victimWW.getName()));
 
         this.tryEnchant(victimWW);
+        this.refreshTab();
     }
 
     private void tryEnchant(IPlayerWW target) {
@@ -315,6 +313,36 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.flute_player.enchanted",
                 Formatter.player(target.getName()));
         this.applyTierEffects();
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onUpdatePlayerNameTag(UpdatePlayerNameTagEvent event) {
+        if (!this.hasOwnFlute) return;
+        if (!event.getTargetUUID().equals(this.getPlayerUUID())) return;
+        IPlayerWW viewed = game.getPlayerWW(event.getPlayerUUID()).orElse(null);
+        if (viewed == null || viewed.equals(this.getPlayerWW())) return;
+        if (!viewed.isState(StatePlayer.ALIVE)) return;
+
+        String add;
+        if (this.affectedPlayer.contains(viewed)) {
+            add = " §d♥";
+        } else {
+            int pct = Math.min(100, this.progress.getOrDefault(viewed, 0));
+            if (pct <= 0) return;
+            String color = pct >= 100 ? "§c" : pct >= 50 ? "§e" : "§a";
+            add = " " + color + pct + "%";
+        }
+        event.setSuffix(event.getSuffix() + add);
+    }
+
+    private void refreshTab() {
+        Set<IPlayerWW> targets = new HashSet<>(this.progress.keySet());
+        targets.addAll(this.affectedPlayer);
+        targets.forEach(p -> {
+            if (p.isState(StatePlayer.ALIVE)) {
+                Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(p));
+            }
+        });
     }
 
     private void applyTierEffects() {

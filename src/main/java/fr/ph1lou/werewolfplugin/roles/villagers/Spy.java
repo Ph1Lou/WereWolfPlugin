@@ -35,6 +35,8 @@ public class Spy extends RoleImpl implements IAffectedPlayers, IPower {
 
     @Nullable
     private IPlayerWW playerWW;
+    @Nullable
+    private IPlayerWW lastSpied;
     private int count = 0;
     private boolean power = false;
 
@@ -120,7 +122,13 @@ public class Spy extends RoleImpl implements IAffectedPlayers, IPower {
         }
 
         this.count = 0;
+        this.lastSpied = this.playerWW;
         this.playerWW = null;
+    }
+
+    @Nullable
+    public IPlayerWW getLastSpied() {
+        return this.lastSpied;
     }
 
     @Override

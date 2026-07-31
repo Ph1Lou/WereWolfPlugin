@@ -166,7 +166,7 @@ public class CounterfeiterWereWolf extends RoleWereWolf implements IAffectedPlay
         if (this.falsifiedTarget == null) return;
         if (!event.getPlayerWW().equals(this.falsifiedTarget)) return;
 
-        if (this.getPlayerWW().isState(StatePlayer.ALIVE)) {
+        if (this.getPlayerWW().isState(StatePlayer.ALIVE) && isAbilityEnabled()) {
             this.getPlayerWW().addPlayerMaxHealth(-TWO_HEARTS);
             this.getPlayerWW().sendMessageWithKey(Prefix.RED,
                     "werewolf.roles.counterfeiter_werewolf.lose_health",

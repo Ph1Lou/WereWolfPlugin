@@ -25,7 +25,9 @@ import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IInvisible;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -77,6 +79,13 @@ public class LittleGirl extends RoleImpl implements IInvisible {
 
         event.setDuration(20 * (5 + 3 * compteur));
         event.setCancelled(false);
+
+        Player pfPlayer = Bukkit.getPlayer(this.getPlayerUUID());
+        if (pfPlayer != null && event.getLocation() != null) {
+            Location pfLoc = pfPlayer.getLocation();
+            Utils.sendParticleArrow(pfLoc, pfPlayer,
+                    Utils.getAngle(pfLoc, event.getLocation()), 800);
+        }
     }
 
     @EventHandler

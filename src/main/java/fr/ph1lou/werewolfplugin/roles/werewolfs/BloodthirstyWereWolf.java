@@ -168,6 +168,7 @@ public class BloodthirstyWereWolf extends RoleWereWolf implements IAffectedPlaye
     @Override
     public void second() {
 
+        if (!isAbilityEnabled()) return;
         if (this.traquedPlayerWW == null) return;
 
         Player player = Bukkit.getPlayer(this.getPlayerUUID());

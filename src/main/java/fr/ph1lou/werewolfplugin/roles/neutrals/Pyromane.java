@@ -1,5 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -41,7 +43,8 @@ import java.util.UUID;
         attribute = RoleAttribute.NEUTRAL,
         defaultAura = Aura.LIGHT,
         sharpnessDiamondModifier = 1,
-        sharpnessIronModifier = 1)
+        sharpnessIronModifier = 1,
+        configurations = {@Configuration(config = @ConfigurationBasic(key = "werewolf.roles.pyromane.configurations.pyromane_every_other_day", defaultValue = true))})
 public class Pyromane extends RoleNeutral implements IPower {
 
     private static final int COVER_COOLDOWN = 10 * 60;
@@ -64,6 +67,7 @@ public class Pyromane extends RoleNeutral implements IPower {
     private int fireEndTimer = 0;
     private boolean burnPending = false;
     private boolean burnActive = false;
+    private int dayNumber = -8;
 
     public Pyromane(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -84,8 +88,7 @@ public class Pyromane extends RoleNeutral implements IPower {
 
     public void cover(IPlayerWW target) {
         this.coveredPlayers.add(target.getUUID());
-        target.sendMessageWithKey(Prefix.RED, "werewolf.roles.pyromane.covered_notify",
-                Formatter.player(this.getPlayerWW().getName()));
+        target.sendMessageWithKey(Prefix.RED, "werewolf.roles.pyromane.covered_notify");
     }
 
     public void onCovered() {
@@ -205,6 +208,27 @@ public class Pyromane extends RoleNeutral implements IPower {
         this.fireLocation = null;
     }
 
+    private void spawnFireParticles() {
+        if (this.fireLocation == null) return;
+        org.bukkit.World w = this.fireLocation.getWorld();
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            if (online.getLocation().getWorld() != w) continue;
+            try {
+                if (online.getLocation().distance(this.fireLocation) > 32) continue;
+            } catch (Throwable ignored) {
+                continue;
+            }
+            for (int i = 0; i < 12; i++) {
+                double angle = (Math.PI * 2 * i) / 12;
+                double rx = this.fireLocation.getX() + Math.cos(angle) * 4.5;
+                double rz = this.fireLocation.getZ() + Math.sin(angle) * 4.5;
+                Location loc = new Location(w, rx, this.fireLocation.getY() + 1.2, rz);
+                online.spawnParticle(org.bukkit.Particle.FLAME, loc, 2);
+            }
+            online.spawnParticle(org.bukkit.Particle.LAVA, this.fireLocation.clone().add(0, 1, 0), 2);
+        }
+    }
+
     @Override
     public void second() {
         if (!isAbilityEnabled()) return;
@@ -214,6 +238,7 @@ public class Pyromane extends RoleNeutral implements IPower {
             if (game.getTimer() >= this.fireEndTimer) {
                 endFire();
             } else {
+                spawnFireParticles();
                 for (IPlayerWW p : game.getAlivePlayersWW()) {
                     if (p.equals(this.getPlayerWW())) continue;
                     if (this.coveredPlayers.contains(p.getUUID())) continue;
@@ -235,6 +260,11 @@ public class Pyromane extends RoleNeutral implements IPower {
     public void onDay(DayEvent event) {
         if (!isAbilityEnabled()) return;
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (game.getConfig().isConfigActive("werewolf.roles.pyromane.configurations.pyromane_every_other_day")
+                && event.getNumber() == dayNumber + 1) {
+            return;
+        }
+        dayNumber = event.getNumber();
         setPower(true);
         this.burnPower = true;
     }

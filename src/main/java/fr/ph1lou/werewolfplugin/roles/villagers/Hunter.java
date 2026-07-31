@@ -61,6 +61,7 @@ public class Hunter extends RoleImpl implements IPower {
 
     @EventHandler
     public void onFinalDeathEvent(FinalDeathEvent event) {
+        if (!isAbilityEnabled()) return;
         IPlayerWW playerWW = event.getPlayerWW();
 
         if (playerWW.equals(this.getPlayerWW())) {

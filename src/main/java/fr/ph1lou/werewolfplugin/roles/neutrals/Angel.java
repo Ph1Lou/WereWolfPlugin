@@ -349,6 +349,7 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
+        if (!isAbilityEnabled()) return;
         IPlayerWW playerWW = event.getPlayerWW();
 
         if (!getAffectedPlayers().contains(playerWW)) return;

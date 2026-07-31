@@ -30,7 +30,7 @@ import java.util.List;
         category = Category.VILLAGER,
         attribute = RoleAttribute.INFORMATION,
         defaultAura = Aura.LIGHT,
-        configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.DETECTIVE_EVERY_OTHER_DAY))})
+        configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.DETECTIVE_EVERY_OTHER_DAY, defaultValue = true))})
 public class Detective extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private static final String BLUE = "bleu";

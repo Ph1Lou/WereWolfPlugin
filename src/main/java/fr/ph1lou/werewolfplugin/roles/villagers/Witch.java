@@ -28,7 +28,9 @@ import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Role(key = RoleBase.WITCH,defaultAura = Aura.DARK, category = Category.VILLAGER,
         attribute = RoleAttribute.VILLAGER,
@@ -37,6 +39,10 @@ public class Witch extends RoleImpl implements IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private boolean power = true;
+
+    private static final double WITCH_PROXIMITY = 20d;
+    private static final int DISTANCE_THRESHOLD = 80;
+    private final Map<IPlayerWW, Integer> proximitySeconds = new HashMap<>();
 
     public Witch(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -95,6 +101,17 @@ public class Witch extends RoleImpl implements IAffectedPlayers, IPower {
 
     }
 
+    @Override
+    public void second() {
+        if (!this.isAbilityEnabled()) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        game.getAlivePlayersWW().stream()
+                .filter(p -> !p.equals(this.getPlayerWW()))
+                .filter(p -> p.distance(this.getPlayerWW()) < WITCH_PROXIMITY)
+                .forEach(p -> proximitySeconds.merge(p, 1, Integer::sum));
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void onThirdDeathEvent(ThirdDeathEvent event) {
 
@@ -110,6 +127,22 @@ public class Witch extends RoleImpl implements IAffectedPlayers, IPower {
         }
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        boolean showPseudo = true;
+        try {
+            if (this.getPlayerWW().getLocation().getWorld() == playerWW.getLocation().getWorld()
+                    && this.getPlayerWW().getLocation().distance(playerWW.getLocation()) > DISTANCE_THRESHOLD) {
+                int seconds = proximitySeconds.getOrDefault(playerWW, 0);
+                int chance = Math.min(100, seconds / 20);
+                showPseudo = chance > 0 && game.getRandom().nextInt(100) < chance;
+            }
+        } catch (Throwable ignored) {
+        }
+
+        if (!showPseudo) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.witch.resuscitation_message_unknown");
+            return;
+        }
 
         TextComponent textComponent =
                 VersionUtils.getVersionUtils().createClickableText(

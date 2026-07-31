@@ -104,6 +104,7 @@ public class Sister extends RoleImpl implements IAffectedPlayers {
     public void second() {
 
 
+        if (!isAbilityEnabled()) return;
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }

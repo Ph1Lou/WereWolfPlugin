@@ -61,6 +61,12 @@ public class Shaman extends RoleImpl implements IAffectedPlayers {
 
         IPlayerWW playerWW = event.getPlayerWW();
 
+        if (playerWW.getRole().isKey(RoleBase.HERMIT)
+                || playerWW.getRole().isKey(RoleBase.FEARFUL_WEREWOLF)) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.shaman.hidden_death");
+            return;
+        }
+
         if (!playerWW.getLastKiller().isPresent()) {
             return;
         }
@@ -75,7 +81,7 @@ public class Shaman extends RoleImpl implements IAffectedPlayers {
         this.getPlayerWW().sendMessage(textComponent);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onAnnounceDeath(AnnouncementDeathEvent event) {
 
         if (!event.getTargetPlayer().equals(getPlayerWW())) {

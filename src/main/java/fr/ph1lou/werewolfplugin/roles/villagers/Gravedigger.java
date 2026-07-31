@@ -123,7 +123,7 @@ public class Gravedigger extends RoleImpl implements IAffectedPlayers {
                 .filter(player -> player.isState(StatePlayer.ALIVE))
                 .filter(player -> !player.equals(playerWW))
                 .collect(Collectors.toSet());
-        String key = playerWW.getRole().getKey();
+        String key = playerWW.getRole().getDisplayRole();
 
         CreateGravediggerClueEvent clueEvent = new CreateGravediggerClueEvent(this.getPlayerWW(), playerWW, deathLocation, nearbyPlayers, key);
         Bukkit.getPluginManager().callEvent(clueEvent);

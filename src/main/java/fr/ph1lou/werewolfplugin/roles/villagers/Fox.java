@@ -171,6 +171,7 @@ public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPl
     @Override
     public void second() {
 
+        if (!isAbilityEnabled()) return;
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }

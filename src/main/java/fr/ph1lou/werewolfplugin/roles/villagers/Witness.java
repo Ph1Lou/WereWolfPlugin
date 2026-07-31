@@ -115,6 +115,7 @@ public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
     @EventHandler
     public void onFinalDeathEvent(FinalDeathEvent event) {
 
+        if (!isAbilityEnabled()) return;
         IPlayerWW playerWW = event.getPlayerWW();
 
         if (!getAffectedPlayers().contains(playerWW)) return;

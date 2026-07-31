@@ -23,6 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -41,6 +42,7 @@ public class BuildingsManager implements IBuildingsManager {
     public static final int COUNCIL_COOLDOWN = 10 * 60;
     public static final int SANCTUARY_VISIT_SECONDS = 10;
     public static final String SILENCE_KEY = "werewolf.urn_vote_silence";
+    private BuildingDefinition placeholderDefinition;
 
     private final WereWolfAPI game;
     private final BuildingLoader loader = new BuildingLoader();
@@ -55,7 +57,10 @@ public class BuildingsManager implements IBuildingsManager {
     private final Map<UUID, Integer> councilUses = new HashMap<>();
     private final Map<UUID, Integer> councilLastUse = new HashMap<>();
     private final Set<String> activeCouncilPairs = new HashSet<>();
+    private final Set<UUID> honorDisabledNotified = new HashSet<>();
     private final Map<UUID, Map<Integer, Integer>> sanctuaryProgress = new HashMap<>();
+    private final List<int[]> protectedBoxes = new ArrayList<>();
+    private final List<PendingBuilding> pendingRealBuildings = new ArrayList<>();
     private int sanctuaryTaskId = -1;
     private int councilTaskId = -1;
 
@@ -162,6 +167,10 @@ public class BuildingsManager implements IBuildingsManager {
 
             try {
                 paster.paste(definition, world, x, y, z, dye);
+                protectedBoxes.add(new int[]{x, y, z,
+                        x + definition.getWidth() - 1,
+                        y + definition.getHeight() - 1,
+                        z + definition.getLength() - 1});
                 Location banner = paster.functionalLocation(definition, "banner", world, x, y, z);
                 sanctuaries.add(new Sanctuary(world, x, y, z, banner, dye, particle));
                 placedCenters.add(new Location(world, x, 0, z));
@@ -252,8 +261,7 @@ public class BuildingsManager implements IBuildingsManager {
     }
 
     private void applySanctuaryReward(IPlayerWW playerWW) {
-        playerWW.addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.WEAKNESS, SILENCE_KEY, 0));
-        playerWW.addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.SLOWNESS, SILENCE_KEY, 0));
+        playerWW.getRole().enableAbilities();
 
         Camp camp = playerWW.getRole().getCamp();
         if (camp == Camp.VILLAGER) {
@@ -304,6 +312,25 @@ public class BuildingsManager implements IBuildingsManager {
         if (councilChambers.isEmpty() || !game.isState(StateGame.GAME)) {
             return;
         }
+        if (!game.getConfig().isConfigActive(ConfigBase.HONOR)) {
+            Set<UUID> onPlates = new HashSet<>();
+            for (CouncilChamber chamber : councilChambers) {
+                Player p1 = findPlayerOn(chamber.getPlate1());
+                Player p2 = findPlayerOn(chamber.getPlate2());
+                if (p1 != null) onPlates.add(p1.getUniqueId());
+                if (p2 != null) onPlates.add(p2.getUniqueId());
+            }
+            for (UUID uuid : onPlates) {
+                if (honorDisabledNotified.add(uuid)) {
+                    game.getPlayerWW(uuid).ifPresent(w ->
+                            w.sendMessageWithKey(Prefix.RED,
+                                    "werewolf.configurations.buildings.council_no_honor"));
+                }
+            }
+            honorDisabledNotified.retainAll(onPlates);
+            return;
+        }
+        honorDisabledNotified.clear();
         Set<String> currentPairs = new HashSet<>();
         for (CouncilChamber chamber : councilChambers) {
             Player p1 = findPlayerOn(chamber.getPlate1());
@@ -412,37 +439,103 @@ public class BuildingsManager implements IBuildingsManager {
     private boolean tryPlace(BuildingDefinition definition, World world, int x, int y, int z,
                              DyeColor bannerColor, int urnCapacity) {
         try {
-            paster.paste(definition, world, x, y, z, bannerColor);
-
-            Location banner = paster.functionalLocation(definition, "banner", world, x, y, z);
-
-            switch (definition.getType()) {
-                case VOTE_OFFICE: {
-                    Location urn = paster.functionalLocation(definition, "urn", world, x, y, z);
-                    if (urn == null) {
-                        return false;
-                    }
-                    voteOffices.add(new VoteOffice(world, x, y, z, banner, urn, urnCapacity));
-                    break;
+            if (usePlaceholder()) {
+                BuildingDefinition placeholder = getPlaceholderDefinition();
+                if (placeholder != null) {
+                    paster.paste(placeholder, world, x, y, z, null);
+                    protectedBoxes.add(new int[]{x, y, z,
+                            x + placeholder.getWidth() - 1,
+                            y + placeholder.getHeight() - 1,
+                            z + placeholder.getLength() - 1});
                 }
-                case COUNCIL_CHAMBER: {
-                    Location plate1 = paster.functionalLocation(definition, "plate1", world, x, y, z);
-                    Location plate2 = paster.functionalLocation(definition, "plate2", world, x, y, z);
-                    Location glass = paster.functionalLocation(definition, "glass", world, x, y, z);
-                    if (plate1 == null || plate2 == null) {
-                        return false;
-                    }
-                    councilChambers.add(new CouncilChamber(world, x, y, z, banner, plate1, plate2, glass));
-                    break;
-                }
-                case DECORATIVE:
-                default:
-                    break;
+                pendingRealBuildings.add(new PendingBuilding(definition, world, x, y, z, bannerColor, urnCapacity));
+                return true;
             }
+            paster.paste(definition, world, x, y, z, bannerColor);
+            protectedBoxes.add(new int[]{x, y, z,
+                    x + definition.getWidth() - 1,
+                    y + definition.getHeight() - 1,
+                    z + definition.getLength() - 1});
+            registerBuilding(definition, world, x, y, z, bannerColor, urnCapacity);
             return true;
         } catch (Throwable t) {
             Bukkit.getLogger().warning("[WereWolfPlugin] Failed to paste building: " + t.getMessage());
             return false;
+        }
+    }
+
+    private boolean usePlaceholder() {
+        return game.getConfig().isConfigActive(ConfigBase.URN_VOTE);
+    }
+
+    private BuildingDefinition getPlaceholderDefinition() {
+        if (placeholderDefinition == null) {
+            List<BuildingDefinition> defs = loader.getDefinitions(BuildingType.DECORATIVE);
+            if (!defs.isEmpty()) {
+                placeholderDefinition = defs.get(0);
+            }
+        }
+        return placeholderDefinition;
+    }
+
+    private void clearBox(World world, int x, int y, int z, int width, int height, int length) {
+        for (int bx = 0; bx < width; bx++) {
+            for (int bz = 0; bz < length; bz++) {
+                for (int by = 0; by < height; by++) {
+                    world.getBlockAt(x + bx, y + by, z + bz).setType(Material.AIR, false);
+                }
+            }
+        }
+    }
+
+    private void registerBuilding(BuildingDefinition definition, World world, int x, int y, int z,
+                                  DyeColor bannerColor, int urnCapacity) {
+        Location banner = paster.functionalLocation(definition, "banner", world, x, y, z);
+        switch (definition.getType()) {
+            case VOTE_OFFICE: {
+                Location urn = paster.functionalLocation(definition, "urn", world, x, y, z);
+                Location chest = paster.functionalLocation(definition, "chest", world, x, y, z);
+                if (urn == null) {
+                    return;
+                }
+                voteOffices.add(new VoteOffice(world, x, y, z, banner, urn, chest, urnCapacity));
+                break;
+            }
+            case COUNCIL_CHAMBER: {
+                Location plate1 = paster.functionalLocation(definition, "plate1", world, x, y, z);
+                Location plate2 = paster.functionalLocation(definition, "plate2", world, x, y, z);
+                Location glass = paster.functionalLocation(definition, "glass", world, x, y, z);
+                if (plate1 == null || plate2 == null) {
+                    return;
+                }
+                councilChambers.add(new CouncilChamber(world, x, y, z, banner, plate1, plate2, glass));
+                break;
+            }
+            case DECORATIVE:
+            default:
+                break;
+        }
+    }
+
+    public void revealBuildings() {
+        if (pendingRealBuildings.isEmpty()) {
+            return;
+        }
+        List<PendingBuilding> pending = new ArrayList<>(pendingRealBuildings);
+        pendingRealBuildings.clear();
+        for (PendingBuilding pb : pending) {
+            try {
+                clearBox(pb.world, pb.x, pb.y, pb.z,
+                        pb.definition.getWidth(), pb.definition.getHeight(), pb.definition.getLength());
+                paster.paste(pb.definition, pb.world, pb.x, pb.y, pb.z, pb.bannerColor);
+                protectedBoxes.add(new int[]{pb.x, pb.y, pb.z,
+                        pb.x + pb.definition.getWidth() - 1,
+                        pb.y + pb.definition.getHeight() - 1,
+                        pb.z + pb.definition.getLength() - 1});
+                registerBuilding(pb.definition, pb.world, pb.x, pb.y, pb.z, pb.bannerColor, pb.urnCapacity);
+            } catch (Throwable t) {
+                Bukkit.getLogger().warning("[WereWolfPlugin] Failed to reveal building: " + t.getMessage());
+            }
         }
     }
 
@@ -504,5 +597,43 @@ public class BuildingsManager implements IBuildingsManager {
         councilLastUse.clear();
         activeCouncilPairs.clear();
         sanctuaryProgress.clear();
+        protectedBoxes.clear();
+        pendingRealBuildings.clear();
+    }
+
+    public boolean isProtected(Location loc) {
+        if (loc == null || loc.getWorld() != game.getMapManager().getWorld()) {
+            return false;
+        }
+        int x = loc.getBlockX();
+        int y = loc.getBlockY();
+        int z = loc.getBlockZ();
+        for (int[] box : protectedBoxes) {
+            if (x >= box[0] && x <= box[3]
+                    && y >= box[1] && y <= box[4]
+                    && z >= box[2] && z <= box[5]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static final class PendingBuilding {
+        private final BuildingDefinition definition;
+        private final World world;
+        private final int x, y, z;
+        private final DyeColor bannerColor;
+        private final int urnCapacity;
+
+        PendingBuilding(BuildingDefinition definition, World world, int x, int y, int z,
+                        DyeColor bannerColor, int urnCapacity) {
+            this.definition = definition;
+            this.world = world;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.bannerColor = bannerColor;
+            this.urnCapacity = urnCapacity;
+        }
     }
 }

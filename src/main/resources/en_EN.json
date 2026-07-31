@@ -163,10 +163,11 @@
         "power_available": "You may §astill§f use your power",
         "power_not_available": "You have §calready§f used your power",
         "items": "one potion of healing, two potions of damage, one potion of regeneration and one potion of strength",
-        "description": "Once during the game, you may bring a player back to life.",
+        "description": "Once during the game, you may bring a player back to life. If the player dies more than §b80 blocks§f away from you, the chance to know their identity depends on the time spent near them during the game (§b1% every 20s§f, cumulative).",
         "not_himself": "You §ccannot§f save yourself",
         "himself": "You §acan§f save yourself",
         "resuscitation_message": "§b&player&§r is dead, to revive them, §6Click here §r(You have §b7sec§r)",
+        "resuscitation_message_unknown": "A player §bdied far away§f. You haven't spent enough time near them to identify them.",
         "resuscitation_perform": "You revived §b&player&",
         "command": "save_witch",
         "configurations": {
@@ -629,7 +630,7 @@
         "full": "This player has a full inventory, he cannot receive a pipe",
         "wait": "You have to wait §bone day§f before giving another pipe",
         "affected": "§bAffected player§f : §f&list&\n",
-        "craft_description": "To craft a pipe, surround a stick with 4 golds ingots",
+        "craft_description": "To craft a pipe, surround a stick with 8 gold ingots",
         "description": "Once you craft your pipe, every player at less than §b&number&§f blocs of you will slowly become charmed (1% every &timer& seconds).",
         "power": "You may craft §badditional§f pipes and give them to other players once per day by §bright-clicking§f them. A player carrying a pipe will §bunknowingly§f charm players around him (3x slower) and cannot get rid of it. He will be notified at the start of the next episode. Hitting a player boosts his charm by §b10%§f (once per player).",
         "enchanted": "You charmed §b&player&",
@@ -794,14 +795,15 @@
       },
       "twin": {
         "display": "Twin",
-        "description": "At the beginning of the night, if you are more than §b&number2&§f blocs away from your twin, you receive either the list of players in a range of §b&number&§f blocs from your twin OR the role of one of those players.",
-        "effects": "When your twin dies, you get five minutes of Strength and Speed",
+        "description": "At the beginning of the night, if you are more than §b&number2&§f blocs away from your twin, you receive the list of players in a range of §b&number&§f blocs from your twin or the role of one of those players. The information received alternates between the two Twins each episode.",
+        "effects": "When your twin dies, you get five minutes of Strength 0.5 and Speed 0.5. If one of you eats a golden apple more than §b&number&§f blocs away from the other, the Absorption effect is shared.",
         "timer": "In &timer&you get the nickname of your Twins.",
         "twin_list": "You are a Twin with: &list&",
         "too_near": "You are too close to your twin to obtain any information",
         "list_near": "The following players are in a range of &number& blocs around your twin, &list&",
         "role_near": "A player at most &number& blocs away from your twin is a §b&role&§f",
-        "death": "Your twin &player& died. Enraged by this, you obtain Strength and Speed for 5 minutes",
+        "death": "Your twin &player& died. Enraged by this, you obtain Strength 0.5 and Speed 0.5 for 5 minutes",
+        "absorption_shared": "Your twin &player& ate a golden apple. You share their §bAbsorption§f effect.",
         "configurations": {
           "distance": "Twins action range §b&number&"
         },
@@ -1266,7 +1268,7 @@
         "same_target": "You must target two different players",
         "not_met": "You must have met these players",
         "cover_perform": "You covered §b&player&§f and §b&player1&§f with oil",
-        "covered_notify": "§b&player&§f covered you with oil!",
+        "covered_notify": "You have been covered with oil!",
         "no_essence": "No player is covered with oil",
         "ignited_perform": "You ignited §b&number&§f covered player(s)",
         "ignited_target": "§b&player&§f ignited you! You lose §c2♥§f for 10 minutes.",
@@ -1621,7 +1623,12 @@
           "command": "color",
           "description": "Allows to colorize a player's nickname",
           "player_choice": "§bPlayer Marking",
-          "color_choice": "§bcolor choice"
+          "color_choice": "§bcolor choice",
+          "pastille_choice": "§bPastille choice",
+          "pastille_mode_on": "§ePastille Mode: §aEnabled",
+          "pastille_mode_off": "§ePastille Mode: §cDisabled",
+          "pastille_mode_lore": "§7Add a colored badge next to the name",
+          "pastille_remove": "§cRemove pastille"
         }
       }
     },
@@ -2246,6 +2253,11 @@
         "start": "Beginning of §cBlood Moon",
         "end": "§cBlood Moon End",
         "count": "Beginning of the Moon after §b&number&§f day(s)"
+      },
+      "cupid_rancunier": {
+        "name": "Vengeful Cupidon",
+        "description": "When the couple dies after episode 5, the Cupid becomes Vengeful and must win alone.",
+        "transform": "[§5Vengeful Cupidon§r] Your couple has perished... Vengeance consumes you! You become a loner and must now win alone. Your aura is now dark."
       }
     },
     "check": {
@@ -2297,7 +2309,7 @@
     "categories": {
       "villager": "Villagers",
       "werewolf": "Werewolves",
-      "neutral": "Neutrals",
+      "neutral": "Solos",
       "addons": "Addons Roles",
       "colors": {
         "villager": "§a",

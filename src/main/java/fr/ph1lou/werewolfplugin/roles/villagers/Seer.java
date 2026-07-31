@@ -33,7 +33,7 @@ import java.util.List;
         attribute = RoleAttribute.INFORMATION,
         defaultAura = Aura.LIGHT,
         configurations = {
-        @Configuration(config = @ConfigurationBasic(key = ConfigBase.SEER_EVERY_OTHER_DAY)),
+        @Configuration(config = @ConfigurationBasic(key = ConfigBase.SEER_EVERY_OTHER_DAY, defaultValue = true)),
         @Configuration(config = @ConfigurationBasic(key = ConfigBase.CHATTY_SEER))
 })
 public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {

@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
         auraDescriptionSpecialUseCase = "werewolf.roles.bear_trainer.aura",
         category = Category.VILLAGER,
         attribute = RoleAttribute.INFORMATION,
-        configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.BEAR_TRAINER_EVERY_OTHER_DAY)),
+        configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.BEAR_TRAINER_EVERY_OTHER_DAY, defaultValue = true)),
         configValues = { @IntValue(key = IntValueBase.BEAR_TRAINER_DISTANCE,
                 defaultValue = 50,
                 meetUpValue = 50,

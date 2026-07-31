@@ -52,6 +52,7 @@ public class PlayerWW implements IPlayerWW {
     private final Map<PotionModifier, Integer> potionModifiers = new HashMap<>();
 
     private final Map<IPlayerWW, ChatColor> colors = new HashMap<>();
+    private final Map<IPlayerWW, ChatColor> pastilles = new HashMap<>();
     private final List<MessageAction> disconnectedMessages = new ArrayList<>();
     private final List<ItemStack> decoItems = new ArrayList<>();
     private final List<IPlayerWW> killer = new ArrayList<>();
@@ -134,6 +135,14 @@ public class PlayerWW implements IPlayerWW {
 
         for (PotionEffect po : player.getActivePotionEffects()) {
             player.removePotionEffect(po.getType());
+        }
+    }
+
+    @Override
+    public void setWalkSpeed(float walkSpeed) {
+        Player player = Bukkit.getPlayer(this.uuid);
+        if (player != null) {
+            player.setWalkSpeed(walkSpeed);
         }
     }
 
@@ -715,6 +724,21 @@ public class PlayerWW implements IPlayerWW {
     @Override
     public void setColor(IPlayerWW iPlayerWW, ChatColor chatColor) {
         this.colors.put(iPlayerWW, chatColor);
+    }
+
+    @Override
+    public ChatColor getPastilleColor(IPlayerWW iPlayerWW) {
+        return this.pastilles.get(iPlayerWW);
+    }
+
+    @Override
+    public void setPastilleColor(IPlayerWW iPlayerWW, ChatColor chatColor) {
+        this.pastilles.put(iPlayerWW, chatColor);
+    }
+
+    @Override
+    public void removePastille(IPlayerWW iPlayerWW) {
+        this.pastilles.remove(iPlayerWW);
     }
 
     @Override

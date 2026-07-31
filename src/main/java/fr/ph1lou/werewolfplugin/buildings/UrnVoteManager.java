@@ -3,24 +3,16 @@ package fr.ph1lou.werewolfplugin.buildings;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.buildings.IVoteOffice;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.buildings.UrnVoteCastEvent;
+import fr.ph1lou.werewolfapi.events.buildings.UrnVoteResultEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfplugin.utils.ExposedHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class UrnVoteManager {
 
@@ -95,16 +87,18 @@ public class UrnVoteManager {
         }
         active = false;
 
-        Map<UUID, Integer> totals = new HashMap<>();
+        Map<IPlayerWW, Integer> totals = new HashMap<>();
         for (VoteOffice office : buildingsManager.getVoteOffices()) {
             for (Map.Entry<UUID, Integer> e : office.getVotesAgainst().entrySet()) {
-                totals.merge(e.getKey(), e.getValue(), Integer::sum);
+                IPlayerWW target = game.getPlayerWW(e.getKey()).orElse(null);
+                if (target == null) continue;
+                totals.merge(target, e.getValue(), Integer::sum);
             }
         }
 
-        UUID winner = null;
+        IPlayerWW winner = null;
         int max = 0;
-        for (Map.Entry<UUID, Integer> e : totals.entrySet()) {
+        for (Map.Entry<IPlayerWW, Integer> e : totals.entrySet()) {
             if (e.getValue() > max) {
                 max = e.getValue();
                 winner = e.getKey();
@@ -117,13 +111,14 @@ public class UrnVoteManager {
             return;
         }
 
-        Optional<IPlayerWW> opt = game.getPlayerWW(winner);
-        if (!opt.isPresent()) {
+        UrnVoteResultEvent resultEvent = new UrnVoteResultEvent(winner, max, sessionNumber, totals);
+        Bukkit.getPluginManager().callEvent(resultEvent);
+
+        if (resultEvent.isCancelled()) {
             return;
         }
-        IPlayerWW target = opt.get();
 
-        applySanctions(target, sessionNumber, max);
+        applySanctions(resultEvent.getPlayerWW(), sessionNumber, resultEvent.getVotes());
     }
 
     private void applySanctions(IPlayerWW target, int session, int votes) {
@@ -137,11 +132,12 @@ public class UrnVoteManager {
             target.removePlayerMaxHealth(2);
         }
 
-        ExposedHelper.expose(game, target);
+        if (session < 3) {
+            ExposedHelper.expose(game, target);
+        }
 
         if (session >= 3) {
-            target.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.WEAKNESS, 20 * 60 * 5, 0, BuildingsManager.SILENCE_KEY));
-            target.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SLOWNESS, 20 * 60 * 5, 0, BuildingsManager.SILENCE_KEY));
+            target.getRole().disableAbilities();
             Bukkit.broadcastMessage(game.translate(Prefix.RED, "werewolf.configurations.buildings.urn_vote_result_role",
                     Formatter.player(target.getName()),
                     Formatter.number(votes),

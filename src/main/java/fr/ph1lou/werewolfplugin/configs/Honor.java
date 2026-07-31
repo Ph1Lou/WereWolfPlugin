@@ -131,7 +131,7 @@ public class Honor extends ListenerWerewolf {
 
         IPlayerWW targetPlayer = event.getTargetPlayer();
 
-        if (targetPlayer.getRole().isNeutral()) {
+        if (targetPlayer.getRole().isNeutral() && !targetPlayer.getRole().isWereWolf()) {
             if (getGame().getRandom().nextFloat() > 0.95) {
                 event.setRole("werewolf.configurations.hidden_roles.magic");
             }

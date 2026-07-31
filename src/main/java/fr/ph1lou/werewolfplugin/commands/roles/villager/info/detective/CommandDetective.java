@@ -17,6 +17,10 @@ import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfplugin.roles.villagers.Detective;
+import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 
 @RoleCommand(key = "werewolf.roles.detective.command",
@@ -75,8 +79,20 @@ public class CommandDetective implements IParameterizedCommandRole {
 
         detectiveRole.onInvestigated();
         if (detectiveRole.canGuess()) {
-            playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.detective.guess_available",
-                    Formatter.format("&command&", game.translate("werewolf.roles.detective.command_guess")));
+            TextComponent msg = VersionUtils.getVersionUtils().createClickableText(
+                    game.translate(Prefix.YELLOW, "werewolf.roles.detective.guess_available",
+                            Formatter.format("&command&", game.translate("werewolf.roles.detective.command_guess"))),
+                    "/ww " + game.translate("werewolf.roles.detective.command_guess") + " ",
+                    ClickEvent.Action.SUGGEST_COMMAND);
+            playerWW.sendMessage(msg);
+
+            final IPlayerWW detectiveWW = playerWW;
+            BukkitUtils.scheduleSyncDelayedTask(game, () -> {
+                if (detectiveRole.canGuess()) {
+                    detectiveRole.clearGuess();
+                    detectiveWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.detective.guess_expired");
+                }
+            }, 60 * 20L);
         }
     }
 }

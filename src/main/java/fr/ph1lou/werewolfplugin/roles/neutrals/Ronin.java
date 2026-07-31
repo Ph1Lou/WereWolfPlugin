@@ -1,15 +1,12 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Camp;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
+import fr.ph1lou.werewolfapi.enums.*;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.buildings.SanctuaryVisitEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
@@ -18,7 +15,7 @@ import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.AbsentionistListVoteEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
-import fr.ph1lou.werewolfapi.events.roles.ronin.RoninDuelEvent;
+import fr.ph1lou.werewolfapi.events.random_events.SwapEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -47,7 +44,8 @@ import java.util.UUID;
 @Role(key = RoleBase.RONIN,
         category = Category.NEUTRAL,
         attribute = RoleAttribute.NEUTRAL,
-        defaultAura = Aura.DARK)
+        defaultAura = Aura.DARK,
+        configurations = {@Configuration(config = @ConfigurationBasic(key = "werewolf.roles.ronin.configurations.ronin_every_other_day", defaultValue = true))})
 public class Ronin extends RoleNeutral implements IPower {
 
     private enum HonorSource {
@@ -56,14 +54,13 @@ public class Ronin extends RoleNeutral implements IPower {
         GROUP_NON_COMPLIANCE, SANCTUARIES
     }
 
-    private enum DuelMode { HEMORRHAGE, SILENCE }
-
     private static final float DEFAULT_WALK_SPEED = 0.2f;
 
     private int roninHonor = -4;
     private int highestHonor = -4;
     private boolean initialized = false;
     private boolean power = false;
+    private boolean syncing = false;
 
     private int currentHealthBonus = 0;
     private float currentResistanceLevel = 0f;
@@ -71,15 +68,20 @@ public class Ronin extends RoleNeutral implements IPower {
 
     private final Set<org.bukkit.DyeColor> visitedSanctuaries = new HashSet<>();
 
-    @Nullable private IPlayerWW hemorrhageTarget;
+    @Nullable
+    private IPlayerWW hemorrhageTarget;
     private int hemorrhageEndTimer = 0;
     private float hemorrhageResistanceDebuff = 0f;
-    @Nullable private Float originalWalkSpeed;
+    @Nullable
+    private Float originalWalkSpeed;
 
-    @Nullable private IPlayerWW silenceTarget;
+    @Nullable
+    private IPlayerWW silenceTarget;
     private int silenceEndTimer = 0;
 
     private int particleTick = 0;
+    private boolean honorZeroToggle = false;
+    private int dayNumber = -8;
 
     public Ronin(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -118,9 +120,23 @@ public class Ronin extends RoleNeutral implements IPower {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onHonorChange(HonorChangeEvent event) {
-        if (event.getPlayerWW().equals(this.getPlayerWW())) {
+        if (event.getPlayerWW().equals(this.getPlayerWW()) && !syncing) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onSwap(SwapEvent event) {
+        if (!event.getPlayerWW1().equals(this.getPlayerWW()) && !event.getPlayerWW2().equals(this.getPlayerWW())) {
+            return;
+        }
+        syncing = true;
+        int clamped = Math.max(-3, Math.min(3, this.roninHonor));
+        int delta = clamped - this.getPlayerWW().getHonor();
+        if (delta != 0) {
+            this.getPlayerWW().modifyHonor(delta);
+        }
+        syncing = false;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -130,19 +146,25 @@ public class Ronin extends RoleNeutral implements IPower {
             endSilence(true);
             return;
         }
-        if (this.silenceTarget != null && event.getPlayerWW().equals(this.silenceTarget)) {
+        if (event.getPlayerWW().equals(this.silenceTarget)) {
             this.silenceTarget = null;
         }
-        if (this.hemorrhageTarget != null && event.getPlayerWW().equals(this.hemorrhageTarget)) {
+        if (event.getPlayerWW().equals(this.hemorrhageTarget)) {
             endHemorrhage();
         }
         Optional<IPlayerWW> killer = event.getPlayerWW().getLastKiller();
-        if (killer.isPresent() && killer.get().equals(this.getPlayerWW())) {
+        if (killer.isPresent() && killer.get().equals(this.getPlayerWW()) && isAbilityEnabled()) {
             Camp deadCamp = event.getPlayerWW().getRole().getCamp();
             switch (deadCamp) {
-                case WEREWOLF: applyHonorChange(HonorSource.KILL_WEREWOLF); break;
-                case NEUTRAL: applyHonorChange(HonorSource.KILL_NEUTRAL); break;
-                case VILLAGER: applyHonorChange(HonorSource.KILL_VILLAGER); break;
+                case WEREWOLF:
+                    applyHonorChange(HonorSource.KILL_WEREWOLF);
+                    break;
+                case NEUTRAL:
+                    applyHonorChange(HonorSource.KILL_NEUTRAL);
+                    break;
+                case VILLAGER:
+                    applyHonorChange(HonorSource.KILL_VILLAGER);
+                    break;
             }
         }
     }
@@ -175,7 +197,8 @@ public class Ronin extends RoleNeutral implements IPower {
         int total = 4;
         try {
             total = Math.max(1, game.getConfig().getValue(IntValueBase.BUILDINGS_SANCTUARY_COUNT));
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         if (this.visitedSanctuaries.size() >= total) {
             applyHonorChange(HonorSource.SANCTUARIES);
             this.visitedSanctuaries.clear();
@@ -186,6 +209,11 @@ public class Ronin extends RoleNeutral implements IPower {
     public void onDay(DayEvent event) {
         if (!isAbilityEnabled()) return;
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (game.getConfig().isConfigActive("werewolf.roles.ronin.configurations.ronin_every_other_day")
+                && event.getNumber() == dayNumber + 1) {
+            return;
+        }
+        dayNumber = event.getNumber();
         setPower(true);
         if (isInOversizedGroup()) {
             applyHonorChange(HonorSource.GROUP_NON_COMPLIANCE);
@@ -238,7 +266,8 @@ public class Ronin extends RoleNeutral implements IPower {
             } else if (honor < 0) {
                 color = Color.RED;
             } else {
-                color = game.getRandom().nextBoolean() ? Color.WHITE : Color.RED;
+                this.honorZeroToggle = !this.honorZeroToggle;
+                color = this.honorZeroToggle ? Color.WHITE : Color.RED;
             }
             VersionUtils.getVersionUtils().spawnColoredParticle(
                     roninPlayer, targetPlayer.getLocation().clone().add(0, 1, 0), color);
@@ -446,13 +475,23 @@ public class Ronin extends RoleNeutral implements IPower {
 
     private static int getMaxHealthBonus(int h) {
         switch (h) {
-            case 4: return 6;
-            case 3: return 4;
-            case 2: return 2;
-            case 1: case 0: return 0;
-            case -1: case -2: return -2;
-            case -3: case -4: return -4;
-            default: return 0;
+            case 4:
+                return 6;
+            case 3:
+                return 4;
+            case 2:
+                return 2;
+            case 1:
+            case 0:
+                return 0;
+            case -1:
+            case -2:
+                return -2;
+            case -3:
+            case -4:
+                return -4;
+            default:
+                return 0;
         }
     }
 
@@ -471,13 +510,21 @@ public class Ronin extends RoleNeutral implements IPower {
 
     private static int getHemorrhageDuration(int h) {
         switch (h) {
-            case 4: return 120;
-            case 3: return 105;
-            case 2: return 90;
-            case 1: return 75;
-            case 0: return 60;
-            case -1: case -2: return 45;
-            default: return 30;
+            case 4:
+                return 120;
+            case 3:
+                return 105;
+            case 2:
+                return 90;
+            case 1:
+                return 75;
+            case 0:
+                return 60;
+            case -1:
+            case -2:
+                return 45;
+            default:
+                return 30;
         }
     }
 
@@ -497,25 +544,42 @@ public class Ronin extends RoleNeutral implements IPower {
 
     private static int getSilenceDuration(int h) {
         switch (h) {
-            case 4: return 20 * 60;
-            case 3: return 17 * 60;
-            case 2: return 14 * 60;
-            case 1: return 12 * 60;
-            case 0: return 10 * 60;
-            case -1: return 8 * 60;
-            case -2: return 6 * 60;
-            default: return 4 * 60;
+            case 4:
+                return 20 * 60;
+            case 3:
+                return 17 * 60;
+            case 2:
+                return 14 * 60;
+            case 1:
+                return 12 * 60;
+            case 0:
+                return 10 * 60;
+            case -1:
+                return 8 * 60;
+            case -2:
+                return 6 * 60;
+            default:
+                return 4 * 60;
         }
     }
 
-    public int getRoninHonor() { return this.roninHonor; }
-    public int getHighestHonor() { return this.highestHonor; }
+    public int getRoninHonor() {
+        return this.roninHonor;
+    }
+
+    public int getHighestHonor() {
+        return this.highestHonor;
+    }
 
     @Override
-    public boolean hasPower() { return this.power; }
+    public boolean hasPower() {
+        return this.power;
+    }
 
     @Override
-    public void setPower(boolean power) { this.power = power; }
+    public void setPower(boolean power) {
+        this.power = power;
+    }
 
     @Override
     public @NotNull String getDescription() {

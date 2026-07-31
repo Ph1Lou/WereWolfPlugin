@@ -6,11 +6,13 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.utils.ItemBuilder;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.utils.InventoryUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -55,8 +57,8 @@ public class ChoiceGui implements InventoryProvider {
                                 new ItemBuilder(UniversalMaterial.PLAYER_HEAD.getStack())
                                         .setHead(targetWW.getName(),
                                                 Bukkit.getOfflinePlayer(targetWW.getReviewUUID()))
-                                        .setDisplayName(playerWW.getColor(targetWW) + targetWW.getName())
-                                        .build()), e -> ColorsGUI.getInventory(Collections.singletonList(targetWW)).open(player)))));
+                                        .setDisplayName(formatName(playerWW, targetWW))
+                                        .build()), e -> ColorsGUI.getInventory(Collections.singletonList(targetWW), player).open(player)))));
 
         InventoryUtils.fillInventory(game, items, pagination, contents, () -> getInventory(player), 36);
     }
@@ -64,6 +66,16 @@ public class ChoiceGui implements InventoryProvider {
     @Override
     public void update(Player player, InventoryContents contents) {
 
+    }
+
+    private static String formatName(IPlayerWW playerWW, IPlayerWW targetWW) {
+        ChatColor pastille = playerWW.getPastilleColor(targetWW);
+        StringBuilder sb = new StringBuilder();
+        if (pastille != null) {
+            sb.append(pastille).append("● ");
+        }
+        sb.append(playerWW.getColor(targetWW)).append(targetWW.getName());
+        return sb.toString();
     }
 
 }

@@ -91,6 +91,7 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
 
     @EventHandler
     public void onCharmedDeath(FinalDeathEvent event) {
+        if (!isAbilityEnabled()) return;
         if (!event.getPlayerWW().equals(this.playerWW)) {
             return;
         }

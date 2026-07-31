@@ -70,6 +70,7 @@ public class EnchantmentListener implements Listener {
 
         Role role = playerWW.getRole().getClass().getAnnotation(Role.class);
 
+
         for (Enchantment e : enchant.keySet()) {
 
             result.removeEnchantment(e);
@@ -81,9 +82,9 @@ public class EnchantmentListener implements Listener {
             } else if (UniversalEnchantment.PROTECTION.getEnchantment().equals(e)) {
 
                 if (item.getType().equals(Material.DIAMOND_BOOTS) ||
-                    item.getType().equals(Material.DIAMOND_LEGGINGS) ||
-                    item.getType().equals(Material.DIAMOND_HELMET) ||
-                    item.getType().equals(Material.DIAMOND_CHESTPLATE)) {
+                        item.getType().equals(Material.DIAMOND_LEGGINGS) ||
+                        item.getType().equals(Material.DIAMOND_HELMET) ||
+                        item.getType().equals(Material.DIAMOND_CHESTPLATE)) {
                     tempEnchant.put(e, Math.min(enchant.get(e),
                             game.getConfig().getLimitProtectionDiamond() + role.protectionDiamondModifier()));
                 } else {

@@ -77,6 +77,10 @@ public class Avocat extends RoleImpl implements IAffectedPlayers {
 
             if (!this.getPlayerWW().isState(StatePlayer.DEATH)) {
                 if (!this.anyHonorChange) {
+                    int honorDelta = defended.getHonor() - this.getPlayerWW().getHonor();
+                    if (honorDelta != 0) {
+                        this.getPlayerWW().modifyHonor(honorDelta);
+                    }
                     this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
                             "werewolf.roles.avocat.defense_end_exact",
                             Formatter.player(defended.getName()),

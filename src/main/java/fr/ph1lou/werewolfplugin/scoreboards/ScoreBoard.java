@@ -50,8 +50,8 @@ public class ScoreBoard implements IScoreboard {
         this.formatters.add(Formatter.format("&name&", WereWolfAPI::getGameName));
 
         this.formatters.add(Formatter.format("&timer&", (wereWolfAPI) -> Utils.conversion(wereWolfAPI.getTimer())));
-        this.formatters.add(Formatter.format("&day&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getTimer() / (wereWolfAPI.getConfig()
-                                                                                                                        .getTimerValue(TimerBase.DAY_DURATION) / 2 + 1))));
+        this.formatters.add(Formatter.format("&day&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getTimer() / (2 * wereWolfAPI.getConfig()
+                                                                                                                        .getTimerValue(TimerBase.DAY_DURATION)) + 1)));
         this.formatters.add(Formatter.format("&group&", (wereWolfAPI) -> String.valueOf(wereWolfAPI.getGroup())));
         this.formatters.add(Formatter.format("&border&", (wereWolfAPI) -> {
             if (game.getConfig().getTimerValue(TimerBase.BORDER_BEGIN) > 0) {

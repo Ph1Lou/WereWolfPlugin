@@ -10,6 +10,7 @@ import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
+import fr.ph1lou.werewolfapi.events.game.actionablestory.ActionableStoryEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AmnesiacLoverDeathEvent;
 import fr.ph1lou.werewolfapi.events.lovers.DonEvent;
@@ -25,6 +26,7 @@ import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
+import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
@@ -55,7 +57,7 @@ import java.util.stream.Collectors;
         sharpnessDiamondModifier = 1,
         powerModifier = 1,
         requireRoles = { RoleBase.CUPID })
-public class Rival extends RoleNeutral implements IPower {
+public class Rival extends RoleNeutral implements IPower, ILimitedUse {
 
     public static final int ANALYSE_COOLDOWN = 15 * 60;
     public static final int DEVINER_COOLDOWN = 30 * 60;
@@ -82,6 +84,9 @@ public class Rival extends RoleNeutral implements IPower {
     @Nullable
     private IPlayerWW isolatedLover = null;
     private int isolationEnd = 0;
+
+    private int isolateUse = 0;
+    private static final int ISOLATE_MAX_USE = 2;
 
     public Rival(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -280,15 +285,23 @@ public class Rival extends RoleNeutral implements IPower {
             this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.no_couple");
             return;
         }
+        if (isolateUse >= ISOLATE_MAX_USE) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.isolate_no_use");
+            return;
+        }
 
         IPlayerWW nearest = null;
         double best = ISOLATE_RANGE;
+        int inRange = 0;
         for (IPlayerWW l : lover.getLovers()) {
             if (!l.isState(StatePlayer.ALIVE)) continue;
             double d = l.distance(this.getPlayerWW());
             if (d <= best) {
                 best = d;
                 nearest = l;
+            }
+            if (d <= ISOLATE_RANGE) {
+                inRange++;
             }
         }
 
@@ -299,9 +312,17 @@ public class Rival extends RoleNeutral implements IPower {
 
         isolatedLover = nearest;
         isolationEnd = game.getTimer() + ISOLATE_DURATION;
+        isolateUse++;
 
-        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.rival.isolate_perform",
-                Formatter.player(nearest.getName()));
+        Bukkit.getPluginManager().callEvent(new ActionableStoryEvent(this.getPlayerWW(), "werewolf.roles.rival.isoler"));
+
+        if (inRange >= 2) {
+            this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.rival.isolate_both",
+                    Formatter.player(nearest.getName()));
+        } else {
+            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.rival.isolate_perform",
+                    Formatter.player(nearest.getName()));
+        }
     }
 
     public void bonus(int choice) {
@@ -355,6 +376,11 @@ public class Rival extends RoleNeutral implements IPower {
         }
         if (event.getPlayerWW().equals(isolatedLover) || event.getReceiverWW().equals(isolatedLover)) {
             event.setCancelled(true);
+            if (event.getPlayerWW().equals(isolatedLover)) {
+                event.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.isolate_targeted");
+            } else {
+                event.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.rival.isolate_deceptive");
+            }
         }
     }
 
@@ -426,5 +452,15 @@ public class Rival extends RoleNeutral implements IPower {
     @Override
     public boolean hasPower() {
         return power;
+    }
+
+    @Override
+    public int getUse() {
+        return isolateUse;
+    }
+
+    @Override
+    public void setUse(int use) {
+        this.isolateUse = use;
     }
 }

@@ -146,10 +146,11 @@
         "power_available": "Potete §aancora§f usare il vostro potere",
         "power_not_available": "Avete §cgià§f usato il vostro potere",
         "items": "una pozione di Cura, due pozioni di Danno, una pozione di Rigenerazione e una pozione di Forza",
-        "description": "Una sola volta nella partita, potete fare rinascere un giocatore.",
+        "description": "Una sola volta nella partita, potete fare rinascere un giocatore. Se il giocatore muore a più di §b80 blocchi§f da voi, la probabilità di conoscere la sua identità dipende dal tempo passato vicino a lui durante la partita (§b1% ogni 20s§f, cumulabile).",
         "not_himself": "§cNon potete§f rinascervi voi stessi",
         "himself": "§aPotete§f rinascervi voi stessi",
         "resuscitation_message": "§b&player&§r è morto, per farlo rivivere, §6Clicca qui §r(Avete §b7sec§r)",
+        "resuscitation_message_unknown": "Un giocatore è §bmorto lontano§f. Non avete passato abbastanza tempo vicino a lui per identificarlo.",
         "resuscitation_perform": "Avete appena fatto rivivere §b&player&",
         "command": "sauver_witch",
         "configurations": {
@@ -751,14 +752,15 @@
       },
       "twin": {
         "display": "Gemello",
-        "description": "All inizio della notte, se siete a più di §b&number2&§f blocchi dal vostro Gemello, ricevete la lista dei giocatori a meno di §b&number&§f blochi dal vostro Gemello O il ruolo di uno dei giocatori di questa lista.",
-        "effects": "Quando il vostro Gemello muore, ottenete cinque minuti di Forza e Velocità",
+        "description": "All inizio della notte, se siete a più di §b&number2&§f blocchi dal vostro Gemello, ricevete la lista dei giocatori a meno di §b&number&§f blochi dal vostro Gemello o il ruolo di uno dei giocatori di questa lista. Le informazioni ricevute si alternano tra i due Gemelli ad ogni episodio.",
+        "effects": "Quando il vostro Gemello muore, ottenete cinque minuti di Forza 0.5 e Velocità 0.5. Se uno di voi mangia una mela d'oro a più di §b&number&§f blocchi dall'altro, l'effetto di §bAssorbimento§f è condiviso.",
         "timer": "Tra &timer&, ottenete 3 nomi tra quelli dei vostri Gemelli",
         "twin_list": "Il vostro gemello è nella lista seguente : &list&",
         "too_near": "Siete troppo vicino al vostro Gemello per avere delle informazioni",
         "list_near": "Ecco la lista dei giocatori a meno di &number& blocchi dal vostro Gemello, &list&",
         "role_near": "Un giocatore è situato a meno di &number& blocchi dal vostro Gemello è §b&role&§f",
-        "death": "Vostro Gemello &player& è morto, di rabbia disponete di cinque minuti di Forza e Velocità",
+        "death": "Vostro Gemello &player& è morto, di rabbia disponete di cinque minuti di Forza 0.5 e Velocità 0.5",
+        "absorption_shared": "Il vostro Gemello &player& ha mangiato una mela d'oro. Condividete il suo effetto di §bAssorbimento§f.",
         "configurations": {
           "distance": "Campo di azione dei Gemelli §b&number&"
         },
@@ -1291,7 +1293,7 @@
         "same_target": "Devi mirare a due giocatori diversi",
         "not_met": "Devi aver incontrato questi giocatori",
         "cover_perform": "Hai ricoperto d'olio §b&player&§f e §b&player1&§f",
-        "covered_notify": "§b&player&§f ti ha ricoperto d'olio!",
+        "covered_notify": "Sei stato ricoperto d'olio!",
         "no_essence": "Nessun giocatore è ricoperto d'olio",
         "ignited_perform": "Hai incendiato §b&number&§f giocatore/i ricoperto/i d'olio",
         "ignited_target": "§b&player&§f ti ha incendiato! Perdi §c2♥§f per 10 minuti.",
@@ -1675,7 +1677,12 @@
           "command": "color",
           "description": "Permet de coloriser le pseudo d'un joueur",
           "player_choice": "Marquage du §bjoueur",
-          "color_choice": "Choix de la §bcouleur"
+          "color_choice": "Choix de la §bcouleur",
+          "pastille_choice": "Scelta della §bpastilla",
+          "pastille_mode_on": "§eModalità Pastilla: §aAttivata",
+          "pastille_mode_off": "§eModalità Pastilla: §cDisattivata",
+          "pastille_mode_lore": "§7Aggiunge una pastiglia colorata accanto al nome",
+          "pastille_remove": "§cRimuovi pastilla"
         }
       }
     },
@@ -2247,6 +2254,11 @@
         "start": "Début d'une Lune de §cSang",
         "end": "Fin de la Lune de §cSang",
         "count": "Début de la Lune au bout de §b&number&§f jour(s)"
+      },
+      "cupid_rancunier": {
+        "name": "Cupidon Rancunier",
+        "description": "À la mort du couple après l'épisode 5, le Cupidon devient Rancunier et doit gagner seul.",
+        "transform": "[§5Cupidon Rancunier§r] Votre couple a péri... La rancune vous consume ! Vous devenez un solitaire et devez désormais gagner seul. Votre aura devient ténébreuse."
       }
     },
     "check": {

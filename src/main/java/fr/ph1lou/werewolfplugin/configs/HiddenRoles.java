@@ -72,7 +72,7 @@ public class HiddenRoles extends ListenerWerewolf {
 
         IPlayerWW playerWW = event.getTargetPlayer();
 
-        if (playerWW.getRole().isNeutral()) {
+        if (playerWW.getRole().isNeutral() && !playerWW.getRole().isWereWolf()) {
             if (getGame().getRandom().nextFloat() > 0.95) {
                 event.setRole("werewolf.configurations.hidden_roles.magic");
             }

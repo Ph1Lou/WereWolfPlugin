@@ -123,6 +123,7 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
     @Override
     public void second() {
 
+        if (!isAbilityEnabled()) return;
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }

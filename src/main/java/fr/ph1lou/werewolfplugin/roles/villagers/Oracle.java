@@ -28,7 +28,7 @@ import java.util.List;
 @Role(key = RoleBase.ORACLE,
         category = Category.VILLAGER,
         attribute = RoleAttribute.MINOR_INFORMATION,
-        configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.ORACLE_EVERY_OTHER_DAY))})
+        configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.ORACLE_EVERY_OTHER_DAY, defaultValue = true))})
 public class Oracle extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();

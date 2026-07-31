@@ -163,10 +163,11 @@
         "power_available": "Vous pouvez §aencore§f utiliser votre pouvoir",
         "power_not_available": "Vous avez §cdéjà§f utilisé votre pouvoir",
         "items": "une potion de Soins, deux potions de Dégats, une potion de Régénération et une potion de Force",
-        "description": "Une fois dans la partie, vous pouvez ressusciter un joueur.",
+        "description": "Une fois dans la partie, vous pouvez ressusciter un joueur. Si le joueur meurt à plus de §b80 blocs§f de vous, la chance de connaître son identité dépend du temps passé près de lui durant la partie (§b1% toutes les 20s§f, cumulable).",
         "not_himself": "Vous ne §cpouvez pas§f vous ressusciter vous même",
         "himself": "Vous §apouvez§f vous ressusciter vous même",
         "resuscitation_message": "§b&player&§r est mort, pour le ressusciter, §6Cliquez ici §r(Vous avez §b7sec§r)",
+        "resuscitation_message_unknown": "Un joueur est §bmort au loin§f. Vous n'avez pas passé assez de temps près de lui pour l'identifier.",
         "resuscitation_perform": "Vous venez de ressusciter §b&player&",
         "command": "sauver_witch",
         "configurations": {
@@ -301,6 +302,10 @@
         "isolate_need_guess": "Vous devez d'abord deviner le couple avec §b/ww deviner§f.",
         "isolate_no_target": "Aucun Amoureux à moins de §b15 blocs§f.",
         "isolate_perform": "Vous isolez §b&player&§f : il ne peut plus envoyer ni recevoir de vie pendant §b3 minutes§f.",
+        "isolate_both": "Les deux Amoureux sont dans le rayon ! Le plus proche (§b&player&§f) a été ciblé.",
+        "isolate_no_use": "Vous n'avez plus d'utilisation de votre pouvoir d'isolation.",
+        "isolate_targeted": "Vous avez été ciblé par un Rival ! Vous ne pouvez pas faire de don pour le moment.",
+        "isolate_deceptive": "Votre partenaire ne semble pas avoir besoin d'autant de vie.",
         "bonus_need_kill": "Vous devez d'abord tuer un Amoureux pour choisir un bonus.",
         "bonus_already": "Vous avez déjà choisi votre bonus.",
         "bonus_invalid": "Choix invalide. Utilisez un numéro entre 1 et 4.",
@@ -458,6 +463,7 @@
         "guess_correct": "Vous avez deviné correctement ! Le code &code& signifie bien que les deux joueurs sont du même camp. Vous conservez votre pouvoir.",
         "guess_wrong": "Vous vous êtes trompé. Le code &code& ne signifie pas que les deux joueurs sont du même camp. Vous perdez l'utilisation de votre pouvoir.",
         "guess_unavailable": "Vous ne pouvez pas deviner maintenant",
+        "guess_expired": "Le temps pour deviner est écoulé.",
         "configurations": {
           "detective_every_other_day": "Detective tous les deux jours"
         }
@@ -629,7 +635,7 @@
         "full": "Le joueur a son inventaire rempli, il ne peut recevoir la flûte",
         "wait": "Vous devez attendre §bun jour§f avant de transmettre une nouvelle flûte",
         "affected": "§bPersonne affectée§f : §f&list&\n",
-        "craft_description": "Pour fabriquer votre flûte, un baton entouré de 4 lingots d'or dans votre établi",
+        "craft_description": "Pour fabriquer votre flûte, un baton entouré de 8 lingots d'or dans votre établi",
         "description": "Lorsque vous aurez fabriqué votre flûte, toutes les personnes se situant à moins de §b&number&§f blocs de vous seront charmées progressivement (1% toutes les &timer& secondes).",
         "power": "Vous pouvez fabriquer des flûtes §bsupplémentaires§f, et les donner furtivement aux joueurs par un §bclic droit§f une fois par cycle. Un joueur avec une flûte charmera §bà son insu§f les joueurs autour de lui (3x moins vite), sans pouvoir s'en débarrasser. Il en sera notifié au début de l'épisode suivant. Frapper un joueur augmente son charme de §b10%§f (une fois par joueur).",
         "enchanted": "Vous venez d'enchanter §b&player&",
@@ -647,7 +653,8 @@
           "progress": "Charme 1% toutes les §b&timer&"
         },
         "configurations": {
-          "distance": "Champ d'action du Joueur de Flûte §b&number&"
+          "distance": "Champ d'action du Joueur de Flûte §b&number&",
+          "flute_player_every_other_day": "Joueur de Flûte tous les deux jours"
         }
       },
       "librarian": {
@@ -720,12 +727,14 @@
       },
       "shaman": {
         "display": "Chaman",
-        "description": "A chaque fois qu'un joueur meurt, vous pouvez décider dans les 30 secondes qui suivent de sacrifier §c1.5§f coeur permanent pour obtenir aléatoirement le nom ou le rôle de §cla personne qui l'a tué§f. \nVous voyez toujours le véritable rôle d'un joueur mort définitivement",
+        "description": "A chaque fois qu'un joueur meurt, vous pouvez décider dans les 30 secondes qui suivent de sacrifier §c1§f coeur permanent pour obtenir §b4 noms de joueurs§f dont le tueur se cache parmi eux. \nVous voyez toujours le véritable rôle d'un joueur mort définitivement, sauf si sa mort est cachée.",
         "cannot_use": "Vous ne pouvez plus exécuter cette action",
         "not_enough_life": "Vous n'avez pas assez de vie pour cela",
-        "choice_message": "Un joueur est mort. §bCliquez ici§r pour obtenir une information sur son tueur en échange de §c1.5§f coeur permanent. Vous avez §b30§r secondes.",
+        "choice_message": "Un joueur est mort. §bCliquez ici§r pour obtenir une information sur son tueur en échange de §c1§f coeur permanent. Vous avez §b30§r secondes.",
+        "hidden_death": "Un joueur est mort, mais sa mort est cachée. Vous ne pouvez pas obtenir d'informations.",
         "victim_name": "§b&player&§r est le tueur",
         "victim_role": "Un §b&role&§r est le tueur",
+        "victim_names": "Le tueur se cache parmi : §b&names&§r",
         "command": "command_shaman",
         "aura": "Quand le §bChaman§f utilisent son pouvoir, son aura devient Obscure"
       },
@@ -794,14 +803,15 @@
       },
       "twin": {
         "display": "Jumeau",
-        "description": "Au début de la nuit, si vous êtes à plus de §b&number2&§f blocs de votre Jumeau, vous recevez la liste des joueurs à moins de §b&number&§f blocs de votre Jumeau OU le rôle d’un des joueurs de cette liste.",
-        "effects": "Lorsque votre Jumeau meurt, vous obtenez 5 minutes de Force et de Vitesse",
+        "description": "Au début de la nuit, si vous êtes à plus de §b&number2&§f blocs de votre Jumeau, vous recevez la liste des joueurs à moins de §b&number&§f blocs de votre Jumeau ou le rôle d’un des joueurs de cette liste. Les informations reçues s'alternent entre les deux Jumeaux à chaque épisode.",
+        "effects": "Lorsque votre Jumeau meurt, vous obtenez 5 minutes de Force 0.5 et Vitesse 0.5. Si l'un de vous mange une pomme en or à plus de §b&number&§f blocs de l'autre, l'effet d'§bAbsorption§f est partagé.",
         "timer": "Dans &timer&, vous obtenez le pseudo de vos Jumeaux.",
         "twin_list": "Vous êtes Jumeau avec : &list&",
         "too_near": "Vous êtes trop proche de votre Jumeau pour voir des informations",
         "list_near": "Voici la liste des joueurs à moins de &number& blocs de votre Jumeau, &list&",
         "role_near": "Un joueur situé à moins de &number& blocs de votre Jumeau est §b&role&§f",
-        "death": "Votre Jumeau &player& est mort. De rage, vous obtenez 5 minutes de Force et de Vitesse",
+        "death": "Votre Jumeau &player& est mort. De rage, vous obtenez 5 minutes de Force 0.5 et Vitesse 0.5",
+        "absorption_shared": "Votre Jumeau &player& a mangé une pomme en or. Vous partagez son effet d'§bAbsorption§f.",
         "configurations": {
           "distance": "Champ d'action des Jumeaux §b&number&"
         },
@@ -1002,6 +1012,7 @@
         "use_power": "Vous pouvez espionner un nouveau joueur avec §b/ww spy",
         "result": "Le joueur &player& a effectué &number& action(s) racontable(s)",
         "perform": "Vous commencez à espionner §b&player&",
+        "not_consecutive": "Vous ne pouvez pas espionner le même joueur deux fois d'affilée.",
         "day": "Pouvoir activé Jour §b&number&"
       },
       "benefactor": {
@@ -1214,6 +1225,14 @@
         "nuire_perform": "Vous avez réduit l'Honneur de §b&number&§f joueur(s) à proximité",
         "nuire_warn": "§b&player&§f (Loup-Garou Déloyal) a réduit votre Honneur de 1"
       },
+      "mesquin_werewolf": {
+        "display": "Loup-Garou Mesquin",
+        "description": "Vous possédez l'effet §bForce I§f la nuit (dont le % dépend de votre Honneur). §bTrois fois par partie§f, vous pouvez §btrafiquer une urne de vote§f en interagissant avec elle (clic droit sur le jukebox), même en dehors des sessions de vote. Les Villageois qui votent dans une urne trafiquée §bne gagnent pas d'Honneur§f. Une fois par partie, vous pouvez pousser un hurlement via §b/ww hurler§r. Vous gagnez §bSpeed I§f et §b2♥§f d'Absorption pendant 1 minute si vous tuez un joueur.",
+        "rig_perform": "Vous avez trafiqué cette urne. Les Villageois qui y voteront ne gagneront pas d'Honneur.",
+        "rig_no_use": "Vous n'avez plus de traficage disponible.",
+        "rig_already": "Cette urne est déjà trafiquée.",
+        "command": "hurler"
+      },
       "avocat": {
         "display": "Avocat",
         "description": "Vous pouvez, une fois toutes les 10 minutes, empêcher l'Honneur d'un joueur de descendre pendant 10 minutes via §b/ww defendre§r [Pseudo]. L'Honneur du joueur défendu peut tout de même augmenter. Vous ne pouvez pas défendre le même joueur deux fois d'affilée. À la fin des 10 minutes, vous êtes notifié de combien l'Honneur du joueur défendu aurait diminué si vous ne l'aviez pas défendu. Dans le cas où son Honneur n'a pas varié, vous en obtenez la valeur exacte.",
@@ -1228,7 +1247,10 @@
         "display": "Prophétesse",
         "description": "Au début de chaque épisode, vous recevez une liste de tous les joueurs dont l'aura actuelle est différente de leur aura au début de l'épisode précédent. Dans le cas où l'aura change plusieurs fois, vous n'en êtes pas mise au courant.",
         "no_change": "Aucun joueur n'a vu son aura changer depuis le début de l'épisode précédent.",
-        "list": "Les joueurs suivants ont une aura différente de celle qu'ils avaient au début de l'épisode précédent : §b&list&§f."
+        "list": "Les joueurs suivants ont une aura différente de celle qu'ils avaient au début de l'épisode précédent : §b&list&§f.",
+        "configurations": {
+          "prophetess_every_other_day": "Prophétesse tous les deux jours"
+        }
       },
       "renegade": {
         "display": "Renégat",
@@ -1253,7 +1275,10 @@
         "silence_start": "Vous réduisez §b&player&§f au silence !",
         "silence_target": "§b&player&§f vous a réduit au silence ! Vos pouvoirs sont désactivés.",
         "silence_end": "Vous n'êtes plus réduit au silence. Vos pouvoirs sont réactivés.",
-        "actionbar": "Honneur : §b&number&§f (record : §b&number1&§f)"
+        "actionbar": "Honneur : §b&number&§f (record : §b&number1&§f)",
+        "configurations": {
+          "ronin_every_other_day": "Ronin tous les deux jours"
+        }
       },
       "pyromane": {
         "display": "Pyromane",
@@ -1265,7 +1290,7 @@
         "same_target": "Vous devez viser deux joueurs différents",
         "not_met": "Vous devez avoir croisé ces joueurs",
         "cover_perform": "Vous avez recouvert d'essence §b&player&§f et §b&player1&§f",
-        "covered_notify": "§b&player&§f vous a recouvert d'essence !",
+        "covered_notify": "Vous avez été recouvert d'essence !",
         "no_essence": "Aucun joueur n'est recouvert d'essence",
         "ignited_perform": "Vous avez enflammé §b&number&§f joueur(s) recouvert(s) d'essence",
         "ignited_target": "§b&player&§f vous a enflammé ! Vous perdez §c2♥§f pendant 10 minutes.",
@@ -1275,7 +1300,23 @@
         "covered_by_fire": "Vous vous approchez d'un bâtiment en flammes et êtes recouvert d'essence !",
         "fire_covered": "§b&player&§f s'est approché du bâtiment en flammes et a été recouvert d'essence.",
         "not_in_building": "Vous devez vous trouver dans un bâtiment",
-        "burn_used": "Vous avez déjà utilisé votre condamnation cet épisode"
+        "burn_used": "Vous avez déjà utilisé votre condamnation cet épisode",
+        "configurations": {
+          "pyromane_every_other_day": "Pyromane tous les deux jours"
+        }
+      },
+      "alerter_werewolf": {
+        "display": "Loup-Garou Alerteur",
+        "description": "Une fois par épisode, vous pouvez cibler un joueur avec §b/ww alerte§f. Si vous restez §b3 minutes§f à proximité de votre cible, vous révélez son rôle à un autre Loup-Garou aléatoire. Vous ne pouvez pas alerter sur un membre de votre camp. Vous apprenez le nom du Loup alerté, et lui apprend le vôtre.",
+        "command": "alerte",
+        "perform": "Vous commencez à suivre §b&player&§f. Restez à proximité pendant 3 minutes pour alerter un Loup.",
+        "alert_received": "Le Loup-Garou §b&player&§f vous a alerté : la cible est un §b&role&§f.",
+        "alerter_notified": "Vous avez alerté le Loup-Garou §b&player&§f.",
+        "alerted_wolf_notified": "Le Loup-Garou §b&player&§f vous a alerté.",
+        "alert_no_wolf": "Aucun autre Loup-Garou n'est en vie pour être alerté.",
+        "configurations": {
+          "alerter_werewolf_every_other_day": "Loup-Garou Alerteur tous les deux jours"
+        }
       }
     },
     "announcement": {
@@ -1324,7 +1365,8 @@
       "fake_lover": " en faux couple avec &player&",
       "cursed_lover": " en couple maudit avec &player&",
       "victory": "Victoire",
-      "message": "Victoire &winner&"
+      "message": "Victoire &winner&",
+      "random_events": "§6Événements aléatoires actifs :§f &events&"
     },
     "commands": {
       "admin": {
@@ -1620,7 +1662,12 @@
           "command": "color",
           "description": "Permet de coloriser le pseudo d'un joueur",
           "player_choice": "Marquage du §bjoueur",
-          "color_choice": "Choix de la §bcouleur"
+          "color_choice": "Choix de la §bcouleur",
+          "pastille_choice": "Choix de la §bpastille",
+          "pastille_mode_on": "§eMode Pastille: §aActivé",
+          "pastille_mode_off": "§eMode Pastille: §cDésactivé",
+          "pastille_mode_lore": "§7Ajoute une pastille colorée à côté du nom",
+          "pastille_remove": "§cRetirer la pastille"
         }
       }
     },
@@ -1979,10 +2026,18 @@
           "urn_capacity": "Capacité des urnes : §b&number&§r votes"
         },
         "timers": {
-          "urn_vote_1_start": { "name": "1er vote par urne (§b&timer&§r)" },
-          "urn_vote_2_start": { "name": "2ème vote par urne (§b&timer&§r)" },
-          "urn_vote_3_start": { "name": "3ème vote par urne (§b&timer&§r)" },
-          "urn_vote_duration": { "name": "Durée d'un vote par urne (§b&timer&§r)" }
+          "urn_vote_1_start": {
+            "name": "1er vote par urne (§b&timer&§r)"
+          },
+          "urn_vote_2_start": {
+            "name": "2ème vote par urne (§b&timer&§r)"
+          },
+          "urn_vote_3_start": {
+            "name": "3ème vote par urne (§b&timer&§r)"
+          },
+          "urn_vote_duration": {
+            "name": "Durée d'un vote par urne (§b&timer&§r)"
+          }
         },
         "urn_menu": "Urne de vote",
         "urn_full": "Cette urne est §cpleine",
@@ -2245,6 +2300,35 @@
         "start": "Début d'une Lune de §cSang",
         "end": "Fin de la Lune de §cSang",
         "count": "Début de la Lune au bout de §b&number&§f jour(s)"
+      },
+      "cupid_rancunier": {
+        "name": "Cupidon Rancunier",
+        "description": "À la mort du couple après l'épisode 5, le Cupidon devient Rancunier et doit gagner seul.",
+        "transform": "[§5Cupidon Rancunier§r] Votre couple a péri... La rancune vous consume ! Vous devenez un solitaire et devez désormais gagner seul. Votre aura devient ténébreuse."
+      },
+      "night_assembly": {
+        "name": "Assemblée nocturne",
+        "description": "Les Loups-Garous reçoivent un message \nau début de la première nuit d'un épisode aléatoire \nà partir de l'épisode 3.\n Ils auront alors 1 minute pour cibler un joueur \navec la commande /lg assemblee [Joueur]. \nÀ la fin de la minute : les votants prennent -1 d'Honneur \net reçoivent une droite de particules sur la terre \nqui mène vers la localisation du joueur le plus ciblé à la fin de l'assemblée ; \nles non-votants prennent +1 d'Honneur ; \nle joueur ciblé est mis au courant qu'il était ciblé à la fin de la nuit \net reçoit l'effet Weakness I jusqu'à la fin de l'épisode.",
+        "command": "assemblee",
+        "announce": "§5Assemblée nocturne§r ! Vous avez §b1 minute§r pour cibler un joueur avec §b/ww assemblee [Pseudo]§r. Les votants perdent §c-1 Honneur§r mais obtiennent la direction du joueur le plus ciblé. Les non-votants gagnent §a+1 Honneur§r.",
+        "vote_perform": "Vous avez voté pour cibler §b&player&§r.",
+        "voted": "Vous avez participé à l'assemblée. §c-1 Honneur§r. Une flèche vous indique la direction du joueur le plus ciblé.",
+        "not_voted": "Vous n'avez pas participé à l'assemblée. §a+1 Honneur§r.",
+        "targeted": "§cVous avez été ciblé par l'assemblée nocturne des Loups-Garous.§r Vous subissez §cWeakness I§r jusqu'à la fin de l'épisode.",
+        "not_active": "Aucune assemblée nocturne n'est en cours."
+      },
+      "gri_gri_immunity": {
+        "name": "Gri-gri d'immunité",
+        "description": "Un Gri-gri apparaît dans l'un des coffres des bureaux de vote. \nLa personne étant en possession de celui-ci lors du dépouillement verra les votes à son encontre annulés. \nLe joueur ciblé par le vote sera donc le prochain joueur le plus voté. \nLe Gri-gri ne disparaît pas si le joueur qui le possède n'est pas le joueur le plus voté.",
+        "item_name": "§5Gri-gri d'immunité",
+        "item_lore": "§7Les votes à votre encontre seront annulés lors du dépouillement.",
+        "appeared": "§5Un Gri-gri d'immunité§r est apparu dans l'un des coffres des bureaux de vote !",
+        "consumed": "§5Le Gri-gri d'immunité§r a protégé §b&player&§r : ses votes ont été annulés. Le prochain joueur le plus voté subit les sanctions à sa place.",
+        "timers": {
+          "spawn": {
+            "name": "Apparition du Gri-gri (§b&timer&§f)"
+          }
+        }
       }
     },
     "check": {
@@ -2296,7 +2380,7 @@
     "categories": {
       "villager": "Villageois",
       "werewolf": "Loups Garous",
-      "neutral": "Neutres",
+      "neutral": "Solos",
       "addons": "Rôles Addons",
       "colors": {
         "villager": "§a",

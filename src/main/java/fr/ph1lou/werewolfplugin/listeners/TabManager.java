@@ -129,6 +129,7 @@ public class TabManager implements Listener {
         Team team = scoreboard.getTeam(player.getName());
         StringBuilder sb = new StringBuilder(updatePlayerNameTagEvent.getPrefix());
         AtomicReference<ChatColor> chatColor = new AtomicReference<>(updatePlayerNameTagEvent.getChatColor());
+        AtomicReference<String> pastille = new AtomicReference<>("");
 
         if (updatePlayerNameTagEvent.isTabVisibility()) {
             VersionUtils.getVersionUtils().showPlayer(target, player);
@@ -146,6 +147,10 @@ public class TabManager implements Listener {
                         .ifPresent(playerWW -> {
                             if(playerWW.isState(StatePlayer.ALIVE)){
                                 chatColor.set(targetWW.getColor(playerWW));
+                                ChatColor pastilleColor = targetWW.getPastilleColor(playerWW);
+                                if(pastilleColor != null){
+                                    pastille.set(pastilleColor.toString() + "● ");
+                                }
                             }
                             if (requestSeeWereWolfListEvent.isAccept()) {
                                 AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(targetWW, playerWW);
@@ -161,12 +166,13 @@ public class TabManager implements Listener {
             });
 
             String suffix = updatePlayerNameTagEvent.getSuffix();
-            String prefix2 = sb.toString();
+            String prefix2 = sb.toString() + pastille.get();
             boolean visibility = updatePlayerNameTagEvent.isVisibility();
 
             if (game.getModerationManager().getModerators().contains(target.getUniqueId())) {
                 suffix = updateModeratorNameTagEvent.getSuffix() + suffix;
                 chatColor.set(updateModeratorNameTagEvent.getPrefix());
+                pastille.set("");
                 visibility = true;
             }
             team.setSuffix(suffix.substring(0, Math.min(16, suffix.length())));

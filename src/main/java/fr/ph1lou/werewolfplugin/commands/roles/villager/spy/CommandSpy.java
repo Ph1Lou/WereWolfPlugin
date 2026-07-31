@@ -15,6 +15,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfplugin.roles.villagers.Spy;
 import org.bukkit.Bukkit;
 
 @RoleCommand(key = "werewolf.roles.spy.command",
@@ -31,6 +32,12 @@ public class CommandSpy implements IParameterizedCommandRole {
         IRole spy = playerWW.getRole();
 
         IPlayerWW playerWW1 = ctx.player(0);
+
+        Spy spyRole = (Spy) spy;
+        if (playerWW1.equals(spyRole.getLastSpied())) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.spy.not_consecutive");
+            return;
+        }
 
         ((IPower) spy).setPower(false);
 

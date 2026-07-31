@@ -12,6 +12,7 @@ import fr.ph1lou.werewolfapi.events.game.game_cycle.WinEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
 import fr.ph1lou.werewolfapi.events.lovers.AroundLoverEvent;
+import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.lovers.ILover;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -20,6 +21,7 @@ import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import fr.ph1lou.werewolfplugin.Main;
+import fr.ph1lou.werewolfplugin.Register;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -157,6 +159,17 @@ public class End {
             Bukkit.getPluginManager().callEvent(endPlayerMessageEvent);
 
             Bukkit.broadcastMessage(sb.toString());
+        }
+
+        List<String> triggeredEvents = Register.get().getRandomEventsRegister().stream()
+                .filter(w -> game.getListenersManager().getRandomEvent(w.getMetaDatas().key())
+                        .map(ListenerWerewolf::wasTriggered).orElse(false))
+                .map(w -> game.translate(w.getMetaDatas().key()))
+                .collect(Collectors.toList());
+
+        if (!triggeredEvents.isEmpty()) {
+            Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.end.random_events",
+                    Formatter.format("&events&", String.join("§f, ", triggeredEvents))));
         }
 
         for (Player p : Bukkit.getOnlinePlayers()) {

@@ -29,7 +29,7 @@ import java.util.List;
             defaultAura = Aura.NEUTRAL,
             category = Category.VILLAGER,
             attribute = RoleAttribute.INFORMATION,
-            configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.CROUPIER_EVERY_OTHER_DAY))})
+            configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.CROUPIER_EVERY_OTHER_DAY, defaultValue = true))})
 public class Croupier extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();

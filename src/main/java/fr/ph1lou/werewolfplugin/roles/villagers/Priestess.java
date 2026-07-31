@@ -70,6 +70,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
     @EventHandler
     public void onDeath(FinalDeathEvent event) {
 
+        if (!isAbilityEnabled()) return;
         if (!this.affectedPlayer.contains(event.getPlayerWW())) return;
 
         if (!event.getPlayerWW().getRole().isWereWolf()) return;
@@ -146,7 +147,7 @@ public class Priestess extends RoleWithLimitedSelectionDuration implements IAffe
 
         IPlayerWW playerWW = event.getTargetPlayer();
 
-        if (playerWW.getRole().isNeutral()) {
+        if (playerWW.getRole().isNeutral() && !playerWW.getRole().isWereWolf()) {
             if (game.getRandom().nextFloat() > 0.95) {
                 event.setRole("werewolf.roles.priestess.magic");
             }

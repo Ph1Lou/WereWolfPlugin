@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfplugin.buildings.UrnVoteManager;
 import fr.ph1lou.werewolfplugin.buildings.VoteOffice;
 import fr.ph1lou.werewolfplugin.game.GameManager;
+import fr.ph1lou.werewolfplugin.roles.werewolfs.MesquinWereWolf;
 import org.bukkit.entity.Player;
 
 public final class UrnVoteGuiHelper {
@@ -35,7 +36,8 @@ public final class UrnVoteGuiHelper {
             return;
         }
 
-        if (game.getConfig().isConfigActive(ConfigBase.HONOR)) {
+        if (game.getConfig().isConfigActive(ConfigBase.HONOR)
+                && !MesquinWereWolf.isAnyUrnRiggedAt(game, office.getUrnLocation())) {
             voter.modifyHonor(1);
         }
 

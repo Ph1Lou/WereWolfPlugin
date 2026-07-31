@@ -17,6 +17,10 @@ import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import org.bukkit.Bukkit;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 @RoleCommand(key = "werewolf.roles.shaman.command",
         roleKeys = RoleBase.SHAMAN,
         argNumbers = 1,
@@ -29,7 +33,7 @@ public class CommandShaman implements IParameterizedCommandRole {
 
         IPlayerWW playerWW1 = ctx.player(0);
 
-        if (playerWW.getHealth() < 3) {
+        if (playerWW.getHealth() < 2) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.shaman.not_enough_life");
             return;
         }
@@ -56,17 +60,22 @@ public class CommandShaman implements IParameterizedCommandRole {
             return;
         }
 
-        playerWW.removePlayerMaxHealth(3);
+        playerWW.removePlayerMaxHealth(2);
         playerWW.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.DARK, 1, false));
 
-        if (game.getRandom().nextBoolean()) {
-            playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.shaman.victim_name",
-                    Formatter.player(killerWW.getName()));
-        } else {
-            IRole role = killerWW.getRole();
-            playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.shaman.victim_role",
-                    Formatter.role(game.translate(role.getDisplayRole())));
+        List<IPlayerWW> namePool = new ArrayList<>(game.getAlivePlayersWW());
+        namePool.removeIf(p -> p.equals(killerWW));
+        Collections.shuffle(namePool, game.getRandom());
+
+        List<String> names = new ArrayList<>();
+        names.add(killerWW.getName());
+        for (int i = 0; i < 3 && i < namePool.size(); i++) {
+            names.add(namePool.get(i).getName());
         }
+        Collections.shuffle(names, game.getRandom());
+
+        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.shaman.victim_names",
+                Formatter.format("&names&", String.join("§f, §b", names)));
 
     }
 }

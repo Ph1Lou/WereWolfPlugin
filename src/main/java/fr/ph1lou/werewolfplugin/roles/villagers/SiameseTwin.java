@@ -85,6 +85,7 @@ public class SiameseTwin extends RoleImpl {
     @Override
     public void second() {
 
+        if (!isAbilityEnabled()) return;
         double health = game.getAlivePlayersWW()
                 .stream()
                 .map(IPlayerWW::getRole)

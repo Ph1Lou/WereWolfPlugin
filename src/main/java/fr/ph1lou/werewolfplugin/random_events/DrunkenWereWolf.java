@@ -68,13 +68,17 @@ public class DrunkenWereWolf extends ListenerWerewolf {
 
         Collections.shuffle(fakeListPool, game.getRandom());
 
-        this.fakeList.addAll(fakeListPool.subList(0, playerWWS.size()));
+        this.fakeList.add(this.temp);
 
         this.fakeList.addAll(game.getAlivePlayersWW().stream()
                 .filter(playerWW -> playerWW.getRole().isKey(RoleBase.ALPHA_WEREWOLF))
+                .filter(playerWW -> !playerWW.equals(this.temp))
                 .collect(Collectors.toList()));
 
-        this.fakeList.add(this.temp);
+        for (IPlayerWW p : fakeListPool) {
+            if (this.fakeList.size() >= playerWWS.size()) break;
+            this.fakeList.add(p);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

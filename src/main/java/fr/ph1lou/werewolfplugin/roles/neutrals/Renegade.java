@@ -23,6 +23,7 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
+import fr.ph1lou.werewolfapi.role.interfaces.IInvisible;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
@@ -101,6 +102,7 @@ public class Renegade extends RoleNeutral implements IPower {
 
         for (IPlayerWW p : game.getAlivePlayersWW()) {
             if (p.equals(this.getPlayerWW())) continue;
+            if (p.getRole() instanceof IInvisible && ((IInvisible) p.getRole()).isInvisible()) continue;
             Location loc = p.getLocation();
             if (loc.getWorld() != renegadeLoc.getWorld()) continue;
             double dist = renegadeLoc.distance(loc);

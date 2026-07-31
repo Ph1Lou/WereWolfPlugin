@@ -60,6 +60,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
     @EventHandler
     public void onFinalDeath(FinalDeathEvent event) {
 
+        if (!isAbilityEnabled()) return;
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
@@ -96,6 +97,7 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
     @Override
     public void second() {
 
+        if (!isAbilityEnabled()) return;
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }

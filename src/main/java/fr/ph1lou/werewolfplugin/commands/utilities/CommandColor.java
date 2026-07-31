@@ -31,7 +31,7 @@ public class CommandColor implements ICommand {
                     .map(Entity::getUniqueId)
                     .map(game::getPlayerWW)
                     .filter(Optional::isPresent)
-                    .map(Optional::get).collect(Collectors.toList())).open(player);
+                    .map(Optional::get).collect(Collectors.toList()), player).open(player);
             return;
         }
         ChoiceGui.getInventory(player).open(player);

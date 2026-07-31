@@ -103,6 +103,7 @@ public class Astronomer extends RoleImpl implements IAffectedPlayers, IPower {
     @Override
     public void second() {
 
+        if (!isAbilityEnabled()) return;
         if (this.hasPower()) {
             return;
         }

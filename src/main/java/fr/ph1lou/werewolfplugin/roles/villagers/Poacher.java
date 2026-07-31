@@ -146,6 +146,7 @@ public class Poacher extends RoleImpl {
     @Override
     public void second() {
 
+        if (!isAbilityEnabled()) return;
         if (!this.carcasses.isEmpty()) {
             List<UUID> expired = new ArrayList<>();
             for (Map.Entry<UUID, Carcass> entry : this.carcasses.entrySet()) {

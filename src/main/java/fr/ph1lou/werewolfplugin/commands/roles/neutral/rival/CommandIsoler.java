@@ -13,6 +13,7 @@ import fr.ph1lou.werewolfplugin.roles.neutrals.Rival;
 @RoleCommand(key = "werewolf.roles.rival.isoler_command",
         roleKeys = RoleBase.RIVAL,
         argNumbers = 0,
+        requiredLimitedUse = 2,
         statesPlayer = StatePlayer.ALIVE)
 public class CommandIsoler implements IParameterizedCommandRole {
 

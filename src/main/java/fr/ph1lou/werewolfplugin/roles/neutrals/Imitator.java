@@ -96,6 +96,7 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent event) {
 
+        if (!isAbilityEnabled()) return;
         if (event.getEntity().getKiller() == null) return;
         Player killer = event.getEntity().getKiller();
 

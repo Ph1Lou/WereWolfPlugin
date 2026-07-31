@@ -1,5 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.Configuration;
+import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -26,11 +28,13 @@ import java.util.UUID;
 @Role(key = RoleBase.PROPHETESS,
         category = Category.VILLAGER,
         attribute = RoleAttribute.MINOR_INFORMATION,
-        defaultAura = Aura.NEUTRAL)
+        defaultAura = Aura.NEUTRAL,
+        configurations = {@Configuration(config = @ConfigurationBasic(key = "werewolf.roles.prophetess.configurations.prophetess_every_other_day", defaultValue = true))})
 public class Prophetess extends RoleImpl {
 
     private final Map<UUID, Aura> previousAuras = new HashMap<>();
     private boolean initialized = false;
+    private int dayNumber = -8;
 
     public Prophetess(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -39,6 +43,12 @@ public class Prophetess extends RoleImpl {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDay(DayEvent event) {
         if (!isAbilityEnabled()) return;
+
+        if (game.getConfig().isConfigActive("werewolf.roles.prophetess.configurations.prophetess_every_other_day")
+                && event.getNumber() == dayNumber + 1) {
+            return;
+        }
+        dayNumber = event.getNumber();
 
         if (!initialized) {
             initialized = true;

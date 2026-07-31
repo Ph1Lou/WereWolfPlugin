@@ -14,6 +14,7 @@ import java.util.UUID;
 public class VoteOffice extends Building implements IVoteOffice {
 
     private final Location urnLocation;
+    private final Location chestLocation;
     private final int baseCapacity;
     private int capacity;
     private int votesCast;
@@ -21,15 +22,20 @@ public class VoteOffice extends Building implements IVoteOffice {
     private int blankVotes;
     private final Set<UUID> blankVoters = new HashSet<>();
 
-    public VoteOffice(World world, int baseX, int baseY, int baseZ, Location bannerLocation, Location urnLocation, int capacity) {
+    public VoteOffice(World world, int baseX, int baseY, int baseZ, Location bannerLocation, Location urnLocation, Location chestLocation, int capacity) {
         super(BuildingType.VOTE_OFFICE, world, baseX, baseY, baseZ, bannerLocation);
         this.urnLocation = urnLocation;
+        this.chestLocation = chestLocation;
         this.baseCapacity = capacity;
         this.capacity = capacity;
     }
 
     public Location getUrnLocation() {
         return urnLocation;
+    }
+
+    public Location getChestLocation() {
+        return chestLocation;
     }
 
     public int getBaseCapacity() {

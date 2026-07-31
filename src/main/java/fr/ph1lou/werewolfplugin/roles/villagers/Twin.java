@@ -8,11 +8,13 @@ import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
+import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.twin.AutoTwinEvent;
@@ -25,8 +27,16 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfplugin.Main;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,9 +48,10 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.TWIN,
         category = Category.VILLAGER,
         attribute = RoleAttribute.VILLAGER,
+        defaultAura = Aura.LIGHT,
         requireDouble = true,
         timers = { @Timer(key = TimerBase.TWIN_DURATION,
-                defaultValue = 1800, meetUpValue = 300,
+                defaultValue = 2700, meetUpValue = 300,
                 decrementAfterRole = true,
                 onZero = AutoTwinEvent.class) },
         configValues = { @IntValue(key = IntValueBase.TWIN_DISTANCE,
@@ -50,6 +61,10 @@ public class Twin extends RoleImpl {
 
     @Nullable
     private List<IPlayerWW> twinList;
+
+    private static final float DEFAULT_WALK_SPEED = 0.2f;
+    private int dayNumber = -8;
+    private boolean rageActive = false;
 
     public Twin(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -103,8 +118,14 @@ public class Twin extends RoleImpl {
     }
 
     @EventHandler
+    public void onDay(DayEvent event) {
+        this.dayNumber = event.getNumber();
+    }
+
+    @EventHandler
     public void onTwinDeath(FinalDeathEvent event) {
 
+        if (!isAbilityEnabled()) return;
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
@@ -119,10 +140,34 @@ public class Twin extends RoleImpl {
 
         this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.twin.death", Formatter.player(event.getPlayerWW().getName()));
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, 6000, 0, this.getKey()));
+        this.rageActive = true;
+        this.getPlayerWW().setWalkSpeed(DEFAULT_WALK_SPEED * 1.1f);
 
-        this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED, 6000, 0, this.getKey()));
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Twin.this.rageActive = false;
+                Twin.this.getPlayerWW().setWalkSpeed(DEFAULT_WALK_SPEED);
+            }
+        }.runTaskLater(JavaPlugin.getPlugin(Main.class), 6000);
+    }
 
+    @EventHandler
+    public void onTwinRageDamage(EntityDamageByEntityEvent event) {
+
+        if (!this.rageActive) return;
+        if (!isAbilityEnabled()) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (!(event.getEntity() instanceof Player)) return;
+        if (!(event.getDamager() instanceof Player)) return;
+
+        Player damager = (Player) event.getDamager();
+        if (!damager.getUniqueId().equals(this.getPlayerUUID())) return;
+
+        if (damager.hasPotionEffect(UniversalPotionEffectType.STRENGTH.getPotionEffectType())) return;
+
+        event.setDamage(event.getDamage() * (1 + game.getConfig().getStrengthRate() / 200f));
     }
 
     @EventHandler
@@ -133,6 +178,12 @@ public class Twin extends RoleImpl {
         }
 
         if (this.twinList == null) {
+            return;
+        }
+
+        if (this.getPlayerWW().getPotionModifiers().stream()
+                .anyMatch(pm -> pm.getPotionEffectType() == UniversalPotionEffectType.WEAKNESS
+                        || pm.getPotionEffectType() == UniversalPotionEffectType.SLOWNESS)) {
             return;
         }
 
@@ -153,7 +204,10 @@ public class Twin extends RoleImpl {
                             .filter(playerWW1 -> playerWW.distance(playerWW1) < game.getConfig().getValue(IntValueBase.TWIN_DISTANCE))
                             .collect(Collectors.toList());
 
-                    if (game.getRandom().nextBoolean()) {
+                    int twinIndex = this.getPlayerUUID().compareTo(playerWW.getUUID()) < 0 ? 0 : 1;
+                    boolean giveList = ((this.dayNumber + twinIndex) % 2 == 0);
+
+                    if (giveList) {
 
                         if (nearPlayers.isEmpty()) {
                             return;
@@ -190,6 +244,32 @@ public class Twin extends RoleImpl {
                         this.getPlayerWW().sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.twin.role_near",
                                 Formatter.number(game.getConfig().getValue(IntValueBase.TWIN_DISTANCE)),
                                 Formatter.role(game.translate(twinRoleEvent.getTargetWW().getRole().getDisplayRole())));
+                    }
+                });
+    }
+
+    @EventHandler
+    public void onGoldenAppleEat(PlayerItemConsumeEvent event) {
+
+        if (!isAbilityEnabled()) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (this.twinList == null) return;
+
+        if (!event.getPlayer().getUniqueId().equals(this.getPlayerUUID())) return;
+
+        ItemStack item = event.getItem();
+        if (UniversalMaterial.ENCHANTED_GOLDEN_APPLE.getStack(item.getAmount()).equals(item)) return;
+        if (!item.getType().equals(Material.GOLDEN_APPLE)) return;
+
+        this.twinList.stream()
+                .filter(twin -> twin.isState(StatePlayer.ALIVE))
+                .findFirst()
+                .ifPresent(twin -> {
+                    if (this.getPlayerWW().distance(twin) > game.getConfig().getValue(IntValueBase.TWIN_DISTANCE)) {
+                        twin.addPotionModifier(PotionModifier.add(
+                                UniversalPotionEffectType.ABSORPTION, 2400, 0, this.getKey()));
+                        twin.sendMessageWithKey(Prefix.BLUE, "werewolf.roles.twin.absorption_shared",
+                                Formatter.player(this.getPlayerWW().getName()));
                     }
                 });
     }
