@@ -1,7 +1,9 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
@@ -9,6 +11,7 @@ import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.roles.bonesetter.BonesetterHealEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -32,7 +35,15 @@ import java.util.List;
 @Role(key = RoleBase.BONESETTER,
         defaultAura = Aura.LIGHT,
         category = Category.VILLAGER,
-        attribute = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER,
+        configValues = {@IntValue(key = IntValueBase.BONESETTER_HEALTH_THRESHOLD,
+                defaultValue = 8, meetUpValue = 8, step = 2, item = UniversalMaterial.RED_DYE),
+                @IntValue(key = IntValueBase.BONESETTER_REGEN_DURATION,
+                        defaultValue = 150, meetUpValue = 150, step = 25, item = UniversalMaterial.CLOCK),
+                @IntValue(key = IntValueBase.BONESETTER_REGEN_AMPLIFIER,
+                        defaultValue = 1, meetUpValue = 1, step = 1, item = UniversalMaterial.GOLDEN_APPLE),
+                @IntValue(key = IntValueBase.BONESETTER_BONUS_HEALTH,
+                        defaultValue = 2, meetUpValue = 2, step = 1, item = UniversalMaterial.APPLE)})
 public class Bonesetter extends RoleImpl implements IAffectedPlayers, ILimitedUse {
     private final List<IPlayerWW> affectedPlayers = new ArrayList<>();
     private final List<IPlayerWW> alreadyUsed = new ArrayList<>();
@@ -74,13 +85,13 @@ public class Bonesetter extends RoleImpl implements IAffectedPlayers, ILimitedUs
 
         if (!playerWW.isState(StatePlayer.ALIVE)) return;
 
-        if (playerWW.getHealth() - event.getFinalDamage() > 8) return;
+        if (playerWW.getHealth() - event.getFinalDamage() > game.getConfig().getValue(IntValueBase.BONESETTER_HEALTH_THRESHOLD)) return;
 
         BonesetterHealEvent bonesetterHealEvent = new BonesetterHealEvent(getPlayerWW(), playerWW);
         Bukkit.getPluginManager().callEvent(bonesetterHealEvent);
         if (!bonesetterHealEvent.isCancelled()) {
             //25 ticks = 1/2 heart
-            playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.REGENERATION, 6 * 25, 1, getKey()));
+            playerWW.addPotionModifier(PotionModifier.add(UniversalPotionEffectType.REGENERATION, game.getConfig().getValue(IntValueBase.BONESETTER_REGEN_DURATION), game.getConfig().getValue(IntValueBase.BONESETTER_REGEN_AMPLIFIER), getKey()));
             getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.bonesetter.activate");
             affectedPlayers.remove(playerWW);
         }
@@ -91,7 +102,7 @@ public class Bonesetter extends RoleImpl implements IAffectedPlayers, ILimitedUs
         if (!event.getPlayer().getUniqueId().equals(getPlayerUUID())) return;
 
         if (event.getItem().getType().equals(Material.GOLDEN_APPLE)) {
-            getPlayerWW().addPlayerHealth(2);
+            getPlayerWW().addPlayerHealth(game.getConfig().getValue(IntValueBase.BONESETTER_BONUS_HEALTH));
         }
     }
 

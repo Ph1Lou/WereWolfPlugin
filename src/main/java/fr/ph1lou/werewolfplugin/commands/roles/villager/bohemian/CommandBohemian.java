@@ -30,7 +30,7 @@ public class CommandBohemian implements IParameterizedCommandRole {
         IPlayerWW target = ctx.player(0);
         int amount = ctx.intValue(1);
 
-        if (!bohemian.canSacrifice()) {
+        if (!bohemian.hasPower()) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.bohemian.cooldown");
             return;
         }
@@ -50,7 +50,7 @@ public class CommandBohemian implements IParameterizedCommandRole {
         }
 
         bohemian.sacrificeHonor(amount);
-        bohemian.onSacrificed();
+        bohemian.setPower(false);
 
         switch (amount) {
             case 1:

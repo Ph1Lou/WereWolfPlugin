@@ -3,8 +3,10 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
@@ -12,6 +14,7 @@ import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -30,13 +33,15 @@ import java.util.List;
         category = Category.VILLAGER,
         attribute = RoleAttribute.INFORMATION,
         defaultAura = Aura.LIGHT,
-        configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.DETECTIVE_EVERY_OTHER_DAY, defaultValue = true))})
+        configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.DETECTIVE_EVERY_OTHER_DAY, defaultValue = true))},
+        configValues = {@IntValue(key = IntValueBase.DETECTIVE_FIRST_EPISODE,
+                defaultValue = 3, meetUpValue = 3, step = 1, item = UniversalMaterial.COMPASS),
+                @IntValue(key = IntValueBase.DETECTIVE_GUESS_EPISODE,
+                        defaultValue = 5, meetUpValue = 5, step = 1, item = UniversalMaterial.CLOCK)})
 public class Detective extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private static final String BLUE = "bleu";
     private static final String YELLOW = "jaune";
-    private static final int FIRST_EPISODE = 3;
-    private static final int GUEST_EPISODE = 5;
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private int dayNumber = -8;
@@ -72,7 +77,7 @@ public class Detective extends RoleWithLimitedSelectionDuration implements IAffe
     @EventHandler
     public void onDay(DayEvent event) {
 
-        if (event.getNumber() < FIRST_EPISODE) {
+        if (event.getNumber() < game.getConfig().getValue(IntValueBase.DETECTIVE_FIRST_EPISODE)) {
             return;
         }
 
@@ -110,7 +115,7 @@ public class Detective extends RoleWithLimitedSelectionDuration implements IAffe
     }
 
     public void onInvestigated() {
-        this.canGuess = this.dayNumber >= GUEST_EPISODE;
+        this.canGuess = this.dayNumber >= game.getConfig().getValue(IntValueBase.DETECTIVE_GUESS_EPISODE);
     }
 
     public boolean canGuess() {
@@ -132,7 +137,9 @@ public class Detective extends RoleWithLimitedSelectionDuration implements IAffe
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.roles.detective.description"))
+                .setDescription(game.translate("werewolf.roles.detective.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.DETECTIVE_FIRST_EPISODE)),
+                        Formatter.format("&number2&", game.getConfig().getValue(IntValueBase.DETECTIVE_GUESS_EPISODE))))
                 .build();
     }
 

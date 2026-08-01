@@ -1,14 +1,17 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.RequirePower;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.events.random_events.SwapEvent;
@@ -34,7 +37,11 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.WITNESS,
         category = Category.VILLAGER,
-        attribute = RoleAttribute.MINOR_INFORMATION)
+        attribute = RoleAttribute.MINOR_INFORMATION,
+        configValues = {@IntValue(key = IntValueBase.WITNESS_HEALTH_PENALTY,
+                defaultValue = 4, meetUpValue = 4, step = 2, item = UniversalMaterial.RED_DYE),
+                @IntValue(key = IntValueBase.WITNESS_CULPRIT_REDUCTION,
+                        defaultValue = 30, meetUpValue = 30, step = 5, item = UniversalMaterial.SHIELD)})
 public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
 
     public Witness(WereWolfAPI main, IPlayerWW playerWW) {
@@ -130,7 +137,7 @@ public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
 
         this.power = false;
 
-        getPlayerWW().removePlayerMaxHealth(4);
+        getPlayerWW().removePlayerMaxHealth(game.getConfig().getValue(IntValueBase.WITNESS_HEALTH_PENALTY));
         getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.witness.culprit_death");
     }
 
@@ -157,7 +164,7 @@ public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
         if (power) {
             getPlayerWW().sendMessageWithKey(Prefix.BLUE, "werewolf.roles.witness.reveal_culprit", Formatter.format("&player&", getAffectedPlayers().get(0).getName()));
         } else {
-            getPlayerWW().removePlayerMaxHealth(4);
+            getPlayerWW().removePlayerMaxHealth(game.getConfig().getValue(IntValueBase.WITNESS_HEALTH_PENALTY));
         }
     }
 
@@ -206,6 +213,6 @@ public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
 
         if (!affectedPlayer.contains(targetWW)) return;
 
-        event.setDamage(event.getDamage() * 0.7);
+        event.setDamage(event.getDamage() * (100 - game.getConfig().getValue(IntValueBase.WITNESS_CULPRIT_REDUCTION)) / 100.0);
     }
 }

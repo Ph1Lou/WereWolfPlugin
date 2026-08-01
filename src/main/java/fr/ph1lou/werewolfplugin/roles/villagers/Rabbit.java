@@ -1,13 +1,16 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
@@ -26,7 +29,19 @@ import org.jetbrains.annotations.NotNull;
 
 @Role(key = RoleBase.RABBIT,
         category = Category.VILLAGER,
-        attribute = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER,
+        configValues = {@IntValue(key = IntValueBase.RABBIT_LOW_HEALTH,
+                defaultValue = 6, meetUpValue = 6, step = 1, item = UniversalMaterial.RED_DYE),
+                @IntValue(key = IntValueBase.RABBIT_HIGH_HEALTH,
+                        defaultValue = 12, meetUpValue = 12, step = 1, item = UniversalMaterial.GOLDEN_APPLE),
+                @IntValue(key = IntValueBase.RABBIT_ALLY_RANGE,
+                        defaultValue = 20, meetUpValue = 20, step = 1, item = UniversalMaterial.COMPASS),
+                @IntValue(key = IntValueBase.RABBIT_ALLY_REDUCTION,
+                        defaultValue = 10, meetUpValue = 10, step = 5, item = UniversalMaterial.SHIELD),
+                @IntValue(key = IntValueBase.RABBIT_LOW_SPEED,
+                        defaultValue = 120, meetUpValue = 120, step = 5, item = UniversalMaterial.SUGAR_CANE_BLOCK),
+                @IntValue(key = IntValueBase.RABBIT_NORMAL_SPEED,
+                        defaultValue = 110, meetUpValue = 110, step = 5, item = UniversalMaterial.SUGAR_CANE_BLOCK)})
 public class Rabbit extends RoleImpl {
 
     private static final float defaultWalkSpeed = 0.2f;
@@ -53,11 +68,11 @@ public class Rabbit extends RoleImpl {
 
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE) || player == null) return;
 
-        boolean belowHearts = this.getPlayerWW().getHealth() < 6;
+        boolean belowHearts = this.getPlayerWW().getHealth() < game.getConfig().getValue(IntValueBase.RABBIT_LOW_HEALTH);
 
         if (this.belowHearts == belowHearts) return;
 
-        player.setWalkSpeed(defaultWalkSpeed * (this.belowHearts ? 1.2f : 1.1f));
+        player.setWalkSpeed(defaultWalkSpeed * (this.belowHearts ? game.getConfig().getValue(IntValueBase.RABBIT_LOW_SPEED) / 100f : game.getConfig().getValue(IntValueBase.RABBIT_NORMAL_SPEED) / 100f));
         this.belowHearts = belowHearts;
     }
 
@@ -68,7 +83,7 @@ public class Rabbit extends RoleImpl {
 
         if (!(event.getEntity() instanceof Player)) return;
 
-        if (this.getPlayerWW().getHealth() >= 12) {
+        if (this.getPlayerWW().getHealth() >= game.getConfig().getValue(IntValueBase.RABBIT_HIGH_HEALTH)) {
             return;
         }
 
@@ -82,7 +97,7 @@ public class Rabbit extends RoleImpl {
             return;
         }
 
-        if (victimWW.distance(this.getPlayerWW()) > 20) {
+        if (victimWW.distance(this.getPlayerWW()) > game.getConfig().getValue(IntValueBase.RABBIT_ALLY_RANGE)) {
             return;
         }
 
@@ -92,7 +107,7 @@ public class Rabbit extends RoleImpl {
             return;
         }
 
-        event.setDamage(event.getDamage() * 0.9);
+        event.setDamage(event.getDamage() * (100 - game.getConfig().getValue(IntValueBase.RABBIT_ALLY_REDUCTION)) / 100.0);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

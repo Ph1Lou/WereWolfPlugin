@@ -46,14 +46,14 @@ import java.util.UUID;
 @Role(key = RoleBase.POACHER, category = Category.VILLAGER,
         defaultAura = Aura.NEUTRAL,
         attribute = RoleAttribute.VILLAGER,
-        timers = { @Timer(key = TimerBase.POACHER_PROGRESS, defaultValue = 10, meetUpValue = 10) },
+        timers = { @Timer(key = TimerBase.POACHER_PROGRESS, defaultValue = 10, meetUpValue = 10),
+                @Timer(key = TimerBase.POACHER_CARCASS_DURATION, defaultValue = 15 * 60, meetUpValue = 15 * 60, step = 60) },
         configValues = {
-                @IntValue(key = IntValueBase.POACHER_DISTANCE, defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.ARROW)
+                @IntValue(key = IntValueBase.POACHER_DISTANCE, defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.ARROW),
+                @IntValue(key = IntValueBase.POACHER_DETECTION_DISTANCE, defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.COMPASS)
         })
 public class Poacher extends RoleImpl {
 
-    private static final int DETECTION_DISTANCE = 50;
-    private static final int CARCASS_DURATION = 15 * 60;
     private static final String AURA_MODIFIER_NAME = "poacher_fur";
 
     private final Map<UUID, Carcass> carcasses = new LinkedHashMap<>();
@@ -89,7 +89,7 @@ public class Poacher extends RoleImpl {
             if (category == Category.WEREWOLF
                     || RoleBase.WOLF_DOG.equals(deathRole)
                     || RoleBase.WHITE_WEREWOLF.equals(deathRole)) {
-                this.carcasses.put(deadUUID, new Carcass(deadPlayer, CARCASS_DURATION));
+                this.carcasses.put(deadUUID, new Carcass(deadPlayer, game.getConfig().getTimerValue(TimerBase.POACHER_CARCASS_DURATION)));
             }
         });
     }
@@ -182,7 +182,7 @@ public class Poacher extends RoleImpl {
 
             double dist = deathLoc.distance(poacherLoc);
 
-            if (poacher != null && dist <= DETECTION_DISTANCE) {
+            if (poacher != null && dist <= game.getConfig().getValue(IntValueBase.POACHER_DETECTION_DISTANCE)) {
                 poacher.playEffect(deathLoc, Effect.MOBSPAWNER_FLAMES, null);
             }
 
@@ -275,7 +275,7 @@ public class Poacher extends RoleImpl {
 
             sb.insert(0, actionBar + " ");
             sb.append(" ").append(actionBar);
-        } else if (nearest != null && nearestDist <= DETECTION_DISTANCE) {
+        } else if (nearest != null && nearestDist <= game.getConfig().getValue(IntValueBase.POACHER_DETECTION_DISTANCE)) {
             int palier = (int) Math.round(nearestDist / 10.0) * 10;
             String arrow = Utils.getArrow(player, nearest.getDeathLocation());
             sb.insert(0, game.translate("werewolf.roles.poacher.actionbar_distance",

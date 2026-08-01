@@ -1,7 +1,9 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
@@ -9,6 +11,7 @@ import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.Sound;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -28,7 +31,9 @@ import java.util.Objects;
         defaultAura = Aura.NEUTRAL,
         category = Category.VILLAGER,
         attribute = RoleAttribute.VILLAGER,
-        requireDouble = true)
+        requireDouble = true,
+        configValues = @IntValue(key = IntValueBase.SIAMESE_TWIN_HEALTH_BONUS,
+                defaultValue = 4, meetUpValue = 4, step = 2, item = UniversalMaterial.RED_DYE))
 public class SiameseTwin extends RoleImpl {
 
     public SiameseTwin(WereWolfAPI api, IPlayerWW playerWW) {
@@ -79,7 +84,7 @@ public class SiameseTwin extends RoleImpl {
 
     @Override
     public void recoverPower() {
-        this.getPlayerWW().addPlayerMaxHealth(4);
+        this.getPlayerWW().addPlayerMaxHealth(game.getConfig().getValue(IntValueBase.SIAMESE_TWIN_HEALTH_BONUS));
     }
 
     @Override

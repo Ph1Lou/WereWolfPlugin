@@ -1,7 +1,9 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
@@ -9,6 +11,7 @@ import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -32,7 +35,9 @@ import java.util.UUID;
         defaultAura = Aura.LIGHT,
         auraDescriptionSpecialUseCase = "werewolf.roles.protector.aura",
         category = Category.VILLAGER,
-        attribute = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER,
+        configValues = @IntValue(key = IntValueBase.PROTECTOR_FALL_REDUCTION,
+                defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.SHIELD))
 public class Protector extends RoleWithLimitedSelectionDuration implements IAffectedPlayers {
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -117,7 +122,7 @@ public class Protector extends RoleWithLimitedSelectionDuration implements IAffe
 
         if (!event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) return;
 
-        event.setDamage(event.getDamage() * 0.5);
+        event.setDamage(event.getDamage() * (100 - game.getConfig().getValue(IntValueBase.PROTECTOR_FALL_REDUCTION)) / 100.0);
 
     }
 }

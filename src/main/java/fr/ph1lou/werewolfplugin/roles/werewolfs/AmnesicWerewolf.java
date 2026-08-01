@@ -1,13 +1,18 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.Sound;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.werewolf.AppearInWereWolfListEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -24,16 +29,19 @@ import java.util.Set;
 @Role(key = RoleBase.AMNESIAC_WEREWOLF,
         defaultAura = Aura.DARK,
         category = Category.WEREWOLF,
-        attribute = RoleAttribute.WEREWOLF)
+        attribute = RoleAttribute.WEREWOLF,
+        configValues = {@IntValue(key = IntValueBase.AMNESIAC_WEREWOLF_PROXIMITY_RANGE,
+                defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.COMPASS),
+                @IntValue(key = IntValueBase.AMNESIAC_WEREWOLF_HOWLING_RANGE,
+                        defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.SKELETON_SKULL)},
+        timers = {@Timer(key = TimerBase.AMNESIAC_WEREWOLF_REVEAL_MIN,
+                defaultValue = 70 * 60, meetUpValue = 70 * 60, step = 60),
+                @Timer(key = TimerBase.AMNESIAC_WEREWOLF_REVEAL_MAX,
+                        defaultValue = 90 * 60, meetUpValue = 90 * 60, step = 60)})
 public class AmnesicWerewolf extends RoleWereWolf implements IPower {
 
-    public static final double PROXIMITY_RANGE = 10d;
-    public static final double HOWLING_RANGE = 50d;
-    private static final int REVEAL_MIN = 70 * 60;
-    private static final int REVEAL_MAX = 90 * 60;
-
     private boolean power = true;
-    private int revealTime = REVEAL_MAX;
+    private int revealTime = Integer.MAX_VALUE;
     private final Set<IPlayerWW> knownWolves = new HashSet<>();
 
     public AmnesicWerewolf(WereWolfAPI api, IPlayerWW playerWW) {
@@ -42,7 +50,9 @@ public class AmnesicWerewolf extends RoleWereWolf implements IPower {
 
     @Override
     public void recoverPower() {
-        this.revealTime = REVEAL_MIN + game.getRandom().nextInt(REVEAL_MAX - REVEAL_MIN + 1);
+        int revealMin = game.getConfig().getTimerValue(TimerBase.AMNESIAC_WEREWOLF_REVEAL_MIN);
+        int revealMax = game.getConfig().getTimerValue(TimerBase.AMNESIAC_WEREWOLF_REVEAL_MAX);
+        this.revealTime = revealMin + game.getRandom().nextInt(Math.max(1, revealMax - revealMin + 1));
         this.knownWolves.add(getPlayerWW());
     }
 
@@ -65,7 +75,7 @@ public class AmnesicWerewolf extends RoleWereWolf implements IPower {
         game.getAlivePlayersWW().stream()
                 .filter(p -> !p.equals(this.getPlayerWW()))
                 .filter(p -> p.getRole().isWereWolf())
-                .filter(p -> p.distance(this.getPlayerWW()) < PROXIMITY_RANGE)
+                .filter(p -> p.distance(this.getPlayerWW()) < game.getConfig().getValue(IntValueBase.AMNESIAC_WEREWOLF_PROXIMITY_RANGE))
                 .forEach(knownWolves::add);
     }
 
@@ -88,12 +98,12 @@ public class AmnesicWerewolf extends RoleWereWolf implements IPower {
         int nearbyWolves = (int) game.getAlivePlayersWW().stream()
                 .filter(p -> !p.equals(this.getPlayerWW()))
                 .filter(p -> p.getRole().isWereWolf())
-                .filter(p -> p.distance(this.getPlayerWW()) < HOWLING_RANGE)
+                .filter(p -> p.distance(this.getPlayerWW()) < game.getConfig().getValue(IntValueBase.AMNESIAC_WEREWOLF_HOWLING_RANGE))
                 .count();
 
         game.getAlivePlayersWW().stream()
                 .filter(p -> !p.equals(this.getPlayerWW()))
-                .filter(p -> p.distance(this.getPlayerWW()) < HOWLING_RANGE)
+                .filter(p -> p.distance(this.getPlayerWW()) < game.getConfig().getValue(IntValueBase.AMNESIAC_WEREWOLF_HOWLING_RANGE))
                 .forEach(p -> {
                     Sound.WOLF_HOWL.play(p);
                     p.sendMessageWithKey(Prefix.RED, "werewolf.roles.amnesiac_werewolf.howl_warn");

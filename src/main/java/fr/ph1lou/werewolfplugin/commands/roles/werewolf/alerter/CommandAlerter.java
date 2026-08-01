@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.commands.roles.werewolf.alerter;
 import fr.ph1lou.werewolfapi.annotations.Params;
 import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.commands.CommandContext;
@@ -33,6 +34,7 @@ public class CommandAlerter implements IParameterizedCommandRole {
         alerter.resetProximity();
 
         playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.alerter_werewolf.perform",
-                Formatter.player(target.getName()));
+                Formatter.player(target.getName()),
+                Formatter.number(game.getConfig().getValue(IntValueBase.ALERTER_PROXIMITY_REQUIRED)));
     }
 }

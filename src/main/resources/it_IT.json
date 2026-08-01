@@ -479,14 +479,15 @@
         "items": "Due Pozioni Splash di Cura",
         "power_available": "Potete §aancora§f usare il vostro potere",
         "power_not_available": "Avete §cgià§f usato il vostro potere",
-        "description": "Potete fare rinascere un giocatore di scelta vostra, ucciso dai Lupi Mannari. Questo giocatore raggiungerà il vostro Campo, tenendo i suoi poteri di origine.",
+        "description": "Corrompete i giocatori a meno di §b&distance& blocs§f (100% in §b&number&s§f da soli, più velocemente con Lupi Mannari vicini). Una volta per partita, potete infettare un giocatore corrotto ucciso da un Lupo Mannaro tramite un messaggio cliccabile (5 sec). Risorge con i suoi poteri e si unisce ai Lupi Mannari. Potete ululare una volta per partita via §b/ww hurler§r.",
         "infection_message": "§b&player&§r è morto, per infettarlo §6Clicca qui §r(Avete §b7sec§r)",
         "infection_perform": "Avete appena infettato §b&player&",
         "player_cannot_be_infected": "Il giocatore non può più essere infettato",
         "command": "infettare_infect",
         "configurations": {
           "auto_rez": "L'Infect può rinascersi da solo",
-          "corruption_time": "Tempo di corruzione (s)"
+          "corruption_time": "Tempo di corruzione (§b&number&s§f)",
+          "corruption_distance": "Distanza di corruzione (§b&number&§f blocs)"
         },
         "player_not_corrupted": "Ce joueur n'est pas corrompu",
         "corruption_complete": "§b&player&§r è ora completamente corrotto. Potrete infettarlo alla sua morte (se ucciso da un Lupo Mannaro)."
@@ -1111,22 +1112,31 @@
       },
       "vaudouiste": {
         "display": "Vaudouiste",
-        "description": "§fVous gagnez avec le §aVillage§f. Vous pouvez créer une §bpoupée vaudou§f d'un joueur dont vous avez été à moins de §b20 blocs§f pendant §b2 minutes§f (cumulé), via §b/ww vaudou [Pseudo]§f. §b3 poupées maximum§f simultanées.\nLes poupées durent §b15 minutes§f. Pendant ce temps, vous recevez un message dès que le joueur ciblé subit des dégâts (PvP ou PvE).\nQuand un joueur dont vous avez créé la poupée meurt, vous pouvez §csacrifier 1❤ permanent§f avec §b/ww sacrifier§f pour connaître le rôle de son tueur.",
-        "power": "Poupées vaudou : §b/ww vaudou [Pseudo]§f (3 max, 15 min). Sacrifice : §b/ww sacrifier§f (-1❤ → rôle du tueur).",
+        "description": "§fVous gagnez avec le §aVillage§f. Vous pouvez créer une §bpoupée vaudou§f d'un joueur dont vous avez été à moins de §b&range& blocs§f pendant §b&proximity& secondes§f (cumulé), via §b/ww vaudou [Pseudo]§f. §b&max_dolls& poupées maximum§f simultanées.\nLes poupées durent §b&duration&§f. Pendant ce temps, vous recevez un message dès que le joueur ciblé subit des dégâts (PvP ou PvE).\nQuand un joueur dont vous avez créé la poupée meurt, vous pouvez §csacrifier &sacrifice&❤ permanent§f avec §b/ww sacrifier§f pour connaître le rôle de son tueur.",
+        "power": "Poupées vaudou : §b/ww vaudou [Pseudo]§f (&max_dolls& max, &duration&). Sacrifice : §b/ww sacrifier§f (-&sacrifice&❤ → rôle du tueur).",
         "commands": "§b/ww vaudou [Pseudo]§f pour créer une poupée — §b/ww sacrifier§f pour révéler le tueur.",
         "vaudou_command": "vaudou",
         "sacrifice_command": "sacrifier",
         "perform": "Vous avez créé une poupée vaudou de §b&player&§f.",
         "already_doll": "Vous avez déjà une poupée active de ce joueur.",
-        "not_enough_proximity": "Vous n'avez pas été assez longtemps à proximité de §b&player&§f (2 minutes à moins de 20 blocs requises).",
+        "not_enough_proximity": "Vous n'avez pas été assez longtemps à proximité de §b&player&§f (§b&proximity& secondes§f à moins de §b&range& blocs§f requises).",
         "too_many_dolls": "Vous avez déjà atteint le maximum de §b&number&§f poupées.",
         "doll_expired": "Votre poupée de §b&player&§f a expiré.",
         "doll_damaged": "Votre poupée §b&player&§f subit §c&number&❤§f de dégâts.",
-        "doll_dead": "Votre poupée §b&player&§f est morte. Utilisez §b/ww sacrifier§f pour perdre 1❤ et connaître le rôle du tueur.",
+        "doll_dead": "Votre poupée §b&player&§f est morte. Utilisez §b/ww sacrifier§f pour perdre &sacrifice&❤ et connaître le rôle du tueur.",
         "doll_dead_no_killer": "Votre poupée §b&player&§f est morte, mais aucun tueur n'a été identifié.",
-        "sacrifice_reveal": "Vous sacrifiez §c1❤§f : §b&player&§f a été tué par §b&killer&§f (§c&role&§f).",
+        "sacrifice_reveal": "Vous sacrifiez §c&number&❤§f : §b&player&§f a été tué par §b&killer&§f (§c&role&§f).",
         "no_pending_sacrifice": "Aucune poupée morte en attente de sacrifice.",
-        "proximity_reached": "Vous avez été assez longtemps près de §b&player&§f : vous pouvez désormais créer une poupée vaudou."
+        "proximity_reached": "Vous avez été assez longtemps près de §b&player&§f : vous pouvez désormais créer une poupée vaudou.",
+        "configurations": {
+          "proximity_range": "Distance de proximité (§b&number&§f blocs)",
+          "proximity_required": "Temps de proximité requis (§b&number&s§f)",
+          "max_dolls": "Nombre maximum de poupées (§b&number&§f)",
+          "sacrifice_health": "Vie sacrifiée (§b&number&§f❤)"
+        },
+        "timers": {
+          "doll_duration": "Durée d'une poupée (§b&timer&§f)"
+        }
       },
       "astronomer": {
         "display": "Astronome",
@@ -1276,7 +1286,7 @@
       },
       "bohemian": {
         "display": "Bohémienne",
-        "description": "Vous commencez la partie avec un niveau d'Honneur de §b1§f. Vous pouvez sacrifier vos niveaux d'Honneur via §b/ww boheme§r [Pseudo] [1-2-3] (1 fois toutes les 10 minutes) pour obtenir une information sur le joueur visé :\n§b1§f : Niveau d'Honneur du joueur\n§b2§f : Nombre de commandes dont le joueur a été la cible et nature de la dernière\n§b3§f : Camp du joueur (Villageois, Loups-Garous ou autre)\nÀ chaque début d'épisode, vous êtes informée de votre niveau d'Honneur actuel (actuel : §b&number&§f).",
+        "description": "Vous commencez la partie avec un niveau d'Honneur de §b1§f. Vous pouvez sacrifier vos niveaux d'Honneur via §b/ww boheme§r [Pseudo] [1-2-3] (1 fois toutes les §b&timer&§f) pour obtenir une information sur le joueur visé :\n§b1§f : Niveau d'Honneur du joueur\n§b2§f : Nombre de commandes dont le joueur a été la cible et nature de la dernière\n§b3§f : Camp du joueur (Villageois, Loups-Garous ou autre)\nÀ chaque début d'épisode, vous êtes informée de votre niveau d'Honneur actuel (actuel : §b&number&§f).",
         "command": "boheme",
         "honor_level": "Votre niveau d'Honneur actuel est de §b&number&§f",
         "cooldown": "Vous devez attendre avant de pouvoir réutiliser votre pouvoir",
@@ -1284,7 +1294,10 @@
         "info_honor": "§b&player&§f a un niveau d'Honneur de §b&number&§f",
         "info_commands": "§b&player&§f a été la cible de §b&number&§f commande(s). La dernière était : &nature&",
         "info_camp": "§b&player&§f fait partie du camp : &camp&",
-        "no_command": "Aucune"
+        "no_command": "Aucune",
+        "timers": {
+          "cooldown": "Cooldown (§b&timer&§f)"
+        }
       },
       "disloyal_werewolf": {
         "display": "Loup-Garou Déloyal",
@@ -1295,13 +1308,17 @@
       },
       "avocat": {
         "display": "Avvocato",
-        "description": "Una volta ogni 10 minuti, puoi impedire che l'Onore di un giocatore diminuisca per 10 minuti tramite §b/ww defendre§r [Nome]. L'Onore del giocatore difeso può comunque aumentare. Non puoi difendere lo stesso giocatore due volte di seguito. Al termine dei 10 minuti, vieni informato di quanto l'Onore del giocatore difeso sarebbe diminuito se non lo avessi difeso. Se il suo Onore non è variato affatto, ne ottieni il valore esatto.",
+        "description": "Una volta ogni §b&number&s§f, puoi impedire che l'Onore di un giocatore diminuisca per §b&number2&s§f tramite §b/ww defendre§r [Nome]. L'Onore del giocatore difeso può comunque aumentare. Non puoi difendere lo stesso giocatore due volte di seguito. Al termine dei §b&number2&s§f, vieni informato di quanto l'Onore del giocatore difeso sarebbe diminuito se non lo avessi difeso. Se il suo Onore non è variato affatto, ne ottieni il valore esatto.",
         "command": "defendre",
         "cooldown": "Devi aspettare §b&number&§f minuto/i prima di poter riutilizzare il tuo potere",
         "same_target": "Non puoi difendere lo stesso giocatore due volte di seguito",
-        "perform": "Difendi §b&player&§f per 10 minuti. Il suo Onore non può diminuire.",
+        "perform": "Difendi §b&player&§f per §b&number&s§f. Il suo Onore non può diminuire.",
         "defense_end_decrease": "La difesa di §b&player&§f è terminata. Senza la tua difesa, il suo Onore sarebbe diminuito di §b&number&§f.",
-        "defense_end_exact": "La difesa di §b&player&§f è terminata. Il suo Onore non è variato durante la difesa, è di §b&number&§f."
+        "defense_end_exact": "La difesa di §b&player&§f è terminata. Il suo Onore non è variato durante la difesa, è di §b&number&§f.",
+        "configurations": {
+          "cooldown": "Cooldown difesa (§b&number&s§f)",
+          "defense_duration": "Durata difesa (§b&number&s§f)"
+        }
       },
       "prophetess": {
         "display": "Profetessa",

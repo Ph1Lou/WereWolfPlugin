@@ -63,7 +63,11 @@
         "color": "§0",
         "description": "§6LOUP-GAROU §7➽§c Une liaison destructive entre §6&player&§c et vous vient de naître, même si vous êtes dans le même camp, vous ne pouvez gagner ensemble.\n§c Vous possédez un coeur supplémentaire permanent et chute Amortie tant que vous êtes les deux en vie.",
         "death_cursed_lover": "Votre Couple Maudit est Mort, vous perdez vos Bonus associés",
-        "not_enough_players": "Il n'y a pas assez de personnes pour former un couple maudit"
+        "not_enough_players": "Il n'y a pas assez de personnes pour former un couple maudit",
+        "configurations": {
+          "health_bonus": "Bonus de vie du couple (§b&number&§f)",
+          "health_penalty": "Malus au décès du partenaire (§b&number&§f)"
+        }
       },
       "amnesiac_lover": {
         "display": "Couple Amnésique",
@@ -112,6 +116,10 @@
       },
       "serial_killer": {
         "display": "Tueur en Série",
+        "configurations": {
+          "health_per_kill": "Vie gagnée par kill (§b&number&§f)",
+          "golden_apples": "Pommes d'or par kill (§b&number&§f)"
+        },
         "items": "Un livre Tranchant III, un livre Protection III et un livre Puissance III",
         "effect": "Force avant son premier kill",
         "hearts": "Coeur(s) en Plus : §b&heart&\n",
@@ -119,6 +127,14 @@
       },
       "amnesiac_werewolf": {
         "display": "Loup-Garou Amnésique",
+        "configurations": {
+          "proximity_range": "Distance de proximité (§b&number&§f blocs)",
+          "howling_range": "Portée du hurlement (§b&number&§f blocs)"
+        },
+        "timers": {
+          "reveal_min": "Révélation min. (§b&timer&§f)",
+          "reveal_max": "Révélation max. (§b&timer&§f)"
+        },
         "description": "Vous gagnez avec les §cLoups-Garous§f. La nuit, vous bénéficiez de §bForce I§f (dont le % dépend de votre §bHonneur§f).\nVous n'apparaissez pas dans la liste des Loups jusqu'à un moment aléatoire entre §b70 et 90 minutes§f. Votre propre liste ne contient au départ que votre nom ; chaque Loup-Garou approché à moins de §b10 blocs§f s'y ajoute.\nSi vous tuez un joueur, vous gagnez §bSpeed I§f et §b2❤ d'Absorption§f pendant 1 minute.",
         "power": "Vous êtes un Loup-Garou caché : vous n'apparaissez pas dans la liste des Loups avant 70-90 min, et votre liste de Loups connus se constitue par proximité (10 blocs).",
         "command": "§b/ww hurler§f pour hurler une fois dans la partie.",
@@ -267,7 +283,11 @@
         "hide_composition": "Parmi ces 3 rôles, un seul est présent dans la partie : &role1&, &role2&, &role3&",
         "rumor": "Le joueur §b&player&§f a écrit la rumeur &message&",
         "configurations": {
-          "vote_see_number": "Nombre de dépouillements §b&number&§r"
+          "vote_see_number": "Nombre de dépouillements §b&number&§r",
+          "office_proximity": "Proximité du bureau de vote (§b&number&§f blocs)"
+        },
+        "timers": {
+          "redirect_window": "Fenêtre de détournement (§b&timer&§f)"
         }
       },
       "angel": {
@@ -330,6 +350,22 @@
       },
       "rival": {
         "display": "Rival",
+        "configurations": {
+          "isolate_range": "Distance d'isolation (§b&number&§f blocs)",
+          "damage_reduction": "Réduction de dégâts vs amoureux (§b&number&§f%)",
+          "penalty_health": "Malus de vie (§b&number&§f)",
+          "isolate_max_use": "Utilisations max d'isolation (§b&number&§f)",
+          "regen_health": "Vie régénérée (§b&number&§f)",
+          "regen_count": "Nombre de régénérations (§b&number&§f)",
+          "kill_golden_apples": "Pommes d'or du bonus (§b&number&§f)",
+          "speed_amplifier": "Amplificateur Speed (§b&number&§f)"
+        },
+        "timers": {
+          "analyse_cooldown": "Cooldown analyser (§b&timer&§f)",
+          "deviner_cooldown": "Cooldown deviner (§b&timer&§f)",
+          "isolate_duration": "Durée d'isolation (§b&timer&§f)",
+          "regen_interval": "Intervalle de régénération (§b&timer&§f)"
+        },
         "item": "Une boussole (action bar) pointant vers le Cupidon, puis vers les Amoureux après /ww deviner.",
         "description": "Vous devez tuer au moins l'un des deux Amoureux. Si vous y parvenez, choisissez un bonus permanent avec §b/ww bonus <1-4>§f (1 : 25 pommes en or, 2 : Speed II, 3 : Force I, 4 : Régénération I). L'Amoureux survivant devra alors gagner seul.\nSi les Amoureux meurent sans que vous n'en ayez tué un, vous perdez §c5❤ permanents§f mais regagnez §b1❤ toutes les 5 minutes§f.\nVous disposez d'une boussole vers le Cupidon (s'il existe), puis vers les Amoureux après avoir deviné le couple.",
         "power": "Tuer un Amoureux → bonus. Sinon −5❤ (regen 1❤/5min). Commandes : analyser (3 joueurs/15min), deviner (le couple/30min), isoler (coupe les dons d'un Amoureux 3min), bonus.",
@@ -401,6 +437,9 @@
       },
       "village_idiot": {
         "display": "Idiot du Village",
+        "configurations": {
+          "health_penalty": "Malus de vie (§b&number&§f)"
+        },
         "suffix": "§6Idiot",
         "power_on": "Vous pouvez §aencore§f ressusciter",
         "power_off": "Vois ne pouvez §cplus§f ressusciter",
@@ -445,6 +484,9 @@
       },
       "counterfeiter_werewolf": {
         "display": "Loup-Garou Faussaire",
+        "configurations": {
+          "heart_loss": "Vie perdue si la cible meurt (§b&number&§f❤)"
+        },
         "description": "§fVous gagnez avec les §cLoups-Garous§f. La nuit, vous bénéficiez de §bForce I§f (dont le pourcentage dépend de votre §bHonneur§f). Si vous tuez un joueur, vous gagnez §bSpeed I§f et §b2❤ d'Absorption§f pendant 1 minute.\nUne fois par épisode, vous pouvez donner un §brôle de façade§f à un joueur de votre choix (sauf vous-même) via §b/ww fausser [Pseudo]§f. Le rôle de façade dépend du camp de la cible et change son aura :\n§b•§f Cible Loup-Garou : rôle de façade villageois ou solitaire, aura §aLumineuse§f.\n§b•§f Cible villageois/solitaire : rôle de façade Loup-Garou ou solitaire, aura §8Obscure§f.\nLa façade dure jusqu'à la fin de l'épisode. Si un joueur faussé meurt pendant ce délai, c'est le §brôle de façade§f qui s'affiche dans le message de mort, mais vous perdez §c2❤ permanents§f.",
         "power": "Vous pouvez pousser un hurlement une fois dans la partie avec §b/ww hurler§f.",
         "commands": "§b/ww fausser [Pseudo]§f pour fausser un rôle — §b/ww hurler§f pour hurler (1x).",
@@ -461,22 +503,31 @@
       },
       "vaudouiste": {
         "display": "Vaudouiste",
-        "description": "§fVous gagnez avec le §aVillage§f. Vous pouvez créer une §bpoupée vaudou§f d'un joueur dont vous avez été à moins de §b20 blocs§f pendant §b2 minutes§f (cumulé), via §b/ww vaudou [Pseudo]§f. §b3 poupées maximum§f simultanées.\nLes poupées durent §b15 minutes§f. Pendant ce temps, vous recevez un message dès que le joueur ciblé subit des dégâts (PvP ou PvE).\nQuand un joueur dont vous avez créé la poupée meurt, vous pouvez §csacrifier 1❤ permanent§f avec §b/ww sacrifier§f pour connaître le rôle de son tueur.",
-        "power": "Poupées vaudou : §b/ww vaudou [Pseudo]§f (3 max, 15 min). Sacrifice : §b/ww sacrifier§f (-1❤ → rôle du tueur).",
+        "description": "§fVous gagnez avec le §aVillage§f. Vous pouvez créer une §bpoupée vaudou§f d'un joueur dont vous avez été à moins de §b&range& blocs§f pendant §b&proximity& secondes§f (cumulé), via §b/ww vaudou [Pseudo]§f. §b&max_dolls& poupées maximum§f simultanées.\nLes poupées durent §b&duration&§f. Pendant ce temps, vous recevez un message dès que le joueur ciblé subit des dégâts (PvP ou PvE).\nQuand un joueur dont vous avez créé la poupée meurt, vous pouvez §csacrifier &sacrifice&❤ permanent§f avec §b/ww sacrifier§f pour connaître le rôle de son tueur.",
+        "power": "Poupées vaudou : §b/ww vaudou [Pseudo]§f (&max_dolls& max, &duration&). Sacrifice : §b/ww sacrifier§f (-&sacrifice&❤ → rôle du tueur).",
         "commands": "§b/ww vaudou [Pseudo]§f pour créer une poupée — §b/ww sacrifier§f pour révéler le tueur.",
         "vaudou_command": "vaudou",
         "sacrifice_command": "sacrifier",
         "perform": "Vous avez créé une poupée vaudou de §b&player&§f.",
         "already_doll": "Vous avez déjà une poupée active de ce joueur.",
-        "not_enough_proximity": "Vous n'avez pas été assez longtemps à proximité de §b&player&§f (2 minutes à moins de 20 blocs requises).",
+        "not_enough_proximity": "Vous n'avez pas été assez longtemps à proximité de §b&player&§f (§b&proximity& secondes§f à moins de §b&range& blocs§f requises).",
         "too_many_dolls": "Vous avez déjà atteint le maximum de §b&number&§f poupées.",
         "doll_expired": "Votre poupée de §b&player&§f a expiré.",
         "doll_damaged": "Votre poupée §b&player&§f subit §c&number&❤§f de dégâts.",
-        "doll_dead": "Votre poupée §b&player&§f est morte. Utilisez §b/ww sacrifier§f pour perdre 1❤ et connaître le rôle du tueur.",
+        "doll_dead": "Votre poupée §b&player&§f est morte. Utilisez §b/ww sacrifier§f pour perdre &sacrifice&❤ et connaître le rôle du tueur.",
         "doll_dead_no_killer": "Votre poupée §b&player&§f est morte, mais aucun tueur n'a été identifié.",
-        "sacrifice_reveal": "Vous sacrifiez §c1❤§f : §b&player&§f a été tué par §b&killer&§f (§c&role&§f).",
+        "sacrifice_reveal": "Vous sacrifiez §c&number&❤§f : §b&player&§f a été tué par §b&killer&§f (§c&role&§f).",
         "no_pending_sacrifice": "Aucune poupée morte en attente de sacrifice.",
-        "proximity_reached": "Vous avez été assez longtemps près de §b&player&§f : vous pouvez désormais créer une poupée vaudou."
+        "proximity_reached": "Vous avez été assez longtemps près de §b&player&§f : vous pouvez désormais créer une poupée vaudou.",
+        "configurations": {
+          "proximity_range": "Distance de proximité (§b&number&§f blocs)",
+          "proximity_required": "Temps de proximité requis (§b&number&s§f)",
+          "max_dolls": "Nombre maximum de poupées (§b&number&§f)",
+          "sacrifice_health": "Vie sacrifiée (§b&number&§f❤)"
+        },
+        "timers": {
+          "doll_duration": "Durée d'une poupée (§b&timer&§f)"
+        }
       },
       "thief": {
         "display": "Voleur",
@@ -528,7 +579,7 @@
         "items": "Deux Potions Splash de Soin",
         "power_available": "Vous pouvez §aencore§f utiliser votre pouvoir",
         "power_not_available": "Vous avez §cdéjà§f utilisé votre pouvoir",
-        "description": "Vous corrompez les joueurs à proximité (100% en &number&s seul, plus vite avec des Loups-Garous proches). Une fois dans la partie, vous pouvez infecter un joueur corrompu tué par un Loup-Garou via un message cliquable (5 sec). Il ressuscite avec ses pouvoirs et rejoint le camp des Loups-Garous. Vous pouvez hurler une fois par partie via §b/ww hurler§r.",
+        "description": "Vous corrompez les joueurs à moins de §b&distance& blocs§f (100% en §b&number&s§f seul, plus vite avec des Loups-Garous proches). Une fois dans la partie, vous pouvez infecter un joueur corrompu tué par un Loup-Garou via un message cliquable (5 sec). Il ressuscite avec ses pouvoirs et rejoint le camp des Loups-Garous. Vous pouvez hurler une fois par partie via §b/ww hurler§r.",
         "infection_message": "§b&player&§r est mort, pour l'infecter §6Cliquez ici §r(Vous avez §b7sec§r)",
         "infection_perform": "Vous venez d'infecter §b&player&",
         "player_cannot_be_infected": "Le joueur ne peut pas (plus) être infecté",
@@ -537,7 +588,8 @@
         "command": "infecter_infect",
         "configurations": {
           "auto_rez": "L'Infect peut se ressusciter",
-          "corruption_time": "Temps de corruption (§b&timer&s§f)"
+          "corruption_time": "Temps de corruption (§b&number&s§f)",
+          "corruption_distance": "Distance de corruption (§b&number&§f blocs)"
         }
       },
       "seer": {
@@ -589,6 +641,9 @@
       },
       "protector": {
         "display": "Salvateur",
+        "configurations": {
+          "fall_reduction": "Réduction des dégâts de chute (§b&number&§f%)"
+        },
         "items": "Trois Potions Splash de Soin",
         "description": "Une fois par épisode, vous pouvez protéger un joueur jusqu'à la fin de l'épisode courant via §b/ww proteger§r [Pseudo]. Le joueur protégé obtient l'effet Resistance I ainsi qu'une réduction des dégâts de chute de 50%. Le joueur protégé n'est pas informé de cette protection.",
         "protection_message": "Protégez un joueur pour la journée §b/ww proteger§r vous avez §b&timer&",
@@ -634,6 +689,9 @@
       },
       "white_werewolf": {
         "display": "Loup-Garou Blanc",
+        "configurations": {
+          "health_bonus": "Bonus de vie (§b&number&§f)"
+        },
         "heart": "Cinq Coeurs Permanents en plus",
         "description": "Vous êtes infiltré parmi les Loups-Garous."
       },
@@ -655,6 +713,9 @@
       },
       "siamese_twin": {
         "display": "Frère Siamois",
+        "configurations": {
+          "health_bonus": "Bonus de vie (§b&number&§f)"
+        },
         "power": "Deux coeurs en plus",
         "description": "Vous avez été séparé de votre frère à la naissance, cependant vous avez gardé un lien très fort avec lui. Vos coeurs au dela du cinquième sont liés.",
         "siamese_twin_list": "Liste de vos Frères Siamois: §b&list&",
@@ -662,6 +723,12 @@
       },
       "alpha_werewolf": {
         "display": "Loup-Garou Alpha",
+        "configurations": {
+          "absorption_amplifier": "Amplificateur d'absorption (§b&number&§f)"
+        },
+        "timers": {
+          "absorption_duration": "Durée d'absorption (§b&timer&§f)"
+        },
         "description": "Votre pseudo est visible par les autres Loups dans le chat.",
         "effect": "2 ♥ d’absorption pendant 5 minutes au début de chaque nuit.",
         "prefix": "[§c&alpha&§r] &message&"
@@ -991,7 +1058,12 @@
         "success": "Le chasseur a tiré sur &target&. Il perd 5 coeurs.",
         "werewolf_slain": "Vous avez tué un loup; vous infligez désormais plus de dégâts aux loups.",
         "configurations": {
-          "can_shoot": "Chasseur peut tirer après sa mort"
+          "can_shoot": "Chasseur peut tirer après sa mort",
+          "base_bonus": "Bonus de base vs loups (§b&number&§f%)",
+          "bonus_increment": "Incrément par loup tué (§b&number&§f%)"
+        },
+        "timers": {
+          "shoot_window": "Durée pour tirer (§b&timer&§f)"
         }
       },
       "thug": {
@@ -1067,6 +1139,14 @@
       },
       "benefactor": {
         "display": "Bienfaiteur",
+        "configurations": {
+          "min_clients": "Nombre minimum de clients (§b&number&§f)",
+          "regen_health": "Vie régénérée (§b&number&§f)"
+        },
+        "timers": {
+          "cooldown": "Cooldown (§b&timer&§f)",
+          "regen_interval": "Intervalle de régénération (§b&timer&§f)"
+        },
         "description": "3 fois dans la partie (1 fois toutes les 5 minutes), vous pouvez donner au joueur de votre choix (excepté vous-même) 1 ♥ permanent via §b/ww conferer§r. Le joueur visé recevra le don §b3 minutes§f après l'exécution de la commande.",
         "effect": "Vous obtenez un effet Régénération ralenti (1 ♥/min) une fois votre pouvoir entièrement consommé",
         "items": "2 livres Protection II",
@@ -1080,6 +1160,14 @@
       },
       "rabbit": {
         "display": "Lapin",
+        "configurations": {
+          "low_health": "Seuil de vie bas (§b&number&§f)",
+          "high_health": "Seuil de vie haut (§b&number&§f)",
+          "ally_range": "Rayon allié (§b&number&§f blocs)",
+          "ally_reduction": "Réduction de dégâts allié (§b&number&§f%)",
+          "low_speed": "Vitesse en vie basse (§b&number&§f%)",
+          "normal_speed": "Vitesse normale (§b&number&§f%)"
+        },
         "description": "Lorsque vous avez moins de 6 ♥, tous les joueurs du Village autour de vous (dans un rayon de 20 blocs) subissent 10% de dégâts en moins, sauf ceux qui possèdent déjà un effet de Resistance.",
         "effects": "Faiblesse I la nuit, Vitesse en fonction de votre barre de vie : 10% à 3 ♥ et + | 20% en dessous de 3 ♥"
       },
@@ -1113,14 +1201,22 @@
         "fur_numbers": "Nombre de fourrures : §b&number&",
         "recover": "Vous récuperez la fourrure de §b&player&",
         "timers": {
-          "progress": "Durée de la récupération de la fourrure §b&timer&"
+          "progress": "Durée de la récupération de la fourrure §b&timer&",
+          "carcass_duration": "Durée d'un cadavre (§b&timer&§f)"
         },
         "configurations": {
-          "distance": "Champ d'action du Braconnier §b&number&§f blocs"
+          "distance": "Champ d'action du Braconnier §b&number&§f blocs",
+          "detection_distance": "Distance de détection (§b&number&§f blocs)"
         }
       },
       "bonesetter": {
         "display": "Rebouteux",
+        "configurations": {
+          "health_threshold": "Seuil de déclenchement (§b&number&§f)",
+          "regen_duration": "Durée de régénération (§b&number&§f ticks)",
+          "regen_amplifier": "Amplificateur de régénération (§b&number&§f)",
+          "bonus_health": "Bonus par pomme d'or (§b&number&§f)"
+        },
         "description": "Vous pouvez accorder votre protection à 3 joueurs dans la partie (sauf vous-même) via §b/ww guerir§r. Les joueurs ciblés ne sont pas avertis. Lorsqu'un joueur protégé passe en-dessous de §b4♥§f, il est automatiquement soigné de §b3♥§f. Vous recevez un message lorsqu'une guérison s'active (sans savoir qui). Vous régénérez §b3♥§f (au lieu de 2) lorsque vous mangez une pomme en or.",
         "command": "guerir",
         "command_description": "/ww guerir",
@@ -1133,6 +1229,10 @@
       },
       "witness": {
         "display": "Témoin",
+        "configurations": {
+          "health_penalty": "Malus de vie (§b&number&§f)",
+          "culprit_reduction": "Réduction de dégâts vs coupable (§b&number&§f%)"
+        },
         "description": "A l'annonce de la liste des loups, vous connaitrez le pseudo d'un coupable, membre du camp des loups. Toutefois, si le coupable venait a mourir, vous perdrez 2 coeurs permanents. De plus, vous infligez 30%% de dégats en moins au coupable.",
         "culprit_name": "Le coupable est §b&player&",
         "culprit_unknown": "Le coupable est dévoilé dans &time&",
@@ -1201,6 +1301,10 @@
       },
       "mastermind": {
         "display": "Mastermind",
+        "configurations": {
+          "correct_bonus": "Bonus si correct (§b&number&§f❤)",
+          "wrong_penalty": "Malus si erreur (§b&number&§f❤)"
+        },
         "description": "Vous pouvez deviner les roles des joueurs avec §b/ww deviner joueur§r. Si vous devinez correctement, vous gagnez un coeur permanent, autrement vous en perdez un.",
         "command": "§b/ww mindsilence joueur§r pour un coeur permanent, desactivez le rôle d'un joueur que vous avez deviné",
         "repeat_target": "Vous avez déja tenté de deviner le role de ce joueur",
@@ -1258,7 +1362,7 @@
       },
       "bohemian": {
         "display": "Bohémienne",
-        "description": "Vous commencez la partie avec un niveau d'Honneur de §b1§f. Vous pouvez sacrifier vos niveaux d'Honneur via §b/ww boheme§r [Pseudo] [1-2-3] (1 fois toutes les 10 minutes) pour obtenir une information sur le joueur visé :\n§b1§f : Niveau d'Honneur du joueur\n§b2§f : Nombre de commandes dont le joueur a été la cible et nature de la dernière\n§b3§f : Camp du joueur (Villageois, Loups-Garous ou autre)\nÀ chaque début d'épisode, vous êtes informée de votre niveau d'Honneur actuel (actuel : §b&number&§f).",
+        "description": "Vous commencez la partie avec un niveau d'Honneur de §b1§f. Vous pouvez sacrifier vos niveaux d'Honneur via §b/ww boheme§r [Pseudo] [1-2-3] (1 fois toutes les §b&timer&§f) pour obtenir une information sur le joueur visé :\n§b1§f : Niveau d'Honneur du joueur\n§b2§f : Nombre de commandes dont le joueur a été la cible et nature de la dernière\n§b3§f : Camp du joueur (Villageois, Loups-Garous ou autre)\nÀ chaque début d'épisode, vous êtes informée de votre niveau d'Honneur actuel (actuel : §b&number&§f).",
         "command": "boheme",
         "honor_level": "Votre niveau d'Honneur actuel est de §b&number&§f",
         "cooldown": "Vous devez attendre avant de pouvoir réutiliser votre pouvoir",
@@ -1266,7 +1370,10 @@
         "info_honor": "§b&player&§f a un niveau d'Honneur de §b&number&§f",
         "info_commands": "§b&player&§f a été la cible de §b&number&§f commande(s). La dernière était : &nature&",
         "info_camp": "§b&player&§f fait partie du camp : &camp&",
-        "no_command": "Aucune"
+        "no_command": "Aucune",
+        "timers": {
+          "cooldown": "Cooldown (§b&timer&§f)"
+        }
       },
       "disloyal_werewolf": {
         "display": "Loup-Garou Déloyal",
@@ -1285,13 +1392,17 @@
       },
       "avocat": {
         "display": "Avocat",
-        "description": "Vous pouvez, une fois toutes les 10 minutes, empêcher l'Honneur d'un joueur de descendre pendant 10 minutes via §b/ww defendre§r [Pseudo]. L'Honneur du joueur défendu peut tout de même augmenter. Vous ne pouvez pas défendre le même joueur deux fois d'affilée. À la fin des 10 minutes, vous êtes notifié de combien l'Honneur du joueur défendu aurait diminué si vous ne l'aviez pas défendu. Dans le cas où son Honneur n'a pas varié, vous en obtenez la valeur exacte.",
+        "description": "Vous pouvez, une fois toutes les §b&number&s§f, empêcher l'Honneur d'un joueur de descendre pendant §b&number2&s§f via §b/ww defendre§r [Pseudo]. L'Honneur du joueur défendu peut tout de même augmenter. Vous ne pouvez pas défendre le même joueur deux fois d'affilée. À la fin des §b&number2&s§f, vous êtes notifié de combien l'Honneur du joueur défendu aurait diminué si vous ne l'aviez pas défendu. Dans le cas où son Honneur n'a pas varié, vous en obtenez la valeur exacte.",
         "command": "defendre",
         "cooldown": "Vous devez attendre §b&number&§f minute(s) avant de pouvoir réutiliser votre pouvoir",
         "same_target": "Vous ne pouvez pas défendre le même joueur deux fois d'affilée",
-        "perform": "Vous défendez §b&player&§f pendant 10 minutes. Son Honneur ne peut pas descendre.",
+        "perform": "Vous défendez §b&player&§f pendant §b&number&s§f. Son Honneur ne peut pas descendre.",
         "defense_end_decrease": "La défense de §b&player&§f a pris fin. Sans votre défense, son Honneur aurait diminué de §b&number&§f.",
-        "defense_end_exact": "La défense de §b&player&§f a pris fin. Son Honneur n'a pas varié pendant la défense, il est de §b&number&§f."
+        "defense_end_exact": "La défense de §b&player&§f a pris fin. Son Honneur n'a pas varié pendant la défense, il est de §b&number&§f.",
+        "configurations": {
+          "cooldown": "Cooldown défense (§b&number&s§f)",
+          "defense_duration": "Durée de défense (§b&number&s§f)"
+        }
       },
       "prophetess": {
         "display": "Prophétesse",
@@ -1304,6 +1415,15 @@
       },
       "renegade": {
         "display": "Renégat",
+        "configurations": {
+          "distance": "Distance de découverte (§b&number&§f blocs)",
+          "balance_rate": "Taux d'équilibre (§b&number&§f%)",
+          "resistance_levels": "Niveaux de résistance (§b&number&§f%)",
+          "forced_join_episode": "Épisode de jonction forcée (§b&number&§f)"
+        },
+        "timers": {
+          "discovery": "Durée de découverte (§b&timer&§f)"
+        },
         "description": "Tous les joueurs reçoivent aléatoirement une couleur (§9bleu§f ou §crouge§f) correspondant à un camp entre Village et Loups-Garous. Vous pouvez découvrir la couleur d'un joueur en restant à moins de §b&number&§f blocs de lui pendant §b&timer&§f. Après découverte, vous pouvez échanger votre couleur avec la sienne via §b/ww swap§r [Joueur] (1x/épisode). Vous possédez une barre d'équilibre remplie à 50% de chaque couleur. En restant proche d'un joueur, la couleur associée augmente et l'autre diminue. À 100% d'une couleur, vous rejoignez le camp associé. Au début de l'épisode 6, vous rejoignez obligatoirement le camp de la couleur majoritaire. Une fois un camp rejoint, vous apprenez combien de joueurs du camp opposé se trouvent parmi ceux dont vous avez découvert la couleur correspondant à ce camp. Vous recevez l'effet Résistance 0.5 : la nuit si vous rejoignez le Village, le jour si vous rejoignez les Loups-Garous.",
         "command": "swap",
         "discover": "Vous avez découvert que §b&player&§f a la couleur &color&.",
@@ -1327,7 +1447,14 @@
         "silence_end": "Vous n'êtes plus réduit au silence. Vos pouvoirs sont réactivés.",
         "actionbar": "Honneur : §b&number&§f (record : §b&number1&§f)",
         "configurations": {
-          "ronin_every_other_day": "Ronin tous les deux jours"
+          "ronin_every_other_day": "Ronin tous les deux jours",
+          "hemorrhage_damage": "Dégâts d'hémorragie (§b&number&§f)",
+          "group_distance": "Distance de groupe (§b&number&§f blocs)",
+          "honor_max": "Honneur maximum (§b&number&§f)",
+          "honor_min": "Honneur minimum (§b&number&§f)"
+        },
+        "timers": {
+          "hemorrhage_delay": "Délai d'hémorragie (§b&timer&§f)"
         }
       },
       "pyromane": {
@@ -1352,19 +1479,35 @@
         "not_in_building": "Vous devez vous trouver dans un bâtiment",
         "burn_used": "Vous avez déjà utilisé votre condamnation cet épisode",
         "configurations": {
-          "pyromane_every_other_day": "Pyromane tous les deux jours"
+          "pyromane_every_other_day": "Pyromane tous les deux jours",
+          "heart_loss": "Vie perdue à l'enflammement (§b&number&§f)",
+          "fire_proximity": "Proximité du feu (§b&number&§f blocs)",
+          "building_proximity": "Proximité du bâtiment (§b&number&§f blocs)",
+          "min_burn_resistance": "Résistance de brûlure min. (§b&number&§f%)",
+          "burn_initial": "Résistance de brûlure initiale (§b&number&§f%)",
+          "burn_increment": "Incrément de brûlure (§b&number&§f%)",
+          "burn_damage_factor": "Facteur de dégâts de brûlure (§b&number&§f%)"
+        },
+        "timers": {
+          "cover_cooldown": "Cooldown recouvrement (§b&timer&§f)",
+          "heart_loss_duration": "Durée de perte de vie (§b&timer&§f)",
+          "fire_duration": "Durée de l'incendie (§b&timer&§f)",
+          "ignition_delay_min": "Délai d'ignition min. (§b&timer&§f)",
+          "ignition_delay_max": "Délai d'ignition max. (§b&timer&§f)"
         }
       },
       "alerter_werewolf": {
         "display": "Loup-Garou Alerteur",
-        "description": "Une fois par épisode, vous pouvez cibler un joueur avec §b/ww alerte§f. Si vous restez §b3 minutes§f à proximité de votre cible, vous révélez son rôle à un autre Loup-Garou aléatoire. Vous ne pouvez pas alerter sur un membre de votre camp. Vous apprenez le nom du Loup alerté, et lui apprend le vôtre.",
+        "description": "Une fois par épisode, vous pouvez cibler un joueur avec §b/ww alerte§f. Si vous restez §b&number&§f secondes à proximité de votre cible, vous révélez son rôle à un autre Loup-Garou aléatoire. Vous ne pouvez pas alerter sur un membre de votre camp. Vous apprenez le nom du Loup alerté, et lui apprend le vôtre.",
         "command": "alerte",
-        "perform": "Vous commencez à suivre §b&player&§f. Restez à proximité pendant 3 minutes pour alerter un Loup.",
+        "distance": "Distance d'alerte (§b&number&§f blocs)",
+        "perform": "Vous commencez à suivre §b&player&§f. Restez à proximité pendant §b&number&§f secondes pour alerter un Loup.",
         "alert_received": "Le Loup-Garou §b&player&§f vous a alerté : la cible est un §b&role&§f.",
         "alerter_notified": "Vous avez alerté le Loup-Garou §b&player&§f.",
         "alert_no_wolf": "Aucun autre Loup-Garou n'est en vie pour être alerté.",
         "configurations": {
-          "alerter_werewolf_every_other_day": "Loup-Garou Alerteur tous les deux jours"
+          "alerter_werewolf_every_other_day": "Loup-Garou Alerteur tous les deux jours",
+          "proximity_required": "Temps de proximité requis (§b&number&s§f)"
         }
       }
     },
@@ -1419,6 +1562,7 @@
       "stats_hover_title": "§6§lStatistiques de &player&"
     },
     "statistics_action": {
+      "alerter_event": "Alerte d'un loup",
       "all_enchanted": "Tous les joueurs envoûtés",
       "amnesiac_lover_death": "Mort de l'amoureux amnésique",
       "amnesiac_lover_revelation": "Révélation des amoureux amnésiques",
@@ -1436,6 +1580,7 @@
       "avenger_list_death": "Mort d'un loup enregistré",
       "avenger_list_register": "Enregistrement d'un loup",
       "avocat_defend": "Défense de l'avocat",
+      "avocat_defense_end": "Fin de défense (avocat)",
       "barbarian_event": "Dissimulation du barbare",
       "bearing_ritual_event": "Rituel du Coussinet",
       "begin_charm": "Début de charme",

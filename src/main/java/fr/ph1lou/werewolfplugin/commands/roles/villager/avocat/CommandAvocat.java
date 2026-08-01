@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.commands.roles.villager.avocat;
 import fr.ph1lou.werewolfapi.annotations.Params;
 import fr.ph1lou.werewolfapi.annotations.PlayerArg;
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.commands.CommandContext;
@@ -49,6 +50,7 @@ public class CommandAvocat implements IParameterizedCommandRole {
         avocat.defend(target);
 
         playerWW.sendMessageWithKey(Prefix.GREEN, "werewolf.roles.avocat.perform",
-                Formatter.player(target.getName()));
+                Formatter.player(target.getName()),
+                Formatter.number(game.getConfig().getValue(IntValueBase.AVOCAT_DEFENSE_DURATION)));
     }
 }

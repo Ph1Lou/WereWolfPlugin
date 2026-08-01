@@ -1,16 +1,21 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.RequirePower;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.game.actionablestory.ActionableStoryEvent;
@@ -59,16 +64,32 @@ import java.util.stream.Collectors;
         sharpnessIronModifier = 1,
         sharpnessDiamondModifier = 1,
         powerModifier = 1,
-        requireRoles = { RoleBase.CUPID })
+        requireRoles = { RoleBase.CUPID },
+        configValues = {@IntValue(key = IntValueBase.RIVAL_ISOLATE_RANGE,
+                defaultValue = 15, meetUpValue = 15, step = 1, item = UniversalMaterial.COMPASS),
+                @IntValue(key = IntValueBase.RIVAL_DAMAGE_REDUCTION,
+                        defaultValue = 30, meetUpValue = 30, step = 5, item = UniversalMaterial.SHIELD),
+                @IntValue(key = IntValueBase.RIVAL_PENALTY_HEALTH,
+                        defaultValue = 10, meetUpValue = 10, step = 2, item = UniversalMaterial.RED_DYE),
+                @IntValue(key = IntValueBase.RIVAL_ISOLATE_MAX_USE,
+                        defaultValue = 2, meetUpValue = 2, step = 1, item = UniversalMaterial.ARROW),
+                @IntValue(key = IntValueBase.RIVAL_REGEN_HEALTH,
+                        defaultValue = 2, meetUpValue = 2, step = 1, item = UniversalMaterial.GOLDEN_APPLE),
+                @IntValue(key = IntValueBase.RIVAL_REGEN_COUNT,
+                        defaultValue = 5, meetUpValue = 5, step = 1, item = UniversalMaterial.EXPERIENCE_BOTTLE),
+                @IntValue(key = IntValueBase.RIVAL_KILL_GOLDEN_APPLES,
+                        defaultValue = 25, meetUpValue = 25, step = 1, item = UniversalMaterial.GOLDEN_APPLE),
+                @IntValue(key = IntValueBase.RIVAL_SPEED_AMPLIFIER,
+                        defaultValue = 1, meetUpValue = 1, step = 1, item = UniversalMaterial.SUGAR_CANE_BLOCK)},
+        timers = {@Timer(key = TimerBase.RIVAL_ANALYSE_COOLDOWN,
+                defaultValue = 15 * 60, meetUpValue = 15 * 60, step = 60),
+                @Timer(key = TimerBase.RIVAL_DEVINER_COOLDOWN,
+                        defaultValue = 30 * 60, meetUpValue = 30 * 60, step = 60),
+                @Timer(key = TimerBase.RIVAL_ISOLATE_DURATION,
+                        defaultValue = 3 * 60, meetUpValue = 3 * 60, step = 15),
+                @Timer(key = TimerBase.RIVAL_REGEN_INTERVAL,
+                        defaultValue = 5 * 60, meetUpValue = 5 * 60, step = 30)})
 public class Rival extends RoleNeutral implements IPower, ILimitedUse {
-
-    public static final int ANALYSE_COOLDOWN = 15 * 60;
-    public static final int DEVINER_COOLDOWN = 30 * 60;
-    public static final int ISOLATE_RANGE = 15;
-    public static final int ISOLATE_DURATION = 3 * 60;
-    public static final int REGEN_INTERVAL_TICKS = 5 * 60 * 20;
-    public static final double DAMAGE_REDUCTION = 0.30;
-    private static final int PENALTY_HEALTH = 10;
 
     @Nullable
     private IPlayerWW cupidWW = null;
@@ -81,15 +102,14 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
     private boolean bonusChosen = false;
     private boolean guessed = false;
 
-    private int lastAnalyse = -ANALYSE_COOLDOWN;
-    private int lastDeviner = -DEVINER_COOLDOWN;
+    private int lastAnalyse;
+    private int lastDeviner;
 
     @Nullable
     private IPlayerWW isolatedLover = null;
     private int isolationEnd = 0;
 
     private int isolateUse = 0;
-    private static final int ISOLATE_MAX_USE = 2;
 
     public Rival(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -204,14 +224,15 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
         power = false;
         lover = null;
 
-        this.getPlayerWW().removePlayerMaxHealth(PENALTY_HEALTH);
+        this.getPlayerWW().removePlayerMaxHealth(game.getConfig().getValue(IntValueBase.RIVAL_PENALTY_HEALTH));
 
+        long regenIntervalTicks = game.getConfig().getTimerValue(TimerBase.RIVAL_REGEN_INTERVAL) * 20L;
         int task = BukkitUtils.scheduleSyncRepeatingTask(game,
-                () -> this.getPlayerWW().addPlayerMaxHealth(2),
-                REGEN_INTERVAL_TICKS, REGEN_INTERVAL_TICKS);
+                () -> this.getPlayerWW().addPlayerMaxHealth(game.getConfig().getValue(IntValueBase.RIVAL_REGEN_HEALTH)),
+                regenIntervalTicks, regenIntervalTicks);
         BukkitUtils.scheduleSyncDelayedTask(game,
                 () -> Bukkit.getScheduler().cancelTask(task),
-                5L * REGEN_INTERVAL_TICKS + 100L);
+                (long) game.getConfig().getValue(IntValueBase.RIVAL_REGEN_COUNT) * regenIntervalTicks + 100L);
 
         this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.penalty");
         Bukkit.getPluginManager().callEvent(new RivalLoverDeathEvent(this.getPlayerWW(), new ArrayList<>()));
@@ -230,7 +251,7 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
             return;
         }
         int now = game.getTimer();
-        int remaining = ANALYSE_COOLDOWN - (now - lastAnalyse);
+        int remaining = game.getConfig().getTimerValue(TimerBase.RIVAL_ANALYSE_COOLDOWN) - (now - lastAnalyse);
         if (remaining > 0) {
             this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.cooldown",
                     Formatter.number((int) Math.ceil(remaining / 60.0)));
@@ -258,7 +279,7 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
             return;
         }
         int now = game.getTimer();
-        int remaining = DEVINER_COOLDOWN - (now - lastDeviner);
+        int remaining = game.getConfig().getTimerValue(TimerBase.RIVAL_DEVINER_COOLDOWN) - (now - lastDeviner);
         if (remaining > 0) {
             this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.cooldown",
                     Formatter.number((int) Math.ceil(remaining / 60.0)));
@@ -288,13 +309,13 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
             this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.no_couple");
             return;
         }
-        if (isolateUse >= ISOLATE_MAX_USE) {
+        if (isolateUse >= game.getConfig().getValue(IntValueBase.RIVAL_ISOLATE_MAX_USE)) {
             this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.rival.isolate_no_use");
             return;
         }
 
         IPlayerWW nearest = null;
-        double best = ISOLATE_RANGE;
+        double best = game.getConfig().getValue(IntValueBase.RIVAL_ISOLATE_RANGE);
         int inRange = 0;
         for (IPlayerWW l : lover.getLovers()) {
             if (!l.isState(StatePlayer.ALIVE)) continue;
@@ -303,7 +324,7 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
                 best = d;
                 nearest = l;
             }
-            if (d <= ISOLATE_RANGE) {
+            if (d <= game.getConfig().getValue(IntValueBase.RIVAL_ISOLATE_RANGE)) {
                 inRange++;
             }
         }
@@ -314,7 +335,7 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
         }
 
         isolatedLover = nearest;
-        isolationEnd = game.getTimer() + ISOLATE_DURATION;
+        isolationEnd = game.getTimer() + game.getConfig().getTimerValue(TimerBase.RIVAL_ISOLATE_DURATION);
         isolateUse++;
 
         Bukkit.getPluginManager().callEvent(new ActionableStoryEvent(this.getPlayerWW(), "werewolf.roles.rival.isoler"));
@@ -347,11 +368,11 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
 
         switch (choice) {
             case 1:
-                this.getPlayerWW().addItem(new ItemStack(Material.GOLDEN_APPLE, 25));
+                this.getPlayerWW().addItem(new ItemStack(Material.GOLDEN_APPLE, game.getConfig().getValue(IntValueBase.RIVAL_KILL_GOLDEN_APPLES)));
                 break;
             case 2:
                 this.getPlayerWW().addPotionModifier(
-                        PotionModifier.add(UniversalPotionEffectType.SPEED, Integer.MAX_VALUE, 1, this.getKey()));
+                        PotionModifier.add(UniversalPotionEffectType.SPEED, Integer.MAX_VALUE, game.getConfig().getValue(IntValueBase.RIVAL_SPEED_AMPLIFIER), this.getKey()));
                 break;
             case 3:
                 this.getPlayerWW().addPotionModifier(
@@ -399,7 +420,7 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
         IPlayerWW damagerWW = game.getPlayerWW(event.getDamager().getUniqueId()).orElse(null);
         if (damagerWW == null || lover == null) return;
         if (lover.getLovers().contains(damagerWW)) {
-            event.setDamage(event.getDamage() * (1 - DAMAGE_REDUCTION));
+            event.setDamage(event.getDamage() * (1 - game.getConfig().getValue(IntValueBase.RIVAL_DAMAGE_REDUCTION) / 100.0));
         }
     }
 
@@ -445,6 +466,8 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
 
     @Override
     public void recoverPower() {
+        this.lastAnalyse = -game.getConfig().getTimerValue(TimerBase.RIVAL_ANALYSE_COOLDOWN);
+        this.lastDeviner = -game.getConfig().getTimerValue(TimerBase.RIVAL_DEVINER_COOLDOWN);
     }
 
     @Override

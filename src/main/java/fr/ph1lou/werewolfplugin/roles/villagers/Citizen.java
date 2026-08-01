@@ -5,6 +5,7 @@ import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.*;
 import fr.ph1lou.werewolfapi.buildings.IVoteOffice;
 import fr.ph1lou.werewolfapi.enums.*;
@@ -43,15 +44,21 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.CITIZEN,
         category = Category.VILLAGER,
         attribute = RoleAttribute.MINOR_INFORMATION,
-        configValues = @IntValue(key = IntValueBase.CITIZEN_SEE_VOTE_NUMBER,
+        configValues = {@IntValue(key = IntValueBase.CITIZEN_SEE_VOTE_NUMBER,
                 defaultValue = 3,
                 meetUpValue = 3,
                 step = 1,
-                item = UniversalMaterial.ANVIL))
+                item = UniversalMaterial.ANVIL),
+                @IntValue(key = IntValueBase.CITIZEN_OFFICE_PROXIMITY,
+                        defaultValue = 15,
+                        meetUpValue = 15,
+                        step = 1,
+                        item = UniversalMaterial.COMPASS)},
+        timers = @Timer(key = TimerBase.CITIZEN_REDIRECT_WINDOW,
+                defaultValue = 30,
+                meetUpValue = 30,
+                step = 5))
 public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, IPower {
-
-    private static final int REDIRECT_WINDOW = 30;
-    private static final int OFFICE_PROXIMITY = 15;
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private final Set<Integer> canceledSessions = new HashSet<>();
@@ -162,7 +169,7 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
         if (game.getConfig().isConfigActive(ConfigBase.URN_VOTE)) return;
 
         int waiting = game.getConfig().getTimerValue(TimerBase.VOTE_WAITING);
-        long delay = Math.max(0, waiting - REDIRECT_WINDOW) * 20L;
+        long delay = Math.max(0, waiting - game.getConfig().getTimerValue(TimerBase.CITIZEN_REDIRECT_WINDOW)) * 20L;
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
             if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
@@ -287,7 +294,7 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
     public IVoteOffice findNearestOffice() {
         Location loc = this.getPlayerWW().getLocation();
         IVoteOffice nearest = null;
-        double nearestDist = (double) OFFICE_PROXIMITY;
+        double nearestDist = (double) game.getConfig().getValue(IntValueBase.CITIZEN_OFFICE_PROXIMITY);
         for (IVoteOffice office : game.getBuildingsManager().getVoteOffices()) {
             Location oLoc = office.getUrnLocation();
             if (oLoc == null || oLoc.getWorld() != loc.getWorld()) continue;

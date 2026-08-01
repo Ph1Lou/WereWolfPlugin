@@ -49,13 +49,12 @@ import java.util.UUID;
         defaultAura = Aura.NEUTRAL,
         timers = { @Timer(key = TimerBase.RENEGADE_DISCOVERY, defaultValue = 10, meetUpValue = 10) },
         configValues = {
-                @IntValue(key = IntValueBase.RENEGADE_DISTANCE, defaultValue = 20, meetUpValue = 20, step = 5, item = UniversalMaterial.COMPASS)
+                @IntValue(key = IntValueBase.RENEGADE_DISTANCE, defaultValue = 20, meetUpValue = 20, step = 5, item = UniversalMaterial.COMPASS),
+                @IntValue(key = IntValueBase.RENEGADE_BALANCE_RATE, defaultValue = 2, meetUpValue = 2, step = 1, item = UniversalMaterial.EXPERIENCE_BOTTLE),
+                @IntValue(key = IntValueBase.RENEGADE_RESISTANCE_LEVELS, defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.SHIELD),
+                @IntValue(key = IntValueBase.RENEGADE_FORCED_JOIN_EPISODE, defaultValue = 6, meetUpValue = 6, step = 1, item = UniversalMaterial.CLOCK)
         })
 public class Renegade extends RoleNeutral implements IPower {
-
-    private static final float BALANCE_RATE = 1f / 50f;
-    private static final double RESISTANCE_LEVELS = 0.5;
-    private static final int FORCED_JOIN_EPISODE = 6;
 
     private enum RenegadeColor { BLUE, RED }
 
@@ -125,9 +124,9 @@ public class Renegade extends RoleNeutral implements IPower {
         RenegadeColor targetColor = this.playerColors.get(nearest.getUUID());
         if (targetColor != null) {
             if (targetColor == RenegadeColor.BLUE) {
-                this.balance = Math.min(1f, this.balance + BALANCE_RATE);
+                this.balance = Math.min(1f, this.balance + (float) (game.getConfig().getValue(IntValueBase.RENEGADE_BALANCE_RATE) / 100.0));
             } else {
-                this.balance = Math.max(0f, this.balance - BALANCE_RATE);
+                this.balance = Math.max(0f, this.balance - (float) (game.getConfig().getValue(IntValueBase.RENEGADE_BALANCE_RATE) / 100.0));
             }
         }
 
@@ -168,7 +167,7 @@ public class Renegade extends RoleNeutral implements IPower {
             setPower(true);
         }
 
-        if (event.getNumber() >= FORCED_JOIN_EPISODE) {
+        if (event.getNumber() >= game.getConfig().getValue(IntValueBase.RENEGADE_FORCED_JOIN_EPISODE)) {
             if (this.balance >= 0.5f) {
                 joinCamp(this.blueIsVillage ? Camp.VILLAGER : Camp.WEREWOLF);
             } else {
@@ -284,7 +283,7 @@ public class Renegade extends RoleNeutral implements IPower {
 
         if (!shouldApply) return;
 
-        double reduction = RESISTANCE_LEVELS * 0.20;
+        double reduction = (game.getConfig().getValue(IntValueBase.RENEGADE_RESISTANCE_LEVELS) / 100.0) * 0.20;
         event.setDamage(event.getDamage() * (1 - reduction));
     }
 

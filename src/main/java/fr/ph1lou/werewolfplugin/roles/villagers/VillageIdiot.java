@@ -1,14 +1,17 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.RequirePower;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
@@ -30,7 +33,9 @@ import java.util.Optional;
 
 @Role(key = RoleBase.VILLAGE_IDIOT,
         category = Category.VILLAGER,
-        attribute = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER,
+        configValues = @IntValue(key = IntValueBase.VILLAGE_IDIOT_HEALTH_PENALTY,
+                defaultValue = 4, meetUpValue = 4, step = 2, item = UniversalMaterial.RED_DYE))
 public class VillageIdiot extends RoleImpl implements IPower {
 
     private boolean power = true;
@@ -126,7 +131,7 @@ public class VillageIdiot extends RoleImpl implements IPower {
             Bukkit.getPluginManager().callEvent(
                     new UpdateNameTagEvent(player));
         }
-        this.getPlayerWW().removePlayerMaxHealth(4);
+        this.getPlayerWW().removePlayerMaxHealth(this.game.getConfig().getValue(IntValueBase.VILLAGE_IDIOT_HEALTH_PENALTY));
         event.setCancelled(true);
         Bukkit.broadcastMessage(this.game.translate(Prefix.YELLOW, "werewolf.roles.village_idiot.announce",
                 Formatter.player(this.getPlayerWW().getName())));

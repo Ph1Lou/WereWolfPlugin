@@ -1,9 +1,12 @@
 package fr.ph1lou.werewolfplugin.roles.lovers;
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Lover;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Sound;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.EndPlayerMessageEvent;
 import fr.ph1lou.werewolfapi.events.game.utils.WinConditionsCheckEvent;
@@ -25,7 +28,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-@Lover(key = LoverBase.CURSED_LOVER, color = CursedLover.COLOR)
+@Lover(key = LoverBase.CURSED_LOVER, color = CursedLover.COLOR,
+        configValues = {@IntValue(key = IntValueBase.CURSED_LOVER_HEALTH_BONUS,
+                defaultValue = 2, meetUpValue = 2, step = 1, item = UniversalMaterial.RED_DYE),
+                @IntValue(key = IntValueBase.CURSED_LOVER_HEALTH_PENALTY,
+                        defaultValue = 2, meetUpValue = 2, step = 1, item = UniversalMaterial.SKELETON_SKULL)})
 public class CursedLover extends LoverBaseImpl implements ILover, Listener {
     public static final String COLOR = "werewolf.lovers.cursed_lover.color";
 
@@ -66,7 +73,7 @@ public class CursedLover extends LoverBaseImpl implements ILover, Listener {
 
         playerWW1.sendMessageWithKey(Prefix.RED, "werewolf.lovers.cursed_lover.death_cursed_lover");
 
-        playerWW1.removePlayerMaxHealth(2);
+        playerWW1.removePlayerMaxHealth(game.getConfig().getValue(IntValueBase.CURSED_LOVER_HEALTH_PENALTY));
 
         this.game.getConfig().removeOneLover(LoverBase.CURSED_LOVER);
     }
@@ -75,7 +82,7 @@ public class CursedLover extends LoverBaseImpl implements ILover, Listener {
 
         if (this.cursedLover1.equals(playerWW)) {
             if (!this.power1) {
-                playerWW.addPlayerMaxHealth(2);
+                playerWW.addPlayerMaxHealth(game.getConfig().getValue(IntValueBase.CURSED_LOVER_HEALTH_BONUS));
             }
             this.power1 = true;
             playerWW.sendMessageWithKey("werewolf.lovers.cursed_lover.description",
@@ -83,7 +90,7 @@ public class CursedLover extends LoverBaseImpl implements ILover, Listener {
             playerWW.sendSound(Sound.SHEEP_SHEAR);
         } else if (this.cursedLover2.equals(playerWW)) {
             if (!this.power2) {
-                playerWW.addPlayerMaxHealth(2);
+                playerWW.addPlayerMaxHealth(game.getConfig().getValue(IntValueBase.CURSED_LOVER_HEALTH_BONUS));
             }
             this.power2 = true;
             playerWW.sendMessageWithKey("werewolf.lovers.cursed_lover.description",

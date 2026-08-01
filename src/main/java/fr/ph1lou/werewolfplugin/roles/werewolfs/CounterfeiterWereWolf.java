@@ -1,13 +1,16 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
@@ -35,11 +38,12 @@ import java.util.stream.Collectors;
         auraDescriptionSpecialUseCase = "werewolf.roles.counterfeiter_werewolf.aura",
         defaultAura = Aura.NEUTRAL,
         category = Category.WEREWOLF,
-        attribute = RoleAttribute.WEREWOLF)
+        attribute = RoleAttribute.WEREWOLF,
+        configValues = @IntValue(key = IntValueBase.COUNTERFEITER_HEART_LOSS,
+                defaultValue = 2, meetUpValue = 2, step = 1, item = UniversalMaterial.RED_DYE))
 public class CounterfeiterWereWolf extends RoleWereWolf implements IAffectedPlayers, IPower {
 
     public static final String AURA_MODIFIER_NAME = "counterfeiter_werewolf_facade";
-    private static final double TWO_HEARTS = 4d;
 
     private boolean power = true;
     private IPlayerWW falsifiedTarget = null;
@@ -168,10 +172,10 @@ public class CounterfeiterWereWolf extends RoleWereWolf implements IAffectedPlay
         if (!event.getPlayerWW().equals(this.falsifiedTarget)) return;
 
         if (this.getPlayerWW().isState(StatePlayer.ALIVE) && isAbilityEnabled()) {
-            this.getPlayerWW().addPlayerMaxHealth(-TWO_HEARTS);
+            this.getPlayerWW().addPlayerMaxHealth(-2.0 * game.getConfig().getValue(IntValueBase.COUNTERFEITER_HEART_LOSS));
             this.getPlayerWW().sendMessageWithKey(Prefix.RED,
                     "werewolf.roles.counterfeiter_werewolf.lose_health",
-                    Formatter.number(2));
+                    Formatter.number(game.getConfig().getValue(IntValueBase.COUNTERFEITER_HEART_LOSS)));
         }
     }
 

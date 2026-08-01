@@ -1,12 +1,15 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -22,7 +25,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Role(key = RoleBase.MASTERMIND, defaultAura = Aura.NEUTRAL, category = Category.NEUTRAL, attribute = RoleAttribute.NEUTRAL)
+@Role(key = RoleBase.MASTERMIND, defaultAura = Aura.NEUTRAL, category = Category.NEUTRAL, attribute = RoleAttribute.NEUTRAL,
+        configValues = {@IntValue(key = IntValueBase.MASTERMIND_CORRECT_BONUS,
+                defaultValue = 2, meetUpValue = 2, step = 1, item = UniversalMaterial.GOLDEN_APPLE),
+                @IntValue(key = IntValueBase.MASTERMIND_WRONG_PENALTY,
+                        defaultValue = 2, meetUpValue = 2, step = 1, item = UniversalMaterial.RED_DYE)})
 public class Mastermind extends RoleNeutral implements IGuesser, IAffectedPlayers, IPower {
 
     private final List<IPlayerWW> guessedPlayers = new ArrayList<>();
@@ -73,11 +80,11 @@ public class Mastermind extends RoleNeutral implements IGuesser, IAffectedPlayer
         if (targetWW.getRole().getKey().equals(key)) {
             guessedPlayers.add(targetWW);
             getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.mastermind.guess_success", Formatter.format("&player&", targetWW.getName()));
-            getPlayerWW().addPlayerMaxHealth(2);
+            getPlayerWW().addPlayerMaxHealth(game.getConfig().getValue(IntValueBase.MASTERMIND_CORRECT_BONUS));
         } else {
             failedPlayers.add(targetWW);
             getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.mastermind.guess_fail");
-            getPlayerWW().removePlayerMaxHealth(2);
+            getPlayerWW().removePlayerMaxHealth(game.getConfig().getValue(IntValueBase.MASTERMIND_WRONG_PENALTY));
         }
     }
 

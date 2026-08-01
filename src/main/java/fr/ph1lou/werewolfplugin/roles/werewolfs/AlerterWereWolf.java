@@ -6,6 +6,7 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.*;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
+import fr.ph1lou.werewolfapi.events.roles.alerter_werewolf.AlerterEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -13,6 +14,7 @@ import fr.ph1lou.werewolfapi.role.impl.RoleWereWolf;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,12 +27,12 @@ import java.util.stream.Collectors;
         category = Category.WEREWOLF,
         attribute = RoleAttribute.WEREWOLF,
         defaultAura = Aura.NEUTRAL,
-        configValues = @IntValue(key = IntValueBase.ALERTER_DISTANCE,
+        configValues = {@IntValue(key = IntValueBase.ALERTER_DISTANCE,
                 defaultValue = 20, meetUpValue = 20, step = 5, item = UniversalMaterial.COMPASS),
+                @IntValue(key = IntValueBase.ALERTER_PROXIMITY_REQUIRED,
+                        defaultValue = 180, meetUpValue = 180, step = 10, item = UniversalMaterial.CLOCK)},
         configurations = {@Configuration(config = @ConfigurationBasic(key = "werewolf.roles.alerter_werewolf.configurations.alerter_werewolf_every_other_day", defaultValue = true))})
 public class AlerterWereWolf extends RoleWereWolf implements IPower, IAffectedPlayers {
-
-    public static final int PROXIMITY_REQUIRED = 180;
 
     private boolean power = false;
     @Nullable
@@ -45,7 +47,8 @@ public class AlerterWereWolf extends RoleWereWolf implements IPower, IAffectedPl
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.roles.alerter_werewolf.description"))
+                .setDescription(game.translate("werewolf.roles.alerter_werewolf.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.ALERTER_PROXIMITY_REQUIRED))))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .build();
     }
@@ -78,7 +81,7 @@ public class AlerterWereWolf extends RoleWereWolf implements IPower, IAffectedPl
             this.proximitySeconds++;
         }
 
-        if (this.proximitySeconds >= PROXIMITY_REQUIRED) {
+        if (this.proximitySeconds >= game.getConfig().getValue(IntValueBase.ALERTER_PROXIMITY_REQUIRED)) {
             this.alert();
             this.setPower(false);
             this.clearAffectedPlayer();
@@ -105,6 +108,13 @@ public class AlerterWereWolf extends RoleWereWolf implements IPower, IAffectedPl
         }
 
         IPlayerWW alertedWolf = wolves.get(game.getRandom().nextInt(wolves.size()));
+
+        AlerterEvent alerterEvent = new AlerterEvent(this.getPlayerWW(), alertedWolf);
+        Bukkit.getPluginManager().callEvent(alerterEvent);
+
+        if (alerterEvent.isCancelled()) {
+            return;
+        }
 
         alertedWolf.sendMessageWithKey(Prefix.YELLOW,
                 "werewolf.roles.alerter_werewolf.alert_received",

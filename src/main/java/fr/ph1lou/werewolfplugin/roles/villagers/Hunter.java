@@ -2,14 +2,19 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.werewolf.WereWolfKillEvent;
@@ -33,7 +38,13 @@ import org.jetbrains.annotations.NotNull;
         category = Category.VILLAGER,
         attribute = RoleAttribute.VILLAGER,
         powerModifier = 1,
-        configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.HUNTER_CAN_SHOOT, meetUpValue = true)))
+        configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.HUNTER_CAN_SHOOT, meetUpValue = true)),
+        configValues = {@IntValue(key = IntValueBase.HUNTER_BASE_BONUS,
+                defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.GOLDEN_SWORD),
+                @IntValue(key = IntValueBase.HUNTER_BONUS_INCREMENT,
+                        defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.RED_DYE)},
+        timers = @Timer(key = TimerBase.HUNTER_SHOOT_WINDOW,
+                defaultValue = 30, meetUpValue = 30, step = 5))
 public class Hunter extends RoleImpl implements IPower {
 
     private boolean power = false;
@@ -48,7 +59,7 @@ public class Hunter extends RoleImpl implements IPower {
         DescriptionBuilder descBuilder = new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.hunter.description"))
                 .setItems(game.translate("werewolf.roles.hunter.items"))
-                .setEffects(game.translate("werewolf.roles.hunter.effect", Formatter.format("&number&", 0.5 + damageBonus)));
+                .setEffects(game.translate("werewolf.roles.hunter.effect", Formatter.format("&number&", game.getConfig().getValue(IntValueBase.HUNTER_BASE_BONUS) / 100.0 + damageBonus)));
         if (game.getConfig().isConfigActive(ConfigBase.HUNTER_CAN_SHOOT)) {
             descBuilder = descBuilder.addExtraLines(game.translate("werewolf.roles.hunter.description_shoot"));
         }
@@ -72,7 +83,7 @@ public class Hunter extends RoleImpl implements IPower {
                 BukkitUtils.scheduleSyncDelayedTask(game, () -> {
                     getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.check.end_selection");
                     setPower(false);
-                }, 20 * 30);
+                }, 20 * game.getConfig().getTimerValue(TimerBase.HUNTER_SHOOT_WINDOW));
             }
             return;
         }
@@ -80,7 +91,7 @@ public class Hunter extends RoleImpl implements IPower {
         if (!playerWW.getRole().isWereWolf()) return;
 
         if (playerWW.getLastKiller().isPresent() && playerWW.getLastKiller().get().equals(getPlayerWW())) {
-            damageBonus += 0.1;
+            damageBonus += game.getConfig().getValue(IntValueBase.HUNTER_BONUS_INCREMENT) / 100.0;
             getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.hunter.werewolf_slain");
         }
     }
@@ -106,7 +117,7 @@ public class Hunter extends RoleImpl implements IPower {
         IPlayerWW targetWW = game.getPlayerWW(target.getUniqueId()).orElse(null);
         if (targetWW == null || !targetWW.getRole().isWereWolf()) return;
 
-        event.setDamage(event.getDamage() * (1 + (game.getConfig().getStrengthRate() / 100f) * (0.5 + damageBonus)));
+        event.setDamage(event.getDamage() * (1 + (game.getConfig().getStrengthRate() / 100f) * (game.getConfig().getValue(IntValueBase.HUNTER_BASE_BONUS) / 100.0 + damageBonus)));
     }
 
     @EventHandler

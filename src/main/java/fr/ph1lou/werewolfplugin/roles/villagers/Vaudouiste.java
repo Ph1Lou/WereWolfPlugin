@@ -1,14 +1,19 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.roles.vaudouiste.VoodooCreateDollEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -17,6 +22,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,14 +40,20 @@ import java.util.Optional;
 @Role(key = RoleBase.VAUDOUISTE,
         defaultAura = Aura.DARK,
         category = Category.VILLAGER,
-        attribute = RoleAttribute.MINOR_INFORMATION)
+        attribute = RoleAttribute.MINOR_INFORMATION,
+        configValues = {
+                @IntValue(key = IntValueBase.VAUDOUISTE_PROXIMITY_RANGE,
+                        defaultValue = 20, meetUpValue = 20, step = 5, item = UniversalMaterial.COMPASS),
+                @IntValue(key = IntValueBase.VAUDOUISTE_PROXIMITY_REQUIRED,
+                        defaultValue = 120, meetUpValue = 120, step = 10, item = UniversalMaterial.CLOCK),
+                @IntValue(key = IntValueBase.VAUDOUISTE_MAX_DOLLS,
+                        defaultValue = 3, meetUpValue = 3, step = 1, item = UniversalMaterial.ARROW),
+                @IntValue(key = IntValueBase.VAUDOUISTE_SACRIFICE_HEALTH,
+                        defaultValue = 1, meetUpValue = 1, step = 1, item = UniversalMaterial.SKELETON_SKULL)
+        },
+        timers = @Timer(key = TimerBase.VAUDOUISTE_DOLL_DURATION,
+                defaultValue = 900, meetUpValue = 900, step = 30))
 public class Vaudouiste extends RoleImpl implements IAffectedPlayers {
-
-    public static final double PROXIMITY_RANGE = 20d;
-    public static final int PROXIMITY_REQUIRED = 120;
-    public static final int DOLL_DURATION = 15 * 60;
-    public static final int MAX_DOLLS = 3;
-    public static final double SACRIFICE_HEALTH = 2d;
 
     private final Map<IPlayerWW, Integer> proximitySeconds = new HashMap<>();
     private final Map<IPlayerWW, Integer> dolls = new HashMap<>();
@@ -53,9 +65,16 @@ public class Vaudouiste extends RoleImpl implements IAffectedPlayers {
 
     @Override
     public @NotNull String getDescription() {
+        Formatter range = Formatter.format("&range&", game.getConfig().getValue(IntValueBase.VAUDOUISTE_PROXIMITY_RANGE));
+        Formatter proximity = Formatter.format("&proximity&", game.getConfig().getValue(IntValueBase.VAUDOUISTE_PROXIMITY_REQUIRED));
+        Formatter maxDolls = Formatter.format("&max_dolls&", game.getConfig().getValue(IntValueBase.VAUDOUISTE_MAX_DOLLS));
+        Formatter duration = Formatter.format("&duration&", Utils.conversion(game.getConfig().getTimerValue(TimerBase.VAUDOUISTE_DOLL_DURATION)));
+        Formatter sacrifice = Formatter.format("&sacrifice&", game.getConfig().getValue(IntValueBase.VAUDOUISTE_SACRIFICE_HEALTH));
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.roles.vaudouiste.description"))
-                .setPower(game.translate("werewolf.roles.vaudouiste.power"))
+                .setDescription(game.translate("werewolf.roles.vaudouiste.description",
+                        range, proximity, maxDolls, duration, sacrifice))
+                .setPower(game.translate("werewolf.roles.vaudouiste.power",
+                        maxDolls, duration, sacrifice))
                 .setCommand(game.translate("werewolf.roles.vaudouiste.commands"))
                 .build();
     }
@@ -85,15 +104,17 @@ public class Vaudouiste extends RoleImpl implements IAffectedPlayers {
                         "werewolf.roles.vaudouiste.doll_expired",
                         Formatter.player(target.getName())));
 
+        int range = game.getConfig().getValue(IntValueBase.VAUDOUISTE_PROXIMITY_RANGE);
+        int required = game.getConfig().getValue(IntValueBase.VAUDOUISTE_PROXIMITY_REQUIRED);
         game.getAlivePlayersWW().stream()
                 .filter(p -> !p.equals(this.getPlayerWW()))
-                .filter(p -> p.distance(this.getPlayerWW()) < PROXIMITY_RANGE)
+                .filter(p -> p.distance(this.getPlayerWW()) < range)
                 .forEach(p -> {
-                    int prev = Math.min(PROXIMITY_REQUIRED, proximitySeconds.getOrDefault(p, 0));
-                    if (prev >= PROXIMITY_REQUIRED) return;
+                    int prev = Math.min(required, proximitySeconds.getOrDefault(p, 0));
+                    if (prev >= required) return;
                     int next = prev + 1;
                     proximitySeconds.put(p, next);
-                    if (next >= PROXIMITY_REQUIRED) {
+                    if (next >= required) {
                         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
                                 "werewolf.roles.vaudouiste.proximity_reached",
                                 Formatter.player(p.getName()));
@@ -109,17 +130,19 @@ public class Vaudouiste extends RoleImpl implements IAffectedPlayers {
             return;
         }
 
-        if (proximitySeconds.getOrDefault(target, 0) < PROXIMITY_REQUIRED) {
+        if (proximitySeconds.getOrDefault(target, 0) < game.getConfig().getValue(IntValueBase.VAUDOUISTE_PROXIMITY_REQUIRED)) {
             this.getPlayerWW().sendMessageWithKey(Prefix.RED,
                     "werewolf.roles.vaudouiste.not_enough_proximity",
-                    Formatter.player(target.getName()));
+                    Formatter.player(target.getName()),
+                    Formatter.format("&range&", game.getConfig().getValue(IntValueBase.VAUDOUISTE_PROXIMITY_RANGE)),
+                    Formatter.format("&proximity&", game.getConfig().getValue(IntValueBase.VAUDOUISTE_PROXIMITY_REQUIRED)));
             return;
         }
 
-        if (dolls.size() >= MAX_DOLLS) {
+        if (dolls.size() >= game.getConfig().getValue(IntValueBase.VAUDOUISTE_MAX_DOLLS)) {
             this.getPlayerWW().sendMessageWithKey(Prefix.RED,
                     "werewolf.roles.vaudouiste.too_many_dolls",
-                    Formatter.number(MAX_DOLLS));
+                    Formatter.number(game.getConfig().getValue(IntValueBase.VAUDOUISTE_MAX_DOLLS)));
             return;
         }
 
@@ -148,13 +171,14 @@ public class Vaudouiste extends RoleImpl implements IAffectedPlayers {
 
         PendingSacrifice pending = pendingSacrifices.poll();
 
-        this.getPlayerWW().addPlayerMaxHealth(-SACRIFICE_HEALTH);
+        this.getPlayerWW().addPlayerMaxHealth(-2.0 * game.getConfig().getValue(IntValueBase.VAUDOUISTE_SACRIFICE_HEALTH));
 
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
                 "werewolf.roles.vaudouiste.sacrifice_reveal",
                 Formatter.player(pending.dead.getName()),
                 Formatter.format("&killer&", pending.killer.getName()),
-                Formatter.role(game.translate(pending.killer.getRole().getKey())));
+                Formatter.role(game.translate(pending.killer.getRole().getKey())),
+                Formatter.number(game.getConfig().getValue(IntValueBase.VAUDOUISTE_SACRIFICE_HEALTH)));
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -201,12 +225,13 @@ public class Vaudouiste extends RoleImpl implements IAffectedPlayers {
 
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
                 "werewolf.roles.vaudouiste.doll_dead",
-                Formatter.player(dead.getName()));
+                Formatter.player(dead.getName()),
+                Formatter.format("&sacrifice&", game.getConfig().getValue(IntValueBase.VAUDOUISTE_SACRIFICE_HEALTH)));
     }
 
     @Override
     public void addAffectedPlayer(IPlayerWW iPlayerWW) {
-        this.dolls.put(iPlayerWW, DOLL_DURATION);
+        this.dolls.put(iPlayerWW, game.getConfig().getTimerValue(TimerBase.VAUDOUISTE_DOLL_DURATION));
     }
 
     @Override

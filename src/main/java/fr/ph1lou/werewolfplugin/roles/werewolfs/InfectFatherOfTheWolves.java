@@ -40,14 +40,18 @@ import java.util.stream.Collectors;
         attribute = RoleAttribute.WEREWOLF,
         weight = 1.5f,
         configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.INFECT_AUTO_RESURRECTION)),
-        configValues = @IntValue(key = IntValueBase.INFECT_CORRUPTION_TIME,
+        configValues = {@IntValue(key = IntValueBase.INFECT_CORRUPTION_TIME,
                 defaultValue = 500,
                 meetUpValue = 500,
                 step = 10,
-                item = UniversalMaterial.CLOCK))
+                item = UniversalMaterial.CLOCK),
+                @IntValue(key = IntValueBase.INFECT_CORRUPTION_DISTANCE,
+                        defaultValue = 20,
+                        meetUpValue = 20,
+                        step = 5,
+                        item = UniversalMaterial.COMPASS)})
 public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPlayers, IPower {
 
-    private static final double CORRUPTION_DISTANCE = 20d;
     private static final double CORRUPTION_THRESHOLD = 100.0;
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
@@ -109,6 +113,7 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
         Location selfLoc = self.getLocation();
 
         int corruptionTime = Math.max(1, game.getConfig().getValue(IntValueBase.INFECT_CORRUPTION_TIME));
+        double corruptionDistance = game.getConfig().getValue(IntValueBase.INFECT_CORRUPTION_DISTANCE);
         double infectRate = CORRUPTION_THRESHOLD / corruptionTime;
         double wolfRate = infectRate / 4.0;
 
@@ -125,14 +130,14 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
             double rate = 0;
             Location pLoc = p.getLocation();
 
-            if (pLoc.getWorld() == selfLoc.getWorld() && pLoc.distance(selfLoc) < CORRUPTION_DISTANCE) {
+            if (pLoc.getWorld() == selfLoc.getWorld() && pLoc.distance(selfLoc) < corruptionDistance) {
                 rate += infectRate;
             }
 
             for (IPlayerWW wolf : wolves) {
                 if (wolf.equals(p)) continue;
                 Location wolfLoc = wolf.getLocation();
-                if (pLoc.getWorld() == wolfLoc.getWorld() && pLoc.distance(wolfLoc) < CORRUPTION_DISTANCE) {
+                if (pLoc.getWorld() == wolfLoc.getWorld() && pLoc.distance(wolfLoc) < corruptionDistance) {
                     rate += wolfRate;
                 }
             }
@@ -199,7 +204,8 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
 
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.infect_father_of_the_wolves.description",
-                        Formatter.number(game.getConfig().getValue(IntValueBase.INFECT_CORRUPTION_TIME))))
+                        Formatter.number(game.getConfig().getValue(IntValueBase.INFECT_CORRUPTION_TIME)),
+                        Formatter.format("&distance&", game.getConfig().getValue(IntValueBase.INFECT_CORRUPTION_DISTANCE))))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .setPower(game.translate(power ? "werewolf.roles.infect_father_of_the_wolves.power_available" : "werewolf.roles.infect_father_of_the_wolves.power_not_available"))
                 .setItems(game.translate("werewolf.roles.infect_father_of_the_wolves.items"))

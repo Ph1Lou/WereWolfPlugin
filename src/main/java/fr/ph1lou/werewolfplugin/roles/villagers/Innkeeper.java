@@ -47,8 +47,10 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.INNKEEPER,
         category = Category.VILLAGER,
         attribute = RoleAttribute.MINOR_INFORMATION,
-        configValues = @IntValue(key = IntValueBase.INNKEEPER_DETECTION_RADIUS,
-                defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.IRON_DOOR))
+        configValues = {@IntValue(key = IntValueBase.INNKEEPER_DETECTION_RADIUS,
+                defaultValue = 10, meetUpValue = 10, step = 1, item = UniversalMaterial.IRON_DOOR),
+                @IntValue(key = IntValueBase.INNKEEPER_AVAILABLE_ROOMS,
+                        defaultValue = 3, meetUpValue = 3, step = 1, item = UniversalMaterial.BED)})
 public class Innkeeper extends RoleImpl implements IPower {
     private static final float defaultWalkSpeed = 0.2f;
     private final List<ClientData> clientDatas = new ArrayList<>();
@@ -79,7 +81,7 @@ public class Innkeeper extends RoleImpl implements IPower {
 
     @Override
     public void recoverPower() {
-
+        this.availableRooms = game.getConfig().getValue(IntValueBase.INNKEEPER_AVAILABLE_ROOMS);
     }
 
     @EventHandler

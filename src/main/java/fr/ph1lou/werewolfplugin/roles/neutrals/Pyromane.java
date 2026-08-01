@@ -2,11 +2,15 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.buildings.IBuilding;
 import fr.ph1lou.werewolfapi.buildings.ICouncilChamber;
 import fr.ph1lou.werewolfapi.buildings.ISanctuary;
@@ -15,6 +19,7 @@ import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.roles.pyromane.PyromaneCoverEvent;
 import fr.ph1lou.werewolfapi.events.roles.pyromane.PyromaneIgniteEvent;
@@ -46,21 +51,37 @@ import java.util.UUID;
         defaultAura = Aura.LIGHT,
         sharpnessDiamondModifier = 1,
         sharpnessIronModifier = 1,
-        configurations = {@Configuration(config = @ConfigurationBasic(key = "werewolf.roles.pyromane.configurations.pyromane_every_other_day", defaultValue = true))})
+        configurations = {@Configuration(config = @ConfigurationBasic(key = "werewolf.roles.pyromane.configurations.pyromane_every_other_day", defaultValue = true))},
+        configValues = {@IntValue(key = IntValueBase.PYROMANE_HEART_LOSS_AMOUNT,
+                defaultValue = 4, meetUpValue = 4, step = 1, item = UniversalMaterial.RED_DYE),
+                @IntValue(key = IntValueBase.PYROMANE_FIRE_PROXIMITY,
+                        defaultValue = 15, meetUpValue = 15, step = 1, item = UniversalMaterial.COMPASS),
+                @IntValue(key = IntValueBase.PYROMANE_BUILDING_PROXIMITY,
+                        defaultValue = 15, meetUpValue = 15, step = 1, item = UniversalMaterial.COMPASS),
+                @IntValue(key = IntValueBase.PYROMANE_MIN_BURN_RESISTANCE,
+                        defaultValue = 150, meetUpValue = 150, step = 10, item = UniversalMaterial.SHIELD),
+                @IntValue(key = IntValueBase.PYROMANE_BURN_INITIAL,
+                        defaultValue = 50, meetUpValue = 50, step = 5, item = UniversalMaterial.SHIELD),
+                @IntValue(key = IntValueBase.PYROMANE_BURN_INCREMENT,
+                        defaultValue = 25, meetUpValue = 25, step = 5, item = UniversalMaterial.SHIELD),
+                @IntValue(key = IntValueBase.PYROMANE_BURN_DAMAGE_FACTOR,
+                        defaultValue = 20, meetUpValue = 20, step = 5, item = UniversalMaterial.SHIELD)},
+        timers = {@Timer(key = TimerBase.PYROMANE_COVER_COOLDOWN,
+                defaultValue = 10 * 60, meetUpValue = 10 * 60, step = 30),
+                @Timer(key = TimerBase.PYROMANE_HEART_LOSS_DURATION,
+                        defaultValue = 10 * 60, meetUpValue = 10 * 60, step = 30),
+                @Timer(key = TimerBase.PYROMANE_FIRE_DURATION,
+                        defaultValue = 20 * 60, meetUpValue = 20 * 60, step = 60),
+                @Timer(key = TimerBase.PYROMANE_IGNITION_DELAY_MIN,
+                        defaultValue = 3 * 60, meetUpValue = 3 * 60, step = 15),
+                @Timer(key = TimerBase.PYROMANE_IGNITION_DELAY_MAX,
+                        defaultValue = 5 * 60, meetUpValue = 5 * 60, step = 15)})
 public class Pyromane extends RoleNeutral implements IPower {
-
-    private static final int COVER_COOLDOWN = 10 * 60;
-    private static final int HEART_LOSS_DURATION = 10 * 60;
-    private static final int HEART_LOSS_AMOUNT = 4;
-    private static final int FIRE_DURATION = 20 * 60;
-    private static final int FIRE_PROXIMITY = 15;
-    private static final int BUILDING_PROXIMITY = 15;
-    private static final float MIN_BURN_RESISTANCE = -1.5f;
 
     private final Set<UUID> coveredPlayers = new HashSet<>();
     private final Map<UUID, Float> burnResistance = new HashMap<>();
 
-    private int lastCoverTimer = -COVER_COOLDOWN;
+    private int lastCoverTimer = 0;
     private boolean ignitePower = false;
     private boolean burnPower = false;
 
@@ -76,11 +97,11 @@ public class Pyromane extends RoleNeutral implements IPower {
     }
 
     public boolean canCover() {
-        return game.getTimer() - this.lastCoverTimer >= COVER_COOLDOWN;
+        return game.getTimer() - this.lastCoverTimer >= game.getConfig().getTimerValue(TimerBase.PYROMANE_COVER_COOLDOWN);
     }
 
     public int getCoverRemaining() {
-        return COVER_COOLDOWN - (game.getTimer() - this.lastCoverTimer);
+        return game.getConfig().getTimerValue(TimerBase.PYROMANE_COVER_COOLDOWN) - (game.getTimer() - this.lastCoverTimer);
     }
 
     public boolean hasMet(IPlayerWW target) {
@@ -119,20 +140,20 @@ public class Pyromane extends RoleNeutral implements IPower {
         for (IPlayerWW target : targets) {
             this.coveredPlayers.remove(target.getUUID());
 
-            target.removePlayerMaxHealth(HEART_LOSS_AMOUNT);
+            target.removePlayerMaxHealth(game.getConfig().getValue(IntValueBase.PYROMANE_HEART_LOSS_AMOUNT));
             final UUID targetUUID = target.getUUID();
             BukkitUtils.scheduleSyncDelayedTask(game, () -> {
                 IPlayerWW p = game.getPlayerWW(targetUUID).orElse(null);
                 if (p != null) {
-                    p.addPlayerMaxHealth(HEART_LOSS_AMOUNT);
+                    p.addPlayerMaxHealth(game.getConfig().getValue(IntValueBase.PYROMANE_HEART_LOSS_AMOUNT));
                 }
-            }, HEART_LOSS_DURATION * 20L);
+            }, game.getConfig().getTimerValue(TimerBase.PYROMANE_HEART_LOSS_DURATION) * 20L);
 
             float current = this.burnResistance.getOrDefault(targetUUID, 0f);
             if (current == 0f) {
-                current = -0.5f;
+                current = -game.getConfig().getValue(IntValueBase.PYROMANE_BURN_INITIAL) / 100f;
             } else {
-                current = Math.max(MIN_BURN_RESISTANCE, current - 0.25f);
+                current = Math.max(-game.getConfig().getValue(IntValueBase.PYROMANE_MIN_BURN_RESISTANCE) / 100f, current - game.getConfig().getValue(IntValueBase.PYROMANE_BURN_INCREMENT) / 100f);
             }
             this.burnResistance.put(targetUUID, current);
 
@@ -151,7 +172,7 @@ public class Pyromane extends RoleNeutral implements IPower {
     @Nullable
     public IBuilding findNearestBuilding() {
         IBuilding nearest = null;
-        double nearestDist = (double) BUILDING_PROXIMITY;
+        double nearestDist = (double) game.getConfig().getValue(IntValueBase.PYROMANE_BUILDING_PROXIMITY);
         Location loc = this.getPlayerWW().getLocation();
 
         for (IVoteOffice office : game.getBuildingsManager().getVoteOffices()) {
@@ -180,7 +201,7 @@ public class Pyromane extends RoleNeutral implements IPower {
         this.burnedBuilding = building;
         this.burnPending = true;
 
-        int delay = 3 * 60 + game.getRandom().nextInt(2 * 60);
+        int delay = game.getConfig().getTimerValue(TimerBase.PYROMANE_IGNITION_DELAY_MIN) + game.getRandom().nextInt(Math.max(1, game.getConfig().getTimerValue(TimerBase.PYROMANE_IGNITION_DELAY_MAX) - game.getConfig().getTimerValue(TimerBase.PYROMANE_IGNITION_DELAY_MIN)));
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.pyromane.burn_pending",
                 Formatter.player(this.getPlayerWW().getName()));
 
@@ -193,7 +214,7 @@ public class Pyromane extends RoleNeutral implements IPower {
         this.burnActive = true;
         this.fireLocation = new Location(this.burnedBuilding.getWorld(),
                 this.burnedBuilding.getBaseX(), this.burnedBuilding.getBaseY(), this.burnedBuilding.getBaseZ());
-        this.fireEndTimer = game.getTimer() + FIRE_DURATION;
+        this.fireEndTimer = game.getTimer() + game.getConfig().getTimerValue(TimerBase.PYROMANE_FIRE_DURATION);
 
         ((fr.ph1lou.werewolfplugin.buildings.BuildingsManager) game.getBuildingsManager())
                 .setDisabled(this.burnedBuilding, true);
@@ -272,7 +293,7 @@ public class Pyromane extends RoleNeutral implements IPower {
                 if (this.coveredPlayers.contains(p.getUUID())) continue;
                 Location pl = p.getLocation();
                 if (pl.getWorld() != this.fireLocation.getWorld()) continue;
-                if (pl.distance(this.fireLocation) <= FIRE_PROXIMITY) {
+                if (pl.distance(this.fireLocation) <= game.getConfig().getValue(IntValueBase.PYROMANE_FIRE_PROXIMITY)) {
                     this.coveredPlayers.add(p.getUUID());
                     p.sendMessageWithKey(Prefix.RED, "werewolf.roles.pyromane.covered_by_fire");
                     this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
@@ -308,7 +329,7 @@ public class Pyromane extends RoleNeutral implements IPower {
         Player entity = (Player) event.getEntity();
         float res = this.burnResistance.getOrDefault(entity.getUniqueId(), 0f);
         if (res != 0f) {
-            event.setDamage(event.getDamage() * (1 - res * 0.20));
+            event.setDamage(event.getDamage() * (1 - res * game.getConfig().getValue(IntValueBase.PYROMANE_BURN_DAMAGE_FACTOR) / 100.0));
         }
     }
 
@@ -326,6 +347,7 @@ public class Pyromane extends RoleNeutral implements IPower {
     public void recoverPower() {
         setPower(false);
         this.burnPower = false;
+        this.lastCoverTimer = -game.getConfig().getTimerValue(TimerBase.PYROMANE_COVER_COOLDOWN);
     }
 
     @Override

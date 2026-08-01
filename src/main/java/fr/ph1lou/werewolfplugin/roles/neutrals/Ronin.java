@@ -2,12 +2,15 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
 import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.enums.*;
 import fr.ph1lou.werewolfapi.events.ActionBarEvent;
 import fr.ph1lou.werewolfapi.events.buildings.SanctuaryVisitEvent;
@@ -47,7 +50,17 @@ import java.util.UUID;
         category = Category.NEUTRAL,
         attribute = RoleAttribute.NEUTRAL,
         defaultAura = Aura.DARK,
-        configurations = {@Configuration(config = @ConfigurationBasic(key = "werewolf.roles.ronin.configurations.ronin_every_other_day", defaultValue = true))})
+        configurations = {@Configuration(config = @ConfigurationBasic(key = "werewolf.roles.ronin.configurations.ronin_every_other_day", defaultValue = true))},
+        configValues = {@IntValue(key = IntValueBase.RONIN_HEMORRHAGE_DAMAGE,
+                defaultValue = 1, meetUpValue = 1, step = 1, item = UniversalMaterial.RED_DYE),
+                @IntValue(key = IntValueBase.RONIN_GROUP_DISTANCE,
+                        defaultValue = 30, meetUpValue = 30, step = 5, item = UniversalMaterial.COMPASS),
+                @IntValue(key = IntValueBase.RONIN_HONOR_MAX,
+                        defaultValue = 4, meetUpValue = 4, step = 1, item = UniversalMaterial.GOLDEN_APPLE),
+                @IntValue(key = IntValueBase.RONIN_HONOR_MIN,
+                        defaultValue = -4, meetUpValue = -4, step = 1, item = UniversalMaterial.SKELETON_SKULL)},
+        timers = @Timer(key = TimerBase.RONIN_HEMORRHAGE_DELAY,
+                defaultValue = 5, meetUpValue = 5, step = 1))
 public class Ronin extends RoleNeutral implements IPower {
 
     private enum HonorSource {
@@ -93,8 +106,8 @@ public class Ronin extends RoleNeutral implements IPower {
     public void recoverPower() {
         if (!this.initialized) {
             this.initialized = true;
-            this.roninHonor = -4;
-            this.highestHonor = -4;
+            this.roninHonor = game.getConfig().getValue(IntValueBase.RONIN_HONOR_MIN);
+            this.highestHonor = game.getConfig().getValue(IntValueBase.RONIN_HONOR_MIN);
             setPower(false);
             applyHonorEffects();
         }
@@ -302,7 +315,7 @@ public class Ronin extends RoleNeutral implements IPower {
             default:
                 actual = 0;
         }
-        int newHonor = Math.max(-4, Math.min(4, this.roninHonor + actual));
+        int newHonor = Math.max(game.getConfig().getValue(IntValueBase.RONIN_HONOR_MIN), Math.min(game.getConfig().getValue(IntValueBase.RONIN_HONOR_MAX), this.roninHonor + actual));
         if (newHonor == this.roninHonor) return;
         this.roninHonor = newHonor;
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.ronin.honor_change",
@@ -446,9 +459,9 @@ public class Ronin extends RoleNeutral implements IPower {
                     BukkitUtils.scheduleSyncDelayedTask(game, () -> {
                         Player p = Bukkit.getPlayer(target.getUUID());
                         if (p != null && target.isState(StatePlayer.ALIVE)) {
-                            p.damage(1.0);
+                            p.damage(game.getConfig().getValue(IntValueBase.RONIN_HEMORRHAGE_DAMAGE));
                         }
-                    }, 5 * 20L);
+                    }, game.getConfig().getTimerValue(TimerBase.RONIN_HEMORRHAGE_DELAY) * 20L);
                 }
             }
         }
@@ -470,7 +483,7 @@ public class Ronin extends RoleNeutral implements IPower {
             if (p.equals(this.getPlayerWW())) continue;
             Location l = p.getLocation();
             if (l.getWorld() != loc.getWorld()) continue;
-            if (loc.distance(l) < 30) nearby++;
+            if (loc.distance(l) < game.getConfig().getValue(IntValueBase.RONIN_GROUP_DISTANCE)) nearby++;
         }
         return nearby >= game.getGroup();
     }

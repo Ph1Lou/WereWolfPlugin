@@ -457,22 +457,31 @@
       },
       "vaudouiste": {
         "display": "Voodoo Priest",
-        "description": "§fYou win with the §aVillage§f. You may create a §bvoodoo doll§f of a player you have been within §b20 blocks§f of for §b2 minutes§f (cumulative), via §b/ww vaudou [Name]§f. §b3 dolls max§f at once.\nDolls last §b15 minutes§f. During that time, you receive a message whenever the targeted player takes damage (PvP or PvE).\nWhen a player whose doll you created dies, you may §csacrifice 1❤ permanent§f with §b/ww sacrifier§f to learn their killer's role.",
-        "power": "Voodoo dolls: §b/ww vaudou [Name]§f (3 max, 15 min). Sacrifice: §b/ww sacrifier§f (-1❤ → killer's role).",
+        "description": "§fYou win with the §aVillage§f. You may create a §bvoodoo doll§f of a player you have been within §b&range& blocks§f of for §b&proximity& seconds§f (cumulative), via §b/ww vaudou [Name]§f. §b&max_dolls& dolls max§f at once.\nDolls last §b&duration&§f. During that time, you receive a message whenever the targeted player takes damage (PvP or PvE).\nWhen a player whose doll you created dies, you may §csacrifice &sacrifice&❤ permanent§f with §b/ww sacrifier§f to learn their killer's role.",
+        "power": "Voodoo dolls: §b/ww vaudou [Name]§f (&max_dolls& max, &duration&). Sacrifice: §b/ww sacrifier§f (-&sacrifice&❤ → killer's role).",
         "commands": "§b/ww vaudou [Name]§f to create a doll — §b/ww sacrifier§f to reveal the killer.",
         "vaudou_command": "vaudou",
         "sacrifice_command": "sacrifier",
         "perform": "You created a voodoo doll of §b&player&§f.",
         "already_doll": "You already have an active doll of this player.",
-        "not_enough_proximity": "You haven't been near §b&player&§f long enough (2 minutes within 20 blocks required).",
+        "not_enough_proximity": "You haven't been near §b&player&§f long enough (§b&proximity& seconds§f within §b&range& blocks§f required).",
         "too_many_dolls": "You already reached the maximum of §b&number&§f dolls.",
         "doll_expired": "Your doll of §b&player&§f has expired.",
         "doll_damaged": "Your doll §b&player&§f took §c&number&❤§f damage.",
-        "doll_dead": "Your doll §b&player&§f died. Use §b/ww sacrifier§f to lose 1❤ and learn the killer's role.",
+        "doll_dead": "Your doll §b&player&§f died. Use §b/ww sacrifier§f to lose &sacrifice&❤ and learn the killer's role.",
         "doll_dead_no_killer": "Your doll §b&player&§f died, but no killer was identified.",
-        "sacrifice_reveal": "You sacrifice §c1❤§f: §b&player&§f was killed by §b&killer&§f (§c&role&§f).",
+        "sacrifice_reveal": "You sacrifice §c&number&❤§f: §b&player&§f was killed by §b&killer&§f (§c&role&§f).",
         "no_pending_sacrifice": "No dead doll awaiting sacrifice.",
-        "proximity_reached": "You've been near §b&player&§f long enough: you can now create a voodoo doll."
+        "proximity_reached": "You've been near §b&player&§f long enough: you can now create a voodoo doll.",
+        "configurations": {
+          "proximity_range": "Proximity distance (§b&number&§f blocks)",
+          "proximity_required": "Proximity time required (§b&number&s§f)",
+          "max_dolls": "Maximum number of dolls (§b&number&§f)",
+          "sacrifice_health": "Health sacrificed (§b&number&§f❤)"
+        },
+        "timers": {
+          "doll_duration": "Doll duration (§b&timer&§f)"
+        }
       },
       "thief": {
         "display": "Thief",
@@ -523,7 +532,7 @@
         "items": "Two splash potions of healing",
         "power_available": "You may §astill§f use your power",
         "power_not_available": "You have §calready§f used your power",
-        "description": "You corrupt nearby players (100% in &number&s alone, faster with nearby Werewolves). Once per game, you may infect a corrupted player killed by a Werewolf via a clickable message (5 sec). They resurrect with their powers and join the Werewolves. You may howl once per game via §b/ww hurler§r.",
+        "description": "You corrupt players within §b&distance& blocks§f (100% in §b&number&s§f alone, faster with nearby Werewolves). Once per game, you may infect a corrupted player killed by a Werewolf via a clickable message (5 sec). They resurrect with their powers and join the Werewolves. You may howl once per game via §b/ww hurler§r.",
         "infection_message": "§b&player&§r is dead, to infect §6Click here §r(You have §b7sec§r)",
         "infection_perform": "You infected §b&player&",
         "player_cannot_be_infected": "The player can't (anymore) be infected",
@@ -532,7 +541,8 @@
         "command": "infecter_infect",
         "configurations": {
           "auto_rez": "The infect father of the Wolves can resurrect himself",
-          "corruption_time": "Corruption time (s)"
+          "corruption_time": "Corruption time (§b&number&s§f)",
+          "corruption_distance": "Corruption distance (§b&number&§f blocks)"
         }
       },
       "seer": {
@@ -1250,7 +1260,7 @@
       },
       "bohemian": {
         "display": "Bohemian",
-        "description": "You start the game with an Honor level of §b1§f. You may sacrifice your Honor levels via §b/ww boheme§r [Player] [1-2-3] (once every 10 minutes) to gain information about the targeted player:\n§b1§f: Target's Honor level\n§b2§f: Number of commands the target has been the target of, and the nature of the last one\n§b3§f: Target's camp (Villager, Werewolves or other)\nAt each episode start, you are informed of your current Honor level (current: §b&number&§f).",
+        "description": "You start the game with an Honor level of §b1§f. You may sacrifice your Honor levels via §b/ww boheme§r [Player] [1-2-3] (once every §b&timer&§f) to gain information about the targeted player:\n§b1§f: Target's Honor level\n§b2§f: Number of commands the target has been the target of, and the nature of the last one\n§b3§f: Target's camp (Villager, Werewolves or other)\nAt each episode start, you are informed of your current Honor level (current: §b&number&§f).",
         "command": "boheme",
         "honor_level": "Your current Honor level is §b&number&§f",
         "cooldown": "You must wait before using your power again",
@@ -1258,7 +1268,10 @@
         "info_honor": "§b&player&§f has an Honor level of §b&number&§f",
         "info_commands": "§b&player&§f has been the target of §b&number&§f command(s). The last one was: &nature&",
         "info_camp": "§b&player&§f belongs to the camp: &camp&",
-        "no_command": "None"
+        "no_command": "None",
+        "timers": {
+          "cooldown": "Cooldown (§b&timer&§f)"
+        }
       },
       "disloyal_werewolf": {
         "display": "Disloyal Werewolf",
@@ -1269,13 +1282,17 @@
       },
       "avocat": {
         "display": "Lawyer",
-        "description": "Once every 10 minutes, you can prevent a player's Honor from decreasing for 10 minutes via §b/ww defendre§r [Name]. The defended player's Honor can still increase. You cannot defend the same player twice in a row. At the end of the 10 minutes, you are notified of how much the defended player's Honor would have decreased if you had not defended them. If their Honor did not vary at all, you learn its exact value.",
+        "description": "Once every §b&number&s§f, you can prevent a player's Honor from decreasing for §b&number2&s§f via §b/ww defendre§r [Name]. The defended player's Honor can still increase. You cannot defend the same player twice in a row. At the end of the §b&number2&s§f, you are notified of how much the defended player's Honor would have decreased if you had not defended them. If their Honor did not vary at all, you learn its exact value.",
         "command": "defendre",
         "cooldown": "You must wait §b&number&§f minute(s) before using your power again",
         "same_target": "You cannot defend the same player twice in a row",
-        "perform": "You defend §b&player&§f for 10 minutes. Their Honor cannot decrease.",
+        "perform": "You defend §b&player&§f for §b&number&s§f. Their Honor cannot decrease.",
         "defense_end_decrease": "The defense of §b&player&§f has ended. Without your defense, their Honor would have decreased by §b&number&§f.",
-        "defense_end_exact": "The defense of §b&player&§f has ended. Their Honor did not vary during the defense, it is §b&number&§f."
+        "defense_end_exact": "The defense of §b&player&§f has ended. Their Honor did not vary during the defense, it is §b&number&§f.",
+        "configurations": {
+          "cooldown": "Defense cooldown (§b&number&s§f)",
+          "defense_duration": "Defense duration (§b&number&s§f)"
+        }
       },
       "prophetess": {
         "display": "Prophetess",
