@@ -1,5 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -35,7 +37,6 @@ public class Avocat extends RoleImpl implements IAffectedPlayers {
     private int lastUseTimer = -COOLDOWN;
     private IPlayerWW lastDefendedPlayer = null;
     private IPlayerWW defendedPlayer = null;
-    private int defenseGeneration = 0;
     private int preventedDecrease = 0;
     private boolean anyHonorChange = false;
 
@@ -62,16 +63,12 @@ public class Avocat extends RoleImpl implements IAffectedPlayers {
         this.lastUseTimer = game.getTimer();
         this.preventedDecrease = 0;
         this.anyHonorChange = false;
-        this.defenseGeneration++;
         addAffectedPlayer(target);
 
-        final int generation = this.defenseGeneration;
         final IPlayerWW defended = target;
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
-            if (this.defenseGeneration != generation) {
-                return;
-            }
+          
             this.defendedPlayer = null;
             removeAffectedPlayer(defended);
 
@@ -96,9 +93,9 @@ public class Avocat extends RoleImpl implements IAffectedPlayers {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
+    @RequireAbility
+    @RequireAlive
     public void onHonorChange(HonorChangeEvent event) {
-        if (!isAbilityEnabled()) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
         if (this.defendedPlayer == null) return;
 
         IPlayerWW playerWW = event.getPlayerWW();

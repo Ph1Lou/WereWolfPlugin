@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -49,12 +50,8 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    @RequireAlive
     public void onNight(NightEvent event) {
-
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, RoleBase.WEREWOLF, 0));
 
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.little_girl.remove_armor");
@@ -105,13 +102,8 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
     }
 
     @EventHandler
+    @RequireAlive
     public void onDay(DayEvent event) {
-
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
 
         if (isInvisible()) {
             this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.INVISIBILITY, this.getKey(), 0));
@@ -127,12 +119,8 @@ public class MischievousWereWolf extends RoleWereWolf implements IInvisible {
     }
 
     @EventHandler
+    @RequireAlive
     public void onDayWillCome(DayWillComeEvent event) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
 
         this.getPlayerWW().sendMessageWithKey(
                 Prefix.ORANGE, "werewolf.roles.little_girl.soon_to_be_day");

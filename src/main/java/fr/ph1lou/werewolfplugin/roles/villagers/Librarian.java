@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -90,13 +91,12 @@ public class Librarian extends RoleImpl implements ILimitedUse, IAffectedPlayers
     }
 
     @EventHandler
+    @RequireAbility
     public void onFinalDeath(FinalDeathEvent event) {
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         if (this.storage.isEmpty()) return;
-
-        if (!isAbilityEnabled()) return;
 
         Bukkit.broadcastMessage(game.translate(Prefix.YELLOW, "werewolf.roles.librarian.death"));
         int page = 1;

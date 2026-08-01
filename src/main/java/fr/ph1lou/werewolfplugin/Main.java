@@ -41,6 +41,7 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
     private final InventoryManager invManager = new InventoryManager(this);
     private WereWolfAPI currentGame;
     private Register registerManager;
+    private StatisticsEvents statisticsEvents;
 
     public Main() {
         super();
@@ -72,7 +73,8 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             this.registerManager = new Register(this); //to do before all things who need register
-            BukkitUtils.registerListener(new StatisticsEvents(this));
+            this.statisticsEvents = new StatisticsEvents(this);
+            BukkitUtils.registerListener(this.statisticsEvents);
             Objects.requireNonNull(getCommand("a")).setExecutor(new Admin(this));
             Objects.requireNonNull(getCommand("ww")).setExecutor(new Command(this));
             GameManager.createGame(this, wereWolfAPI -> this.currentGame = wereWolfAPI);
@@ -110,6 +112,10 @@ public class Main extends JavaPlugin implements GetWereWolfAPI {
 
     public void createGame() {
         GameManager.createGame(this, wereWolfAPI -> this.currentGame = wereWolfAPI);
+    }
+
+    public StatisticsEvents getStatisticsEvents() {
+        return this.statisticsEvents;
     }
 }
 

@@ -13,44 +13,48 @@ import fr.ph1lou.werewolfapi.events.roles.witch.WitchResurrectionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
-import fr.ph1lou.werewolfapi.role.interfaces.IPower;
-import fr.ph1lou.werewolfapi.role.interfaces.IRole;
+import fr.ph1lou.werewolfplugin.roles.villagers.Witch;
 import org.bukkit.Bukkit;
 
-@RoleCommand(key = "werewolf.roles.witch.command",
+@RoleCommand(key = "werewolf.roles.witch.command_life",
         roleKeys = RoleBase.WITCH,
         argNumbers = 1,
-        requiredPower = true,
         autoCompletion = false,
         args = @Params(players = @PlayerArg(index = 0, byUuid = true,
-                states = { StatePlayer.JUDGEMENT },
+                states = {StatePlayer.JUDGEMENT},
                 stateMessageKey = "werewolf.check.not_in_judgement")))
-public class CommandWitch implements IParameterizedCommandRole {
+public class CommandWitchLife implements IParameterizedCommandRole {
 
     @Override
     public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
-        IRole witch = playerWW.getRole();
+        Witch witch = (Witch) playerWW.getRole();
 
-        IPlayerWW playerWW1 = ctx.player(0);
+        if (!witch.hasLifePotion()) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.witch.potion_already_used");
+            return;
+        }
 
-        if (playerWW1 == null) {
+        IPlayerWW target = ctx.player(0);
+
+        if (target == null) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.player_not_found");
             return;
         }
 
-        if (!game.getConfig().isConfigActive(ConfigBase.WITCH_AUTO_RESURRECTION) && playerWW.equals(playerWW1)) {
+        boolean self = target.equals(playerWW);
+
+        if (self && !game.getConfig().isConfigActive(ConfigBase.WITCH_AUTO_RESURRECTION)) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.not_yourself");
             return;
         }
 
-        if (game.getTimer() - playerWW1.getDeathTime() < 7) {
+        if (!self && !witch.isOfferValid(target)) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.witch.too_late");
             return;
         }
 
-        ((IPower) witch).setPower(false);
-        WitchResurrectionEvent witchResurrectionEvent = new WitchResurrectionEvent(playerWW, playerWW1);
+        WitchResurrectionEvent witchResurrectionEvent = new WitchResurrectionEvent(playerWW, target);
         Bukkit.getPluginManager().callEvent(witchResurrectionEvent);
 
         if (witchResurrectionEvent.isCancelled()) {
@@ -58,9 +62,12 @@ public class CommandWitch implements IParameterizedCommandRole {
             return;
         }
 
-        ((IAffectedPlayers) witch).addAffectedPlayer(playerWW1);
-        game.resurrection(playerWW1);
+        witch.setLifePotion(false);
+        if (!self) {
+            witch.clearOffer(target);
+        }
+        game.resurrection(target);
         playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.witch.resuscitation_perform",
-                Formatter.player(playerWW1.getName()));
+                Formatter.player(target.getName()));
     }
 }

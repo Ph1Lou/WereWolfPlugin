@@ -40,12 +40,11 @@ public class CommandPriestess implements IParameterizedCommandRole {
         }
 
         if (playerWW.getHealth() < 5) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.seer.not_enough_life");
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.priestess.not_enough_life");
         } else {
             IRole role1 = playerWW1.getRole();
 
             PriestessEvent priestessEvent = new PriestessEvent(playerWW, playerWW1, role1.getDisplayCamp());
-            ((IPower) priestess).setPower(false);
             Bukkit.getPluginManager().callEvent(priestessEvent);
 
             if (priestessEvent.isCancelled()) {
@@ -53,13 +52,19 @@ public class CommandPriestess implements IParameterizedCommandRole {
                 return;
             }
 
+            ((IPower) priestess).setPower(false);
             ((IAffectedPlayers) priestess).addAffectedPlayer(playerWW1);
 
             playerWW.removePlayerMaxHealth(4);
 
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.priestess.message",
-                    Formatter.player(playerWW1.getName()),
-                    Formatter.format("&camp&", game.translate(priestessEvent.getCamp())));
+            if (role1.isWereWolf()) {
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.priestess.message_werewolf",
+                        Formatter.player(playerWW1.getName()),
+                        Formatter.role(game.translate(role1.getKey())));
+            } else {
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.priestess.message_no_info",
+                        Formatter.player(playerWW1.getName()));
+            }
 
         }
     }

@@ -164,7 +164,6 @@ public class MapManager implements IMapManager {
         }
         if (world.equals(this.world)) {
             generateMap(game.getConfig().getBorderMax() / 2);
-            ((GameManager) game).getBuildingsManager().generate();
         }
     }
 

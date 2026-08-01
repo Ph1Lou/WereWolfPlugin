@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -151,13 +153,10 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
     }
 
     @EventHandler
+    @RequireAlive
     public void onVoteEndEvent(VoteResultEvent event) {
 
         if (event.getPlayerWW() == null) {
-            return;
-        }
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -171,11 +170,10 @@ public class Raven extends RoleWithLimitedSelectionDuration implements IAffected
     }
 
     @EventHandler
+    @RequireAbility
     private void onPlayerDamage(EntityDamageEvent event) {
 
         if (!(event.getEntity() instanceof Player)) return;
-
-        if (!isAbilityEnabled()) return;
 
         Player player = (Player) event.getEntity();
         UUID uuid = player.getUniqueId();

@@ -1,5 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -144,8 +146,6 @@ public class Vaudouiste extends RoleImpl implements IAffectedPlayers {
             return;
         }
 
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
         PendingSacrifice pending = pendingSacrifices.poll();
 
         this.getPlayerWW().addPlayerMaxHealth(-SACRIFICE_HEALTH);
@@ -158,10 +158,10 @@ public class Vaudouiste extends RoleImpl implements IAffectedPlayers {
     }
 
     @EventHandler(ignoreCancelled = true)
+    @RequireAbility
+    @RequireAlive
     public void onDamage(EntityDamageEvent event) {
 
-        if (!this.isAbilityEnabled()) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
         if (!(event.getEntity() instanceof Player)) return;
         if (event.getFinalDamage() <= 0) return;
 
@@ -179,9 +179,8 @@ public class Vaudouiste extends RoleImpl implements IAffectedPlayers {
     }
 
     @EventHandler
+    @RequireAbility
     public void onFinalDeath(FinalDeathEvent event) {
-
-        if (!this.isAbilityEnabled()) return;
 
         IPlayerWW dead = event.getPlayerWW();
         if (!dolls.containsKey(dead)) return;

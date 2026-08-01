@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -96,9 +97,8 @@ public class Cupid extends RoleImpl implements IAffectedPlayers, IPower {
     }
 
     @EventHandler
+    @RequireAlive
     public void onAroundLoverEvent(AroundLoverEvent event) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (event.getPlayerWWS().contains(getPlayerWW())) {
             for (IPlayerWW playerWW : affectedPlayer) {

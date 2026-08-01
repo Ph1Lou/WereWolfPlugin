@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -59,10 +60,8 @@ public class Druid extends RoleImpl implements IPower {
     }
 
     @EventHandler
+    @RequireAlive
     public void onDay(DayEvent event) {
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
         this.setPower(true);
 
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.druid.day");

@@ -2,39 +2,55 @@ package fr.ph1lou.werewolfplugin.configs;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
-import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
 import fr.ph1lou.werewolfapi.events.game.configs.LoneWolfEvent;
+import fr.ph1lou.werewolfapi.events.game.life_cycle.FinalDeathEvent;
 import fr.ph1lou.werewolfapi.events.game.timers.WereWolfListEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
-import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Configuration(config = @ConfigurationBasic(key = ConfigBase.LONE_WOLF),
-        timers = @Timer(key = TimerBase.LONE_WOLF_DURATION, defaultValue = 60 * 60, meetUpValue = 20 * 60))
+@Configuration(config = @ConfigurationBasic(key = ConfigBase.LONE_WOLF))
 public class LoneWolf extends ListenerWerewolf {
+
+    private static final double SOLO_HEALTH = 28;
+
+    private int threshold = -1;
 
     public LoneWolf(WereWolfAPI main) {
         super(main);
     }
 
     @EventHandler
-    public void designAloneWolf(WereWolfListEvent event) {
+    public void onWereWolfList(WereWolfListEvent event) {
 
         WereWolfAPI game = this.getGame();
 
-        BukkitUtils.scheduleSyncDelayedTask(game,
-                this::designSolitary,
-                (long) (game.getRandom().nextFloat() * game.getConfig().getTimerValue(TimerBase.LONE_WOLF_DURATION) * 20));
+        int initialCount = game.getPlayersWW().size();
+
+        double ratio = 0.65 + game.getRandom().nextDouble() * 0.25;
+
+        this.threshold = (int) Math.round(initialCount * ratio);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onFinalDeath(FinalDeathEvent event) {
+
+        if (this.threshold < 0) return;
+
+        WereWolfAPI game = this.getGame();
+
+        if (game.getAlivePlayersWW().size() < this.threshold) {
+            this.designSolitary();
+        }
     }
 
     private void designSolitary() {
@@ -52,17 +68,25 @@ public class LoneWolf extends ListenerWerewolf {
 
         IRole role = roleWWs.get((int) Math.floor(game.getRandom().nextDouble() * roleWWs.size()));
 
-        LoneWolfEvent event = new LoneWolfEvent((role.getPlayerWW()));
+        LoneWolfEvent event = new LoneWolfEvent(role.getPlayerWW());
 
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) return;
 
-        role.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.configurations.lone_wolf.message");
+        IPlayerWW playerWW = role.getPlayerWW();
 
-        if (role.getPlayerWW().getMaxHealth() < 30) {
-            role.getPlayerWW().addPlayerMaxHealth(Math.max(0, Math.min(8, 30 - role.getPlayerWW().getMaxHealth())));
+        playerWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.lone_wolf.message");
+
+        double currentMax = playerWW.getMaxHealth();
+        if (currentMax < SOLO_HEALTH) {
+            playerWW.addPlayerMaxHealth(SOLO_HEALTH - currentMax);
+        } else if (currentMax > SOLO_HEALTH) {
+            playerWW.removePlayerMaxHealth(currentMax - SOLO_HEALTH);
         }
+
+        playerWW.addPlayerHealth(SOLO_HEALTH - playerWW.getHealth());
+
         role.setSolitary(true);
         register(false);
     }

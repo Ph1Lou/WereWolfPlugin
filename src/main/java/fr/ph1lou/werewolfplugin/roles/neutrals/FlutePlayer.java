@@ -4,6 +4,8 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
@@ -205,11 +207,8 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     }
 
     @EventHandler
+    @RequireAlive
     public void onDay(DayEvent event) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         if (this.hasOwnFlute) {
             if (!(game.getConfig().isConfigActive("werewolf.roles.flute_player.configurations.flute_player_every_other_day")
@@ -221,8 +220,20 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             }
         }
 
-        new ArrayList<>(pendingNotify).forEach(playerWW ->
-                playerWW.sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.flute_player.fluted_notify"));
+        new ArrayList<>(pendingNotify).forEach(playerWW -> {
+            Player player = Bukkit.getPlayer(playerWW.getUUID());
+            if (player != null) {
+                PlayerInventory inventory = player.getInventory();
+                for (int j = 9; j < 40; j++) {
+                    if (inventory.getItem(j) == null) {
+                        inventory.setItem(j, flute);
+                        break;
+                    }
+                }
+            }
+            this.flutedPlayer.add(playerWW);
+            playerWW.sendMessageWithKey(Prefix.ORANGE, "werewolf.roles.flute_player.fluted_notify");
+        });
         pendingNotify.clear();
     }
 
@@ -271,11 +282,11 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onHit(EntityDamageByEntityEvent event) {
 
-        if (!this.isAbilityEnabled()) return;
         if (!this.hasOwnFlute) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (!(event.getDamager() instanceof Player)) return;
         if (!event.getDamager().getUniqueId().equals(this.getPlayerUUID())) return;
@@ -388,10 +399,10 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onRequestStrengthRate(RequestStrengthRateEvent event) {
 
-        if (!this.isAbilityEnabled()) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
         if (!event.getPlayerWW().equals(this.getPlayerWW())) return;
 
         long count = this.affectedPlayer.stream()
@@ -479,7 +490,7 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             return;
         }
 
-        if (this.flutedPlayer.contains(clickedPlayerWW)) {
+        if (this.flutedPlayer.contains(clickedPlayerWW) || this.pendingNotify.contains(clickedPlayerWW)) {
             return;
         }
 
@@ -488,23 +499,13 @@ public class FlutePlayer extends RoleNeutral implements IPower, IAffectedPlayers
             return;
         }
 
-        PlayerInventory inventory = clickedPlayer.getInventory();
-        for (int j = 9; j < 40; j++) {
-            if (inventory.getItem(j) == null) {
-                inventory.setItem(j, flute);
-                Bukkit.getPluginManager().callEvent(new GiveFluteEvent(clickedPlayerWW, this.getPlayerWW()));
-                this.flutedPlayer.add(clickedPlayerWW);
-                this.pendingNotify.add(clickedPlayerWW);
-                this.power = false;
-                this.fluteInStore--;
-                this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.flute_player.transmit",
-                        Formatter.player(clickedPlayerWW.getName()),
-                        Formatter.number(this.fluteInStore));
-                return;
-            }
-        }
-
-        this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.roles.flute_player.full");
+        Bukkit.getPluginManager().callEvent(new GiveFluteEvent(clickedPlayerWW, this.getPlayerWW()));
+        this.pendingNotify.add(clickedPlayerWW);
+        this.power = false;
+        this.fluteInStore--;
+        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.flute_player.transmit",
+                Formatter.player(clickedPlayerWW.getName()),
+                Formatter.number(this.fluteInStore));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

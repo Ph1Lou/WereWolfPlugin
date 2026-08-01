@@ -2,6 +2,8 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
@@ -280,11 +282,8 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
 
     @EventHandler
+    @RequireAlive
     public void onAutoAngel(AutoAngelEvent event) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         if (isChoice(AngelForm.ANGEL)) {
 
@@ -347,9 +346,9 @@ public class Angel extends RoleNeutral implements IAffectedPlayers, ILimitedUse 
 
 
     @EventHandler
+    @RequireAbility
     public void onFinalDeath(FinalDeathEvent event) {
 
-        if (!isAbilityEnabled()) return;
         IPlayerWW playerWW = event.getPlayerWW();
 
         if (!getAffectedPlayers().contains(playerWW)) return;

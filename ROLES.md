@@ -706,12 +706,12 @@ Invisibilité via `onCloseInvent` (InventoryCloseEvent, LittleGirl.java:190-238)
 - **Classe :** `Priestess` (extends `RoleWithLimitedSelectionDuration`) · **Marqueurs :** IAffectedPlayers
 - **Camp :** Villageois · **Aura :** Neutre · **Attribut :** Information
 
-`attribute=INFORMATION`. IntValue `IntValueBase.PRIESTESS_DISTANCE` (défaut 10, meetUp 10, pas 2). `getAura()` (Priestess.java:117) retourne toujours `LIGHT`. `setPower(false)` à l'init.
-`onDay` (Priestess.java:84) : `setPower(true)`, envoie un message avec `PRIESTESS_DISTANCE` et `POWER_DURATION`.
-Commande `CommandPriestess` (CommandPriestess.java:29) : cible un joueur vivant à ≤ `PRIESTESS_DISTANCE` ET nécessite `health >= 5`. Déclenche `PriestessEvent` (camp = `getDisplayCamp` de la cible), `setPower(false)`, `addAffectedPlayer`, **`removePlayerMaxHealth(4)`** (coûte 2 cœurs de vie max), envoie le camp apparent.
+`attribute=INFORMATION`. IntValue `IntValueBase.PRIESTESS_DISTANCE` (défaut 10, meetUp 10, pas 2). `getAura()` (Priestess.java:120) retourne toujours `LIGHT`. `setPower(false)` à l'init.
+`onDay` (Priestess.java:85) : `isAbilityEnabled()` + `isState(ALIVE)`, `setPower(true)`, envoie un message avec `PRIESTESS_DISTANCE` et `POWER_DURATION`.
+Commande `CommandPriestess` (CommandPriestess.java:29) : cible un joueur vivant à ≤ `PRIESTESS_DISTANCE` ET nécessite `health >= 5`. Déclenche `PriestessEvent` (camp = `getDisplayCamp` de la cible), vérifie `isCancelled()`, puis `setPower(false)`, `addAffectedPlayer`, **`removePlayerMaxHealth(4)`** (coûte 2 cœurs de vie max). Si la cible `isWereWolf()` → envoie le **rôle réel** (`getKey()`) ; sinon → message « aucune information ».
 `onDeath` (FinalDeathEvent, Priestess.java:70) : si le mort est dans `affectedPlayer` ET `isWereWolf()`, envoie un message, retire la cible, **`addPlayerMaxHealth(2)`** (récupère 1 cœur de vie max).
-`onAnnounceDeath` (HIGHEST, Priestess.java:121) : à sa propre mort, révèle son vrai rôle dans l'annonce.
-`onAnnouncementDeathEvent` (HIGH, Priestess.java:136) : si config `HONOR` active, retour. Sinon fausse l'affichage du rôle des morts ("magic") : pour un neutre non-loup, 5% de chance d'affichage magique ; sinon 80% : si Prêtresse vivante, cache les loups (affiche magic pour les loups) ; si morte, cache les non-loups. 20% : inverse. Brouille donc l'information de rôle des morts selon que la Prêtresse est vivante ou non.
+`onAnnounceDeath` (HIGHEST, Priestess.java:124) : quand la Prêtresse est la `targetPlayer` (visionneuse), override le rôle affiché par le **vrai rôle** (`getKey()`) du mort. Permet à la Prêtresse de voir les rôles de tous les morts peu importe l'Honneur.
+`onAnnouncementDeathEvent` (HIGH, Priestess.java:139) : `isAbilityEnabled()` requis. Si config `HONOR` active, retour. Sinon fausse l'affichage du rôle des morts ("magic") : pour un neutre non-loup, 5% de chance d'affichage magique ; sinon 70% : si Prêtresse vivante, cache les loups (affiche magic pour les loups) ; si morte, cache les non-loups. 30% : inverse. Brouille donc l'information de rôle des morts selon que la Prêtresse est vivante ou non.
 `onCompositionUpdate` (HIGHEST, Priestess.java:178) : annule l'événement (cache les mises à jour de composition).
 `onUpdate` (UpdatePlayerNameTagEvent HIGHEST, Priestess.java:183) : pour les joueurs morts, met le suffixe à "" (cache le suffixe de mort).
 
@@ -823,20 +823,27 @@ Chaque sœur survivante choisit donc, à la mort d'une sœur, de révéler soit 
 ### Sorcière
 
 - **Clé :** `witch`
-- **Classe :** `Witch` (extends `RoleImpl`) · **Marqueurs :** IAffectedPlayers, IPower
+- **Classe :** `Witch` (extends `RoleImpl`) · **Marqueurs :** aucun
 - **Camp :** Villageois · **Aura :** Obscure · **Attribut :** Villageois
 
-Rôle villageois (attribute=VILLAGER), `defaultAura=DARK`. Config imbriquée `ConfigBase.WITCH_AUTO_RESURRECTION` (défaut `true`). `power` démarre à `true`. Usage unique.
+Rôle villageois (attribute=VILLAGER), `defaultAura=DARK`. Deux potions à usage unique : `lifePotion` (défaut `true`) et `deathPotion` (défaut `true`). Config imbriquée `ConfigBase.WITCH_AUTO_RESURRECTION` (défaut `true`) : autorise l'auto-résurrection de la Sorcière à sa propre mort.
 
-Auto-résurrection — `onThirdDeathEvent(ThirdDeathEvent, ignoreCancelled=true)` (Witch.java:99) : si `hasPower()` et `isAbilityEnabled()` :
-- Si la mourante est la Sorcière elle-même : appelle `autoResurrection()`. Si `WITCH_AUTO_RESURRECTION` est actif, déclenche `WitchResurrectionEvent(self, self)`, consomme le pouvoir, ressuscite la Sorcière, annule la mort. Si la config est inactive, l'auto-résurrection échoue (la Sorcière meurt).
-- Sinon (un autre joueur meurt) et la Sorcière est vivante : envoie un texte cliquable proposant de ressusciter ce joueur via la commande `/ww witch.command <uuid>`.
+Déclenchement à la mort — `onThirdDeathEvent(ThirdDeathEvent, ignoreCancelled=true)` (Witch.java) : si `isAbilityEnabled()` et Sorcière vivante :
+- Ignore les joueurs infectés (`playerWW.getRole().isInfected()`).
+- **Si la mourante est la Sorcière elle-même** : appelle `autoResurrection()`. Si `WITCH_AUTO_RESURRECTION` est actif et `lifePotion` disponible, déclenche `WitchResurrectionEvent(self, self)` (cancellable), consomme la potion de vie, ressuscite la Sorcière et annule la mort. Sinon, la Sorcière meurt.
+- Si les deux potions sont épuisées, ne fait rien.
+- Révélation binaire : si la Sorcière est à plus de `DISTANCE_THRESHOLD` (80) blocs du mort (ou dans un autre monde), envoie `resuscitation_message_unknown` (aucun nom, aucun lien). Sinon, enregistre l'offre (`pendingOffers`, `game.getTimer()`) et envoie un message cliquable proposant :
+  - **Potion de vie** (si `lifePotion`) → `/ww command_life <uuid>` ;
+  - **Potion de mort** (si `deathPotion` et qu'un tueur est identifié via `getLastKiller()`) → `/ww command_death <uuid>`.
+  - L'offre n'est valide que pendant `OFFER_WINDOW` (5 s).
 
-Commande dédiée `CommandWitch` (`/ww`, `requiredPower=true`, `autoCompletion=false`, 1 arg joueur en état `JUDGEMENT`, par UUID) : si `WITCH_AUTO_RESURRECTION` est inactif et que la cible est la Sorcière elle-même, refus. Si `game.getTimer() - deathTime < 7` (moins de 7s depuis la mort), ignoré. Sinon consomme le pouvoir, déclenche `WitchResurrectionEvent`, ajoute la cible aux affected players, ressuscite la cible.
+Commande Potion de vie — `CommandWitchLife` (`/ww`, `autoCompletion=false`, 1 arg joueur par UUID en `JUDGEMENT`) : si `lifePotion` épuisée → refus. La cible peut être la Sorcière elle-même **uniquement si `WITCH_AUTO_RESURRECTION` est actif** (sinon `not_yourself`), auquel cas la fenêtre d'offre de 5 s est ignorée (fallback d'auto-résurrection). Pour autrui, si l'offre n'est plus valide (> 5 s) → `too_late`. Sinon déclenche `WitchResurrectionEvent` (cancellable), consomme la potion, ressuscite la cible (`game.resurrection`).
 
-Résumé config : `WITCH_AUTO_RESURRECTION=true` → la Sorcière se ressuscite automatiquement à sa propre mort ET peut ressusciter autrui manuellement. `=false` → pas d'auto-résurrection, ne peut ressusciter qu'autrui (pas elle-même).
+Commande Potion de mort — `CommandWitchDeath` (même signature d'args, `excludeSelf=true`) : si `deathPotion` épuisée → refus. Si pas de tueur (`getLastKiller` vide) → `no_killer`. Sinon déclenche `WitchCurseEvent` (cancellable, `@TellableStoryEvent`), consomme la potion, ajoute le tueur aux `cursedKillers`.
 
-Aucun effet de potion, aucune condition de victoire perso.
+Malédiction (Potion de mort) — `onGoldenAppleEat(PlayerItemConsumeEvent, priority=HIGHEST)` (Witch.java) : tant que la Sorcière est en vie, si le mangeur est un tueur maudit, retire `ABSORPTION_REDUCTION` (2 = 1♥) à son Absorption courante (`player.setAbsorptionAmount(max(0, current - 2))`) après application des effets de la pomme en or.
+
+Aucun effet de potion passif, aucune condition de victoire perso.
 
 ### Témoin
 

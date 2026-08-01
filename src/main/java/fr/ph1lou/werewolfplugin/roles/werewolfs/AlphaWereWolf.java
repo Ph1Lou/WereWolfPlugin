@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
@@ -53,11 +54,8 @@ public class AlphaWereWolf extends RoleWereWolf {
     }
 
     @EventHandler
+    @RequireAbility
     public void onNight(NightEvent event) {
-
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
         this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.ABSORPTION, 6000, 0, this.getKey()));
     }
 

@@ -1,14 +1,11 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.Day;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
+import fr.ph1lou.werewolfapi.enums.*;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.AnnouncementDeathEvent;
@@ -65,17 +62,14 @@ public class Assassin extends RoleNeutral implements ILimitedUse {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onNight(NightEvent event) {
-
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.STRENGTH, this.getKey(), 0));
 
     }
 
     @EventHandler
+    @RequireAbility
     public void onDay(DayEvent event) {
-
-        if (!isAbilityEnabled()) return;
-
         this.getPlayerWW()
                 .addPotionModifier(PotionModifier.add(UniversalPotionEffectType.STRENGTH, this.getKey()));
 

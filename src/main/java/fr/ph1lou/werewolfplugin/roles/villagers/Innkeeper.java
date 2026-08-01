@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -81,11 +83,9 @@ public class Innkeeper extends RoleImpl implements IPower {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onKill(FinalDeathEvent event) {
-
-        if (!this.isAbilityEnabled() || !this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         clientDatas.stream()
                 .filter(clientData -> clientData.playerWW.equals(event.getPlayerWW()))

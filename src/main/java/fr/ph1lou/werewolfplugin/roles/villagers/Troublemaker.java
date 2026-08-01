@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -39,11 +41,8 @@ public class Troublemaker extends RoleImpl implements IAffectedPlayers, IPower {
     }
 
     @EventHandler
+    @RequireAbility
     public void onFinalDeath(FinalDeathEvent event) {
-
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
 
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
@@ -103,13 +102,11 @@ public class Troublemaker extends RoleImpl implements IAffectedPlayers, IPower {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onRequestAccessWereWolfChat(WereWolfCanSpeakInChatEvent event) {
 
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
-
-        if (!isAbilityEnabled()) return;
 
         event.setCanSpeak(true);
     }

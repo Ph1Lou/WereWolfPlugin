@@ -1,5 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Category;
@@ -60,15 +62,11 @@ public class Rabbit extends RoleImpl {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     protected void onCheckReduceDamage(EntityDamageByEntityEvent event) {
 
-        if (!this.isAbilityEnabled()) return;
-
         if (!(event.getEntity() instanceof Player)) return;
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         if (this.getPlayerWW().getHealth() >= 12) {
             return;
@@ -98,9 +96,8 @@ public class Rabbit extends RoleImpl {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
+    @RequireAbility
     public void onNight(NightEvent event) {
-
-        if (!this.isAbilityEnabled()) return;
 
         this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.WEAKNESS, this.getKey()));
     }

@@ -87,9 +87,13 @@ public class Discord extends ListenerWerewolf {
                 werewolf.getRole().setSolitary(true);
                 werewolf.sendMessageWithKey(Prefix.RED, "werewolf.configurations.lone_wolf.message");
 
-                if (werewolf.getMaxHealth() < 28) {
-                    werewolf.addPlayerMaxHealth(Math.min(8, 28 - werewolf.getMaxHealth()));
+                double currentMax = werewolf.getMaxHealth();
+                if (currentMax < 28) {
+                    werewolf.addPlayerMaxHealth(28 - currentMax);
+                } else if (currentMax > 28) {
+                    werewolf.removePlayerMaxHealth(currentMax - 28);
                 }
+                werewolf.addPlayerHealth(28 - werewolf.getHealth());
                 neutral.getRole().setTransformedToVillager(true);
                 if (neutral.getRole().isCamp(Camp.VILLAGER)) {
                     neutral.sendMessageWithKey(Prefix.RED, "werewolf.random_events.discord.to_villager");

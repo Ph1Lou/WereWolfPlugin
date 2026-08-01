@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -40,12 +41,8 @@ public class FalsifierWereWolf extends RoleWereWolf {
     }
 
     @EventHandler
+    @RequireAlive
     public void onSelectionEnd(SelectionEndEvent event) {
-
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         if (!isAbilityEnabled()) {
             this.setDisplayCamp(Camp.WEREWOLF.getKey());

@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -131,11 +132,10 @@ public class Sister extends RoleImpl implements IAffectedPlayers {
     }
 
     @EventHandler
+    @RequireAlive
     public void onSisterDeathReveal(SisterDeathEvent event) {
 
         if (event.isCancelled()) return;
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         event.getAllSisters().add(getPlayerWW());
 

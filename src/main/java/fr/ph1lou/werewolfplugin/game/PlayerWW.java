@@ -302,7 +302,6 @@ public class PlayerWW implements IPlayerWW {
             return;
         }
         AtomicBoolean find = new AtomicBoolean(false);
-        AtomicBoolean particle = new AtomicBoolean(false);
 
         new ArrayList<>(this.potionModifiers.keySet())
                 .stream()
@@ -323,12 +322,6 @@ public class PlayerWW implements IPlayerWW {
                         }
 
                         if (player != null) {
-                            if (!particle.get()) {
-                                particle.set(player.getActivePotionEffects()
-                                        .stream()
-                                        .filter(potionEffect -> potionEffect.getType().equals(potionModifier1.getPotionEffectType().getPotionEffectType()))
-                                        .anyMatch(PotionEffect::hasParticles));
-                            }
                             player.removePotionEffect(potionModifier1.getPotionEffectType().getPotionEffectType());
                         }
                     } else if (potionModifier1.getIdentifier().equals(potionModifier.getIdentifier())) {
@@ -350,11 +343,13 @@ public class PlayerWW implements IPlayerWW {
         }
 
         if (player != null) {
-            player.addPotionEffect(new PotionEffect(potionModifier.getPotionEffectType().getPotionEffectType(),
+            VersionUtils.getVersionUtils().addPotionEffect(player,
+                    potionModifier.getPotionEffectType().getPotionEffectType(),
                     potionModifier.getDuration(),
                     potionModifier.getAmplifier(),
-                    particle.get(),
-                    particle.get()));
+                    false,
+                    false,
+                    false);
         }
 
     }
@@ -727,6 +722,11 @@ public class PlayerWW implements IPlayerWW {
     }
 
     @Override
+    public boolean hasColor(IPlayerWW iPlayerWW) {
+        return this.colors.containsKey(iPlayerWW);
+    }
+
+    @Override
     public ChatColor getPastilleColor(IPlayerWW iPlayerWW) {
         return this.pastilles.get(iPlayerWW);
     }
@@ -800,6 +800,20 @@ public class PlayerWW implements IPlayerWW {
                 this.honor = oldHonor;
             }
         }
+    }
+
+    @Override
+    public void modifyHonorTowardZero() {
+        modifyHonor(-Integer.signum(this.honor));
+    }
+
+    @Override
+    public void modifyHonorAwayFromZero() {
+        int sign = Integer.signum(this.honor);
+        if (sign == 0) {
+            sign = game.getRandom().nextBoolean() ? 1 : -1;
+        }
+        modifyHonor(sign);
     }
 }
 

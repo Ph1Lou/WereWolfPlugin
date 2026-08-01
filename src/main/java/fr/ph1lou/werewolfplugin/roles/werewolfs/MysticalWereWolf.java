@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -60,9 +61,8 @@ public class MysticalWereWolf extends RoleWereWolf {
     }
 
     @EventHandler
+    @RequireAlive
     public void onWereWolfDeath(FinalDeathEvent event) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (!event.getPlayerWW().getRole().isWereWolf()) return;
 

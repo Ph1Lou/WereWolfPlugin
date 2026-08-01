@@ -1225,12 +1225,18 @@ Trois usages distincts :
   @Configuration(config = @ConfigurationBasic(key = ConfigBase.HIDE_COMPOSITION))
   public class HideComposition { }
   ```
-- **Config booléenne avec timer imbriqué** — `configs/LoneWolf.java:22` :
+- **Config booléenne avec listener** — `configs/LoneWolf.java:24` :
   ```java
-  @Configuration(config = @ConfigurationBasic(key = ConfigBase.LONE_WOLF),
-        timers = @Timer(key = TimerBase.LONE_WOLF_DURATION,
-                        defaultValue = 60 * 60, meetUpValue = 20 * 60))
+  @Configuration(config = @ConfigurationBasic(key = ConfigBase.LONE_WOLF))
   public class LoneWolf extends ListenerWerewolf { ... }
+  ```
+- **Config booléenne avec timer imbriqué** — `configs/WerewolfChat.java:30` :
+  ```java
+  @Configuration(config = @ConfigurationBasic(key = ConfigBase.WEREWOLF_CHAT,
+          defaultValue = true, meetUpValue = true),
+          timers = @Timer(key = TimerBase.WEREWOLF_CHAT_DURATION,
+                          defaultValue = 30, meetUpValue = 30))
+  public class WerewolfChat extends ListenerWerewolf { ... }
   ```
 - **Valeur entière** (`@IntValue`) : généralement **imbriquée** dans un `@Role`,
   `@Scenario`, etc. plutôt que top-level (voir Poacher/DiamondLimit ci-dessus).

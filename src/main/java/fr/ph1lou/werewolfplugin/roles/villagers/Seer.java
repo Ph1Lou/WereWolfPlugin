@@ -3,6 +3,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -67,11 +68,8 @@ public class Seer extends RoleWithLimitedSelectionDuration implements IAffectedP
     }
 
     @EventHandler
+    @RequireAlive
     public void onDay(DayEvent event) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         if (game.getConfig().isConfigActive(ConfigBase.SEER_EVERY_OTHER_DAY) &&
                 event.getNumber() == dayNumber + 1) {

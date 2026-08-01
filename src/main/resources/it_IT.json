@@ -2,6 +2,45 @@
   "werewolf": {
     "name": "Plugin Lupo Mannaro",
     "description_plugin": "Plugin di base",
+    "tellable_story": {
+      "analyst_observe": "osserva o analizza un giocatore",
+      "analyst_details": "analisi avanzata di un giocatore",
+      "regeneration": "rigenera il suo protetto",
+      "benefactor_give_heart": "dona un cuore a un giocatore",
+      "devoted_servant": "ruba il ruolo di un giocatore morto",
+      "disloyal_harm": "danneggia dei giocatori",
+      "use_mask": "indossa una maschera",
+      "begin_sniff": "inizia a fiutare un giocatore",
+      "fruit_merchant_command": "usa il suo potere di mercante",
+      "counterfeiter_falsify": "falsa il ruolo di un giocatore nel messaggio di morte",
+      "guard_resurrection": "resuscita un giocatore",
+      "inquisitor": "indaga su un giocatore",
+      "bonesetter_choose": "dona la sua guarigione a un giocatore",
+      "mastermind": "usa il suo potere di mente",
+      "illusionist_add": "aggiunge un giocatore alla lista dei Lupi Mannari",
+      "librarian_request": "chiede informazioni al bibliotecario",
+      "necromancer_resurrection": "resuscita un giocatore",
+      "priestess": "spia un giocatore",
+      "scam": "truffa un giocatore",
+      "infection": "infetta un giocatore",
+      "bloodthirsty_hunt": "dà la caccia a un giocatore",
+      "shaman": "parla con un morto",
+      "tenebrous_blind": "acceca dei giocatori",
+      "sister_see_role": "controlla il ruolo dell'assassino della sorella",
+      "sister_see_name": "controlla il nome dell'assassino della sorella",
+      "begin_charm": "inizia ad affascinare un giocatore",
+      "charm": "affascina un giocatore",
+      "voodoo_doll": "crea una bambola voodoo di un giocatore",
+      "trouble_maker": "teletrasporta uno o più giocatori",
+      "witch_resurrection": "resuscita un giocatore",
+      "witch_curse": "maledice un giocatore",
+      "will_o_the_wisp_incendiary": "innesca la follia incendiaria",
+      "will_o_the_wisp_teleport": "usa il suo scatto",
+      "spy_info": "raccoglie informazioni su un giocatore",
+      "guess": "indovina il ruolo di un giocatore",
+      "player_kill": "il giocatore uccide un altro giocatore",
+      "player_resurrection": "il giocatore resuscita"
+    },
     "lovers": {
       "lover": {
         "100": "Non puoi mandare 100% o dipiù dei tuoi cuori",
@@ -143,16 +182,24 @@
       },
       "witch": {
         "display": "Stregha",
-        "power_available": "Potete §aancora§f usare il vostro potere",
-        "power_not_available": "Avete §cgià§f usato il vostro potere",
-        "items": "una pozione di Cura, due pozioni di Danno, una pozione di Rigenerazione e una pozione di Forza",
-        "description": "Una sola volta nella partita, potete fare rinascere un giocatore. Se il giocatore muore a più di §b80 blocchi§f da voi, la probabilità di conoscere la sua identità dipende dal tempo passato vicino a lui durante la partita (§b1% ogni 20s§f, cumulabile).",
-        "not_himself": "§cNon potete§f rinascervi voi stessi",
+        "description": "Alla morte di ogni giocatore non infettato, potete usare una delle vostre due pozioni entro §b5 secondi§f. §6Pozione di vita§f: fa rinascere il giocatore morto. §6Pozione di morte§f: finché siete in vita, riduce di §c1♥§f l'Assorbimento che il suo assassino riceve da ogni mela d'oro mangiata. Conoscete l'identità del morto solo se si trova a meno di §b80 blocchi§f da voi.",
+        "power": "Pozione di vita: &life&. Pozione di morte: &death&.",
+        "potion_available": "§adisponibile§f",
+        "potion_used": "§cusata§f",
+        "potion_already_used": "Avete §cgià§f usato questa pozione.",
         "himself": "§aPotete§f rinascervi voi stessi",
-        "resuscitation_message": "§b&player&§r è morto, per farlo rivivere, §6Clicca qui §r(Avete §b7sec§r)",
-        "resuscitation_message_unknown": "Un giocatore è §bmorto lontano§f. Non avete passato abbastanza tempo vicino a lui per identificarlo.",
+        "not_himself": "§cNon potete§f rinascervi voi stessi",
+        "items": "una pozione di Cura, due pozioni di Danno, una pozione di Rigenerazione e una pozione di Forza",
+        "death_message": "§b&player&§r è morto. Avete §b5sec§r per usare una pozione:",
+        "life_potion": " §a§l[Pozione di vita]§r ",
+        "death_potion": " §c§l[Pozione di morte]§r ",
         "resuscitation_perform": "Avete appena fatto rivivere §b&player&",
-        "command": "sauver_witch",
+        "curse_perform": "Avete appena maledetto §b&player&§f. Finché siete in vita, riceverà §c1♥§f di Assorbimento in meno da ogni mela d'oro.",
+        "curse_target_notify": "La §6Strega§f ha usato la sua §cPozione di Morte§f su di voi! Finché è in vita, riceverete §c1♥§f di Assorbimento in meno da ogni mela d'oro.",
+        "no_killer": "Nessun assassino è stato identificato per §b&player&§f. La Pozione di morte non è utilizzabile.",
+        "too_late": "Avete §cperso troppo tempo§f, i §b5 secondi§f sono trascorsi.",
+        "command_life": "salva_witch",
+        "command_death": "maledici_witch",
         "configurations": {
           "auto_rez_witch": "la Strega può rinascersi lei stessa"
         }
@@ -438,9 +485,11 @@
         "player_cannot_be_infected": "Il giocatore non può più essere infettato",
         "command": "infettare_infect",
         "configurations": {
-          "auto_rez": "L'Infect può rinascersi da solo"
+          "auto_rez": "L'Infect può rinascersi da solo",
+          "corruption_time": "Tempo di corruzione (s)"
         },
-        "player_not_corrupted": "Ce joueur n'est pas corrompu"
+        "player_not_corrupted": "Ce joueur n'est pas corrompu",
+        "corruption_complete": "§b&player&§r è ora completamente corrotto. Potrete infettarlo alla sua morte (se ucciso da un Lupo Mannaro)."
       },
       "seer": {
         "display": "Chiromante",
@@ -460,18 +509,20 @@
       },
       "priestess": {
         "display": "Sacerdotessa",
-        "description": "Il Giorno, Potete conoscere il campo di un giocatore in cambio di due cuori permanenti. Mentre siete vivi i Lupi Mannari hanno 20% di possibilità di vedere i ruoli dei giocatori morti contro 80% per i Abitanti. Quando morite, queste probabilità si inversano. I solitari hanno 95% di possibilità di vederli",
-        "command": "spec",
+        "description_with_honor": "Il Giorno, Potete spiare un giocatore in cambio di due cuori permanenti. Se il giocatore è un Lupo Mannaro, ottenete il suo ruolo, altrimenti non ottenete alcun dettaglio. Se morite, le probabilità di vedere i ruoli si invertono. I solitari hanno 95% di possibilità di vederli",
+        "command": "consulter",
         "items": "Quattro Ossidiane",
         "magic": "§kCucu",
-        "message": "§b&player&§r è nel campo dei §b&camp&",
+        "message_werewolf": "§b&player&§r è un §b&role&§r",
+        "message_no_info": "Non ottenete alcuna informazione su §b&player&§r",
+        "not_enough_life": "Non avete più abbastanza vita per spiare un giocatore",
         "werewolf_death": "Un Lupo Mannaro che avete spiato è morto, rigenerate 1 cuore",
-        "perform": "Scoprite il campo di un giocatore a meno di §b&number&§r blocchi da voi con §b/ww spec§r avete §b&timer&",
+        "perform": "Spiate un giocatore a meno di §b&number&§r blocchi da voi con §b/ww consulter§r avete §b&timer&",
         "distance": "Dovete essere a meno di &number& blocchi dal giocatore",
         "configurations": {
           "distance": "Campo di azione della Sacerdotessa §b&number&"
         },
-        "description_with_honor": "Le Jour, Vous pouvez connaître le camp d'un joueur en échange de deux coeurs permanents. Si vous mourrez, les probabilités de voir les rôles s'inversent. Les Neutres ont 95% de chance de le voir",
+        "description_with_honor": "Il Giorno, Potete spiare un giocatore in cambio di due cuori permanenti. Se il giocatore è un Lupo Mannaro, ottenete il suo ruolo, altrimenti non ottenete alcun dettaglio. Se morite, le probabilità di vedere i ruoli si invertono. I Neutrali hanno il 95% di possibilità di vederli",
         "aura": "La §bPrêtresse§f garde TOUJOURS une aura Lumineuse"
       },
       "oracle": {
@@ -508,7 +559,7 @@
         "protect": "La guardia vi ha protetto, di questo fatto rinascete",
         "resurrection": "La persona che avete protetto è rinata. Non avete più poteri",
         "message": "Proteggere un giocatore per la giornata §b/ww proteggere§r avete §b&timer&",
-        "protected": "Le garde vient de vous protéger, si vous vous faites tuer par un §aLoup Garou§f vous ressusciterez",
+        "protected": "Le garde vient de vous protéger, si vous vous faites tuer par un §aLoup-Garou§f vous ressusciterez",
         "aura": "Se faire protéger par le §bGarde§f donne une aura §bLumineuse"
       },
       "bear_trainer": {
@@ -520,7 +571,7 @@
           "distance": "Campo di azione del Mostratore di Orsi §b&number&",
           "bear_trainer_every_other_day": "Grognement tous les deux jours"
         },
-        "no_growl": "Il n'y a pas de Loups Garous autour de vous",
+        "no_growl": "Il n'y a pas de Loups-Garous autour de vous",
         "aura": "Le §bMontreur d’Ours§f change d’aura en fonction du nombre de “Grrrrr” (§b0§f / §71§f / §c2+§f)"
       },
       "avenger_werewolf": {
@@ -1563,6 +1614,15 @@
           "composition_hide": "La Composizione è nascosta",
           "_": "§6================================"
         },
+        "tellable_story": {
+          "command": "raccontabili",
+          "description": "Per vedere le azioni raccontabili della composizione",
+          "_": "§6================================",
+          "header": "Azioni raccontabili :",
+          "full_list": "§7(Composizione nascosta — lista completa mostrata)",
+          "generic": "Azioni generiche :",
+          "none": "Nessuna azione raccontabile"
+        },
         "aura": {
           "command": "aura",
           "description": "Spiegazioni sulle aura",
@@ -1987,8 +2047,7 @@
       },
       "lone_wolf": {
         "name": "Lupo Solitario",
-        "message": "Diventate Solitario. Da ora in poi, dovete vincere da Solo. Per questa missione, beneficiate di quattro cuori permanenti supplementari (nella limite di 15 cuori massimi)",
-        "timer": "Durée de déclenchement du Loup Solitaire (§b&timer&§f)"
+        "message": "Diventate §0Lupo Solitario§f. Da ora in poi, dovete §ctradire il vostro campo§f e vincere §cda soli§f. Per questo, avete §b14 cuori permanenti§f."
       },
       "new_vote": {
         "name": "Nuovo voto"
@@ -2009,7 +2068,7 @@
         "description": "I morti sono annunciati la mattina"
       },
       "werewolf_howling": {
-        "name": "Hurlement des Loups Garous",
+        "name": "Hurlement des Loups-Garous",
         "action_bar": "§cHurlement§f : ",
         "message": "Il y a §b&number&§f loups à §b50 blocs§f de vous",
         "command": "hurler",
@@ -2019,8 +2078,6 @@
         "can_use": "Vous pouvez utiliser le §cHurlement§f avec §b/ww hurler"
       },
       "honor": {
-        "name": "Honneur",
-        "description": "Active le système d'honneur",
         "list_near_player": "Les joueurs à moins de §b80 blocs§f sont : §b&list&",
         "spy_info": "Un joueur a eu une info sur votre §brôle§f"
       }
@@ -2360,7 +2417,7 @@
       "villager": "§aVillageois",
       "minor_information": "§eInformations mineures",
       "information": "§6Informations majeures",
-      "werewolf": "§cLoup Garou",
+      "werewolf": "§cLoup-Garou",
       "hybrid": "§1Hybride",
       "neutral": "§7Neutre"
     },

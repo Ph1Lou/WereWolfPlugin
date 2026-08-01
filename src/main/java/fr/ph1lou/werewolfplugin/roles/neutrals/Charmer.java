@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
@@ -90,8 +91,8 @@ public class Charmer extends RoleNeutral implements IPower, IAffectedPlayers {
     }
 
     @EventHandler
+    @RequireAbility
     public void onCharmedDeath(FinalDeathEvent event) {
-        if (!isAbilityEnabled()) return;
         if (!event.getPlayerWW().equals(this.playerWW)) {
             return;
         }

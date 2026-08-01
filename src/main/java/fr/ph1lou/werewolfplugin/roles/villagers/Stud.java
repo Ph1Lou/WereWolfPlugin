@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequirePower;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -62,16 +64,12 @@ public class Stud extends RoleImpl implements IPower {
         game.getConfig().addOneLover(LoverBase.LOVER); //pour rajouter dans la compo le couple à la mort du tombeur (puisque le couple du tombeur est pas affiché dans la compo)
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @RequireAbility
+    @RequirePower
     public void onSecondDeathEvent(SecondDeathEvent event) {
 
-        if (event.isCancelled()) return;
-
         if (!getPlayerWW().equals(event.getPlayerWW())) return;
-
-        if (!hasPower()) return;
-
-        if (!isAbilityEnabled()) return;
 
         Optional<IPlayerWW> killerWW = getPlayerWW().getLastKiller();
 

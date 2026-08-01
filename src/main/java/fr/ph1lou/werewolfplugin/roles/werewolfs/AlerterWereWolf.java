@@ -1,17 +1,10 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
-import fr.ph1lou.werewolfapi.annotations.IntValue;
-import fr.ph1lou.werewolfapi.annotations.Configuration;
-import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
-import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.*;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
+import fr.ph1lou.werewolfapi.enums.*;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -24,8 +17,9 @@ import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Role(key = RoleBase.ALERTER_WEREWOLF,
         category = Category.WEREWOLF,
@@ -62,9 +56,9 @@ public class AlerterWereWolf extends RoleWereWolf implements IPower, IAffectedPl
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onDay(DayEvent event) {
-        if (!this.isAbilityEnabled()) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
         if (game.getConfig().isConfigActive("werewolf.roles.alerter_werewolf.configurations.alerter_werewolf_every_other_day")
                 && event.getNumber() == dayNumber + 1) {
             return;
@@ -80,8 +74,6 @@ public class AlerterWereWolf extends RoleWereWolf implements IPower, IAffectedPl
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
         if (this.target == null) return;
 
-        if (this.getPlayerWW().getLocation().getWorld() != this.target.getLocation().getWorld()) return;
-
         if (this.getPlayerWW().distance(this.target) <= game.getConfig().getValue(IntValueBase.ALERTER_DISTANCE)) {
             this.proximitySeconds++;
         }
@@ -90,7 +82,7 @@ public class AlerterWereWolf extends RoleWereWolf implements IPower, IAffectedPl
             this.alert();
             this.setPower(false);
             this.clearAffectedPlayer();
-            this.proximitySeconds = 0;
+            this.resetProximity();
         }
     }
 
@@ -101,13 +93,10 @@ public class AlerterWereWolf extends RoleWereWolf implements IPower, IAffectedPl
             return;
         }
 
-        List<IPlayerWW> wolves = new ArrayList<>();
-        for (IPlayerWW playerWW : game.getAlivePlayersWW()) {
-            if (playerWW.equals(this.getPlayerWW())) continue;
-            if (playerWW.getRole().isWereWolf()) {
-                wolves.add(playerWW);
-            }
-        }
+        List<IPlayerWW> wolves = game.getAlivePlayersWW().stream()
+                .filter(iPlayerWW -> !this.getPlayerWW().equals(iPlayerWW))
+                .filter(iPlayerWW -> iPlayerWW.getRole().isWereWolf())
+                .collect(Collectors.toList());
 
         if (wolves.isEmpty()) {
             this.getPlayerWW().sendMessageWithKey(Prefix.RED,
@@ -125,10 +114,6 @@ public class AlerterWereWolf extends RoleWereWolf implements IPower, IAffectedPl
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
                 "werewolf.roles.alerter_werewolf.alerter_notified",
                 Formatter.player(alertedWolf.getName()));
-
-        alertedWolf.sendMessageWithKey(Prefix.YELLOW,
-                "werewolf.roles.alerter_werewolf.alerted_wolf_notified",
-                Formatter.player(this.getPlayerWW().getName()));
     }
 
     public void resetProximity() {
@@ -164,10 +149,9 @@ public class AlerterWereWolf extends RoleWereWolf implements IPower, IAffectedPl
 
     @Override
     public List<? extends IPlayerWW> getAffectedPlayers() {
-        List<IPlayerWW> list = new ArrayList<>();
-        if (this.target != null) {
-            list.add(this.target);
+        if (this.target == null) {
+            return Collections.emptyList();
         }
-        return list;
+        return Collections.singletonList(this.target);
     }
 }

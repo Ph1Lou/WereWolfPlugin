@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
@@ -158,9 +160,8 @@ public class Renegade extends RoleNeutral implements IPower {
     }
 
     @EventHandler
+    @RequireAbility
     public void onDay(DayEvent event) {
-        if (!isAbilityEnabled()) return;
-
         if (this.joined) return;
 
         if (this.getPlayerWW().isState(StatePlayer.ALIVE)) {
@@ -242,10 +243,10 @@ public class Renegade extends RoleNeutral implements IPower {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    @RequireAbility
+    @RequireAlive
     public void onActionBar(ActionBarEvent event) {
         if (!this.getPlayerWW().getUUID().equals(event.getPlayerUUID())) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-        if (!isAbilityEnabled()) return;
 
         StringBuilder sb = event.getActionBar();
 

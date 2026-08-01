@@ -101,6 +101,7 @@ public class CommandSeer implements IParameterizedCommandRole {
             String key = roleAnn.key();
             if (game.getConfig().getRoleCount(key) <= 0) continue;
             if (key.equals(targetRole)) continue;
+            if (key.equals(RoleBase.SEER)) continue;
             if (needVillage && roleAnn.category() != Category.VILLAGER) continue;
             pool.add(key);
         }

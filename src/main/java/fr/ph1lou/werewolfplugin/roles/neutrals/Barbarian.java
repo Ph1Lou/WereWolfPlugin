@@ -1,6 +1,9 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
+import fr.ph1lou.werewolfapi.annotations.RequirePower;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -76,17 +79,10 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
+    @RequirePower
     public void onMaskedDeath(FirstDeathEvent event) {
-
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
-
-        if (!this.hasPower()) {
-            return;
-        }
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (event.getPlayerWW().getDeathLocation().getWorld() !=
             this.getPlayerWW().getLocation().getWorld()) {
@@ -118,15 +114,9 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
+    @RequireAbility
+    @RequireAlive
     public void onMaskedDeathAnnouncement(AnnouncementDeathEvent event) {
-
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         if (event.getTargetPlayer().equals(this.getPlayerWW())) {
             return;
@@ -138,11 +128,8 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
     }
 
     @EventHandler
+    @RequireAbility
     private void onPlayerDamageByPlayer(EntityDamageByEntityEvent event) {
-
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
 
         if (!game.isState(StateGame.GAME)) {
             return;

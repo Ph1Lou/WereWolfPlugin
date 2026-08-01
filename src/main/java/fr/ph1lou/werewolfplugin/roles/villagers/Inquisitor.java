@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.enums.Aura;
@@ -66,12 +67,9 @@ public class Inquisitor extends RoleWithLimitedSelectionDuration implements IAff
     }
 
     @EventHandler
+    @RequireAbility
     public void onDay(DayEvent event) {
         if (getPlayerWW().isState(StatePlayer.DEATH)) return;
-
-        if(!this.isAbilityEnabled()){
-            return;
-        }
 
         this.setPower(true);
 

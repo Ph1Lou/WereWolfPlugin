@@ -11,6 +11,7 @@ import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
+import fr.ph1lou.werewolfapi.events.roles.mire.MireEatGappleEvent;
 import fr.ph1lou.werewolfapi.events.roles.mire.MireNearbyPlayerUnderThreeHeartEvent;
 import fr.ph1lou.werewolfapi.events.roles.mire.MireUnderThreeHeartsEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -130,8 +131,7 @@ public class Mire extends RoleImpl {
                     Formatter.number(game.getConfig().getValue(IntValueBase.MIRE_DISTANCE)));
         } else {
             IPlayerWW playerWW = playerWWS.get(0);
-            MireNearbyPlayerUnderThreeHeartEvent event1 =
-                    new MireNearbyPlayerUnderThreeHeartEvent(this.getPlayerWW(), playerWW);
+            MireEatGappleEvent event1 = new MireEatGappleEvent(this.getPlayerWW(), playerWW);
 
             Bukkit.getPluginManager().callEvent(event1);
 

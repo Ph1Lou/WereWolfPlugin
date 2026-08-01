@@ -260,10 +260,8 @@ public class Elections extends ListenerWerewolf {
                         Utils.conversion(game.getConfig().getTimerValue(TimerBase.ELECTIONS_DURATION_CHOICE)))));
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onThirdDeathEvent(ThirdDeathEvent event) {
-
-        if (event.isCancelled()) return;
 
         this.getMayor().ifPresent(playerWW -> {
 

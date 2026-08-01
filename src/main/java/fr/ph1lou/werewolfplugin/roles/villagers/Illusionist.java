@@ -1,5 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -58,14 +60,10 @@ public class Illusionist extends RoleImpl implements IPower, IAffectedPlayers {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onFinalDeathEvent(FinalDeathEvent event) {
 
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
         if (!this.isWait()) {
             return;
         }

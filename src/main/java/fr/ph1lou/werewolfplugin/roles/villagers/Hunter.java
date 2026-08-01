@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -60,8 +61,8 @@ public class Hunter extends RoleImpl implements IPower {
     }
 
     @EventHandler
+    @RequireAbility
     public void onFinalDeathEvent(FinalDeathEvent event) {
-        if (!isAbilityEnabled()) return;
         IPlayerWW playerWW = event.getPlayerWW();
 
         if (playerWW.equals(this.getPlayerWW())) {

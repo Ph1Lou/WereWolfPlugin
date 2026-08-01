@@ -27,7 +27,7 @@ import java.util.Optional;
         autoCompletion = false,
         argNumbers = 1,
         args = @Params(players = @PlayerArg(index = 0, byUuid = true, excludeSelf = true,
-                states = { StatePlayer.JUDGEMENT },
+                states = {StatePlayer.JUDGEMENT},
                 stateMessageKey = "werewolf.check.not_in_judgement")))
 public class CommandInfect implements IParameterizedCommandRole {
 
@@ -41,12 +41,18 @@ public class CommandInfect implements IParameterizedCommandRole {
 
         Optional<IPlayerWW> killerWW = playerWW1.getLastKiller();
 
-        if (!killerWW.isPresent() ||
-                !killerWW.get()
-                        .getRole()
-                        .isWereWolf() ||
-                game.getTimer() - playerWW1.getDeathTime() > 7) {
+        if (!killerWW.isPresent()) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.infect_father_of_the_wolves.player_cannot_be_infected");
+            return;
+        }
 
+        if (!killerWW.get().getRole().isWereWolf()) {
+            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.infect_father_of_the_wolves.player_cannot_be_infected");
+            return;
+        }
+
+        int elapsed = game.getTimer() - playerWW1.getDeathTime();
+        if (elapsed > 7) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.infect_father_of_the_wolves.player_cannot_be_infected");
             return;
         }
@@ -75,7 +81,7 @@ public class CommandInfect implements IParameterizedCommandRole {
         game.resurrection(playerWW1);
 
         if (!playerWW1.getRole().isWereWolf()) { //si déjà loup
-            playerWW1.getRole().setInfected(); //pour qu'il sois actualisé en tan que loup
+            playerWW1.getRole().setInfected(); //pour qu'il sois actualisé en tant que loup
             Bukkit.getPluginManager().callEvent(
                     new NewWereWolfEvent(playerWW1));
         }

@@ -31,10 +31,8 @@ public class Vaccination extends ListenerWerewolf {
         super(game);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onInfection(InfectionEvent e) {
-        if (e.isCancelled()) return;
-
 
         IPlayerWW infectedPlayerWW = e.getTargetWW();
         IRole infectedRole = infectedPlayerWW.getRole();

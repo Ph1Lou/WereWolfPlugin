@@ -1,6 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -69,11 +70,8 @@ public class Trapper extends RoleImpl implements IAffectedPlayers, IPower {
     }
 
     @EventHandler
+    @RequireAlive
     public void onDay(DayEvent event) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         setPower(true);
 

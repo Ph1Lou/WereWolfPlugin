@@ -32,12 +32,8 @@ public class ChatListener implements Listener {
         this.contributors = StatistiksUtils.getContributors();
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     private void onCommand(PlayerCommandPreprocessEvent event) {
-
-        if (event.isCancelled()) {
-            return;
-        }
 
         Player player = event.getPlayer();
         String[] args = event.getMessage().split(" ");

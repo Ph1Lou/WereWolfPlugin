@@ -156,7 +156,8 @@ public class TabManager implements Listener {
                                 AppearInWereWolfListEvent appearInWereWolfListEvent = new AppearInWereWolfListEvent(targetWW, playerWW);
                                 Bukkit.getPluginManager().callEvent(appearInWereWolfListEvent);
                                 if (appearInWereWolfListEvent.isAppear()) {
-                                    if (game.getConfig().isConfigActive(ConfigBase.RED_NAME_TAG)) {
+                                    if (game.getConfig().isConfigActive(ConfigBase.RED_NAME_TAG)
+                                            && !targetWW.hasColor(playerWW)) {
                                         chatColor.set(ChatColor.DARK_RED);
                                     }
                                 }

@@ -1,8 +1,5 @@
 package fr.ph1lou.werewolfplugin.configs;
 
-import fr.ph1lou.werewolfapi.annotations.Configuration;
-import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
-import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Camp;
@@ -42,7 +39,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Configuration(config = @ConfigurationBasic(key = ConfigBase.HONOR, loreKey = "werewolf.configurations.honor.description"))
 public class Honor extends ListenerWerewolf {
 
     private final Set<IPlayerWW> playerWithExtraHeart = new HashSet<>();
@@ -64,7 +60,11 @@ public class Honor extends ListenerWerewolf {
                             killerWW.modifyHonor(1);
                             break;
                         case NEUTRAL:
-                            killerWW.modifyHonor(2);
+                            if (killerWW.getRole().isCamp(Camp.VILLAGER)) {
+                                killerWW.modifyHonor(2);
+                            } else {
+                                killerWW.modifyHonorTowardZero();
+                            }
                             break;
                         case VILLAGER:
                             killerWW.modifyHonor(-1);

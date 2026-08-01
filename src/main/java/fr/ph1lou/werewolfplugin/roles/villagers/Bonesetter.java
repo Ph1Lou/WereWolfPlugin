@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -55,9 +56,8 @@ public class Bonesetter extends RoleImpl implements IAffectedPlayers, ILimitedUs
     }
 
     @EventHandler(ignoreCancelled = true)
+    @RequireAbility
     public void onDamage(EntityDamageEvent event) {
-        if (!isAbilityEnabled()) return;
-
         if (!(event.getEntity() instanceof Player)) return;
 
         Player player = (Player) event.getEntity();

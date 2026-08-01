@@ -143,6 +143,11 @@ public class StatisticsEvents implements Listener {
         }
     }
 
+    @Nullable
+    public GameReview getGameReview() {
+        return this.currentGameReview;
+    }
+
     private <T> T getValue(Class<T> returnedClazz, Class<Event> eventClass, Event event, Class<? extends Annotation> annotationClass) {
         return Arrays.stream(eventClass.getMethods())
                 .filter(method -> method.getAnnotation(annotationClass) != null)

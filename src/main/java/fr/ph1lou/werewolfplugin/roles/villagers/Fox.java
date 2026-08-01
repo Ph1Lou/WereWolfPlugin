@@ -2,6 +2,8 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
@@ -19,6 +21,8 @@ import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.events.roles.fox.SniffEvent;
+import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
+import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
@@ -53,6 +57,7 @@ public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPl
     private float progress = 0;
     private int use = 0;
     private boolean power = false;
+    private int lastDisplayedPct = -1;
 
     public Fox(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -129,8 +134,32 @@ public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPl
 
         this.getPlayerWW().addPotionModifier(PotionModifier.remove(UniversalPotionEffectType.SPEED, this.getKey(), 0));
 
+        IPlayerWW former = getAffectedPlayers().isEmpty() ? null : getAffectedPlayers().get(0);
         clearAffectedPlayer();
         setProgress(0f);
+        this.lastDisplayedPct = -1;
+        if (former != null) {
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(former));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    @RequireAbility
+    @RequireAlive
+    public void onUpdatePlayerNameTag(UpdatePlayerNameTagEvent event) {
+
+        if (!event.getTargetUUID().equals(this.getPlayerUUID())) return;
+        if (getAffectedPlayers().isEmpty()) return;
+
+        IPlayerWW viewed = game.getPlayerWW(event.getPlayerUUID()).orElse(null);
+        if (viewed == null) return;
+        if (!viewed.equals(getAffectedPlayers().get(0))) return;
+
+        int pct = (int) Math.min(100, Math.floor(this.getProgress()));
+        if (pct <= 0) return;
+
+        String color = pct >= 100 ? "§c" : pct >= 50 ? "§e" : "§a";
+        event.setSuffix(event.getSuffix() + " " + color + pct + "%");
     }
 
 
@@ -206,6 +235,12 @@ public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPl
                     Formatter.format("&progress&", Math.min(100, Math.floor(temp))));
         }
 
+        int pct = (int) Math.min(100, Math.floor(temp));
+        if (pct != this.lastDisplayedPct) {
+            this.lastDisplayedPct = pct;
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
+        }
+
         if (temp >= 100) {
 
             boolean isWereWolf = playerWW.getRole().isDisplayCamp(Camp.WEREWOLF.getKey()) ||
@@ -247,6 +282,8 @@ public class Fox extends RoleImpl implements IProgress, ILimitedUse, IAffectedPl
 
             clearAffectedPlayer();
             setProgress(0f);
+            this.lastDisplayedPct = -1;
+            Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(playerWW));
         }
     }
 }

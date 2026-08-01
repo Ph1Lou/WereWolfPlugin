@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -117,15 +119,9 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onPlayerDeath(FinalDeathEvent event) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
 
         event.getPlayerWW()
                 .getLastKiller()
@@ -168,15 +164,9 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onPlayerDeath(DeathItemsEvent event) {
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
-
         if (event.getLocation().getWorld() != this.getPlayerWW().getLocation().getWorld()) {
             return;
         }
@@ -275,14 +265,9 @@ public class Thug extends RoleNeutral implements IPower, IAffectedPlayers {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onUpdateNameTag(UpdatePlayerNameTagEvent event) {
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
-
         if (this.playerWW == null) {
             return;
         }

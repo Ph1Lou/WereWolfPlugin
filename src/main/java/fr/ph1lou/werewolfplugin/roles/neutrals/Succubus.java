@@ -2,6 +2,8 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
@@ -198,6 +200,7 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @RequireAbility
     public void onSecondDeathEvent(SecondDeathEvent event) {
 
         if (!this.getPlayerWW().equals(event.getPlayerWW())) return;
@@ -205,8 +208,6 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
         if (getAffectedPlayers().isEmpty()) return;
 
         if (hasPower()) return;
-
-        if (!isAbilityEnabled()) return;
 
         IPlayerWW targetWW = getAffectedPlayers().get(0);
         Player target = Bukkit.getPlayer(targetWW.getUUID());
@@ -238,13 +239,12 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
     }
 
     @EventHandler
+    @RequireAlive
     public void onDetectVictoryWitchCharmed(WinConditionsCheckEvent event) {
 
         if (event.isWin()) return;
 
         if (hasPower()) return;
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (affectedPlayer.isEmpty()) return;
 
@@ -280,11 +280,10 @@ public class Succubus extends RoleNeutral implements IProgress, IAffectedPlayers
     }
 
     @EventHandler
+    @RequireAlive
     public void onLover(AroundLoverEvent event) {
 
         if (hasPower()) return;
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (event.getPlayerWWS().contains(getPlayerWW())) {
             for (IPlayerWW playerWW : affectedPlayer) {

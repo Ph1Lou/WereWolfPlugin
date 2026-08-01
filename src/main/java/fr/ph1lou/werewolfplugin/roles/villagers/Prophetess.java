@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -41,9 +42,8 @@ public class Prophetess extends RoleImpl {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    @RequireAbility
     public void onDay(DayEvent event) {
-        if (!isAbilityEnabled()) return;
-
         if (game.getConfig().isConfigActive("werewolf.roles.prophetess.configurations.prophetess_every_other_day")
                 && event.getNumber() == dayNumber + 1) {
             return;

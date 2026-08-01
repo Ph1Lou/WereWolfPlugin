@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -287,6 +289,7 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
 
 
     @EventHandler
+    @RequireAbility
     public void onActionBarRequest(ActionBarEvent event) {
 
         if (!getPlayerUUID().equals(event.getPlayerUUID())) {
@@ -300,8 +303,6 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
         if (this.killedBrother) {
             return;
         }
-
-        if (!isAbilityEnabled()) return;
 
         StringBuilder stringBuilder = event.getActionBar();
 
@@ -324,11 +325,10 @@ public class RomulusRemus extends RoleImpl implements IAffectedPlayers, ITransfo
     }
 
     @EventHandler
+    @RequireAlive
     public void onDetectVictoryWithFamily(WinConditionsCheckEvent event) {
 
         if (event.isWin()) return;
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (transformed || affectedPlayers.isEmpty()) return;
 

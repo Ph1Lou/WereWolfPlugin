@@ -1,5 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
+import fr.ph1lou.werewolfapi.annotations.RequirePower;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -61,12 +64,9 @@ public class VillageIdiot extends RoleImpl implements IPower {
     }
 
     @EventHandler
+    @RequireAlive
     public void onVote(VoteEvent event) {
         if (this.hasPower()) {
-            return;
-        }
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 
@@ -80,29 +80,25 @@ public class VillageIdiot extends RoleImpl implements IPower {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
+    @RequireAlive
     public void onUpdateNameTag(UpdatePlayerNameTagEvent event) {
 
         if (!event.getPlayerUUID().equals(getPlayerUUID())) return;
 
         if (this.power) return;
 
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
         event.setSuffix(event.getSuffix() + " " + this.game.translate("werewolf.roles.village_idiot.suffix"));
     }
 
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @RequireAbility
+    @RequirePower
     public void onSecondDeathEvent(SecondDeathEvent event) {
 
         if (!event.getPlayerWW().equals(this.getPlayerWW())) {
             return;
         }
-        if (!this.hasPower()) {
-            return;
-        }
-
-        if (!isAbilityEnabled()) return;
 
         Optional<IPlayerWW> killerWW = this.getPlayerWW().getLastKiller();
 

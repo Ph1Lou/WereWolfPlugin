@@ -2,6 +2,45 @@
   "werewolf": {
     "name": "WereWolfPlugin",
     "description_plugin": "Plugin de base",
+    "tellable_story": {
+      "analyst_observe": "observe ou analyse un joueur",
+      "analyst_details": "analyse avancée d'un joueur",
+      "regeneration": "régénère son protégé",
+      "benefactor_give_heart": "donne un cœur à un joueur",
+      "devoted_servant": "vole le rôle d'un joueur mort",
+      "disloyal_harm": "nuit à des joueurs",
+      "use_mask": "met un masque",
+      "begin_sniff": "commence à flairer un joueur",
+      "fruit_merchant_command": "utilise son pouvoir de marchand",
+      "counterfeiter_falsify": "fausse le rôle d'un joueur dans son message de mort",
+      "guard_resurrection": "ressuscite un joueur",
+      "inquisitor": "mène une enquête sur un joueur",
+      "bonesetter_choose": "donne sa guérison à un joueur",
+      "mastermind": "utilise son pouvoir de meneur de jeu",
+      "illusionist_add": "ajoute un joueur à la liste des Loups-Garous",
+      "librarian_request": "demande une information au bibliothécaire",
+      "necromancer_resurrection": "ressuscite un joueur",
+      "priestess": "espionne un joueur",
+      "scam": "arnaque un joueur",
+      "infection": "infecte un joueur",
+      "bloodthirsty_hunt": "traque un joueur",
+      "shaman": "parle à un mort",
+      "tenebrous_blind": "aveugle des joueurs",
+      "sister_see_role": "consulte le rôle du tueur de sa sœur",
+      "sister_see_name": "consulte le pseudo du tueur de sa sœur",
+      "begin_charm": "commence à charmer un joueur",
+      "charm": "charme un joueur",
+      "voodoo_doll": "crée une poupée vaudou d'un joueur",
+      "trouble_maker": "téléporte un/des joueur(s)",
+      "witch_resurrection": "ressuscite un joueur",
+      "witch_curse": "maudit un joueur",
+      "will_o_the_wisp_incendiary": "déclenche la folie incendiaire",
+      "will_o_the_wisp_teleport": "utilise son dash",
+      "spy_info": "récolte des informations sur un joueur",
+      "guess": "devine le rôle d'un joueur",
+      "player_kill": "le joueur tue un autre joueur",
+      "player_resurrection": "le joueur ressuscite"
+    },
     "lovers": {
       "lover": {
         "display": "Couple",
@@ -88,20 +127,20 @@
         "howl_perform": "Vous avez hurlé. §b&number&§f Loup-Garou(s) à proximité."
       },
       "werewolf": {
-        "display": "Loup Garou",
-        "go_to_the_werewolf_camp": "Vous passez dans le camp des §4Loups Garous §b/ww lg",
+        "display": "Loup-Garou",
+        "go_to_the_werewolf_camp": "Vous passez dans le camp des §4Loups-Garous §b/ww lg",
         "new_werewolf": "Un nouveau joueur a rejoint la meute §b/ww lg",
-        "see_others": "Vous distinguez maintenant les Loups Garous §b/ww lg",
-        "not_werewolf": "Vous n'êtes pas un Loup Garou",
-        "list_not_revealed": "La liste des Loups Garous n'est pas encore dévoilée",
-        "werewolf_list": "Liste des Loups Garous : §b&list&",
+        "see_others": "Vous distinguez maintenant les Loups-Garous §b/ww lg",
+        "not_werewolf": "Vous n'êtes pas un Loup-Garou",
+        "list_not_revealed": "La liste des Loups-Garous n'est pas encore dévoilée",
+        "werewolf_list": "Liste des Loups-Garous : §b&list&",
         "command": "lg"
       },
       "grimy_werewolf": {
-        "display": "Loup Garou Grimeur",
+        "display": "Loup-Garou Grimeur",
         "description": "La première personne que vous tuerez apparaîtra comme un Loup-Garou aléatoire encore en vie à l'annonce de sa mort. À votre propre mort, si vous avez grimé un joueur, vous apparaîtrez avec son rôle ; sinon, vous apparaîtrez comme Loup-Garou Grimeur.",
-        "perform": "Le joueur §b&player&§f était §b&role&§f. Grâce à votre pouvoir, son rôle à l'annonce de sa mort a été maquillé en Loup Garou",
-        "actualize": "Un Loup Garou Grimeur vient de mourir. Il avait maquillé la mort d'un §b&role&",
+        "perform": "Le joueur §b&player&§f était §b&role&§f. Grâce à votre pouvoir, son rôle à l'annonce de sa mort a été maquillé en Loup-Garou",
+        "actualize": "Un Loup-Garou Grimeur vient de mourir. Il avait maquillé la mort d'un §b&role&",
         "command": "grimer",
         "grime_message": "§b&player&§r est mort de vos mains, pour grimer son rôle §6Cliquez ici §r(Vous avez §b7sec§r)",
         "player_cannot_be_grimed": "Le joueur ne peut pas (plus) être grimé"
@@ -147,12 +186,12 @@
       "wolf_dog": {
         "display": "Chien Loup",
         "command": "changer",
-        "description": "Forme §aVillageois§f : Les Loups Garous vous voient dans leur liste, cependant, vous ne connaissez pas les Loups Garous. Attention, les rôles à informations vous voient dans le camp des Loups Garous. Vous pouvez lire et envoyer des messages dans le chat des Loups Garous. Vous avez force la nuit.",
-        "transform": "Vous pouvez passer dans votre forme Loup Garou avec la commande §b/ww changer§f (irreversible), vous avez §b&timer&",
+        "description": "Forme §aVillageois§f : Les Loups-Garous vous voient dans leur liste, cependant, vous ne connaissez pas les Loups-Garous. Attention, les rôles à informations vous voient dans le camp des Loups-Garous. Vous pouvez lire et envoyer des messages dans le chat des Loups-Garous. Vous avez force la nuit.",
+        "transform": "Vous pouvez passer dans votre forme Loup-Garou avec la commande §b/ww changer§f (irreversible), vous avez §b&timer&",
         "time_over": "Vous ne pouvez plus choisir votre forme, vous restez donc Villageois",
-        "perform": "Vous venez de choisir la forme Loup Garou",
+        "perform": "Vous venez de choisir la forme Loup-Garou",
         "aura": "Chien Loup Forme chien : Aura §2Lumineuse§f, Forme Loup : Aura §cObscure§f",
-        "description_2": "Forme §cLoup Garou§f : Les Loups Garous ne vous voient pas dans leur liste. Cependant, vous connaissez les Loups Garous. Les rôles à informations vous voient dans le camp des Villageois. Vous n'avez pas Force la nuit."
+        "description_2": "Forme §cLoup-Garou§f : Les Loups-Garous ne vous voient pas dans leur liste. Cependant, vous connaissez les Loups-Garous. Les rôles à informations vous voient dans le camp des Villageois. Vous n'avez pas Force la nuit."
       },
       "stud": {
         "display": "Tombeur",
@@ -160,16 +199,24 @@
       },
       "witch": {
         "display": "Sorcière",
-        "power_available": "Vous pouvez §aencore§f utiliser votre pouvoir",
-        "power_not_available": "Vous avez §cdéjà§f utilisé votre pouvoir",
+        "description": "À la mort de chaque joueur non infecté, vous pouvez utiliser une de vos deux potions dans les §b5 secondes§f. §6Potion de vie§f : ressuscite le joueur mort. §6Potion de mort§f : tant que vous êtes en vie, réduit de §c1♥§f l'Absorption que recevra son tueur à chaque pomme en or mangée. Vous ne connaissez l'identité du mort que s'il se trouve à moins de §b80 blocs§f de vous.",
+        "power": "Potion de Vie : &life&. Potion de Mort : &death&.",
+        "potion_available": "§adisponible§f",
+        "potion_used": "§cutilisée§f",
+        "potion_already_used": "Vous avez §cdéjà§f utilisé cette potion.",
+        "himself": "Vous §apouvez§f vous ressusciter vous-même",
+        "not_himself": "Vous ne §cpouvez pas§f vous ressusciter vous-même",
         "items": "une potion de Soins, deux potions de Dégats, une potion de Régénération et une potion de Force",
-        "description": "Une fois dans la partie, vous pouvez ressusciter un joueur. Si le joueur meurt à plus de §b80 blocs§f de vous, la chance de connaître son identité dépend du temps passé près de lui durant la partie (§b1% toutes les 20s§f, cumulable).",
-        "not_himself": "Vous ne §cpouvez pas§f vous ressusciter vous même",
-        "himself": "Vous §apouvez§f vous ressusciter vous même",
-        "resuscitation_message": "§b&player&§r est mort, pour le ressusciter, §6Cliquez ici §r(Vous avez §b7sec§r)",
-        "resuscitation_message_unknown": "Un joueur est §bmort au loin§f. Vous n'avez pas passé assez de temps près de lui pour l'identifier.",
+        "death_message": "§b&player&§r est mort. Vous avez §b5sec§r pour utiliser une potion :",
+        "life_potion": " §a§l[Potion de Vie]§r ",
+        "death_potion": " §c§l[Potion de Mort]§r ",
         "resuscitation_perform": "Vous venez de ressusciter §b&player&",
-        "command": "sauver_witch",
+        "curse_perform": "Vous venez de maudire §b&player&§f. Tant que vous êtes en vie, il recevra §c1♥§f d'Absorption en moins à chaque pomme en or.",
+        "curse_target_notify": "La §6Sorcière§f a utilisé sa §cPotion de Mort§f sur vous ! Tant qu'elle est en vie, vous recevrez §c1♥§f d'Absorption en moins à chaque pomme en or.",
+        "no_killer": "Aucun tueur n'a pu être identifié pour §b&player&§f. La Potion de Mort est inutilisable.",
+        "too_late": "Vous avez §cmis trop de temps§f, les §b5 secondes§f sont écoulées.",
+        "command_life": "sauver_witch",
+        "command_death": "maudire_witch",
         "configurations": {
           "auto_rez_witch": "la Sorcière peut se ressusciter elle même"
         }
@@ -178,7 +225,7 @@
         "display": "Petite Fille",
         "item": "3 Tnt",
         "effect": "Invisible en enlevant votre armure la nuit.",
-        "description": "Lorsque vous êtes invisible, vous laissez des particules bleues derrière vous visibles par les Loups Garous Perfides. Inversement vous pouvez les repérer par leurs particules rouges. Vous pouvez également voir le chat des Loups Garous et leur §cHurlement§f",
+        "description": "Lorsque vous êtes invisible, vous laissez des particules bleues derrière vous visibles par les Loups-Garous Perfides. Inversement vous pouvez les repérer par leurs particules rouges. Vous pouvez également voir le chat des Loups-Garous et leur §cHurlement§f",
         "remove_armor": "C'est la nuit, enlevez votre armure pour devenir invisible",
         "visible": "Vous redevenez visible",
         "remove_armor_perform": "Vous devenez invisible. Remettez votre armure pour redevenir visible",
@@ -188,7 +235,7 @@
       "troublemaker": {
         "display": "Trublion",
         "description": "Une fois dans la partie, vous pouvez téléporter un joueur aléatoirement sur la carte avec §b/ww switch§f. Lorsque vous mourrez tous les joueurs sont téléportées aux quatre coins de la carte.",
-        "chat": "Vous pouvez envoyer des messages dans le chat des Loups Garous néanmoins, vous ne pouvez pas voir son contenu",
+        "chat": "Vous pouvez envoyer des messages dans le chat des Loups-Garous néanmoins, vous ne pouvez pas voir son contenu",
         "troublemaker_perform": "Vous venez de trublionner §b&player&",
         "troublemaker_death": "Un Trublion vient de mourir, tous les joueurs sont téléportés aléatoirement",
         "get_switch": "Vous venez d'être téléporté par un trublion",
@@ -275,10 +322,10 @@
         "new_protege": "Votre protégé est maintenant §b&player&, il est &role&"
       },
       "mystical_werewolf": {
-        "display": "Loup Garou Mystique",
-        "no_message": "Le Loup Garou Mystique n'a pas le droit d'envoyer des messages dans le chat des Loups Garous",
-        "description": "À chaque décès d'un Loup Garou, vous obtiendrez le rôle et le pseudo d'un joueur qui n'est pas de votre camp.",
-        "werewolf_death": "Un Loup Garou vient de mourir, vous obtenez comme information que §b&player&§f est §b&role&",
+        "display": "Loup-Garou Mystique",
+        "no_message": "Le Loup-Garou Mystique n'a pas le droit d'envoyer des messages dans le chat des Loups-Garous",
+        "description": "À chaque décès d'un Loup-Garou, vous obtiendrez le rôle et le pseudo d'un joueur qui n'est pas de votre camp.",
+        "werewolf_death": "Un Loup-Garou vient de mourir, vous obtenez comme information que §b&player&§f est §b&role&",
         "ability_disabled": "Votre pouvoir a été désactivé; vous n'obtenez pas d'information"
       },
       "rival": {
@@ -323,9 +370,9 @@
         "smell_beginning": "Vous commencez à flairer §b&player&",
         "smell_perform": "Vous avez flairé §b&player&§f.",
         "result": "Parmi les joueurs flairés, §b&number&§f sont des Loups-Garous",
-        "not_werewolf": "&player& §an'est pas dans le camp des Loups Garous",
+        "not_werewolf": "&player& §an'est pas dans le camp des Loups-Garous",
         "warn": "Il sera prévenu dans 5 minutes que vous l'avez flairé",
-        "werewolf": "&player& §4est dans le camp des Loups Garous.§f Il sera prévenu qu'il a été flairé dans 5 minutes",
+        "werewolf": "&player& §4est dans le camp des Loups-Garous.§f Il sera prévenu qu'il a été flairé dans 5 minutes",
         "not_enough_near": "Vous n'êtes pas assez proche de la personne que vous voulez flairer",
         "progress": "Progression du Flair §b&progress&%",
         "smell": "Vous avez été flairé par un §bRenard§f il y a 5 minutes",
@@ -359,7 +406,7 @@
         "power_off": "Vois ne pouvez §cplus§f ressusciter",
         "announce": "L'Idiot du Village §b&player&§r ressuscite.",
         "vote": "Vous avez perdu votre droit de vote suite à votre resurrection",
-        "description": "Lorsque vous vous faites tuer par un joueur qui n’appartient pas au camp des Loups Garous, vous êtes ressuscité mais perdez 2 coeurs permanents et tous les joueurs sont informés de votre rôle."
+        "description": "Lorsque vous vous faites tuer par un joueur qui n’appartient pas au camp des Loups-Garous, vous êtes ressuscité mais perdez 2 coeurs permanents et tous les joueurs sont informés de votre rôle."
       },
       "villager": {
         "display": "Villageois",
@@ -390,8 +437,8 @@
         "player_cannot_be_assassinated": "Le joueur ne peut pas (plus) être supprimé"
       },
       "falsifier_werewolf": {
-        "display": "Loup Garou Feutré",
-        "description": "§fVous avez un rôle d’affichage différent, qui n'est pas du camp des §cLoup Garou§f, chaque jour parmi ceux encore en vie pour tromper le Village.",
+        "display": "Loup-Garou Feutré",
+        "description": "§fVous avez un rôle d’affichage différent, qui n'est pas du camp des §cLoup-Garou§f, chaque jour parmi ceux encore en vie pour tromper le Village.",
         "role": "§fRole d'affichage Actuel : §b&role&\n",
         "display_role_message": "Votre Rôle d'affichage aujourd'hui est §b&role&",
         "aura": "Le §cLoup-Garou Feutré§f obtient l'aura par défaut de son rôle de façade"
@@ -481,14 +528,16 @@
         "items": "Deux Potions Splash de Soin",
         "power_available": "Vous pouvez §aencore§f utiliser votre pouvoir",
         "power_not_available": "Vous avez §cdéjà§f utilisé votre pouvoir",
-        "description": "Vous corrompez les joueurs à proximité (1%/5s). Les Loups-Garous à proximité y participent également (1%/20s). Une fois dans la partie, vous pouvez infecter un joueur corrompu tué par un Loup-Garou via un message cliquable (5 sec). Il ressuscite avec ses pouvoirs et rejoint le camp des Loups-Garous. Vous pouvez hurler une fois par partie via §b/ww hurler§r.",
+        "description": "Vous corrompez les joueurs à proximité (100% en &number&s seul, plus vite avec des Loups-Garous proches). Une fois dans la partie, vous pouvez infecter un joueur corrompu tué par un Loup-Garou via un message cliquable (5 sec). Il ressuscite avec ses pouvoirs et rejoint le camp des Loups-Garous. Vous pouvez hurler une fois par partie via §b/ww hurler§r.",
         "infection_message": "§b&player&§r est mort, pour l'infecter §6Cliquez ici §r(Vous avez §b7sec§r)",
         "infection_perform": "Vous venez d'infecter §b&player&",
         "player_cannot_be_infected": "Le joueur ne peut pas (plus) être infecté",
         "player_not_corrupted": "Ce joueur n'est pas corrompu",
+        "corruption_complete": "§b&player&§r est désormais corrompu. Vous pourrez l'infecter à sa mort (s'il est tué par un Loup-Garou).",
         "command": "infecter_infect",
         "configurations": {
-          "auto_rez": "L'Infect peut se ressusciter"
+          "auto_rez": "L'Infect peut se ressusciter",
+          "corruption_time": "Temps de corruption (§b&timer&s§f)"
         }
       },
       "seer": {
@@ -509,14 +558,15 @@
       },
       "priestess": {
         "display": "Prêtresse",
-        "description": "Le Jour, Vous pouvez connaître le camp d'un joueur en échange de deux coeurs permanents. Tant que vous êtes en vie, les Loups Garous ont 20% de chance de voir le rôles des joueurs morts contre 80% pour les Villageois. Quand vous mourrez, ces probabilités s'inversent. Les Neutres ont 95% de chance de le voir",
-        "description_with_honor": "Le Jour, Vous pouvez connaître le camp d'un joueur en échange de deux coeurs permanents. Si vous mourrez, les probabilités de voir les rôles s'inversent. Les Neutres ont 95% de chance de le voir",
-        "command": "spec",
+        "description_with_honor": "Le Jour, Vous pouvez espionner un joueur en échange de deux coeurs permanents. Si le joueur est un Loup-Garou, vous obtenez son rôle, sinon vous n'obtenez aucun détail. Si vous mourrez, les probabilités de voir les rôles s'inversent. Les Neutres ont 95% de chance de le voir",
+        "command": "consulter",
         "items": "Quatre Obsidiennes",
         "magic": "§kCoucou",
-        "message": "§b&player&§r est dans le camp des §b&camp&",
-        "werewolf_death": "Un Loup Garou que vous avez espionné est mort, vous regagnez 1 coeur",
-        "perform": "Découvrez le camp d'un joueur à moins de §b&number&§r blocs de vous avec §b/ww spec§r vous avez §b&timer&",
+        "message_werewolf": "§b&player&§r est un §b&role&§r",
+        "message_no_info": "Vous n'obtenez aucune information sur §b&player&§r",
+        "not_enough_life": "Vous n'avez plus assez de vie pour espionner un joueur",
+        "werewolf_death": "Un Loup-Garou que vous avez espionné est mort, vous regagnez 1 coeur",
+        "perform": "Espionnez un joueur à moins de §b&number&§r blocs de vous avec §b/ww consulter§r vous avez §b&timer&",
         "distance": "Vous devez être à moins de &number& blocs du joueur",
         "configurations": {
           "distance": "Champ d'action de la Prêtresse §b&number&"
@@ -553,7 +603,7 @@
         "description": "Vous pouvez protéger chaque joueur une seule fois dans la partie pendant 10 minutes via §b/ww garder§r [Pseudo]. Vous ne pouvez pas vous protéger vous-même. Si le joueur protégé est tué par un Loup-Garou, il ressuscitera. Cependant, vous perdrez votre pouvoir et bénéficierez de Resistance pendant 20 minutes. Votre aura devient Obscure si vous sauvez un joueur.",
         "command": "garder",
         "perform": "Vous venez de protéger §b&player&",
-        "protected": "Le garde vient de vous protéger, si vous vous faites tuer par un §aLoup Garou§f vous ressusciterez",
+        "protected": "Le garde vient de vous protéger, si vous vous faites tuer par un §aLoup-Garou§f vous ressusciterez",
         "protect": "Le garde vous avait protégé, de ce fait vous ressuscitez",
         "resurrection": "La personne que vous avez protégé vient de ressusciter. Vous n'avez plus de pouvoirs, mais vous obtenez Resistance pendant 20 minutes et votre aura devient Obscure",
         "message": "Protégez un joueur §b/ww garder§r vous avez §b&timer&",
@@ -563,7 +613,7 @@
         "display": "Montreur d'Ours",
         "description": "Vous avez la particularité de grogner au début du jour si un Loup-Garou se trouve dans votre voisinage de §b&number&§f blocs. Un message sera envoyé dans le chat global.",
         "growling_message": "&growling&",
-        "no_growl": "Il n'y a pas de Loups Garous autour de vous",
+        "no_growl": "Il n'y a pas de Loups-Garous autour de vous",
         "growling": "Grrrr ",
         "configurations": {
           "distance": "Champ d'action du Montreur d'Ours §b&number&",
@@ -572,18 +622,18 @@
         "aura": "Le §bMontreur d’Ours§f change d’aura en fonction du nombre de “Grrrrr” (§b0§f / §71§f / §c2+§f)"
       },
       "avenger_werewolf": {
-        "display": "Loup Garou Vengeur",
-        "power": "7 cœurs au départ. Lorsque un Loup Garou enregistré meurt, vous gagnez 1 cœur permanent supplémentaire, puis 0.5 coeurs après 12 coeurs.",
-        "description": "Lorsque vous croisez d'autres Loup Garou à moins de §b&number&§f blocs, ceux-ci sont enregistrés.",
+        "display": "Loup-Garou Vengeur",
+        "power": "7 cœurs au départ. Lorsque un Loup-Garou enregistré meurt, vous gagnez 1 cœur permanent supplémentaire, puis 0.5 coeurs après 12 coeurs.",
+        "description": "Lorsque vous croisez d'autres Loup-Garou à moins de §b&number&§f blocs, ceux-ci sont enregistrés.",
         "add": "§b&player&§f a été enregistré",
         "remove": "§b&player&§f était dans votre liste d'enregistrement, vous récupérez un coeur permanent supplémentaire",
         "configurations": {
-          "distance": "Champ d'action du Loup Garou Vengeur §b&number&"
+          "distance": "Champ d'action du Loup-Garou Vengeur §b&number&"
         },
         "aura": "Quand le §cLoup-Garou Vengeur§f atteint 10 ♥, son aura devient Obscure"
       },
       "white_werewolf": {
-        "display": "Loup Garou Blanc",
+        "display": "Loup-Garou Blanc",
         "heart": "Cinq Coeurs Permanents en plus",
         "description": "Vous êtes infiltré parmi les Loups-Garous."
       },
@@ -611,13 +661,13 @@
         "siamese_twin": "Frères Siamois : §b&list&"
       },
       "alpha_werewolf": {
-        "display": "Loup Garou Alpha",
+        "display": "Loup-Garou Alpha",
         "description": "Votre pseudo est visible par les autres Loups dans le chat.",
         "effect": "2 ♥ d’absorption pendant 5 minutes au début de chaque nuit.",
         "prefix": "[§c&alpha&§r] &message&"
       },
       "mischievous_werewolf": {
-        "display": "Loup Garou Perfide",
+        "display": "Loup-Garou Perfide",
         "items": "5 Tnt",
         "effect": "Invisibilité et Force en enlevant votre armure la nuit",
         "description": "Lorsque vous êtes invisible, vous laissez des particules rouges derrière vous qui sont visibles par les §bPetites Filles§f. Inversement vous pouvez les repérer par leurs particules bleues."
@@ -627,7 +677,7 @@
         "effect": "Résistance avant de ressusciter",
         "available": "Vous avez §aencore§f votre seconde Vie.",
         "not_available": "Vous n'avez §cplus§f votre seconde Vie.",
-        "description": "Si un Loup Garou vous tue, vous ressuscitez mais perdez votre §bRésistance§f. Si c’est un Villageois qui vous tue, il perdra son pouvoir et cinq coeurs.",
+        "description": "Si un Loup-Garou vous tue, vous ressuscitez mais perdez votre §bRésistance§f. Si c’est un Villageois qui vous tue, il perdra son pouvoir et cinq coeurs.",
         "info_villager": "Vous venez de tuer l'Ancien, vous perdez 5 coeurs et votre pouvoir"
       },
       "flute_player": {
@@ -756,7 +806,7 @@
         }
       },
       "fearful_werewolf": {
-        "display": "Loup Garou Craintif",
+        "display": "Loup-Garou Craintif",
         "description": "Vos effets dépendent du nombre de Loups-Garous présents à §b&number&§f blocs de vous (y compris vous-même). Vous ne pouvez que voter blanc et votre mort ne produit aucun message : vous ne pouvez ni être ressuscité par la Sorcière, ni infecté par l'Infect Père des Loups. Vous ne pouvez pas hurler.",
         "effects": "+ de 4 LG : Faiblesse ; 2 LG ou moins : Résistance le jour, Force la nuit ; Seul : Vitesse",
         "configurations": {
@@ -774,7 +824,7 @@
       "big_bad_werewolf": {
         "display": "Grand Méchant Loup",
         "effects": "Force le Jour tant qu'un membre des Loups-Garous n'est pas mort",
-        "werewolf_death": "Un Loup Garou vient de mourir, vous perdez votre force le jour",
+        "werewolf_death": "Un Loup-Garou vient de mourir, vous perdez votre force le jour",
         "aura": "Le §cGrand Méchant Loup§f garde TOUJOURS une aura Obscure"
       },
       "will_o_the_wisp": {
@@ -797,8 +847,8 @@
         }
       },
       "howling_werewolf": {
-        "display": "Loup Garou Hurleur",
-        "description": "Vous pouvez utiliser §b3 fois§f le hurlement. §b/ww hurler§f. A chaque fois qu'un Loup Garou hurle, vous obtenez §bRégénération II§f pendant 7 secondes ainsi que le pseudo du Loup",
+        "display": "Loup-Garou Hurleur",
+        "description": "Vous pouvez utiliser §b3 fois§f le hurlement. §b/ww hurler§f. A chaque fois qu'un Loup-Garou hurle, vous obtenez §bRégénération II§f pendant 7 secondes ainsi que le pseudo du Loup",
         "pseudo": "Le joueur qui a hurlé est §b&player&§f"
       },
       "twin": {
@@ -850,7 +900,7 @@
       "scammer": {
         "display": "Escroc",
         "message_villager": "L'§bEscroc§f vous a escroqué, vous devenez §bSimple Villageois§f",
-        "message_werewolf": "L'§bEscroc§f vous a escroqué, vous devenez §bLoup Garou§f sans pouvoir",
+        "message_werewolf": "L'§bEscroc§f vous a arnaqué, vous devenez §bLoup-Garou§f sans pouvoir",
         "description": "Vous volez progressivement le rôle des joueurs à §b&number&§f blocs de vous au rythme de 1% toutes les §b&timer&§f. Le premier joueur escroqué devient Loup-Garou sans pouvoir s’il était dans le camp des Loups sinon Simple Villageois",
         "message": "Vous venez d'escroquer le rôle de &player&",
         "timers": {
@@ -1048,7 +1098,7 @@
         "power": "Une minute plus tard, le joueur le saura et vous recevrez une liste de trois pseudos contenant celui-ci.",
         "activate": "Pour activer votre pouvoir §b/ww activate",
         "already_activate": "Votre pouvoir est §aactivé",
-        "reveal": "L'§bIllusioniste§f vous a ajouté à la liste des Loups Garous",
+        "reveal": "L'§bIllusioniste§f vous a ajouté à la liste des Loups-Garous",
         "reveal_pseudos": "Le pseudo du joueur que vous avez ajouté à la liste des Loups est parmi : §b&names&",
         "command": "activate",
         "perform": "Votre pouvoir a été activé"
@@ -1312,7 +1362,6 @@
         "perform": "Vous commencez à suivre §b&player&§f. Restez à proximité pendant 3 minutes pour alerter un Loup.",
         "alert_received": "Le Loup-Garou §b&player&§f vous a alerté : la cible est un §b&role&§f.",
         "alerter_notified": "Vous avez alerté le Loup-Garou §b&player&§f.",
-        "alerted_wolf_notified": "Le Loup-Garou §b&player&§f vous a alerté.",
         "alert_no_wolf": "Aucun autre Loup-Garou n'est en vie pour être alerté.",
         "configurations": {
           "alerter_werewolf_every_other_day": "Loup-Garou Alerteur tous les deux jours"
@@ -1366,7 +1415,197 @@
       "cursed_lover": " en couple maudit avec &player&",
       "victory": "Victoire",
       "message": "Victoire &winner&",
-      "random_events": "§6Événements aléatoires actifs :§f &events&"
+      "random_events": "§6Événements aléatoires actifs :§f &events&",
+      "stats_hover_title": "§6§lStatistiques de &player&"
+    },
+    "statistics_action": {
+      "all_enchanted": "Tous les joueurs envoûtés",
+      "amnesiac_lover_death": "Mort de l'amoureux amnésique",
+      "amnesiac_lover_revelation": "Révélation des amoureux amnésiques",
+      "amnesic_design": "Désignation amnésique",
+      "amnesic_transform": "Transformation amnésique",
+      "analyst_analyst": "Analyse approfondie",
+      "analyst_see": "Analyse",
+      "angel_choice": "Choix de l'ange",
+      "angel_regeneration": "Régénération de l'ange",
+      "angel_target": "Cible de l'ange",
+      "angel_target_death": "Mort de la cible de l'ange",
+      "assassination": "Assassinat",
+      "auramancer_change_aura": "Changement d'aura",
+      "auramancer_event": "Lecture d'aura",
+      "avenger_list_death": "Mort d'un loup enregistré",
+      "avenger_list_register": "Enregistrement d'un loup",
+      "avocat_defend": "Défense de l'avocat",
+      "barbarian_event": "Dissimulation du barbare",
+      "bearing_ritual_event": "Rituel du Coussinet",
+      "begin_charm": "Début de charme",
+      "begin_smell": "Début de reniflage",
+      "benefactor_give_heart_event": "Don de cœur",
+      "blood_moon_event": "Lune de sang",
+      "bloodthirsty_werewolf_hunt_down_event": "Traque du loup assoiffé",
+      "bloodthirsty_werewolf_low_life_list_display": "Liste des joueurs à faible vie",
+      "bohemian_sacrifice": "Sacrifice du bohémien",
+      "bonesetter_choose": "Choix du rémouleur",
+      "bonesetter_heal": "Soin du rémouleur",
+      "border_start": "Début de la bordure",
+      "border_stop": "Arrêt de la bordure",
+      "charmed": "Joueur charmé",
+      "charmed_death_event": "Mort d'un charmé",
+      "charmer_charmed": "Charme du charmeur",
+      "charmer_get_effect": "Effet récupéré (charmeur)",
+      "citizen_change_vote": "Changement de vote (citoyen)",
+      "corruption_complete": "Corruption achevée",
+      "counterfeiter_falsify_event": "Falsification du faussaire",
+      "croupier_choose": "Choix du croupier",
+      "croupier_event": "Pouvoir du croupier",
+      "cursed": "Joueur maudit",
+      "cursed_lover_death": "Mort du couple maudit",
+      "cursed_lover_revelation": "Révélation du couple maudit",
+      "day": "Jour",
+      "designed_lover": "Désignation des amoureux",
+      "devoted_servant_event": "Vol de rôle (servante dévouée)",
+      "digging_end": "Fin de fouille",
+      "disloyal_harm": "Nuire (déloyal)",
+      "don": "Don",
+      "druid_power": "Pouvoir du druide",
+      "drunken_werewolf": "Loup-Garou bourré",
+      "elder_revive": "Résurrection de l'ancien",
+      "enchanted": "Joueur envoûté",
+      "enquire": "Enquête du détective",
+      "event_loot_box": "Loot box aléatoire",
+      "exposed": "Exposé",
+      "fallen_angel_kill_target": "Ange déchu tue sa cible",
+      "final_kill": "Kill définitif",
+      "find_all_loot_box": "Toutes les loot box trouvées",
+      "fruit_merchant_command": "Commande du marchand de fruits",
+      "fruit_merchant_death": "Mort d'un joueur suivi (marchand de fruits)",
+      "fruit_merchant_recover": "Récupération (marchand de fruits)",
+      "give_back_book": "Rendu du livre",
+      "give_book": "Don du livre",
+      "give_flute": "Don de la flûte",
+      "god_miracle_event": "Miracle divin",
+      "gravedigger_event": "Pouvoir du fossoyeur",
+      "grim": "Grimage",
+      "growl": "Grognement",
+      "guard_event": "Protection du garde",
+      "guard_resurrection": "Résurrection du garde",
+      "guess_event": "Devinette",
+      "hunter_shoot_event": "Tir du chasseur",
+      "idiot_village": "Idiot du village",
+      "illusionist_activate_event": "Activation de l'illusionniste",
+      "illusionist_add_player_event": "Joueur ajouté (illusionniste)",
+      "illusionist_get_names_event": "Noms récupérés (illusionniste)",
+      "incomplete_list_event": "Liste incomplète",
+      "infection": "Infection",
+      "innkeeper_host": "Hébergement (aubergiste)",
+      "innkeeper_kill": "Kill d'un client (aubergiste)",
+      "inquisitor_event": "Pouvoir de l'inquisiteur",
+      "interpret_event": "Interprétation",
+      "invisible": "Invisibilité",
+      "invulnerability": "Invulnérabilité",
+      "kill_event": "Kill",
+      "librarian_death": "Mort du bibliothécaire",
+      "lone_wolf": "Loup solitaire",
+      "lover_death": "Mort en couple",
+      "lover_revelation": "Révélation des amoureux",
+      "mask": "Masque du comédien",
+      "mastermind_event": "Pouvoir du maître du jeu",
+      "mire_eat_gapple": "Mange une pomme d'or (mire)",
+      "mire_nearby_player": "Joueur à proximité (mire)",
+      "mire_under_three_hearts": "Moins de 3 cœurs (mire)",
+      "model": "Modèle",
+      "mysanthrope_sister": "Sœur misanthrope",
+      "mystical_reveal": "Révélation mystique",
+      "necromancer_event": "Pouvoir du nécromancien",
+      "new_display_role": "Nouveau rôle affiché",
+      "new_werewolf": "Nouveau loup",
+      "night": "Nuit",
+      "night_assembly_end_event": "Fin de l'assemblée nocturne",
+      "not_all_werewolf_event": "Loups masqués",
+      "oracle_see": "Vision de l'oracle",
+      "poacher_recover_fur": "Récupération de fourrure (braconnier)",
+      "priestess_spec": "Spéculation de la prêtresse",
+      "protection": "Protection",
+      "putrefaction_event": "Putréfaction",
+      "pvp": "PvP",
+      "pyromane_cover": "Recouvert d'essence par le pyromane",
+      "pyromane_ignite": "Enflammé par le pyromane",
+      "random_infection": "Infection aléatoire",
+      "renegade_join_camp": "Le renégat rejoint un camp",
+      "renegade_swap": "Échange du renégat",
+      "repartition": "Répartition",
+      "reveal_aura_amount": "Révélation d'aura",
+      "reveal_wishes_occultist": "Vœux révélés (occultiste)",
+      "revive": "Résurrection",
+      "rival_lover": "Assassinat d'un amoureux (rival)",
+      "rival_lover_death": "Mort de l'amoureux rival",
+      "romulusremus_mother_death": "Mort de la mère (Romulus/Rémus)",
+      "ronin_duel": "Duel du ronin",
+      "rumors_event": "Rumeur",
+      "rumors_write_event": "Écriture de rumeur",
+      "sanctuary_visit": "Visite du sanctuaire",
+      "scam_event": "Escroquerie",
+      "scape_goat": "Bouc émissaire",
+      "see": "Voyance",
+      "see_vote": "Vision du vote (citoyen)",
+      "servitor_definitive_master": "Maître définitif (serviteur)",
+      "servitor_master_chosen": "Maître choisi (serviteur)",
+      "shaman": "Pouvoir du chamane",
+      "sister_death": "Mort d'une sœur",
+      "sister_role_name": "Rôle de la sœur",
+      "sister_see_name": "Vision de la sœur",
+      "sk_target_death": "Mort de la cible (tueur en série)",
+      "sniff": "Reniflage",
+      "spy_choose_event": "Choix de l'espion",
+      "spy_result_event": "Résultat de l'espion",
+      "steal": "Vol",
+      "story_teller_event": "Pouvoir du conteur",
+      "stud_lover": "Étalon amoureux",
+      "succubus_resurrection": "Résurrection de la succube",
+      "swap_event": "Échange de rôles",
+      "tenebrous": "Pouvoir ténébreux",
+      "thug_command": "Commande du voyou",
+      "thug_recover_golden_apple": "Pomme d'or récupérée (voyou)",
+      "thug_reveal_event": "Révélation du voyou",
+      "track": "Pistage",
+      "troll": "Troll",
+      "troll_lover": "Amoureux troll",
+      "trouble": "Zizanie",
+      "trouble_maker_death": "Mort de la zizanie",
+      "trouple_event": "Trouple",
+      "twin_list": "Liste des jumeaux",
+      "twin_reveal": "Révélation des jumeaux",
+      "twin_role": "Rôle des jumeaux",
+      "urn_vote_cast": "Vote à l'urne",
+      "urn_vote_result": "Résultat du vote à l'urne",
+      "villager_kit": "Kit du villageois",
+      "voodoo_create_doll_event": "Création de poupée vaudou",
+      "vote": "Vote",
+      "vote_result": "Résultat du vote",
+      "werewolf_howler": "Hurlement",
+      "werewolf_list": "Liste des loups",
+      "werewolf_message": "Message des loups",
+      "wild_child_transformation": "Transformation de l'enfant sauvage",
+      "will_o_the_wisp_incendiary_madness": "Folie incendiaire (feu follet)",
+      "will_o_the_wisp_recover_role": "Récupération de rôle (feu follet)",
+      "will_o_the_wisp_teleport": "Téléportation (feu follet)",
+      "win": "Victoire",
+      "wish_change": "Changement de vœu",
+      "witch_curse": "Malédiction de la sorcière",
+      "witch_revive": "Résurrection de la sorcière",
+      "wolf_dog_choose_wolf": "Le loup-chien choisit les loups",
+      "wolf_fleas_event": "Puces de loup",
+      "elections.mayor_death": "Mort du maire",
+      "elections.mayor_extra_golden_apple": "Pomme d'or supplémentaire (maire)",
+      "elections.mayor_golden_apple": "Pomme d'or du maire",
+      "elections.mayor_resurrection": "Résurrection du maire",
+      "elections.mayor_selection": "Élection du maire",
+      "elections.mayor_vote": "Vote du maire",
+      "innkeeper.client_death": "Mort d'un client (aubergiste)",
+      "innkeeper.meet": "Rencontre (aubergiste)",
+      "innkeeper.speed": "Vitesse (aubergiste)",
+      "track.astronomer": "Pistage (astronome)",
+      "random_events.vaccination": "Vaccination aléatoire"
     },
     "commands": {
       "admin": {
@@ -1559,10 +1798,10 @@
           "command": "chatlg",
           "prefix": "[§cChat LG§r] &message&",
           "modo": "[§c&name&§r] &message&",
-          "announce": "Vous avez §b&timer&§f secondes pour écrire §b&number&§f message(s) dans le chat des Loups Garous §b/ww chatlg§r <message>, attention des rôles peuvent voir le contenu du chat",
-          "timer": "Le temps pour parler dans le chat des Loups Garous est écoulé",
-          "not_access": "Vous ne pouvez pas parler dans le chat des Loups Garous",
-          "disable": "Le chat des Loups Garous est désactivé",
+          "announce": "Vous avez §b&timer&§f secondes pour écrire §b&number&§f message(s) dans le chat des Loups-Garous §b/ww chatlg§r <message>, attention des rôles peuvent voir le contenu du chat",
+          "timer": "Le temps pour parler dans le chat des Loups-Garous est écoulé",
+          "not_access": "Vous ne pouvez pas parler dans le chat des Loups-Garous",
+          "disable": "Le chat des Loups-Garous est désactivé",
           "speak_number": "Vous ne pouvez parler que §b&number&§r fois par cycle",
           "drunken": "Attention, le loup bourré est présent dans cette partie"
         },
@@ -1575,6 +1814,15 @@
           "description": "Pour voir la composition",
           "composition_hide": "La Composition est cachée",
           "_": "§6================================"
+        },
+        "tellable_story": {
+          "command": "racontables",
+          "description": "Pour voir les actions racontables de la composition",
+          "_": "§6================================",
+          "header": "Actions racontables :",
+          "full_list": "§7(Composition cachée — liste complète affichée)",
+          "generic": "Actions génériques :",
+          "none": "Aucune action racontable"
         },
         "aura": {
           "command": "aura",
@@ -1899,16 +2147,16 @@
         "name": "Chat"
       },
       "werewolf_chat": {
-        "name": "Chat des Loups Garous",
+        "name": "Chat des Loups-Garous",
         "configurations": {
-          "vote_end": "§b&number&§r messages par cycle dans le chat Loup Garou"
+          "vote_end": "§b&number&§r messages par cycle dans le chat Loup-Garou"
         },
         "timers": {
-          "werewolf_chat_duration": "Durée du Chat des Loups Garous (§b&timer&§r)"
+          "werewolf_chat_duration": "Durée du Chat des Loups-Garous (§b&timer&§r)"
         }
       },
       "werewolf_howling": {
-        "name": "Hurlement des Loups Garous",
+        "name": "Hurlement des Loups-Garous",
         "action_bar": "§cHurlement§f : ",
         "message": "Il y a §b&number&§f loups à §b50 blocs§f de vous",
         "command": "hurler",
@@ -1959,7 +2207,7 @@
         "name": "Composition Cachée"
       },
       "red_name_tag": {
-        "name": "Pseudo des Loups Garous en rouge"
+        "name": "Pseudo des Loups-Garous en rouge"
       },
       "hide_scenarios": {
         "name": "Cache les Scenarios"
@@ -1974,9 +2222,8 @@
         "name": "Double Troll"
       },
       "lone_wolf": {
-        "name": "Loup Solitaire",
-        "message": "Vous devenez §0Solitaire§f. A partir de maintenant,vous devez gagner §cseul§f. Pour cela, vous bénéficiez de quatres coeurs permanents supplémentaires (dans la limite de 15 coeurs max)",
-        "timer": "Période de déclenchement du Loup Solitaire (§b&timer&§f)"
+        "name": "Loup-Garou Solitaire",
+        "message": "Vous devenez §0Loup-Garou Solitaire§f. A partir de maintenant, vous devez §ctrahir votre camp§f et remporter la partie §cseul§f. Pour cela, vous disposez de §b14 coeurs permanents§f."
       },
       "new_vote": {
         "name": "Nouveau Vote"
@@ -1997,8 +2244,6 @@
         "description": "Les morts sont annoncées le matin"
       },
       "honor": {
-        "name": "Honneur",
-        "description": "Active le système d'honneur",
         "list_near_player": "Les joueurs à moins de §b80 blocs§f sont : §b&list&",
         "spy_info": "Un joueur a eu une info sur votre §brôle§f"
       },
@@ -2051,15 +2296,14 @@
         "urn_voted_against": "Vous avez voté contre §b&player&",
         "urn_voted_blank": "Vous avez déposé un §fvote blanc",
         "urn_vote_not_active": "Aucun vote n'est en cours",
+        "burned_unusable": "Ce bâtiment est en flammes, il est inutilisable",
         "urn_vote_begin": "§6Vote n°&number&§f : les urnes sont ouvertes, rendez-vous dans un bureau de vote",
         "urn_vote_time": "§6Vote n°&number&§f par urne ouvert ! Vous avez §b&timer&",
         "urn_vote_no_result": "Le vote n°&number& n'a désigné personne",
         "urn_vote_result": "§b&player&§f a recueilli le plus de votes : §b&number&",
         "urn_vote_result_role": "§b&player&§f a recueilli le plus de votes : §b&number&§f. C'était un §c&role&",
-        "urn_vote_distance": "Le joueur voté est à §b&number&§f blocs (±100)",
         "urn_vote_exposed_you": "§cVous avez été dénoncé par le vote",
         "council_wait": "Personne sur l'autre plaque. Patientez...",
-        "council_no_honor": "Le système d'Honneur n'est pas actif",
         "council_no_use_left": "Vous avez épuisé vos consultations du conseil",
         "council_cooldown": "Vous devez attendre §b&timer&§r avant de pouvoir consulter à nouveau",
         "council_partner_unavailable": "§b&player&§f ne peut pas consulter le conseil pour le moment",
@@ -2189,17 +2433,17 @@
       },
       "infection": {
         "name": "Infection",
-        "description": "Une fois dans la partie, un joueur au hasard est infecté.\nL'infection peut se déclencher pendant une période de §b&period&§f à partir de §b&timer_start&§f après les rôles ,\nsi il y a moins de la moitié des joueurs \nqui sont Loups Garous.",
+        "description": "Une fois dans la partie, un joueur au hasard est infecté.\nL'infection peut se déclencher pendant une période de §b&period&§f à partir de §b&timer_start&§f après les rôles ,\nsi il y a moins de la moitié des joueurs \nqui sont Loups-Garous.",
         "message": "[§5Infection§r] Un joueur aléatoire vient d'être infecté",
         "timer_start": "Début du déclenchement (§b&timer&§f)",
         "period": "Période de déclenchement de l'event (§b&timer&§f)"
       },
       "amnesic": {
         "name": "Amnésique",
-        "message": "[§5Amnesic§r] Vous découvrez que vous êtes en fait un Loup Garou. Vous connaitrez un Loup toutes les &timer&",
-        "description": "Au moment de la liste des Loups,\nune personne non Loup est choisie aléatoirement\net devient Amnésique.\nSi elle se fait taper par un Loup Garou \nelle passera dans leur camp \net connaitra un membre des Loups \ntoutes les §b&timer&§f. \nSi elle n'est pas transformée \nelle garde son camp d'origine",
-        "new": "§b&player&§f est un Loup Garou, prochain pseudo dans &timer&",
-        "timer": "Nouveau Loup Garou tout les §b&timer&"
+        "message": "[§5Amnesic§r] Vous découvrez que vous êtes en fait un Loup-Garou. Vous connaitrez un Loup toutes les &timer&",
+        "description": "Au moment de la liste des Loups,\nune personne non Loup est choisie aléatoirement\net devient Amnésique.\nSi elle se fait taper par un Loup-Garou \nelle passera dans leur camp \net connaitra un membre des Loups \ntoutes les §b&timer&§f. \nSi elle n'est pas transformée \nelle garde son camp d'origine",
+        "new": "§b&player&§f est un Loup-Garou, prochain pseudo dans &timer&",
+        "timer": "Nouveau Loup-Garou tout les §b&timer&"
       },
       "triple": {
         "name": "Trouple",
@@ -2208,8 +2452,8 @@
         "join": "Vous rejoignez le couple constitué de §b&lovers&"
       },
       "drunken_werewolf": {
-        "name": "Loup Garou Bourré",
-        "description": "Un Loup choisi au hasard n'a \npas la bonne liste des Loups Garous"
+        "name": "Loup-Garou Bourré",
+        "description": "Un Loup choisi au hasard n'a \npas la bonne liste des Loups-Garous"
       },
       "bearing_ritual": {
         "name": "Rituel du coussinet",
@@ -2248,7 +2492,7 @@
       },
       "sister_misanthrope": {
         "name": "Soeur Misanthrope",
-        "message": "[§5Soeur Misanthrope§r] Vous passez dans le camp des Loups Garous, mais vous n'apparaissez pas dans la liste des Loups et ne pouvez pas interagir avec le chat des Loups.",
+        "message": "[§5Soeur Misanthrope§r] Vous passez dans le camp des Loups-Garous, mais vous n'apparaissez pas dans la liste des Loups et ne pouvez pas interagir avec le chat des Loups.",
         "description": "À la révélation de la liste des Loups, \nune des Soeurs apprend qu'elle est dans le camp des Loups \n(elle a accès à la liste, obtient Force I la nuit mais n'apparaît pas dans la liste \net ne peut pas interagir avec le chat des Loups."
       },
       "rumors": {
@@ -2379,7 +2623,7 @@
     },
     "categories": {
       "villager": "Villageois",
-      "werewolf": "Loups Garous",
+      "werewolf": "Loups-Garous",
       "neutral": "Solos",
       "addons": "Rôles Addons",
       "colors": {
@@ -2393,7 +2637,7 @@
       "villager": "§aVillageois",
       "minor_information": "§eInformations mineures",
       "information": "§6Informations majeures",
-      "werewolf": "§cLoup Garou",
+      "werewolf": "§cLoup-Garou",
       "hybrid": "§1Hybride",
       "neutral": "§7Neutre"
     },

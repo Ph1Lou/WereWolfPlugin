@@ -1,5 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
+import fr.ph1lou.werewolfapi.annotations.RequirePower;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -54,11 +57,9 @@ public class DevotedServant extends RoleImpl implements IPower, IAffectedPlayers
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onAnnouncementDeath(AnnouncementDeathEvent event) {
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (this.playerWW == null) {
             return;
@@ -111,17 +112,10 @@ public class DevotedServant extends RoleImpl implements IPower, IAffectedPlayers
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
+    @RequirePower
     public void onMaskedDeath(FirstDeathEvent event) {
-
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
-
-        if (!this.hasPower()) {
-            return;
-        }
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (!event.getPlayerWW().getRole().isCamp(Camp.VILLAGER)) {
             return;

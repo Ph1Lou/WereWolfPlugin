@@ -124,10 +124,8 @@ public class DeathListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onFirstDeath(FirstDeathEvent event) {
-
-        if (event.isCancelled()) return;
 
         IPlayerWW playerWW = event.getPlayerWW();
 
@@ -137,10 +135,8 @@ public class DeathListener implements Listener {
         Bukkit.getPluginManager().callEvent(secondDeathEvent);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onSecondDeathEvent(SecondDeathEvent event) {
-
-        if (event.isCancelled()) return;
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
             if (event.getPlayerWW().isState(StatePlayer.JUDGEMENT)) {
@@ -151,10 +147,8 @@ public class DeathListener implements Listener {
         }, 7 * 20);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onThirdDeath(ThirdDeathEvent event) {
-
-        if (event.isCancelled()) return;
 
         BukkitUtils.scheduleSyncDelayedTask(game, () -> {
             if (event.getPlayerWW().isState(StatePlayer.JUDGEMENT)) {
@@ -192,13 +186,15 @@ public class DeathListener implements Listener {
         if (playerWW.isState(StatePlayer.DEATH)) return;
 
         playerWW.setState(StatePlayer.DEATH);
-        ((GameManager) game).setPlayerSize(game.getPlayersCount() - 1);
 
-        game.getPlayersWW().forEach(playerWW1 -> {
+        boolean deathAnnounced = false;
+
+        for (IPlayerWW playerWW1 : game.getPlayersWW()) {
             AnnouncementDeathEvent announcementDeathEvent = new AnnouncementDeathEvent(playerWW, playerWW1, "werewolf.announcement.death_message");
             Bukkit.getPluginManager().callEvent(announcementDeathEvent);
 
             if (!announcementDeathEvent.isCancelled()) {
+                deathAnnounced = true;
                 Formatter[] formatters = (Formatter[]) ArrayUtils.addAll(announcementDeathEvent.getFormatters().toArray(new Formatter[0]),
                         new Formatter[]{Formatter.player(announcementDeathEvent.getPlayerName()),
                                 Formatter.role(game.translate(announcementDeathEvent.getRole()))});
@@ -207,7 +203,11 @@ public class DeathListener implements Listener {
                 announcementDeathEvent.getTargetPlayer().sendMessageWithKey("werewolf.utils.bar");
                 announcementDeathEvent.getTargetPlayer().sendSound(Sound.AMBIENCE_THUNDER);
             }
-        });
+        }
+
+        if (deathAnnounced) {
+            ((GameManager) game).setPlayerSize(game.getPlayersCount() - 1);
+        }
 
         event
                 .getPlayerWW()
@@ -269,10 +269,8 @@ public class DeathListener implements Listener {
                 + game.translate("werewolf.utils.bar");
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onResurrection(ResurrectionEvent event) {
-
-        if (event.isCancelled()) return;
 
         IPlayerWW playerWW = event.getPlayerWW();
 

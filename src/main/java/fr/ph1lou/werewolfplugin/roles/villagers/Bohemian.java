@@ -1,12 +1,13 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.spy.SpyInfoEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
@@ -33,7 +34,6 @@ public class Bohemian extends RoleImpl {
     private final Map<UUID, Integer> targetCounts = new HashMap<>();
     private final Map<UUID, String> lastNature = new HashMap<>();
     private int lastUseTimer = -COOLDOWN;
-    private boolean initialized = false;
 
     public Bohemian(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
@@ -41,18 +41,15 @@ public class Bohemian extends RoleImpl {
 
     @Override
     public void recoverPower() {
-        if (!this.initialized) {
-            this.getPlayerWW().modifyHonor(1 - this.getPlayerWW().getHonor());
-            this.initialized = true;
-        }
+        this.getPlayerWW().modifyHonorTowardZero();
+        this.getPlayerWW().modifyHonor(1);
     }
-    
+
 
     @EventHandler
+    @RequireAlive
+    @RequireAbility
     public void onDay(DayEvent event) {
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
         this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.bohemian.honor_level",
                 Formatter.number(this.getPlayerWW().getHonor()));
     }

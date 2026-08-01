@@ -2,6 +2,45 @@
   "werewolf": {
     "name": "WereWolfPlugin",
     "description_plugin": "Base plugin",
+    "tellable_story": {
+      "analyst_observe": "observes or analyses a player",
+      "analyst_details": "advanced analysis of a player",
+      "regeneration": "regenerates their protégé",
+      "benefactor_give_heart": "gives a heart to a player",
+      "devoted_servant": "steals the role of a dead player",
+      "disloyal_harm": "harms players",
+      "use_mask": "puts on a mask",
+      "begin_sniff": "starts sniffing a player",
+      "fruit_merchant_command": "uses their merchant power",
+      "counterfeiter_falsify": "forges a player's role in their death message",
+      "guard_resurrection": "resurrects a player",
+      "inquisitor": "investigates a player",
+      "bonesetter_choose": "gives their healing to a player",
+      "mastermind": "uses their mastermind power",
+      "illusionist_add": "adds a player to the Werewolves list",
+      "librarian_request": "asks the librarian for information",
+      "necromancer_resurrection": "resurrects a player",
+      "priestess": "spies on a player",
+      "scam": "scams a player",
+      "infection": "infects a player",
+      "bloodthirsty_hunt": "hunts down a player",
+      "shaman": "speaks to a dead player",
+      "tenebrous_blind": "blinds players",
+      "sister_see_role": "checks the role of her sister's killer",
+      "sister_see_name": "checks the name of her sister's killer",
+      "begin_charm": "starts charming a player",
+      "charm": "charms a player",
+      "voodoo_doll": "creates a voodoo doll of a player",
+      "trouble_maker": "teleports player(s)",
+      "witch_resurrection": "resurrects a player",
+      "witch_curse": "curses a player",
+      "will_o_the_wisp_incendiary": "triggers incendiary madness",
+      "will_o_the_wisp_teleport": "uses their dash",
+      "spy_info": "gathers information on a player",
+      "guess": "guesses a player's role",
+      "player_kill": "the player kills another player",
+      "player_resurrection": "the player resurrects"
+    },
     "lovers": {
       "lover": {
         "display": "Lovers",
@@ -160,16 +199,24 @@
       },
       "witch": {
         "display": "Witch",
-        "power_available": "You may §astill§f use your power",
-        "power_not_available": "You have §calready§f used your power",
+        "description": "Whenever a non-infected player dies, you may use one of your two potions within §b5 seconds§f. §6Life Potion§f: revives the dead player. §6Death Potion§f: as long as you are alive, reduces by §c1♥§f the Absorption their killer gains from each golden apple eaten. You only learn the dead player's identity if they are within §b80 blocks§f of you.",
+        "power": "Life Potion: &life&. Death Potion: &death&.",
+        "potion_available": "§aavailable§f",
+        "potion_used": "§cused§f",
+        "potion_already_used": "You have §calready§f used this potion.",
+        "himself": "You §acan§f bring yourself back to life",
+        "not_himself": "You §ccannot§f bring yourself back to life",
         "items": "one potion of healing, two potions of damage, one potion of regeneration and one potion of strength",
-        "description": "Once during the game, you may bring a player back to life. If the player dies more than §b80 blocks§f away from you, the chance to know their identity depends on the time spent near them during the game (§b1% every 20s§f, cumulative).",
-        "not_himself": "You §ccannot§f save yourself",
-        "himself": "You §acan§f save yourself",
-        "resuscitation_message": "§b&player&§r is dead, to revive them, §6Click here §r(You have §b7sec§r)",
-        "resuscitation_message_unknown": "A player §bdied far away§f. You haven't spent enough time near them to identify them.",
+        "death_message": "§b&player&§r is dead. You have §b5sec§r to use a potion:",
+        "life_potion": " §a§l[Life Potion]§r ",
+        "death_potion": " §c§l[Death Potion]§r ",
         "resuscitation_perform": "You revived §b&player&",
-        "command": "save_witch",
+        "curse_perform": "You cursed §b&player&§f. As long as you are alive, they will gain §c1♥§f less Absorption from each golden apple.",
+        "curse_target_notify": "The §6Witch§f used her §cDeath Potion§f on you! As long as she is alive, you will gain §c1♥§f less Absorption from each golden apple.",
+        "no_killer": "No killer could be identified for §b&player&§f. The Death Potion cannot be used.",
+        "too_late": "You §ctook too long§f, the §b5 seconds§f have elapsed.",
+        "command_life": "save_witch",
+        "command_death": "curse_witch",
         "configurations": {
           "auto_rez_witch": "the Witch can bring herself back to life"
         }
@@ -476,14 +523,16 @@
         "items": "Two splash potions of healing",
         "power_available": "You may §astill§f use your power",
         "power_not_available": "You have §calready§f used your power",
-        "description": "You corrupt nearby players (1%/5s). Nearby Werewolves also contribute (1%/20s). Once per game, you may infect a corrupted player killed by a Werewolf via a clickable message (5 sec). They resurrect with their powers and join the Werewolves. You may howl once per game via §b/ww hurler§r.",
+        "description": "You corrupt nearby players (100% in &number&s alone, faster with nearby Werewolves). Once per game, you may infect a corrupted player killed by a Werewolf via a clickable message (5 sec). They resurrect with their powers and join the Werewolves. You may howl once per game via §b/ww hurler§r.",
         "infection_message": "§b&player&§r is dead, to infect §6Click here §r(You have §b7sec§r)",
         "infection_perform": "You infected §b&player&",
         "player_cannot_be_infected": "The player can't (anymore) be infected",
         "player_not_corrupted": "This player is not corrupted",
+        "corruption_complete": "§b&player&§r is now fully corrupted. You will be able to infect them upon their death (if killed by a Werewolf).",
         "command": "infecter_infect",
         "configurations": {
-          "auto_rez": "The infect father of the Wolves can resurrect himself"
+          "auto_rez": "The infect father of the Wolves can resurrect himself",
+          "corruption_time": "Corruption time (s)"
         }
       },
       "seer": {
@@ -504,14 +553,15 @@
       },
       "priestess": {
         "display": "Priestess",
-        "description": "During the day, You may chose to learn to which team a player belongs in exchange for two permanent hearts. While you are alive, the werewolves have a probability of 20% to see the role of a dead person while this is 80% for the villagers. After you died, those probabilities are reversed. Neutral roles have a 95% probability of seeing the role",
-        "description_with_honor": "During the day, you can know a player's camp in exchange for two permanent hearts. If you die, the probability of seeing the roles reverse. Neutrals have a 95% chance to see it",
-        "command": "spec",
+        "description_with_honor": "During the day, you can spy on a player in exchange for two permanent hearts. If the player is a Werewolf, you learn their role, otherwise you get no detail. If you die, the probability of seeing the roles reverse. Neutrals have a 95% chance to see it",
+        "command": "consulter",
         "items": "Four blocks of Obsidian",
         "magic": "§kHello There",
-        "message": "§b&player&§r is a member of the §b&camp&",
+        "message_werewolf": "§b&player&§r is a §b&role&§r",
+        "message_no_info": "You get no information about §b&player&§r",
+        "not_enough_life": "You don't have enough life to spy on someone",
         "werewolf_death": "A Werewolf you discovered died. You get 1 heart back",
-        "perform": "Discover the role of a player who is at less than §b&number&§r blocks of you with §b/ww spec§r you have §b&timer&",
+        "perform": "Spy on a player who is at less than §b&number&§r blocks of you with §b/ww consulter§r you have §b&timer&",
         "distance": "You have to be at less than 10 blocs of the player",
         "configurations": {
           "distance": "Priestess action range §b&number&"
@@ -1327,7 +1377,9 @@
       "fake_lover": " fake couple with &player&",
       "cursed_lover": " in a cursed relationship with &player&",
       "victory": "Victory",
-      "message": "Victory &winner&"
+      "message": "Victory &winner&",
+      "random_events": "§6Active random events:§f &events&",
+      "stats_hover_title": "§6§lStatistics of &player&"
     },
     "commands": {
       "admin": {
@@ -1536,6 +1588,15 @@
           "description": "See the composition",
           "composition_hide": "The composition is hidden",
           "_": "§6================================"
+        },
+        "tellable_story": {
+          "command": "tellable",
+          "description": "To see the tellable actions of the composition",
+          "_": "§6================================",
+          "header": "Tellable actions:",
+          "full_list": "§7(Hidden composition — full list shown)",
+          "generic": "Generic actions:",
+          "none": "No tellable action"
         },
         "aura": {
           "command": "aura",
@@ -1935,9 +1996,8 @@
         "name": "Double Troll"
       },
       "lone_wolf": {
-        "name": "Lone Wolf",
-        "message": "You are becoming §0Solitary§f. From now on, you must earn §calone§f. For this, you get four additional permanent hearts (up to 15 hearts max)",
-        "timer": "Single Wolf trigger period (§b&timer&§f)"
+        "name": "Solo Werewolf",
+        "message": "You become §0Solo Werewolf§f. From now on, you must §cbetray your camp§f and win §calone§f. For this, you have §b14 permanent hearts§f."
       },
       "new_vote": {
         "name": "New Vote"
@@ -1958,8 +2018,6 @@
         "description": "The dead are announced in the morning"
       },
       "honor": {
-        "name": "Honor",
-        "description": "Enable Honor System",
         "list_near_player": "Players under §b80 blocks§f are: §b&list&",
         "spy_info": "A player got a info about your §brole§f"
       },
@@ -2004,15 +2062,14 @@
         "urn_voted_against": "You voted against §b&player&",
         "urn_voted_blank": "You cast a §fblank vote",
         "urn_vote_not_active": "No vote is currently running",
+        "burned_unusable": "This building is on fire and cannot be used",
         "urn_vote_begin": "§6Vote #&number&§f: ballot boxes are open, head to a vote office",
         "urn_vote_time": "§6Vote #&number&§f ballot is open! You have §b&timer&",
         "urn_vote_no_result": "Vote #&number& designated no one",
         "urn_vote_result": "§b&player&§f received the most votes: §b&number&",
         "urn_vote_result_role": "§b&player&§f received the most votes: §b&number&§f. They were a §c&role&",
-        "urn_vote_distance": "The voted player is §b&number&§f blocks away (±100)",
         "urn_vote_exposed_you": "§cYou have been exposed by the vote",
         "council_wait": "No one on the other plate. Please wait...",
-        "council_no_honor": "The Honor system is not active",
         "council_no_use_left": "You have used all your council consultations",
         "council_cooldown": "You must wait §b&timer&§r before consulting again",
         "council_partner_unavailable": "§b&player&§f cannot consult the council right now",

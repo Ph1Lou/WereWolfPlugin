@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequirePower;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -91,11 +93,9 @@ public class GrimyWereWolf extends RoleWereWolf implements IAffectedPlayers, IPo
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @RequireAbility
+    @RequirePower
     public void onSecondDeathEvent(SecondDeathEvent event) {
-
-        if (!hasPower()) return;
-
-        if (!isAbilityEnabled()) return;
 
         IPlayerWW victim = event.getPlayerWW();
 

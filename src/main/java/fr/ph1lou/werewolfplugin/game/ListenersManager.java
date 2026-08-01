@@ -3,33 +3,15 @@ package fr.ph1lou.werewolfplugin.game;
 import fr.ph1lou.werewolfapi.game.IListenersManager;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
-import fr.ph1lou.werewolfapi.lovers.ILover;
-import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfplugin.Register;
-import fr.ph1lou.werewolfplugin.listeners.ActionBarListener;
-import fr.ph1lou.werewolfplugin.listeners.BuildingListener;
-import fr.ph1lou.werewolfplugin.listeners.ChatListener;
-import fr.ph1lou.werewolfplugin.listeners.CycleListener;
-import fr.ph1lou.werewolfplugin.listeners.DamagesListener;
-import fr.ph1lou.werewolfplugin.listeners.DeathListener;
-import fr.ph1lou.werewolfplugin.listeners.DebugListener;
-import fr.ph1lou.werewolfplugin.listeners.EnchantmentListener;
-import fr.ph1lou.werewolfplugin.listeners.InvisibleListener;
-import fr.ph1lou.werewolfplugin.listeners.PatchPotions;
-import fr.ph1lou.werewolfplugin.listeners.PlayerListener;
-import fr.ph1lou.werewolfplugin.listeners.SmallFeaturesListener;
-import fr.ph1lou.werewolfplugin.listeners.TabManager;
-import fr.ph1lou.werewolfplugin.listeners.WerewolfListener;
+import fr.ph1lou.werewolfplugin.configs.Honor;
+import fr.ph1lou.werewolfplugin.listeners.*;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 public class ListenersManager implements IListenersManager {
@@ -59,6 +41,8 @@ public class ListenersManager implements IListenersManager {
         this.listeners.add(new InvisibleListener(this.game));
         this.listeners.add(new DebugListener(this.game));
         this.listeners.add(new BuildingListener(this.game));
+        this.listeners.add(new UrnVoteListener(this.game));
+        this.listeners.add(new Honor(this.game));
 
         VoteManager voteManager = new VoteManager(this.game);
         this.game.setVoteManager(voteManager);
@@ -89,33 +73,19 @@ public class ListenersManager implements IListenersManager {
 
     public void delete() {
 
-        for (Listener listener : this.listeners) {
-            HandlerList.unregisterAll(listener);
-        }
+        listeners.forEach(HandlerList::unregisterAll);
 
-        for (IPlayerWW playerWW1 : this.game.getPlayersWW()) {
-            HandlerList.unregisterAll(playerWW1.getRole());
-        }
+        game.getPlayersWW().forEach(player -> HandlerList.unregisterAll(player.getRole()));
 
-        for (ILover lover : this.game.getLoversManager().getLovers()) {
-            HandlerList.unregisterAll(lover);
-        }
+        game.getLoversManager().getLovers().forEach(HandlerList::unregisterAll);
 
-        for (Listener listener : this.listenersTimers.values()) {
-            HandlerList.unregisterAll(listener);
-        }
+        listenersTimers.values().forEach(HandlerList::unregisterAll);
 
-        for (Listener listener : this.listenersScenarios.values()) {
-            HandlerList.unregisterAll(listener);
-        }
+        listenersScenarios.values().forEach(HandlerList::unregisterAll);
 
-        for (Listener listener : this.listenersConfigurations.values()) {
-            HandlerList.unregisterAll(listener);
-        }
+        listenersConfigurations.values().forEach(HandlerList::unregisterAll);
 
-        for (Listener listener : this.listenersRandomEvents.values()) {
-            HandlerList.unregisterAll(listener);
-        }
+        listenersRandomEvents.values().forEach(HandlerList::unregisterAll);
     }
 
 

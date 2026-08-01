@@ -1,5 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
+import fr.ph1lou.werewolfapi.annotations.RequirePower;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -112,9 +115,9 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
     }
 
     @EventHandler
+    @RequireAlive
     public void onLoverReveal(RevealLoversEvent event) {
 
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
         if (event.getLovers().isEmpty()) return;
 
         List<ILover> loverAPIs = event.getLovers().stream()
@@ -146,10 +149,10 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
+    @RequireAlive
+    @RequirePower
     public void onLoverKilled(FinalDeathEvent event) {
 
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-        if (!power) return;
         if (lover == null) return;
         if (!lover.getLovers().contains(event.getPlayerWW())) return;
 
@@ -385,10 +388,10 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
     }
 
     @EventHandler
+    @RequireAbility
     public void onDamage(EntityDamageByEntityEvent event) {
 
         if (!guessed) return;
-        if (!this.isAbilityEnabled()) return;
         if (!(event.getEntity() instanceof Player)) return;
         if (!event.getEntity().getUniqueId().equals(this.getPlayerUUID())) return;
         if (!(event.getDamager() instanceof Player)) return;
@@ -408,11 +411,11 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onActionBarRequest(ActionBarEvent event) {
 
         if (!getPlayerUUID().equals(event.getPlayerUUID())) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-        if (!isAbilityEnabled()) return;
 
         Player player = Bukkit.getPlayer(event.getPlayerUUID());
         if (player == null) return;

@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -43,10 +44,8 @@ public class Occultist extends Villager {
     }
 
     @EventHandler
+    @RequireAbility
     public void onFinalDeath(FinalDeathEvent event) {
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
         if (event.getPlayerWW().getUUID().equals(this.getPlayerUUID())) {
             this.getPlayerWW().getWish().ifPresent(wish ->
                     Bukkit.broadcastMessage(game.translate(Prefix.ORANGE, "werewolf.roles.occultist.self_death",
@@ -92,10 +91,8 @@ public class Occultist extends Villager {
     }
 
     @EventHandler
+    @RequireAbility
     public void onWishChangeEvent(WishChangeEvent event) {
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
         if (event.getPlayerWW().getRole().getKey().equals(RoleBase.TROUBLEMAKER)) {
             if (!this.troublemakers.contains(event.getPlayerWW())) {
                 this.troublemakers.add(event.getPlayerWW());

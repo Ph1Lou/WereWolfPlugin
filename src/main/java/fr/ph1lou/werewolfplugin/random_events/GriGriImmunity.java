@@ -5,20 +5,20 @@ import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.buildings.IBuildingsManager;
+import fr.ph1lou.werewolfapi.buildings.IVoteOffice;
 import fr.ph1lou.werewolfapi.events.buildings.UrnVoteResultEvent;
 import fr.ph1lou.werewolfapi.events.random_events.GriGriSpawnEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfplugin.buildings.BuildingsManager;
-import fr.ph1lou.werewolfplugin.buildings.VoteOffice;
 import fr.ph1lou.werewolfplugin.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Chest;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -91,11 +91,11 @@ public class GriGriImmunity extends ListenerWerewolf {
         WereWolfAPI game = this.getGame();
         if (!(game instanceof GameManager)) return;
 
-        BuildingsManager bm = ((GameManager) game).getBuildingsManager();
-        List<VoteOffice> offices = bm.getVoteOffices();
+        IBuildingsManager bm = game.getBuildingsManager();
+        List<? extends IVoteOffice> offices = bm.getVoteOffices();
         if (offices.isEmpty()) return;
 
-        VoteOffice office = offices.get(game.getRandom().nextInt(offices.size()));
+        IVoteOffice office = offices.get(game.getRandom().nextInt(offices.size()));
         Location chestLoc = office.getChestLocation();
         if (chestLoc == null) return;
 

@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -58,12 +60,9 @@ public class AvengerWereWolf extends RoleWereWolf implements IAffectedPlayers {
 
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onFinalDeath(FinalDeathEvent event) {
-
-        if (!isAbilityEnabled()) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         if (!this.affectedPlayers.contains(event.getPlayerWW())) {
             return;

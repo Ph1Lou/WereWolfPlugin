@@ -1,5 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
+import fr.ph1lou.werewolfapi.annotations.RequirePower;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -159,21 +162,12 @@ public class Interpreter extends RoleImpl implements IPower {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
+    @RequireAbility
+    @RequireAlive
+    @RequirePower
     public void onDay(DayEvent event) {
 
         if (!this.getPlayerWW().getRole().equals(this)) {
-            return;
-        }
-
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
-        if (!this.hasPower()) {
             return;
         }
 

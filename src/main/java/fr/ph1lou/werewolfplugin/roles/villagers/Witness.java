@@ -1,5 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequirePower;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -113,9 +115,9 @@ public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
     }
 
     @EventHandler
+    @RequireAbility
     public void onFinalDeathEvent(FinalDeathEvent event) {
 
-        if (!isAbilityEnabled()) return;
         IPlayerWW playerWW = event.getPlayerWW();
 
         if (!getAffectedPlayers().contains(playerWW)) return;
@@ -160,12 +162,11 @@ public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    @RequirePower
     public void onSwap(SwapEvent event) {
         if (getPlayerWW().isState(StatePlayer.DEATH)) return;
 
         if (event.isCancelled()) return;
-
-        if (!power) return;
 
         if (affectedPlayer.isEmpty()) return;
 
@@ -187,8 +188,8 @@ public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
     }
 
     @EventHandler
+    @RequirePower
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
-        if (!hasPower()) return;
 
         if (!(event.getEntity() instanceof Player)) return;
 

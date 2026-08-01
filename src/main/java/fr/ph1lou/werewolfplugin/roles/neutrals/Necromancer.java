@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -73,15 +75,9 @@ public class Necromancer extends RoleNeutral implements IProgress, IAffectedPlay
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @RequireAbility
+    @RequireAlive
     public void OnFirstDeath(SecondDeathEvent event) {
-
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         if (this.playerWW != null) {
             return;
@@ -125,13 +121,10 @@ public class Necromancer extends RoleNeutral implements IProgress, IAffectedPlay
     }
 
     @EventHandler
+    @RequireAlive
     public void onDeadAliveDeath(FinalDeathEvent event) {
 
         if (!event.getPlayerWW().equals(this.playerWW)) {
-            return;
-        }
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 

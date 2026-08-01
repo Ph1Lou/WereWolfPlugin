@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.enums.Aura;
@@ -52,15 +54,9 @@ public class NaughtyLittleWolf extends RoleWereWolf {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
+    @RequireAbility
+    @RequireAlive
     public void onNight(NightEvent event) {
-
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
-        if (!isAbilityEnabled()) {
-            return;
-        }
 
         this.getPlayerWW().addPotionModifier(PotionModifier.add(UniversalPotionEffectType.SPEED, this.getKey()));
     }

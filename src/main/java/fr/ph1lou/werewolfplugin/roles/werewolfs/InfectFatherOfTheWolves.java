@@ -3,15 +3,19 @@ package fr.ph1lou.werewolfplugin.roles.werewolfs;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
+import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.enums.Aura;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
+import fr.ph1lou.werewolfapi.enums.*;
+import fr.ph1lou.werewolfapi.events.UpdateNameTagEvent;
+import fr.ph1lou.werewolfapi.events.UpdatePlayerNameTagEvent;
 import fr.ph1lou.werewolfapi.events.game.life_cycle.SecondDeathEvent;
+import fr.ph1lou.werewolfapi.events.roles.infect_father_of_the_wolves.CorruptionCompleteEvent;
 import fr.ph1lou.werewolfapi.events.roles.infect_father_of_the_wolves.InfectionEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
@@ -29,31 +33,30 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Role(key = RoleBase.INFECT, defaultAura = Aura.DARK, category = Category.WEREWOLF,
         attribute = RoleAttribute.WEREWOLF,
         weight = 1.5f,
-        configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.INFECT_AUTO_RESURRECTION)))
+        configurations = @Configuration(config = @ConfigurationBasic(key = ConfigBase.INFECT_AUTO_RESURRECTION)),
+        configValues = @IntValue(key = IntValueBase.INFECT_CORRUPTION_TIME,
+                defaultValue = 500,
+                meetUpValue = 500,
+                step = 10,
+                item = UniversalMaterial.CLOCK))
 public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPlayers, IPower {
 
     private static final double CORRUPTION_DISTANCE = 20d;
-    private static final double INFECT_CORRUPTION_RATE = 1.0 / 5;
-    private static final double WOLF_CORRUPTION_RATE = 1.0 / 20;
     private static final double CORRUPTION_THRESHOLD = 100.0;
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private final Map<UUID, Double> corruption = new HashMap<>();
+    private final Map<UUID, Integer> lastDisplayed = new HashMap<>();
     private boolean power = true;
 
     public InfectFatherOfTheWolves(WereWolfAPI api,
-                                    IPlayerWW playerWW) {
+                                   IPlayerWW playerWW) {
         super(api, playerWW);
     }
 
@@ -105,13 +108,17 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
         IPlayerWW self = this.getPlayerWW();
         Location selfLoc = self.getLocation();
 
+        int corruptionTime = Math.max(1, game.getConfig().getValue(IntValueBase.INFECT_CORRUPTION_TIME));
+        double infectRate = CORRUPTION_THRESHOLD / corruptionTime;
+        double wolfRate = infectRate / 4.0;
+
         List<IPlayerWW> wolves = game.getAlivePlayersWW().stream()
                 .filter(p -> !p.equals(self))
                 .filter(p -> p.getRole().isWereWolf())
                 .collect(Collectors.toList());
 
         for (IPlayerWW p : game.getAlivePlayersWW()) {
-            if (p.equals(self) || p.getRole().isWereWolf()) {
+            if (p.equals(self)) {
                 continue;
             }
 
@@ -119,28 +126,80 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
             Location pLoc = p.getLocation();
 
             if (pLoc.getWorld() == selfLoc.getWorld() && pLoc.distance(selfLoc) < CORRUPTION_DISTANCE) {
-                rate += INFECT_CORRUPTION_RATE;
+                rate += infectRate;
             }
 
             for (IPlayerWW wolf : wolves) {
+                if (wolf.equals(p)) continue;
                 Location wolfLoc = wolf.getLocation();
                 if (pLoc.getWorld() == wolfLoc.getWorld() && pLoc.distance(wolfLoc) < CORRUPTION_DISTANCE) {
-                    rate += WOLF_CORRUPTION_RATE;
+                    rate += wolfRate;
                 }
             }
 
             if (rate > 0) {
-                double current = Math.min(this.corruption.getOrDefault(p.getUUID(), 0.0) + rate, CORRUPTION_THRESHOLD);
+                double previous = this.corruption.getOrDefault(p.getUUID(), 0.0);
+                double current = Math.min(previous + rate, CORRUPTION_THRESHOLD);
                 this.corruption.put(p.getUUID(), current);
+
+                if (hasPower() && previous < CORRUPTION_THRESHOLD && current >= CORRUPTION_THRESHOLD) {
+                    Bukkit.getPluginManager().callEvent(new CorruptionCompleteEvent(this.getPlayerWW(), p));
+                }
             }
         }
+
+        Set<IPlayerWW> toRefresh = new HashSet<>();
+        for (Map.Entry<UUID, Double> e : this.corruption.entrySet()) {
+            int pct = (int) Math.min(100, Math.floor(e.getValue()));
+            Integer last = this.lastDisplayed.get(e.getKey());
+            if (last == null || last != pct) {
+                this.lastDisplayed.put(e.getKey(), pct);
+                IPlayerWW target = game.getPlayerWW(e.getKey()).orElse(null);
+                if (target != null && target.isState(StatePlayer.ALIVE)) {
+                    toRefresh.add(target);
+                }
+            }
+        }
+        toRefresh.forEach(target -> Bukkit.getPluginManager().callEvent(new UpdateNameTagEvent(target)));
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    @RequireAbility
+    @RequireAlive
+    public void onUpdatePlayerNameTag(UpdatePlayerNameTagEvent event) {
+
+        if (!event.getTargetUUID().equals(this.getPlayerUUID())) return;
+
+        IPlayerWW viewed = game.getPlayerWW(event.getPlayerUUID()).orElse(null);
+        if (viewed == null || viewed.equals(this.getPlayerWW())) return;
+        if (!viewed.isState(StatePlayer.ALIVE)) return;
+
+        int pct = (int) Math.min(100, Math.floor(this.corruption.getOrDefault(viewed.getUUID(), 0.0)));
+        if (pct <= 0) return;
+
+        String color = pct >= 100 ? "§c" : pct >= 50 ? "§e" : "§a";
+        event.setSuffix(event.getSuffix() + " " + color + pct + "%");
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    @RequireAbility
+    @RequireAlive
+    public void onCorruptionComplete(CorruptionCompleteEvent event) {
+
+        if (!event.getPlayerWW().equals(this.getPlayerWW())) return;
+        if (event.isCancelled()) return;
+
+        getPlayerWW().sendMessageWithKey(Prefix.YELLOW,
+                "werewolf.roles.infect_father_of_the_wolves.corruption_complete",
+                Formatter.player(event.getTargetWW().getName()));
     }
 
     @Override
     public @NotNull String getDescription() {
 
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.roles.infect_father_of_the_wolves.description"))
+                .setDescription(game.translate("werewolf.roles.infect_father_of_the_wolves.description",
+                        Formatter.number(game.getConfig().getValue(IntValueBase.INFECT_CORRUPTION_TIME))))
                 .setEffects(game.translate("werewolf.description.werewolf"))
                 .setPower(game.translate(power ? "werewolf.roles.infect_father_of_the_wolves.power_available" : "werewolf.roles.infect_father_of_the_wolves.power_not_available"))
                 .setItems(game.translate("werewolf.roles.infect_father_of_the_wolves.items"))
@@ -156,12 +215,15 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onSecondDeathEvent(SecondDeathEvent event) {
 
-        if (!hasPower()) return;
-
-        if (!isAbilityEnabled()) return;
-
         IPlayerWW playerWW = event.getPlayerWW();
 
+        if (!hasPower()) {
+            return;
+        }
+
+        if (!isAbilityEnabled()) {
+            return;
+        }
 
         Optional<IPlayerWW> killerWW = playerWW.getLastKiller();
 
@@ -179,9 +241,15 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
             return;
         }
 
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
+        if (!getPlayerWW().isState(StatePlayer.ALIVE)) {
+            return;
+        }
 
-        if (!this.isCorrupted(playerWW.getUUID())) return;
+        if (!this.isCorrupted(playerWW.getUUID())) {
+            double cur = this.corruption.getOrDefault(playerWW.getUUID(), 0.0);
+            return;
+        }
+
 
         TextComponent infectMessage = VersionUtils.getVersionUtils().createClickableText(
                 game.translate(
@@ -191,7 +259,7 @@ public class InfectFatherOfTheWolves extends RoleWereWolf implements IAffectedPl
                         game.translate("werewolf.roles.infect_father_of_the_wolves.command"),
                         playerWW.getUUID()),
                 ClickEvent.Action.RUN_COMMAND
-                );
+        );
 
         getPlayerWW().sendMessage(infectMessage);
     }

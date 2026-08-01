@@ -2,6 +2,8 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
@@ -123,12 +125,9 @@ public class Twin extends RoleImpl {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onTwinDeath(FinalDeathEvent event) {
-
-        if (!isAbilityEnabled()) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         if (event.getPlayerWW().equals(this.getPlayerWW())) {
             return;
@@ -153,11 +152,11 @@ public class Twin extends RoleImpl {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onTwinRageDamage(EntityDamageByEntityEvent event) {
 
         if (!this.rageActive) return;
-        if (!isAbilityEnabled()) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (!(event.getEntity() instanceof Player)) return;
         if (!(event.getDamager() instanceof Player)) return;
@@ -171,11 +170,8 @@ public class Twin extends RoleImpl {
     }
 
     @EventHandler
+    @RequireAlive
     public void onNight(NightEvent event) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         if (this.twinList == null) {
             return;
@@ -249,10 +245,10 @@ public class Twin extends RoleImpl {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onGoldenAppleEat(PlayerItemConsumeEvent event) {
 
-        if (!isAbilityEnabled()) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
         if (this.twinList == null) return;
 
         if (!event.getPlayer().getUniqueId().equals(this.getPlayerUUID())) return;

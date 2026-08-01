@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -94,9 +95,9 @@ public class Imitator extends RoleNeutral implements IAffectedPlayers, IPower {
 
 
     @EventHandler
+    @RequireAbility
     private void onPlayerDeath(PlayerDeathEvent event) {
 
-        if (!isAbilityEnabled()) return;
         if (event.getEntity().getKiller() == null) return;
         Player killer = event.getEntity().getKiller();
 

@@ -1,6 +1,9 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
+import fr.ph1lou.werewolfapi.annotations.RequirePower;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -67,19 +70,10 @@ public class Servitor extends RoleImpl implements IPower {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
+    @RequirePower
     public void onDay(DayEvent event) {
-
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
-
-        if (!this.hasPower()) {
-            return;
-        }
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         ServitorMasterChosenEvent event1 = new ServitorMasterChosenEvent(getPlayerWW(), Utils.autoSelect(game, getPlayerWW()));
         Bukkit.getPluginManager().callEvent(event1);
@@ -96,15 +90,9 @@ public class Servitor extends RoleImpl implements IPower {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @RequireAbility
+    @RequirePower
     public void onSecondDeathEvent(SecondDeathEvent event) {
-
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
-
-        if (!hasPower()) return;
-
-        if (!isAbilityEnabled()) return;
 
         if (master == null) return;
 

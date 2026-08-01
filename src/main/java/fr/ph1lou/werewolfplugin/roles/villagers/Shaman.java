@@ -1,5 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -51,13 +53,9 @@ public class Shaman extends RoleImpl implements IAffectedPlayers {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onFirstDeathEvent(FinalDeathEvent event) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
-
-        if (!isAbilityEnabled()) return;
 
         IPlayerWW playerWW = event.getPlayerWW();
 
@@ -82,13 +80,12 @@ public class Shaman extends RoleImpl implements IAffectedPlayers {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @RequireAbility
     public void onAnnounceDeath(AnnouncementDeathEvent event) {
 
         if (!event.getTargetPlayer().equals(getPlayerWW())) {
             return;
         }
-
-        if (!isAbilityEnabled()) return;
 
         event.setFormat("werewolf.announcement.death_message_with_role");
         event.setRole(event.getPlayerWW().getRole().getKey());

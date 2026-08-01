@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration(config = @ConfigurationBasic(key = ConfigBase.HIDDEN_ROLES,
-        loreKey = "werewolf.configurations.hidden_roles.description", incompatibleConfigs = ConfigBase.HONOR))
+        loreKey = "werewolf.configurations.hidden_roles.description"))
 public class HiddenRoles extends ListenerWerewolf {
 
     @Nullable

@@ -2,6 +2,8 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -178,7 +180,7 @@ public class Pyromane extends RoleNeutral implements IPower {
         this.burnedBuilding = building;
         this.burnPending = true;
 
-        int delay = 3 * 60 + game.getRandom().nextInt(3 * 60);
+        int delay = 3 * 60 + game.getRandom().nextInt(2 * 60);
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.pyromane.burn_pending",
                 Formatter.player(this.getPlayerWW().getName()));
 
@@ -193,11 +195,16 @@ public class Pyromane extends RoleNeutral implements IPower {
                 this.burnedBuilding.getBaseX(), this.burnedBuilding.getBaseY(), this.burnedBuilding.getBaseZ());
         this.fireEndTimer = game.getTimer() + FIRE_DURATION;
 
+        ((fr.ph1lou.werewolfplugin.buildings.BuildingsManager) game.getBuildingsManager())
+                .setDisabled(this.burnedBuilding, true);
+
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.pyromane.burn_start");
     }
 
     private void endFire() {
         this.burnActive = false;
+        ((fr.ph1lou.werewolfplugin.buildings.BuildingsManager) game.getBuildingsManager())
+                .setDisabled(this.burnedBuilding, false);
         if (this.burnedBuilding instanceof IVoteOffice) {
             IVoteOffice office = (IVoteOffice) this.burnedBuilding;
             int newCap = office.getCapacity() / 2;
@@ -211,55 +218,75 @@ public class Pyromane extends RoleNeutral implements IPower {
     private void spawnFireParticles() {
         if (this.fireLocation == null) return;
         org.bukkit.World w = this.fireLocation.getWorld();
+        if (w == null) return;
+        double cx = this.fireLocation.getX();
+        double cy = this.fireLocation.getY();
+        double cz = this.fireLocation.getZ();
+        Location base = new Location(w, cx, cy, cz);
+        double t = game.getTimer();
+
         for (Player online : Bukkit.getOnlinePlayers()) {
             if (online.getLocation().getWorld() != w) continue;
             try {
-                if (online.getLocation().distance(this.fireLocation) > 32) continue;
+                if (online.getLocation().distance(this.fireLocation) > 48) continue;
             } catch (Throwable ignored) {
                 continue;
             }
-            for (int i = 0; i < 12; i++) {
-                double angle = (Math.PI * 2 * i) / 12;
-                double rx = this.fireLocation.getX() + Math.cos(angle) * 4.5;
-                double rz = this.fireLocation.getZ() + Math.sin(angle) * 4.5;
-                Location loc = new Location(w, rx, this.fireLocation.getY() + 1.2, rz);
-                online.spawnParticle(org.bukkit.Particle.FLAME, loc, 2);
+
+            online.spawnParticle(org.bukkit.Particle.FLAME, base.clone().add(0, 1.5, 0), 60, 5.0, 3.0, 5.0, 0.02);
+            online.spawnParticle(org.bukkit.Particle.FLAME, base.clone().add(0, 3.0, 0), 40, 3.5, 2.0, 3.5, 0.01);
+
+            double[] radii = {2.0, 4.0, 6.0};
+            for (int r = 0; r < radii.length; r++) {
+                double radius = radii[r];
+                int count = 20;
+                for (int i = 0; i < count; i++) {
+                    double angle = (Math.PI * 2 * i) / count + t * 0.15 * (r + 1);
+                    Location loc = new Location(w, cx + Math.cos(angle) * radius, cy + 0.8 + r * 0.6, cz + Math.sin(angle) * radius);
+                    online.spawnParticle(org.bukkit.Particle.FLAME, loc, 2, 0.15, 0.15, 0.15, 0.01);
+                }
             }
-            online.spawnParticle(org.bukkit.Particle.LAVA, this.fireLocation.clone().add(0, 1, 0), 2);
+
+            online.spawnParticle(org.bukkit.Particle.LAVA, base, 8, 4.0, 0.8, 4.0);
+            online.spawnParticle(org.bukkit.Particle.LAVA, base.clone().add(0, 1.5, 0), 5, 2.5, 0.5, 2.5);
         }
     }
 
     @Override
     public void second() {
-        if (!isAbilityEnabled()) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (this.burnActive && this.fireLocation != null) {
             if (game.getTimer() >= this.fireEndTimer) {
                 endFire();
-            } else {
-                spawnFireParticles();
-                for (IPlayerWW p : game.getAlivePlayersWW()) {
-                    if (p.equals(this.getPlayerWW())) continue;
-                    if (this.coveredPlayers.contains(p.getUUID())) continue;
-                    Location pl = p.getLocation();
-                    if (pl.getWorld() != this.fireLocation.getWorld()) continue;
-                    if (pl.distance(this.fireLocation) <= FIRE_PROXIMITY) {
-                        this.coveredPlayers.add(p.getUUID());
-                        p.sendMessageWithKey(Prefix.RED, "werewolf.roles.pyromane.covered_by_fire");
-                        this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
-                                "werewolf.roles.pyromane.fire_covered",
-                                Formatter.player(p.getName()));
-                    }
+                return;
+            }
+        }
+
+        if (!isAbilityEnabled()) return;
+        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
+
+        if (this.burnActive && this.fireLocation != null) {
+            spawnFireParticles();
+            for (IPlayerWW p : game.getAlivePlayersWW()) {
+                if (p.equals(this.getPlayerWW())) continue;
+                if (this.coveredPlayers.contains(p.getUUID())) continue;
+                Location pl = p.getLocation();
+                if (pl.getWorld() != this.fireLocation.getWorld()) continue;
+                if (pl.distance(this.fireLocation) <= FIRE_PROXIMITY) {
+                    this.coveredPlayers.add(p.getUUID());
+                    p.sendMessageWithKey(Prefix.RED, "werewolf.roles.pyromane.covered_by_fire");
+                    this.getPlayerWW().sendMessageWithKey(Prefix.GREEN,
+                            "werewolf.roles.pyromane.fire_covered",
+                            Formatter.player(p.getName()));
                 }
             }
         }
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onDay(DayEvent event) {
-        if (!isAbilityEnabled()) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
         if (game.getConfig().isConfigActive("werewolf.roles.pyromane.configurations.pyromane_every_other_day")
                 && event.getNumber() == dayNumber + 1) {
             return;

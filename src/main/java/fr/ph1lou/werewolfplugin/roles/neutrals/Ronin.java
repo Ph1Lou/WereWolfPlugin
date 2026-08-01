@@ -2,6 +2,8 @@ package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.Configuration;
 import fr.ph1lou.werewolfapi.annotations.ConfigurationBasic;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -206,9 +208,9 @@ public class Ronin extends RoleNeutral implements IPower {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onDay(DayEvent event) {
-        if (!isAbilityEnabled()) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
         if (game.getConfig().isConfigActive("werewolf.roles.ronin.configurations.ronin_every_other_day")
                 && event.getNumber() == dayNumber + 1) {
             return;
@@ -453,9 +455,9 @@ public class Ronin extends RoleNeutral implements IPower {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    @RequireAlive
     public void onActionBar(ActionBarEvent event) {
         if (!this.getPlayerWW().getUUID().equals(event.getPlayerUUID())) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
         event.getActionBar().insert(0, game.translate("werewolf.roles.ronin.actionbar",
                 Formatter.number(this.roninHonor),
                 Formatter.format("&number1&", this.highestHonor)) + " ");

@@ -129,41 +129,11 @@ werewolf.roles.mischievous_werewolf.display:
     ==: org.bukkit.inventory.ItemStack
     type: TNT
     amount: 5
-werewolf.roles.witch.display:
-  0:
-    potion_data: 16389
-    item:
-      ==: org.bukkit.inventory.ItemStack
-      type: POTION
-  1:
-    potion_data: 16385
-    item:
-      ==: org.bukkit.inventory.ItemStack
-      type: POTION
-  2:
-    potion_data: 16393
-    item:
-      ==: org.bukkit.inventory.ItemStack
-      type: POTION
-  3:
-    potion_data: 16460
-    item:
-      ==: org.bukkit.inventory.ItemStack
-      type: POTION
-      amount: 2
 werewolf.roles.little_girl.display:
   0:
     ==: org.bukkit.inventory.ItemStack
     type: TNT
     amount: 3
-werewolf.roles.protector.display:
-  0:
-    potion_data: 16389
-    item:
-      ==: org.bukkit.inventory.ItemStack
-      type: POTION
-      amount: 3
-
 werewolf.roles.assassin.display:
   0:
     ==: org.bukkit.inventory.ItemStack
@@ -226,22 +196,8 @@ werewolf.roles.benefactor.display:
       stored-enchants:
         PROTECTION_ENVIRONMENTAL: 2
 
-werewolf.roles.infect_father_of_the_wolves.display:
-  0:
-    potion_data: 16453
-    item:
-      ==: org.bukkit.inventory.ItemStack
-      type: POTION
-      amount: 2
-
 werewolf.roles.rival.display:
   0:
-    potion_data: 16460
-    item:
-      ==: org.bukkit.inventory.ItemStack
-      type: POTION
-      amount: 2
-  1:
     ==: org.bukkit.inventory.ItemStack
     type: ENCHANTED_BOOK
     meta:
@@ -250,7 +206,7 @@ werewolf.roles.rival.display:
       stored-enchants:
         ARROW_KNOCKBACK: 1
         ARROW_DAMAGE: 2
-  2:
+  1:
     ==: org.bukkit.inventory.ItemStack
     type: ARROW
     amount: 64

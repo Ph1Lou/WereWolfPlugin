@@ -2,6 +2,7 @@ package fr.ph1lou.werewolfplugin.buildings;
 
 import fr.ph1lou.werewolfapi.buildings.BuildingType;
 import fr.ph1lou.werewolfapi.buildings.IVoteOffice;
+import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -9,7 +10,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 public class VoteOffice extends Building implements IVoteOffice {
 
@@ -18,9 +18,9 @@ public class VoteOffice extends Building implements IVoteOffice {
     private final int baseCapacity;
     private int capacity;
     private int votesCast;
-    private final Map<UUID, Integer> votesAgainst = new HashMap<>();
+    private final Map<IPlayerWW, Integer> votesAgainst = new HashMap<>();
     private int blankVotes;
-    private final Set<UUID> blankVoters = new HashSet<>();
+    private final Set<IPlayerWW> blankVoters = new HashSet<>();
 
     public VoteOffice(World world, int baseX, int baseY, int baseZ, Location bannerLocation, Location urnLocation, Location chestLocation, int capacity) {
         super(BuildingType.VOTE_OFFICE, world, baseX, baseY, baseZ, bannerLocation);
@@ -30,34 +30,42 @@ public class VoteOffice extends Building implements IVoteOffice {
         this.capacity = capacity;
     }
 
+    @Override
     public Location getUrnLocation() {
         return urnLocation;
     }
 
+    @Override
     public Location getChestLocation() {
         return chestLocation;
     }
 
+    @Override
     public int getBaseCapacity() {
         return baseCapacity;
     }
 
+    @Override
     public int getCapacity() {
         return capacity;
     }
 
+    @Override
     public int getVotesCast() {
         return votesCast;
     }
 
+    @Override
     public int getRemaining() {
         return Math.max(0, capacity - votesCast);
     }
 
+    @Override
     public boolean isFull() {
         return votesCast >= capacity;
     }
 
+    @Override
     public void reduceCapacity(int amount) {
         this.capacity = Math.max(1, this.capacity - amount);
         if (this.votesCast > this.capacity) {
@@ -65,36 +73,38 @@ public class VoteOffice extends Building implements IVoteOffice {
         }
     }
 
+    @Override
     public void resetSession() {
         this.votesCast = 0;
         this.votesAgainst.clear();
         this.blankVoters.clear();
     }
 
-    public boolean hasBlankVoted(UUID player) {
+    @Override
+    public boolean hasBlankVoted(IPlayerWW player) {
         return blankVoters.contains(player);
     }
 
-    public void recordVoteAgainst(UUID target) {
+    @Override
+    public void recordVoteAgainst(IPlayerWW target) {
         votesAgainst.merge(target, 1, Integer::sum);
         votesCast++;
     }
 
-    public void recordBlank(UUID player) {
+    @Override
+    public void recordBlank(IPlayerWW player) {
         blankVotes++;
         blankVoters.add(player);
         votesCast++;
     }
 
-    public Map<UUID, Integer> getVotesAgainst() {
+    @Override
+    public Map<IPlayerWW, Integer> getVotesAgainst() {
         return votesAgainst;
     }
 
+    @Override
     public int getBlankVotes() {
         return blankVotes;
-    }
-
-    public Set<UUID> getBlankVoters() {
-        return blankVoters;
     }
 }

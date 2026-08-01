@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.neutrals;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
@@ -143,12 +145,9 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
 
 
     @EventHandler
+    @RequireAbility
     public void onNight(NightEvent event) {
 
-
-        if (!this.isAbilityEnabled()) {
-            return;
-        }
 
         List<IPlayerWW> playerWWList = Bukkit.getOnlinePlayers()
                 .stream()
@@ -185,13 +184,10 @@ public class WillOTheWisp extends RoleNeutral implements IInvisible, ILimitedUse
     }
 
     @EventHandler
+    @RequireAlive
     public void onInteraction(EntityDamageByEntityEvent event) {
 
         if (!event.getDamager().getUniqueId().equals(this.getPlayerUUID())) {
-            return;
-        }
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
             return;
         }
 

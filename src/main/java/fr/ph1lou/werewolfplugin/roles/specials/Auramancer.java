@@ -1,6 +1,8 @@
 package fr.ph1lou.werewolfplugin.roles.specials;
 
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
@@ -158,11 +160,9 @@ public class Auramancer extends RoleImpl {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onFirstDeathEvent(FirstDeathEvent event) {
-
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
-
-        if (!isAbilityEnabled()) return;
 
         IPlayerWW playerWW = event.getPlayerWW();
         playerWW.getLastKiller().ifPresent(killerWW -> {
@@ -255,9 +255,8 @@ public class Auramancer extends RoleImpl {
     }
 
     @EventHandler
+    @RequireAlive
     public void onFinalDeath(FinalDeathEvent event) {
-
-        if (!getPlayerWW().isState(StatePlayer.ALIVE)) return;
 
         if (auraLocked) return;
 

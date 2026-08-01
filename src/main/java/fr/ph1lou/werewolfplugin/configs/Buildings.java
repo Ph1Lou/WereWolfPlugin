@@ -46,6 +46,6 @@ public class Buildings extends ListenerWerewolf {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onRepartition(RepartitionEvent event) {
-        ((GameManager) getGame()).getBuildingsManager().init();
+        ((GameManager) getGame()).getBuildingsManager().generate();
     }
 }

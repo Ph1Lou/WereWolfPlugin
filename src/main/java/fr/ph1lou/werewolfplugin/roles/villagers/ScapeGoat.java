@@ -1,5 +1,6 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -56,11 +57,8 @@ public class ScapeGoat extends RoleImpl implements IPower, IAffectedPlayers {
     }
 
     @EventHandler
+    @RequireAlive
     public void onMultiVoteResultEvent(MultiVoteResultEvent multiVoteResultEvent) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         this.setPower(true);
 
@@ -93,11 +91,8 @@ public class ScapeGoat extends RoleImpl implements IPower, IAffectedPlayers {
 
 
     @EventHandler(ignoreCancelled = true)
+    @RequireAlive
     public void onVoteResultEvent(VoteResultEvent voteResultEvent) {
-
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) {
-            return;
-        }
 
         if (this.hasPower()) {
             return;

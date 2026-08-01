@@ -1,7 +1,6 @@
 package fr.ph1lou.werewolfplugin.commands.admin.ingame;
 
 import fr.ph1lou.werewolfapi.annotations.AdminCommand;
-import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.LoverBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
@@ -170,8 +169,6 @@ public class CommandAdminRole implements ICommand {
                     Formatter.player(sb.toString())));
         }
 
-        if (game.getConfig().isConfigActive(ConfigBase.HONOR)) {
-            player.sendMessage(game.translate("werewolf.commands.admin.role.honor", Formatter.number(targetWW.getHonor())));
-        }
+        player.sendMessage(game.translate("werewolf.commands.admin.role.honor", Formatter.number(targetWW.getHonor())));
     }
 }

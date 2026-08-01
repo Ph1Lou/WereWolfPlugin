@@ -3,51 +3,33 @@ package fr.ph1lou.werewolfplugin.buildings;
 import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.buildings.BuildingDefinition;
-import fr.ph1lou.werewolfapi.buildings.BuildingType;
-import fr.ph1lou.werewolfapi.buildings.IBuildingsManager;
-import fr.ph1lou.werewolfapi.buildings.StructurePaster;
+import fr.ph1lou.werewolfapi.buildings.*;
 import fr.ph1lou.werewolfapi.enums.Camp;
 import fr.ph1lou.werewolfapi.enums.StateGame;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.UniversalPotionEffectType;
 import fr.ph1lou.werewolfapi.events.buildings.SanctuaryVisitEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
-import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class BuildingsManager implements IBuildingsManager {
 
     public static final int COUNCIL_MAX_USES = 3;
     public static final int COUNCIL_COOLDOWN = 10 * 60;
     public static final int SANCTUARY_VISIT_SECONDS = 10;
-    public static final String SILENCE_KEY = "werewolf.urn_vote_silence";
     private BuildingDefinition placeholderDefinition;
 
     private final WereWolfAPI game;
     private final BuildingLoader loader = new BuildingLoader();
     private final StructurePaster paster = new StructurePaster();
-    private final List<VoteOffice> voteOffices = new ArrayList<>();
+    private final List<IVoteOffice> voteOffices = new ArrayList<>();
     private final List<CouncilChamber> councilChambers = new ArrayList<>();
     private final List<Sanctuary> sanctuaries = new ArrayList<>();
     private final List<Location> placedCenters = new ArrayList<>();
@@ -57,10 +39,10 @@ public class BuildingsManager implements IBuildingsManager {
     private final Map<UUID, Integer> councilUses = new HashMap<>();
     private final Map<UUID, Integer> councilLastUse = new HashMap<>();
     private final Set<String> activeCouncilPairs = new HashSet<>();
-    private final Set<UUID> honorDisabledNotified = new HashSet<>();
     private final Map<UUID, Map<Integer, Integer>> sanctuaryProgress = new HashMap<>();
     private final List<int[]> protectedBoxes = new ArrayList<>();
     private final List<PendingBuilding> pendingRealBuildings = new ArrayList<>();
+    private final Set<IBuilding> disabledBuildings = new HashSet<>();
     private int sanctuaryTaskId = -1;
     private int councilTaskId = -1;
 
@@ -80,7 +62,7 @@ public class BuildingsManager implements IBuildingsManager {
         return urnVoteManager;
     }
 
-    public List<VoteOffice> getVoteOffices() {
+    public List<IVoteOffice> getVoteOffices() {
         return voteOffices;
     }
 
@@ -90,6 +72,19 @@ public class BuildingsManager implements IBuildingsManager {
 
     public List<Sanctuary> getSanctuaries() {
         return sanctuaries;
+    }
+
+    public boolean isDisabled(IBuilding building) {
+        return building != null && this.disabledBuildings.contains(building);
+    }
+
+    public void setDisabled(IBuilding building, boolean disabled) {
+        if (building == null) return;
+        if (disabled) {
+            this.disabledBuildings.add(building);
+        } else {
+            this.disabledBuildings.remove(building);
+        }
     }
 
     public void generate() {
@@ -207,6 +202,10 @@ public class BuildingsManager implements IBuildingsManager {
             for (int i = 0; i < sanctuaries.size(); i++) {
                 Sanctuary sanctuary = sanctuaries.get(i);
 
+                if (isDisabled(sanctuary)) {
+                    continue;
+                }
+
                 if (sanctuary.hasVisited(uuid)) {
                     continue;
                 }
@@ -263,14 +262,17 @@ public class BuildingsManager implements IBuildingsManager {
     private void applySanctuaryReward(IPlayerWW playerWW) {
         playerWW.getRole().enableAbilities();
 
-        Camp camp = playerWW.getRole().getCamp();
-        if (camp == Camp.VILLAGER) {
+        int oldHonor = playerWW.getHonor();
+
+        if (playerWW.getRole().isCamp(Camp.VILLAGER)) {
             playerWW.modifyHonor(1);
+        } else {
+            playerWW.modifyHonorAwayFromZero();
         }
 
         playerWW.sendMessageWithKey(fr.ph1lou.werewolfapi.basekeys.Prefix.GREEN,
                 "werewolf.configurations.buildings.sanctuary_reward",
-                Formatter.number(camp == Camp.VILLAGER ? 1 : 0));
+                Formatter.number(playerWW.getHonor() - oldHonor));
     }
 
     public boolean canConsult(UUID player) {
@@ -312,27 +314,11 @@ public class BuildingsManager implements IBuildingsManager {
         if (councilChambers.isEmpty() || !game.isState(StateGame.GAME)) {
             return;
         }
-        if (!game.getConfig().isConfigActive(ConfigBase.HONOR)) {
-            Set<UUID> onPlates = new HashSet<>();
-            for (CouncilChamber chamber : councilChambers) {
-                Player p1 = findPlayerOn(chamber.getPlate1());
-                Player p2 = findPlayerOn(chamber.getPlate2());
-                if (p1 != null) onPlates.add(p1.getUniqueId());
-                if (p2 != null) onPlates.add(p2.getUniqueId());
-            }
-            for (UUID uuid : onPlates) {
-                if (honorDisabledNotified.add(uuid)) {
-                    game.getPlayerWW(uuid).ifPresent(w ->
-                            w.sendMessageWithKey(Prefix.RED,
-                                    "werewolf.configurations.buildings.council_no_honor"));
-                }
-            }
-            honorDisabledNotified.retainAll(onPlates);
-            return;
-        }
-        honorDisabledNotified.clear();
         Set<String> currentPairs = new HashSet<>();
         for (CouncilChamber chamber : councilChambers) {
+            if (isDisabled(chamber)) {
+                continue;
+            }
             Player p1 = findPlayerOn(chamber.getPlate1());
             Player p2 = findPlayerOn(chamber.getPlate2());
             if (p1 == null || p2 == null || p1.getUniqueId().equals(p2.getUniqueId())) {
@@ -359,24 +345,28 @@ public class BuildingsManager implements IBuildingsManager {
         if (!game.getConfig().isConfigActive(ConfigBase.BUILDING_COUNCIL_CHAMBER)) {
             return;
         }
-        if (!game.getConfig().isConfigActive(ConfigBase.HONOR)) {
-            w1.sendMessageWithKey(Prefix.RED, "werewolf.configurations.buildings.council_no_honor");
+
+        boolean w1Can = canConsult(w1.getUUID());
+        boolean w2Can = canConsult(w2.getUUID());
+
+        if (!w1Can && !w2Can) {
+            sendCouncilBlockedMessage(w1);
+            sendCouncilBlockedMessage(w2);
             return;
         }
-        if (!canConsult(w1.getUUID())) {
-            if (getCouncilRemaining(w1.getUUID()) <= 0) {
-                w1.sendMessageWithKey(Prefix.RED, "werewolf.configurations.buildings.council_no_use_left");
-            } else {
-                w1.sendMessageWithKey(Prefix.RED, "werewolf.configurations.buildings.council_cooldown",
-                        Formatter.timer(Utils.conversion(getCouncilCooldownRemaining(w1.getUUID()))));
-            }
+        if (!w1Can) {
+            sendCouncilBlockedMessage(w1);
+            w2.sendMessageWithKey(Prefix.RED, "werewolf.configurations.buildings.council_partner_unavailable",
+                    Formatter.player(w1.getName()));
             return;
         }
-        if (!canConsult(w2.getUUID())) {
+        if (!w2Can) {
+            sendCouncilBlockedMessage(w2);
             w1.sendMessageWithKey(Prefix.RED, "werewolf.configurations.buildings.council_partner_unavailable",
                     Formatter.player(w2.getName()));
             return;
         }
+
         recordConsult(w1.getUUID());
         recordConsult(w2.getUUID());
 
@@ -387,6 +377,17 @@ public class BuildingsManager implements IBuildingsManager {
 
         w1.sendMessageWithKey(Prefix.ORANGE, "werewolf.configurations.buildings.council_remaining",
                 Formatter.number(getCouncilRemaining(w1.getUUID())));
+        w2.sendMessageWithKey(Prefix.ORANGE, "werewolf.configurations.buildings.council_remaining",
+                Formatter.number(getCouncilRemaining(w2.getUUID())));
+    }
+
+    private void sendCouncilBlockedMessage(IPlayerWW player) {
+        if (getCouncilRemaining(player.getUUID()) <= 0) {
+            player.sendMessageWithKey(Prefix.RED, "werewolf.configurations.buildings.council_no_use_left");
+        } else {
+            player.sendMessageWithKey(Prefix.RED, "werewolf.configurations.buildings.council_cooldown",
+                    Formatter.timer(Utils.conversion(getCouncilCooldownRemaining(player.getUUID()))));
+        }
     }
 
     private Player findPlayerOn(Location plate) {
@@ -553,11 +554,11 @@ public class BuildingsManager implements IBuildingsManager {
         return true;
     }
 
-    public VoteOffice getVoteOffice(Location urnLocation) {
+    public IVoteOffice getVoteOffice(Location urnLocation) {
         if (urnLocation == null) {
             return null;
         }
-        for (VoteOffice office : voteOffices) {
+        for (IVoteOffice office : voteOffices) {
             Location urn = office.getUrnLocation();
             if (urn != null && urn.getWorld() == urnLocation.getWorld()
                     && urn.getBlockX() == urnLocation.getBlockX()

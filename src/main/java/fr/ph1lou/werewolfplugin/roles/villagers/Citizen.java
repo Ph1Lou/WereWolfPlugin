@@ -2,19 +2,12 @@ package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
 import fr.ph1lou.werewolfapi.annotations.IntValue;
+import fr.ph1lou.werewolfapi.annotations.RequireAbility;
+import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
-import fr.ph1lou.werewolfapi.basekeys.ConfigBase;
-import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
-import fr.ph1lou.werewolfapi.basekeys.Prefix;
-import fr.ph1lou.werewolfapi.basekeys.RoleBase;
-import fr.ph1lou.werewolfapi.basekeys.TimerBase;
-import fr.ph1lou.werewolfapi.buildings.IBuildingsManager;
+import fr.ph1lou.werewolfapi.basekeys.*;
 import fr.ph1lou.werewolfapi.buildings.IVoteOffice;
-import fr.ph1lou.werewolfapi.enums.Category;
-import fr.ph1lou.werewolfapi.enums.RoleAttribute;
-import fr.ph1lou.werewolfapi.enums.StatePlayer;
-import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
-import fr.ph1lou.werewolfapi.enums.VoteStatus;
+import fr.ph1lou.werewolfapi.enums.*;
 import fr.ph1lou.werewolfapi.events.buildings.UrnVote1StartEvent;
 import fr.ph1lou.werewolfapi.events.buildings.UrnVote2StartEvent;
 import fr.ph1lou.werewolfapi.events.buildings.UrnVote3StartEvent;
@@ -23,7 +16,7 @@ import fr.ph1lou.werewolfapi.events.game.day_cycle.DayEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteEndEvent;
 import fr.ph1lou.werewolfapi.events.game.vote.VoteResultEvent;
 import fr.ph1lou.werewolfapi.events.random_events.RumorsWriteEvent;
-import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenSeeVoteEvent;
+import fr.ph1lou.werewolfapi.events.roles.citizen.CitizenChangeVoteEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -44,14 +37,7 @@ import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Role(key = RoleBase.CITIZEN,
@@ -72,62 +58,76 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
     private int use = 0;
     private boolean power = true;
 
-    @Nullable private IVoteOffice votedOffice;
+    @Nullable
+    private IVoteOffice votedOffice;
     private int votedSession = -1;
     private int currentUrnSession = 0;
 
-    @Nullable private IPlayerWW redirectTarget;
+    @Nullable
+    private IPlayerWW redirectTarget;
     private boolean canRedirect = false;
 
-    @Nullable private IRegisterManager registerManager;
+    private final IRegisterManager registerManager;
 
     public Citizen(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
+        GetWereWolfAPI getWereWolfAPI = Bukkit.getServer().getServicesManager().load(GetWereWolfAPI.class);
+        this.registerManager = getWereWolfAPI.getRegisterManager();
     }
 
     @Override
-    public boolean hasPower() { return this.power; }
+    public boolean hasPower() {
+        return this.power;
+    }
 
     @Override
-    public void setPower(boolean power) { this.power = power; }
+    public void setPower(boolean power) {
+        this.power = power;
+    }
 
     @Override
-    public int getUse() { return this.use; }
+    public int getUse() {
+        return this.use;
+    }
 
     @Override
-    public void setUse(int use) { this.use = use; }
+    public void setUse(int use) {
+        this.use = use;
+    }
 
     @Override
-    public void addAffectedPlayer(IPlayerWW playerWW) { this.affectedPlayer.add(playerWW); }
+    public void addAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.add(playerWW);
+    }
 
     @Override
-    public void removeAffectedPlayer(IPlayerWW playerWW) { this.affectedPlayer.remove(playerWW); }
+    public void removeAffectedPlayer(IPlayerWW playerWW) {
+        this.affectedPlayer.remove(playerWW);
+    }
 
     @Override
-    public void clearAffectedPlayer() { this.affectedPlayer.clear(); }
+    public void clearAffectedPlayer() {
+        this.affectedPlayer.clear();
+    }
 
     @Override
-    public List<IPlayerWW> getAffectedPlayers() { return this.affectedPlayer; }
+    public List<IPlayerWW> getAffectedPlayers() {
+        return this.affectedPlayer;
+    }
 
     @Override
     public void recoverPower() {
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onDay(DayEvent event) {
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-        if (!isAbilityEnabled()) return;
         sendHiddenComposition();
     }
 
     private void sendHiddenComposition() {
         if (!game.getConfig().isConfigActive(ConfigBase.HIDE_COMPOSITION)) return;
-
-        if (this.registerManager == null) {
-            GetWereWolfAPI api = Bukkit.getServer().getServicesManager().load(GetWereWolfAPI.class);
-            if (api == null) return;
-            this.registerManager = api.getRegisterManager();
-        }
 
         List<String> present = this.registerManager.getRolesRegister().stream()
                 .map(w -> w.getMetaDatas().key())
@@ -156,9 +156,9 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
     }
 
     @EventHandler
+    @RequireAbility
+    @RequireAlive
     public void onVoteEnd(VoteEndEvent event) {
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-        if (!isAbilityEnabled()) return;
         if (game.getConfig().isConfigActive(ConfigBase.URN_VOTE)) return;
 
         int waiting = game.getConfig().getTimerValue(TimerBase.VOTE_WAITING);
@@ -179,17 +179,24 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
+    @RequireAbility
+    @RequireAlive
     public void onVoteResult(VoteResultEvent event) {
-        if (!isAbilityEnabled()) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
         if (game.getConfig().isConfigActive(ConfigBase.URN_VOTE)) return;
 
         this.canRedirect = false;
 
         if (this.redirectTarget != null) {
-            event.setPlayerWW(this.redirectTarget);
-            this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.citizen.redirect_perform",
-                    Formatter.player(this.redirectTarget.getName()));
+            CitizenChangeVoteEvent changeVoteEvent = new CitizenChangeVoteEvent(this.getPlayerWW(), this.redirectTarget);
+            Bukkit.getPluginManager().callEvent(changeVoteEvent);
+
+            if (changeVoteEvent.isCancelled()) {
+                this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
+            } else {
+                event.setPlayerWW(this.redirectTarget);
+                this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.citizen.redirect_perform",
+                        Formatter.player(this.redirectTarget.getName()));
+            }
             this.redirectTarget = null;
         }
     }
@@ -216,13 +223,22 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
     }
 
     @EventHandler
-    public void onUrnVote1Start(UrnVote1StartEvent event) { currentUrnSession = 1; scheduleUrnVoteInfo(1); }
+    public void onUrnVote1Start(UrnVote1StartEvent event) {
+        currentUrnSession = 1;
+        scheduleUrnVoteInfo(1);
+    }
 
     @EventHandler
-    public void onUrnVote2Start(UrnVote2StartEvent event) { currentUrnSession = 2; scheduleUrnVoteInfo(2); }
+    public void onUrnVote2Start(UrnVote2StartEvent event) {
+        currentUrnSession = 2;
+        scheduleUrnVoteInfo(2);
+    }
 
     @EventHandler
-    public void onUrnVote3Start(UrnVote3StartEvent event) { currentUrnSession = 3; scheduleUrnVoteInfo(3); }
+    public void onUrnVote3Start(UrnVote3StartEvent event) {
+        currentUrnSession = 3;
+        scheduleUrnVoteInfo(3);
+    }
 
     private void scheduleUrnVoteInfo(int session) {
         if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
@@ -237,12 +253,10 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
             if (this.votedOffice == null || this.votedSession != session) return;
 
             int nonBlank = this.votedOffice.getVotesCast() - this.votedOffice.getBlankVotes();
-            Set<UUID> voted = this.votedOffice.getVotesAgainst().keySet();
+            Set<IPlayerWW> voted = this.votedOffice.getVotesAgainst().keySet();
 
             String votedList = voted.stream()
-                    .map(uuid -> game.getPlayerWW(uuid))
-                    .filter(Optional::isPresent)
-                    .map(opt -> opt.get().getName())
+                    .map(IPlayerWW::getName)
                     .collect(Collectors.joining(", "));
 
             this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.citizen.urn_info",
@@ -255,11 +269,10 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
         }, duration * 20L);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
+    @RequireAbility
+    @RequireAlive
     public void onRumor(RumorsWriteEvent event) {
-        if (event.isCancelled()) return;
-        if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
-        if (!isAbilityEnabled()) return;
 
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.citizen.rumor",
                 Formatter.player(event.getPlayerWW().getName()),
@@ -279,7 +292,10 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
             Location oLoc = office.getUrnLocation();
             if (oLoc == null || oLoc.getWorld() != loc.getWorld()) continue;
             double d = loc.distance(oLoc);
-            if (d < nearestDist) { nearestDist = d; nearest = office; }
+            if (d < nearestDist) {
+                nearestDist = d;
+                nearest = office;
+            }
         }
         return nearest;
     }
@@ -290,7 +306,9 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.citizen.urn_cancel_perform");
     }
 
-    public boolean canRedirectNow() { return this.canRedirect; }
+    public boolean canRedirectNow() {
+        return this.canRedirect;
+    }
 
     public void setRedirectTarget(IPlayerWW target) {
         this.redirectTarget = target;
