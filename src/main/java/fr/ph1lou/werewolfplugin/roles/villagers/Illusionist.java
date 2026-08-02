@@ -5,6 +5,7 @@ import fr.ph1lou.werewolfapi.annotations.RequireAlive;
 import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.Sound;
@@ -37,7 +38,8 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.ILLUSIONIST,
         category = Category.VILLAGER,
-        attribute = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER,
+        defaultAura = Aura.NEUTRAL)
 public class Illusionist extends RoleImpl implements IPower, IAffectedPlayers {
 
     private boolean power = true;

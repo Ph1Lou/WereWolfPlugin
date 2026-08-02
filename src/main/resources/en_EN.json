@@ -119,8 +119,8 @@
       },
       "amnesiac_werewolf": {
         "display": "Amnesiac Werewolf",
-        "description": "You win with the §cWerewolves§f. At night, you gain §bStrength I§f (whose percentage depends on your §bHonor§f).\nYou do not appear in the Werewolves' list until a random time between §b70 and 90 minutes§f. Your own list initially contains only your name; each Werewolf you approach within §b10 blocks§f is added to it.\nIf you kill a player, you gain §bSpeed I§f and §b2❤ Absorption§f for 1 minute.",
-        "power": "You are a hidden Werewolf: you don't appear in the Werewolves' list before 70-90 min, and your list of known Werewolves builds up by proximity (10 blocks).",
+        "description": "You win with the §cWerewolves§f. At night, you gain §bStrength I§f (whose percentage depends on your §bHonor§f).\nYou do not appear in the Werewolves' list until a random time between §b&number& and &number1& minutes§f. Your own list initially contains only your name; each Werewolf you approach within §b&number2& blocks§f is added to it.\nIf you kill a player, you gain §bSpeed I§f and §b2❤ Absorption§f for 1 minute.",
+        "power": "You are a hidden Werewolf: you don't appear in the Werewolves' list before &number&-&number1& min, and your list of known Werewolves builds up by proximity (&number2& blocks).",
         "command": "§b/ww hurler§f to howl once per game.",
         "howl_command": "hurler",
         "howl_warn": "A §cWerewolf§f howls nearby...",
@@ -331,7 +331,7 @@
       "rival": {
         "display": "Rival",
         "item": "A compass (action bar) pointing to the Cupid, then to the Lovers after /ww deviner.",
-        "description": "You must kill at least one of the two Lovers. If you succeed, choose a permanent bonus with §b/ww bonus <1-4>§f (1: 25 golden apples, 2: Speed II, 3: Strength I, 4: Regeneration I). The surviving Lover must then win alone.\nIf the Lovers die without you killing one, you lose §c5❤ permanent§f but regain §b1❤ every 5 minutes§f.\nYou have a compass to the Cupid (if any), then to the Lovers after guessing the couple.",
+        "description": "You must kill at least one of the two Lovers. If you succeed, choose a permanent bonus with §b/ww bonus <1-4>§f (1: 25 golden apples, 2: Speed II, 3: Strength I, 4: Regeneration I). The surviving Lover must then win alone.\nIf the Lovers die without you killing one, you lose §c&number&❤ permanent§f but regain §b&number1&❤ every &timer&§f.\nYou have a compass to the Cupid (if any), then to the Lovers after guessing the couple.",
         "power": "Kill a Lover → bonus. Otherwise −5❤ (regen 1❤/5min). Commands: analyser (3 players/15min), deviner (the couple/30min), isoler (cuts a Lover's life-gifts 3min), bonus.",
         "commands": "§b/ww analyser [P1] [P2] [P3]§f (15min) — §b/ww deviner [P1] [P2]§f (30min) — §b/ww isoler§f — §b/ww bonus <1-4>§f.",
         "lover": "The lovers you are associated with are a §b&role1&§f and a §b&role2&§f.",
@@ -500,7 +500,7 @@
       },
       "detective": {
         "display": "Detective",
-        "description": "Once per episode (from episode 3), you can investigate two previously met players via §b/ww inspect§r. You receive a §bblue§r or §eyellow§r code: one means both players are in the same camp, the other that they are not. This meaning is fixed for the whole game but unknown. From episode 5, after each investigation, you may try to guess its meaning via §b/ww guess§r. Correct: you keep your power. Wrong: you lose it. You may choose to never guess.",
+        "description": "Once per episode (from episode &number&), you can investigate two previously met players via §b/ww inspect§r. You receive a §bblue§r or §eyellow§r code: one means both players are in the same camp, the other that they are not. This meaning is fixed for the whole game but unknown. From episode &number2&, after each investigation, you may try to guess its meaning via §b/ww guess§r. Correct: you keep your power. Wrong: you lose it. You may choose to never guess.",
         "inspection_message": "Investigate two met players §b/ww inspect§r you have §b&timer&",
         "code": "You receive the code: &code&",
         "color_bleu": "§bBlue§r",
@@ -1068,7 +1068,7 @@
       },
       "benefactor": {
         "display": "Benefactor",
-        "description": "3 times during the game (once every 5 minutes), you may grant 1 permanent ♥ to a player of your choice (excluding yourself) via §b/ww conferer§r. The targeted player will receive the gift §b3 minutes§f after the command is executed.",
+        "description": "3 times during the game (once every &timer&), you may grant 1 permanent ♥ to a player of your choice (excluding yourself) via §b/ww conferer§r. The targeted player will receive the gift §b3 minutes§f after the command is executed.",
         "effect": "You obtain a slow Regeneration effect (1 ♥/min) once you have fully used your power",
         "items": "2 Books Protection II",
         "command": "conferer",
@@ -1081,7 +1081,7 @@
       },
       "rabbit": {
         "display": "Rabbit",
-        "description": "When you have less than 6 ♥️, all players in the Village around you (within 20 blocks) take 10% less degae except those who already have a Resistance effect.",
+        "description": "When you have less than &number& ♥️, all players in the Village around you (within &number1& blocks) take &number2&% less degae except those who already have a Resistance effect.",
         "effects": "Weakness I at night Speed based on your lifebar: 10% at 3 ♥️ and + | 20% below 3 ♥️"
       },
       "interpreter": {
@@ -1109,7 +1109,7 @@
         "actionbar_1": "§c========§r",
         "actionbar_2": "§6========§r",
         "actionbar_distance": "§6&text&§r",
-        "description": "You win with the §aVillage§f. You sense Werewolf corpses: within §b50§f blocks, you get the distance (by tiers) to them. Within §b&number&§f blocks, your screen turns §cred§f; by staying there §b&timer&§f, you recover its fur. From the first fur on, you appear as a §cWerewolf§f to info roles and your aura becomes §cDark§f. Corpses are marked by an §6orange§f particle for 15 minutes.",
+        "description": "You win with the §aVillage§f. You sense Werewolf corpses: within §b&number1&§f blocks, you get the distance (by tiers) to them. Within §b&number&§f blocks, your screen turns §cred§f; by staying there §b&timer&§f, you recover its fur. From the first fur on, you appear as a §cWerewolf§f to info roles and your aura becomes §cDark§f. Corpses are marked by an §6orange§f particle for §b&timer1&§f.",
         "effects": "First fur: Resistance §b0.5§f. Each additional fur: §b+0.1§f Resistance.",
         "fur_numbers": "Number of furs: §b&number&",
         "recover": "You retrieve the fur from §b&player&",
@@ -1134,7 +1134,7 @@
       },
       "witness": {
         "display": "Witness",
-        "description": "When the wolf list is announced, you will know the name of a culprit, a member of the wolf camp. However, if the culprit dies, you will lose 2 permanent hearts. In addition, you will inflict 30 fewer%% s to the culprit.",
+        "description": "When the wolf list is announced, you will know the name of a culprit, a member of the wolf camp. However, if the culprit dies, you will lose &number& permanent hearts. In addition, you will inflict &number1&% less damage to the culprit.",
         "culprit_name": "The guilty is §b&player&",
         "culprit_unknown": "The culprit was revealed in &time&",
         "culprit_dead": "The guilty is Dead",
@@ -1315,7 +1315,7 @@
       },
       "ronin": {
         "display": "Ronin",
-        "description": "You must win alone. You start with Honor §b-4§f and have your own Honor table ranging from §b-4§f to §b4§f. You gain the advantages of the highest level reached (current: §b&number&§f, peak: §b&number1&§f). Your Honor gains are doubled, losses unchanged. Killing a solo role or visiting all 4 sanctuaries grants §b+2§f. Not respecting groups costs §b-1§f. You permanently see the Honor polarity of players via particles (§fwhite§f = positive, §cred§f = negative). You can challenge a player to a duel via §b/ww duel§r [Player] (1x/episode). Power depends on your Honor, nature depends on the target's polarity: white particles → Hemorrhage, red particles → Silence. Hemorrhage: each melee hit deals §c-0.5♥§f with a 5-second delay. Silence: the target's powers are disabled for the duration.",
+        "description": "You must win alone. You start with Honor §b&number2&§f and have your own Honor table ranging from §b&number2&§f to §b&number3&§f. You gain the advantages of the highest level reached (current: §b&number&§f, peak: §b&number1&§f). Your Honor gains are doubled, losses unchanged. Killing a solo role or visiting all 4 sanctuaries grants §b+2§f. Not respecting groups costs §b-1§f. You permanently see the Honor polarity of players via particles (§fwhite§f = positive, §cred§f = negative). You can challenge a player to a duel via §b/ww duel§r [Player] (1x/episode). Power depends on your Honor, nature depends on the target's polarity: white particles → Hemorrhage, red particles → Silence. Hemorrhage: each melee hit deals §c-0.5♥§f with a 5-second delay. Silence: the target's powers are disabled for the duration.",
         "command": "duel",
         "honor_change": "Your Honor is now §b&number&§f",
         "hemorrhage_start": "You challenge §b&player&§f to a duel (Hemorrhage)!",
@@ -1327,7 +1327,7 @@
       },
       "pyromane": {
         "display": "Pyromaniac",
-        "description": "You must win alone. You can cover 2 players you've met with oil via §b/ww recouvrir§r [Name1] [Name2] (1x/10min). Targets are instantly notified. You can ignite all covered players via §b/ww enflammer§r (1x/episode). Ignited players are no longer covered, lose §c2♥§f permanent for 10 minutes, and have Resistance -0.5 against you (permanent, +0.25 per subsequent burn, minimum -1.5). You can condemn a building via §b/ww condamner§r (1x/episode, must be inside a building). The building catches fire in 3-5 minutes for 20 minutes. Any player approaching the burning building gets covered with oil. After the fire, the urn capacity (if vote office) is halved. You can apply Sharpness IV on your sword.",
+        "description": "You must win alone. You can cover 2 players you've met with oil via §b/ww recouvrir§r [Name1] [Name2] (1x/&timer&). Targets are instantly notified. You can ignite all covered players via §b/ww enflammer§r (1x/episode). Ignited players are no longer covered, lose §c&number&♥§f permanent for &timer1&, and have Resistance -0.5 against you (permanent, +0.25 per subsequent burn, minimum -1.5). You can condemn a building via §b/ww condamner§r (1x/episode, must be inside a building). The building catches fire in &timer2&-&timer3& for &timer4&. Any player approaching the burning building gets covered with oil. After the fire, the urn capacity (if vote office) is halved. You can apply Sharpness IV on your sword.",
         "cover_command": "recouvrir",
         "ignite_command": "enflammer",
         "burn_command": "condamner",

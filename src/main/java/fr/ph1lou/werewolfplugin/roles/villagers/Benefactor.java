@@ -12,6 +12,7 @@ import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.UniversalMaterial;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
@@ -45,7 +46,8 @@ public class Benefactor extends RoleImpl implements IAffectedPlayers {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(this.game, this)
-                .setDescription(this.game.translate("werewolf.roles.benefactor.description"))
+                .setDescription(this.game.translate("werewolf.roles.benefactor.description",
+                        Formatter.timer(this.game, TimerBase.BENEFACTOR_COOLDOWN)))
                 .setItems(this.game.translate("werewolf.roles.benefactor.items"))
                 .setCommand(this.game.translate("werewolf.roles.benefactor.command_description"))
                 .setEffects(this.game.translate("werewolf.roles.benefactor.effect"))

@@ -601,7 +601,9 @@ public class Ronin extends RoleNeutral implements IPower {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.ronin.description",
                         Formatter.number(this.roninHonor),
-                        Formatter.format("&number1&", this.highestHonor)))
+                        Formatter.format("&number1&", this.highestHonor),
+                        Formatter.format("&number2&", game.getConfig().getValue(IntValueBase.RONIN_HONOR_MIN)),
+                        Formatter.format("&number3&", game.getConfig().getValue(IntValueBase.RONIN_HONOR_MAX))))
                 .setCommand(game.translate("werewolf.roles.ronin.command"))
                 .build();
     }

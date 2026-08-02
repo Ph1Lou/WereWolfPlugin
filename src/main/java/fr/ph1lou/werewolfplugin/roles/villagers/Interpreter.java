@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.basekeys.TimerBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -44,7 +45,8 @@ import java.util.stream.Collectors;
 
 @Role(key = RoleBase.INTERPRETER,
         category = Category.VILLAGER,
-        attribute = RoleAttribute.VILLAGER)
+        attribute = RoleAttribute.VILLAGER,
+        defaultAura = Aura.NEUTRAL)
 public class Interpreter extends RoleImpl implements IPower {
 
     private final Set<Wrapper<IRole, Role>> roles = new HashSet<>();

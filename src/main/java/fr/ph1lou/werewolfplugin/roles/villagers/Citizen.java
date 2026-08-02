@@ -1,10 +1,7 @@
 package fr.ph1lou.werewolfplugin.roles.villagers;
 
 import fr.ph1lou.werewolfapi.GetWereWolfAPI;
-import fr.ph1lou.werewolfapi.annotations.IntValue;
-import fr.ph1lou.werewolfapi.annotations.RequireAbility;
-import fr.ph1lou.werewolfapi.annotations.RequireAlive;
-import fr.ph1lou.werewolfapi.annotations.Role;
+import fr.ph1lou.werewolfapi.annotations.*;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.*;
 import fr.ph1lou.werewolfapi.buildings.IVoteOffice;
@@ -294,7 +291,7 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
     public IVoteOffice findNearestOffice() {
         Location loc = this.getPlayerWW().getLocation();
         IVoteOffice nearest = null;
-        double nearestDist = (double) game.getConfig().getValue(IntValueBase.CITIZEN_OFFICE_PROXIMITY);
+        double nearestDist = game.getConfig().getValue(IntValueBase.CITIZEN_OFFICE_PROXIMITY);
         for (IVoteOffice office : game.getBuildingsManager().getVoteOffices()) {
             Location oLoc = office.getUrnLocation();
             if (oLoc == null || oLoc.getWorld() != loc.getWorld()) continue;

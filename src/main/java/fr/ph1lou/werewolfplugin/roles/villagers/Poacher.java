@@ -110,7 +110,9 @@ public class Poacher extends RoleImpl {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.poacher.description",
                         Formatter.number(game.getConfig().getValue(IntValueBase.POACHER_DISTANCE)),
-                        Formatter.timer(game, TimerBase.POACHER_PROGRESS)))
+                        Formatter.format("&number1&", game.getConfig().getValue(IntValueBase.POACHER_DETECTION_DISTANCE)),
+                        Formatter.timer(game, TimerBase.POACHER_PROGRESS),
+                        Formatter.format("&timer1&", Utils.conversion(game.getConfig().getTimerValue(TimerBase.POACHER_CARCASS_DURATION)))))
                 .setEffects(game.translate("werewolf.roles.poacher.effects"))
                 .setPower(game.translate("werewolf.roles.poacher.fur_numbers",
                         Formatter.number(this.furNumbers)))

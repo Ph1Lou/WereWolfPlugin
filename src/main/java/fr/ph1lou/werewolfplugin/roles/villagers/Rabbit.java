@@ -17,6 +17,7 @@ import fr.ph1lou.werewolfapi.events.game.day_cycle.NightEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.impl.PotionModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import org.bukkit.Bukkit;
@@ -54,7 +55,10 @@ public class Rabbit extends RoleImpl {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(this.game, this)
-                .setDescription(this.game.translate("werewolf.roles.rabbit.description"))
+                .setDescription(this.game.translate("werewolf.roles.rabbit.description",
+                        Formatter.number(this.game.getConfig().getValue(IntValueBase.RABBIT_HIGH_HEALTH)),
+                        Formatter.format("&number1&", this.game.getConfig().getValue(IntValueBase.RABBIT_ALLY_RANGE)),
+                        Formatter.format("&number2&", this.game.getConfig().getValue(IntValueBase.RABBIT_ALLY_REDUCTION))))
                 .setEffects(this.game.translate("werewolf.roles.rabbit.effects"))
                 .build();
     }

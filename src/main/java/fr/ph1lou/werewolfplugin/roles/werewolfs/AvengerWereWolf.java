@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Role(key = RoleBase.AVENGER_WEREWOLF,
-        defaultAura = Aura.NEUTRAL,
+        defaultAura = Aura.LIGHT,
         auraDescriptionSpecialUseCase = "werewolf.roles.avenger_werewolf.aura",
         category = Category.WEREWOLF,
         attribute = RoleAttribute.WEREWOLF,

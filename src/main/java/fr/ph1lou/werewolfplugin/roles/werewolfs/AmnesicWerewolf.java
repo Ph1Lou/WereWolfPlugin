@@ -59,9 +59,15 @@ public class AmnesicWerewolf extends RoleWereWolf implements IPower {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.roles.amnesiac_werewolf.description"))
+                .setDescription(game.translate("werewolf.roles.amnesiac_werewolf.description",
+                        Formatter.format("&number&", g -> String.valueOf(g.getConfig().getTimerValue(TimerBase.AMNESIAC_WEREWOLF_REVEAL_MIN) / 60)),
+                        Formatter.format("&number1&", g -> String.valueOf(g.getConfig().getTimerValue(TimerBase.AMNESIAC_WEREWOLF_REVEAL_MAX) / 60)),
+                        Formatter.format("&number2&", game.getConfig().getValue(IntValueBase.AMNESIAC_WEREWOLF_PROXIMITY_RANGE))))
                 .setEffects(game.translate("werewolf.description.werewolf"))
-                .setPower(game.translate("werewolf.roles.amnesiac_werewolf.power"))
+                .setPower(game.translate("werewolf.roles.amnesiac_werewolf.power",
+                        Formatter.format("&number&", g -> String.valueOf(g.getConfig().getTimerValue(TimerBase.AMNESIAC_WEREWOLF_REVEAL_MIN) / 60)),
+                        Formatter.format("&number1&", g -> String.valueOf(g.getConfig().getTimerValue(TimerBase.AMNESIAC_WEREWOLF_REVEAL_MAX) / 60)),
+                        Formatter.format("&number2&", game.getConfig().getValue(IntValueBase.AMNESIAC_WEREWOLF_PROXIMITY_RANGE))))
                 .setCommand(game.translate("werewolf.roles.amnesiac_werewolf.command"))
                 .build();
     }

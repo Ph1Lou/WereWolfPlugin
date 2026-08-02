@@ -7,6 +7,7 @@ import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.Day;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
@@ -22,6 +23,7 @@ import fr.ph1lou.werewolfapi.events.roles.innkeeper.InnkeeperHostEvent;
 import fr.ph1lou.werewolfapi.events.roles.innkeeper.InnkeeperInfoMeetEvent;
 import fr.ph1lou.werewolfapi.events.roles.innkeeper.InnkeeperSpeedEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
@@ -106,6 +108,7 @@ public class Innkeeper extends RoleImpl implements IPower {
                     ClientDeathEvent clientDeathEvent = new ClientDeathEvent(getPlayerWW(), clientData.playerWW, role);
                     Bukkit.getPluginManager().callEvent(clientDeathEvent);
                     if (!clientDeathEvent.isCancelled()) {
+                        this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK, 1, false));
                         getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.dead",
                                 Formatter.role(clientDeathEvent.getRole()));
                         availableRooms--;
@@ -132,6 +135,7 @@ public class Innkeeper extends RoleImpl implements IPower {
                         ClientKillEvent clientKillEvent = new ClientKillEvent(getPlayerWW(), killer);
                         Bukkit.getPluginManager().callEvent(clientKillEvent);
                         if (!clientKillEvent.isCancelled()) {
+                            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK, 1, false));
                             getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.innkeeper.kill");
                             clientDatas.forEach(clientData -> clientData.watching = false);
                             clientDatas.clear();

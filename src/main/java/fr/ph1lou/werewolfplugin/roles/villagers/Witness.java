@@ -54,7 +54,9 @@ public class Witness extends RoleImpl implements IAffectedPlayers, IPower {
     @Override
     public @NotNull String getDescription() {
 
-        DescriptionBuilder descBuilder = new DescriptionBuilder(game, this).setDescription(game.translate("werewolf.roles.witness.description"));
+        DescriptionBuilder descBuilder = new DescriptionBuilder(game, this).setDescription(game.translate("werewolf.roles.witness.description",
+                Formatter.format("&number&", g -> String.valueOf(g.getConfig().getValue(IntValueBase.WITNESS_HEALTH_PENALTY) / 2)),
+                Formatter.format("&number1&", game.getConfig().getValue(IntValueBase.WITNESS_CULPRIT_REDUCTION))));
         if (affectedPlayer.isEmpty()) {
             if (power) {
                 descBuilder.addExtraLines(game.translate("werewolf.roles.witness.culprit_unknown", Formatter.format("&time&",

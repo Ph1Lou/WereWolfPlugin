@@ -4,20 +4,14 @@ import fr.ph1lou.werewolfapi.annotations.RandomEvent;
 import fr.ph1lou.werewolfapi.annotations.Timer;
 import fr.ph1lou.werewolfapi.basekeys.EventBase;
 import fr.ph1lou.werewolfapi.events.game.timers.RepartitionEvent;
-import fr.ph1lou.werewolfapi.events.random_events.ExposedEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.listeners.impl.ListenerWerewolf;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
-import fr.ph1lou.werewolfapi.player.utils.Formatter;
-import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
-import org.bukkit.Bukkit;
+import fr.ph1lou.werewolfplugin.utils.ExposedHelper;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,51 +65,9 @@ public class Exposed extends ListenerWerewolf {
 
         if (playerWWS.isEmpty()) return null;
 
-        IPlayerWW playerWW = playerWWS.get((int) Math.floor(game.getRandom().nextDouble() * playerWWS.size()));
+        IPlayerWW playerWW = playerWWS.get(game.getRandom().nextInt(playerWWS.size()));
 
-        List<IRole> role1List = game.getAlivePlayersWW().stream()
-                .filter(playerWW1 -> !playerWW.equals(playerWW1))
-                .map(IPlayerWW::getRole)
-                .filter(iRole -> !iRole.isKey(playerWW.getRole().getKey()))
-                .filter(roles -> !roles.isCamp(playerWW.getRole().getCamp()))
-                .collect(Collectors.toList());
-
-        if (role1List.isEmpty()) return null;
-
-        IRole role1 = role1List.get((int) Math.floor(game.getRandom().nextDouble() * role1List.size()));
-
-        List<IRole> role2List = game.getAlivePlayersWW().stream()
-                .filter(playerWW1 -> !playerWW.equals(playerWW1))
-                .map(IPlayerWW::getRole)
-                .filter(roles -> !roles.isKey(role1.getKey()))
-                .filter(iRole -> !iRole.isKey(playerWW.getRole().getKey()))
-                .collect(Collectors.toList());
-
-        if (role2List.isEmpty()) return null;
-
-        IRole role2 = role2List.get((int) Math.floor(game.getRandom().nextDouble() * role2List.size()));
-
-        List<String> roles = new ArrayList<>(Arrays.asList(role1.getKey(),
-                role2.getKey(),
-                playerWW.getRole().getDisplayRole()));
-
-        Collections.shuffle(roles, game.getRandom());
-
-        ExposedEvent exposedEvent = new ExposedEvent(playerWW,
-                new ArrayList<>(Arrays.asList(role1.getPlayerWW(),
-                        role2.getPlayerWW(),
-                        playerWW)));
-
-        Bukkit.getPluginManager().callEvent(exposedEvent);
-
-        if (!exposedEvent.isCancelled()) {
-            roles = roles.stream().map(game::translate).collect(Collectors.toList());
-            Bukkit.broadcastMessage(game.translate("werewolf.random_events.exposed.message",
-                    Formatter.player(playerWW.getName()),
-                    Formatter.format("&role1&", roles.get(0)),
-                    Formatter.format("&role2&", roles.get(1)),
-                    Formatter.format("&role3&", roles.get(2))));
-        }
+        ExposedHelper.expose(game, playerWW);
 
         return playerWW;
     }

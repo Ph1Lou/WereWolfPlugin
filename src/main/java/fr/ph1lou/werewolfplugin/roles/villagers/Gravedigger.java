@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * @author havwila
  */
 @Role(key = RoleBase.GRAVEDIGGER,
-        defaultAura = Aura.NEUTRAL,
+        defaultAura = Aura.DARK,
         category = Category.VILLAGER,
         attribute = RoleAttribute.MINOR_INFORMATION,
         configValues = { @IntValue(key = IntValueBase.GRAVEDIGGER_DISTANCE,

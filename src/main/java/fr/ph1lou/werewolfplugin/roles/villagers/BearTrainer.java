@@ -92,6 +92,7 @@ public class BearTrainer extends RoleImpl {
         if (!event.getPlayerWW().equals(getPlayerWW())) return;
 
         if (event.getPlayerWWS().isEmpty()) {
+            this.removeAuraModifier(this.getKey());
             event.setCancelled(true);
             getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.bear_trainer.no_growl");
             return;
@@ -120,9 +121,7 @@ public class BearTrainer extends RoleImpl {
 
         this.removeAuraModifier(this.getKey());
 
-        if (growl == 0) {
-            this.addAuraModifier(new AuraModifier(this.getKey(), Aura.LIGHT, 1, true));
-        } else if (growl == 1) {
+        if (growl == 1) {
             this.addAuraModifier(new AuraModifier(this.getKey(), Aura.NEUTRAL, 1, true));
         } else {
             this.addAuraModifier(new AuraModifier(this.getKey(), Aura.DARK, 1, true));

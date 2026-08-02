@@ -7,9 +7,11 @@ import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.commands.CommandContext;
 import fr.ph1lou.werewolfapi.commands.IParameterizedCommandRole;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.events.roles.hunter.HunterShotEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
+import fr.ph1lou.werewolfapi.player.impl.AuraModifier;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
@@ -37,6 +39,8 @@ public class CommandHunter implements IParameterizedCommandRole {
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) return;
+
+        playerWW.getRole().addAuraModifier(new AuraModifier(playerWW.getRole().getKey(), Aura.DARK, 1, false));
 
         event.getTargetWW().removePlayerHealth(10);
         Bukkit.broadcastMessage(game.translate(Prefix.RED, "werewolf.roles.hunter.success", Formatter.format("&target&",

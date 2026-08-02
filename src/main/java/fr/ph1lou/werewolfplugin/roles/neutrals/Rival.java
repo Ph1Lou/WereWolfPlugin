@@ -127,7 +127,10 @@ public class Rival extends RoleNeutral implements IPower, ILimitedUse {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.roles.rival.description"))
+                .setDescription(game.translate("werewolf.roles.rival.description",
+                        Formatter.format("&number&", g -> String.valueOf(g.getConfig().getValue(IntValueBase.RIVAL_PENALTY_HEALTH) / 2)),
+                        Formatter.format("&number1&", g -> String.valueOf(g.getConfig().getValue(IntValueBase.RIVAL_REGEN_HEALTH) / 2)),
+                        Formatter.timer(game, TimerBase.RIVAL_REGEN_INTERVAL)))
                 .setItems(game.translate("werewolf.roles.rival.item"))
                 .setPower(game.translate("werewolf.roles.rival.power"))
                 .setCommand(game.translate("werewolf.roles.rival.commands"))

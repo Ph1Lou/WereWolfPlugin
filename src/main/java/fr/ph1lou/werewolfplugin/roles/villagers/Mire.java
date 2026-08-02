@@ -5,6 +5,7 @@ import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StateGame;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.MIRE,
         category = Category.VILLAGER,
         attribute = RoleAttribute.MINOR_INFORMATION,
+        defaultAura = Aura.NEUTRAL,
         configValues = @IntValue(
                 key = IntValueBase.MIRE_DISTANCE,
                 defaultValue = 60,

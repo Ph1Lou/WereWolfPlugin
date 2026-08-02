@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Role(key = RoleBase.ALERTER_WEREWOLF,
         category = Category.WEREWOLF,
         attribute = RoleAttribute.WEREWOLF,
-        defaultAura = Aura.NEUTRAL,
+        defaultAura = Aura.LIGHT,
         configValues = {@IntValue(key = IntValueBase.ALERTER_DISTANCE,
                 defaultValue = 20, meetUpValue = 20, step = 5, item = UniversalMaterial.COMPASS),
                 @IntValue(key = IntValueBase.ALERTER_PROXIMITY_REQUIRED,

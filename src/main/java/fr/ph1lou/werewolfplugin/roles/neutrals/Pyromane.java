@@ -30,6 +30,7 @@ import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
+import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -353,7 +354,13 @@ public class Pyromane extends RoleNeutral implements IPower {
     @Override
     public @NotNull String getDescription() {
         return new DescriptionBuilder(game, this)
-                .setDescription(game.translate("werewolf.roles.pyromane.description"))
+                .setDescription(game.translate("werewolf.roles.pyromane.description",
+                        Formatter.timer(game, TimerBase.PYROMANE_COVER_COOLDOWN),
+                        Formatter.format("&number&", g -> String.valueOf(g.getConfig().getValue(IntValueBase.PYROMANE_HEART_LOSS_AMOUNT) / 2)),
+                        Formatter.format("&timer1&", Utils.conversion(game.getConfig().getTimerValue(TimerBase.PYROMANE_HEART_LOSS_DURATION))),
+                        Formatter.format("&timer2&", Utils.conversion(game.getConfig().getTimerValue(TimerBase.PYROMANE_IGNITION_DELAY_MIN))),
+                        Formatter.format("&timer3&", Utils.conversion(game.getConfig().getTimerValue(TimerBase.PYROMANE_IGNITION_DELAY_MAX))),
+                        Formatter.format("&timer4&", Utils.conversion(game.getConfig().getTimerValue(TimerBase.PYROMANE_FIRE_DURATION)))))
                 .setCommand(game.translate("werewolf.roles.pyromane.cover_command"))
                 .build();
     }

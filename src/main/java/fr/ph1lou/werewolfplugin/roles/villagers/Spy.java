@@ -5,6 +5,7 @@ import fr.ph1lou.werewolfapi.annotations.Role;
 import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
+import fr.ph1lou.werewolfapi.enums.Aura;
 import fr.ph1lou.werewolfapi.enums.Category;
 import fr.ph1lou.werewolfapi.enums.RoleAttribute;
 import fr.ph1lou.werewolfapi.enums.StatePlayer;
@@ -30,6 +31,7 @@ import java.util.List;
 @Role(key = RoleBase.SPY,
         category = Category.VILLAGER,
         attribute = RoleAttribute.MINOR_INFORMATION,
+        defaultAura = Aura.NEUTRAL,
         configValues = @IntValue(key = IntValueBase.SPY_DAY, defaultValue = 5, meetUpValue = 2, step = 1, item = UniversalMaterial.ANVIL))
 public class Spy extends RoleImpl implements IAffectedPlayers, IPower {
 
