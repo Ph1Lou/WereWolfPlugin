@@ -377,16 +377,12 @@
       },
       "raven": {
         "display": "Corvo",
-        "effect": "Atterraggio Morbido",
-        "item": "Libro Atterraggio Morbido III",
-        "description": "Il vostro voto conta doppio. Potete maledire un giocatore ogni mattina che otterrà l'effetto Jump Boost durante un giorno.",
-        "curse_message": "Maledite un giocatore per il giorno §b/ww maledire§r, avete §b&timer&",
-        "curse_perform": "Avete appena maledetto §b&player&",
-        "get_curse": "Siete appena stato maledetto dal corvo. Ottenete Jump Boost fino al mattino",
-        "no_longer_curse": "Non siete più maledetto",
-        "command": "maledire",
-        "raven_player_voted": "Vous obtenez une minutes de Force et de Vitesse car le joueur le plus voté est celui que vous aviez voté",
-        "aura": "Se faire maudire par le §bCorbeau§f donne une aura Obscure"
+        "description": "Potete votare senza entrare in un seggio elettorale grazie al comando §b/lg vote [Pseudo]§r. \nPotete votare per qualsiasi giocatore, indipendentemente dal fatto che lo abbiate incontrato o meno. \nSe il giocatore designato dai voti è quello per cui avete votato, il suo prossimo voto non sarà conteggiato durante lo spoglio. \nSe si tratta dell'ultimo voto della partita, otterrà invece l'effetto Debolezza I per 10 minuti.",
+        "vote_usage": "Utilizzo : §b/lg vote [Pseudo]§r",
+        "vote_perform": "Avete votato contro §b&player&§r a distanza.",
+        "penalty_next_vote": "Il giocatore designato dai voti è quello per cui avevate votato (§b&player&§r): il suo prossimo voto non sarà conteggiato durante lo spoglio.",
+        "penalty_last_vote": "Il giocatore designato dai voti è quello per cui avevate votato (§b&player&§r). Essendo l'ultimo voto, riceve Debolezza I per 10 minuti.",
+        "weakness_applied": "Il Corvo ha votato contro di voi durante l'ultimo voto della partita. Subite §bDebolezza I§r per 10 minuti."
       },
       "village_idiot": {
         "display": "Idiota del Villaggio",

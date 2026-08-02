@@ -318,17 +318,17 @@ Aucun effet de potion, aucune commande dédiée, aucune condition de victoire pe
 ### Corbeau
 
 - **Clé :** `raven`
-- **Classe :** `Raven` (extends `RoleWithLimitedSelectionDuration`) · **Marqueurs :** IAffectedPlayers
+- **Classe :** `Raven` (extends `RoleImpl`) · **Marqueurs :** aucun
 - **Camp :** Villageois · **Aura :** Obscure · **Attribut :** Villageois
 
-`defaultAura=DARK`, `attribute=VILLAGER`. `setPower(false)` à l'init. Mémorise `last` (maudit) et `vote`.
-`onDay` (LOWEST, Raven.java:82) : retire JUMP_BOOST et l'aura modifier du `last`, lui envoie `no_longer_curse`, `last=null`. Si vivant : `setPower(true)`, message avec `POWER_DURATION`.
-Commande `CommandRaven` (CommandRaven.java:33, `rejectIfAlreadyAffected`) : `setPower(false)`, déclenche `CurseEvent`, `clearAffectedPlayer` + `addAffectedPlayer` (définit `last`), donne à la cible **JUMP_BOOST permanent** + `AuraModifier` DARK, envoie un message à la cible.
-`getPlayersMet()` (Raven.java:117) : retourne tous les joueurs sauf lui-même (rencontre tout le monde).
-`onVoteEvent` (VoteEvent, Raven.java:124) : quand le Corbeau vote, ajoute 1 vote au score de la cible et mémorise `vote`.
-`onVoteEvent` (VoteResultEvent, Raven.java:135) : si la cible correspond au voté, envoie une flèche de particule vers lui.
-`onVoteEndEvent` (VoteResultEvent, Raven.java:153) : si le joueur voté par le Corbeau est effectivement éliminé, donne au Corbeau STRENGTH (60s, niveau -1) et SPEED (60s, niveau -1).
-`onPlayerDamage` (EntityDamageEvent, Raven.java:173) : annule les dégâts de chute (FALL) subis par le Corbeau.
+Rôle centré sur le **vote à urne** (`ConfigBase.URN_VOTE`, mutuellement exclusif avec `ConfigBase.VOTE`). `defaultAura=DARK`, `attribute=VILLAGER`. Mémorise `ravenVote` (cible votée ce tour).
+`getPlayersMet()` (Raven.java) : retourne tous les joueurs sauf lui-même → le Corbeau peut voter pour n'importe qui.
+Vote à distance via `CommandVote` (`/lg vote [Pseudo]`) : en mode urne, seul le Corbeau peut utiliser la commande ; `UrnVoteManager.castVoteAgainst(raven, target, null)` enregistre le bulletin dans `remoteVotesAgainst` (compté au dépouillement via `endSession`).
+`onUrnVoteCast` (`UrnVoteCastEvent`) : si le votant est le Corbeau et vote non blanc → `ravenVote = target`.
+`onUrnVoteResult` (`UrnVoteResultEvent`, HIGHEST, skip si annulé) : si l'élu == `ravenVote` :
+  - session < 3 → `UrnVoteManager.markBallotDiscarded(élu, session+1)` : au prochain dépouillement, le bulletin de l'élu est consommé mais non compté (`castVoteAgainst` renvoie `DISCARDED`, message `urn_ballot_discarded`).
+  - session 3 (dernier vote) → l'élu reçoit **WEAKNESS I (10 min, amplifier 0)** + message.
+  - puis `ravenVote = null`.
 
 ### Croupier
 

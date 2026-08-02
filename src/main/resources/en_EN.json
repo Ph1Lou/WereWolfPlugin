@@ -384,16 +384,12 @@
       },
       "raven": {
         "display": "Raven",
-        "effect": "NoFall",
-        "item": "Feather Falling III book",
-        "description": "Your vote counts twice. \nYou are able to vote for any player, even a player you haven't met yet. \nIf the player you voted for is the most voted, \nyou obtain a minute of Strength and Speed and player direction by particles",
-        "curse_message": "Curse a player who will receive Jump Boost I for a day §b/ww curse§r, you have §b&timer&",
-        "curse_perform": "You have cursed §b&player&",
-        "raven_player_voted": "You obtain a minute of Strength and Speed because the player you voted for is the most voted",
-        "get_curse": "You have been cursed by the Raven. You now have Jump Boost until the next morning",
-        "no_longer_curse": "You are not cursed anymore",
-        "command": "curse",
-        "aura": "Being cursed by the §bRaven§f grants a §bDark§f aura"
+        "description": "You may vote without entering a voting office by using §b/lg vote [Name]§r. \nYou can vote for any player, whether you have met them or not. \nIf the player designated by the votes is the one you voted for, their next vote will not be counted in the tally. \nIf it is the last vote of the game, they will instead receive Weakness I for 10 minutes.",
+        "vote_usage": "Usage: §b/lg vote [Name]§r",
+        "vote_perform": "You remotely voted against §b&player&§r.",
+        "penalty_next_vote": "The player designated by the votes is the one you voted for (§b&player&§r): their next ballot will not be counted in the tally.",
+        "penalty_last_vote": "The player designated by the votes is the one you voted for (§b&player&§r). As it was the last vote, they receive Weakness I for 10 minutes.",
+        "weakness_applied": "The Raven voted against you during the last vote of the game. You suffer §bWeakness I§r for 10 minutes."
       },
       "village_idiot": {
         "display": "Village Idiot",
@@ -2077,6 +2073,7 @@
         "urn_target_menu": "Vote against a player",
         "urn_target": "Vote against §b&player&",
         "urn_voted_against": "You voted against §b&player&",
+        "urn_ballot_discarded": "Your ballot was not counted in the tally",
         "urn_voted_blank": "You cast a §fblank vote",
         "urn_vote_not_active": "No vote is currently running",
         "burned_unusable": "This building is on fire and cannot be used",

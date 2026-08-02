@@ -13,7 +13,11 @@ import fr.ph1lou.werewolfapi.enums.StatePlayer;
 import fr.ph1lou.werewolfapi.enums.VoteStatus;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
+import fr.ph1lou.werewolfapi.player.utils.Formatter;
+import fr.ph1lou.werewolfplugin.buildings.UrnVoteManager;
+import fr.ph1lou.werewolfplugin.game.GameManager;
 import fr.ph1lou.werewolfplugin.guis.VoteGui;
+import fr.ph1lou.werewolfplugin.roles.villagers.Raven;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -36,6 +40,48 @@ public class CommandVote implements IParameterizedCommand {
 
         if (playerWW == null) return;
 
+        // --- Urn-vote mode: only the Raven may vote remotely via /lg vote ---
+        if (game.getConfig().isConfigActive(ConfigBase.URN_VOTE)) {
+
+            if (!(playerWW.getRole() instanceof Raven)) {
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.vote_disable");
+                return;
+            }
+
+            if (!ctx.has(0)) {
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.raven.vote_usage");
+                return;
+            }
+
+            IPlayerWW target = ctx.player(0);
+            UrnVoteManager urn = ((GameManager) game).getBuildingsManager().getUrnVoteManager();
+
+            if (!urn.isActive()) {
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.buildings.urn_vote_not_active");
+                return;
+            }
+            if (urn.hasVotedAgainst(playerWW)) {
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.already_voted");
+                return;
+            }
+
+            UrnVoteManager.CastResult result = urn.castVoteAgainst(playerWW, target, null);
+
+            if (result == UrnVoteManager.CastResult.REJECTED) {
+                playerWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.vote_disable");
+                return;
+            }
+
+            if (result == UrnVoteManager.CastResult.COUNTED) {
+                playerWW.modifyHonor(1);
+            }
+
+            playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.raven.vote_perform",
+                    Formatter.player(target.getName()));
+            return;
+        }
+
+        // --- Classic vote mode ---
         if (game.getConfig().getTimerValue(TimerBase.VOTE_START) > 0) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.vote_not_yet_activated");
             return;

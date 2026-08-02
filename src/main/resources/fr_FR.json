@@ -424,16 +424,12 @@
       },
       "raven": {
         "display": "Corbeau",
-        "effect": "Chute Amortie",
-        "item": "Livre Chute Amortie III",
-        "description": "Votre vote compte double. \nVous pouvez voter pour un joueur que vous n'avez pas encore rencontré. \nSi le joueur est voté par le plus grand nombre, \nvous obtenez une minute de Force et de Vitesse et la direction du joueur par des particules",
-        "curse_message": "Maudissez un joueur qui obtiendra l'effet Saut amélioré I pendant une journée pour la journée §b/ww maudire§r, vous avez §b&timer&",
-        "curse_perform": "Vous venez de maudire §b&player&",
-        "raven_player_voted": "Vous obtenez une minutes de Force et de Vitesse car le joueur le plus voté est celui que vous aviez voté",
-        "get_curse": "Vous venez d'être maudit par le corbeau. Vous obtenez Jump Boost jusqu'au matin",
-        "no_longer_curse": "Vous n'êtes plus maudit",
-        "command": "maudire",
-        "aura": "Se faire maudire par le §bCorbeau§f donne une aura Obscure"
+        "description": "Vous pouvez voter sans entrer dans un bureau de vote grâce à la commande §b/lg vote [Pseudo]§r. \nVous pouvez voter pour n'importe quel joueur, peu importe si vous l'avez croisé ou non. \nSi le joueur désigné par les votes est celui que vous avez voté, son prochain vote ne sera pas comptabilisé au dépouillement. \nS'il s'agit du dernier vote de la partie, il obtiendra l'effet Faiblesse I pendant 10 minutes à la place.",
+        "vote_usage": "Utilisation : §b/lg vote [Pseudo]§r",
+        "vote_perform": "Vous avez voté contre §b&player&§r à distance.",
+        "penalty_next_vote": "Le joueur désigné par les votes est celui que vous aviez voté (§b&player&§r) : son prochain bulletin ne sera pas comptabilisé au dépouillement.",
+        "penalty_last_vote": "Le joueur désigné par les votes est celui que vous aviez voté (§b&player&§r). Il s'agissant du dernier vote, il reçoit Faiblesse I pendant 10 minutes.",
+        "weakness_applied": "Le Corbeau a voté contre vous lors du dernier vote de la partie. Vous subissez §bFaiblesse I§r pendant 10 minutes."
       },
       "village_idiot": {
         "display": "Idiot du Village",
@@ -2439,6 +2435,7 @@
         "urn_target_menu": "Voter contre un joueur",
         "urn_target": "Voter contre §b&player&",
         "urn_voted_against": "Vous avez voté contre §b&player&",
+        "urn_ballot_discarded": "Votre bulletin n'a pas été comptabilisé lors du dépouillement",
         "urn_voted_blank": "Vous avez déposé un §fvote blanc",
         "urn_vote_not_active": "Aucun vote n'est en cours",
         "burned_unusable": "Ce bâtiment est en flammes, il est inutilisable",

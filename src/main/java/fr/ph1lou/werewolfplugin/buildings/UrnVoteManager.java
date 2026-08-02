@@ -5,6 +5,7 @@ import fr.ph1lou.werewolfapi.buildings.IBuildingsManager;
 import fr.ph1lou.werewolfapi.buildings.IVoteOffice;
 import fr.ph1lou.werewolfapi.events.buildings.UrnVoteCastEvent;
 import fr.ph1lou.werewolfapi.events.buildings.UrnVoteResultEvent;
+import fr.ph1lou.werewolfapi.events.game.vote.AbsentionistListVoteEvent;
 import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
@@ -15,8 +16,10 @@ import org.bukkit.Location;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UrnVoteManager implements IUrnVoteManager {
 
@@ -32,6 +35,8 @@ public class UrnVoteManager implements IUrnVoteManager {
     private final Set<IPlayerWW> votedBlankOnce = new HashSet<>();
     private final Map<IPlayerWW, Set<Location>> blankVotedUrns = new HashMap<>();
     private final Set<IPlayerWW> electedPlayers = new HashSet<>();
+    private final Map<IPlayerWW, Integer> remoteVotesAgainst = new HashMap<>();
+    private final Map<IPlayerWW, Integer> ballotDiscardedForSession = new HashMap<>();
 
     public UrnVoteManager(IBuildingsManager buildingsManager, WereWolfAPI game) {
         this.buildingsManager = buildingsManager;
@@ -76,6 +81,52 @@ public class UrnVoteManager implements IUrnVoteManager {
         blankVotedUrns.computeIfAbsent(player, k -> new HashSet<>()).add(urnLocation);
     }
 
+    /**
+     * Result of an attempt to cast a vote-against ballot (office or remote).
+     * REJECTED: voter/target not eligible (inactive session, already voted,
+     *           target already elected, or office full).
+     * COUNTED:  the ballot was recorded and will be tallied.
+     * DISCARDED: the ballot was consumed (voter is penalized) but not recorded,
+     *            so it will NOT be counted at dépouillement.
+     */
+    public enum CastResult {
+        REJECTED, COUNTED, DISCARDED
+    }
+
+    public CastResult castVoteAgainst(IPlayerWW voter, IPlayerWW target, IVoteOffice office) {
+
+        if (!active) return CastResult.REJECTED;
+        if (hasVotedAgainst(voter)) return CastResult.REJECTED;
+        if (isElected(target)) return CastResult.REJECTED;
+        if (office != null && office.isFull()) return CastResult.REJECTED;
+
+        boolean discarded = isBallotDiscardedFor(voter);
+
+        if (!discarded) {
+            if (office != null) {
+                office.recordVoteAgainst(target);
+            } else {
+                remoteVotesAgainst.merge(target, 1, Integer::sum);
+            }
+        } else {
+            ballotDiscardedForSession.remove(voter);
+        }
+
+        markVotedAgainst(voter);
+        fireCastEvent(voter, target, false, office);
+
+        return discarded ? CastResult.DISCARDED : CastResult.COUNTED;
+    }
+
+    public void markBallotDiscarded(IPlayerWW player, int session) {
+        ballotDiscardedForSession.put(player, session);
+    }
+
+    private boolean isBallotDiscardedFor(IPlayerWW voter) {
+        Integer s = ballotDiscardedForSession.get(voter);
+        return s != null && s == this.session;
+    }
+
     public void startSession(int n) {
         if (active) {
             endSession(this.session);
@@ -85,6 +136,7 @@ public class UrnVoteManager implements IUrnVoteManager {
         votedAgainst.clear();
         votedBlankOnce.clear();
         blankVotedUrns.clear();
+        remoteVotesAgainst.clear();
 
         for (IVoteOffice office : buildingsManager.getVoteOffices()) {
             office.resetSession();
@@ -100,6 +152,16 @@ public class UrnVoteManager implements IUrnVoteManager {
         }
         active = false;
 
+        // Penalize abstention, mirroring the classic vote: villagers who did not take part
+        // (neither voted against someone nor cast a blank ballot) lose 1 honor. The actual
+        // honor change is applied by Honor#onAbstentionistList (villagers only).
+        Set<IPlayerWW> participants = new HashSet<>(votedAgainst);
+        participants.addAll(votedBlankOnce);
+        Bukkit.getPluginManager().callEvent(new AbsentionistListVoteEvent(game.getAlivePlayersWW()
+                .stream()
+                .filter(playerWW -> !participants.contains(playerWW))
+                .collect(Collectors.toList())));
+
         Map<IPlayerWW, Integer> totals = new HashMap<>();
         for (IVoteOffice office : buildingsManager.getVoteOffices()) {
             for (Map.Entry<IPlayerWW, Integer> e : office.getVotesAgainst().entrySet()) {
@@ -107,6 +169,10 @@ public class UrnVoteManager implements IUrnVoteManager {
                 if (target == null) continue;
                 totals.merge(target, e.getValue(), Integer::sum);
             }
+        }
+        for (Map.Entry<IPlayerWW, Integer> e : remoteVotesAgainst.entrySet()) {
+            if (e.getKey() == null) continue;
+            totals.merge(e.getKey(), e.getValue(), Integer::sum);
         }
 
         IPlayerWW winner = null;

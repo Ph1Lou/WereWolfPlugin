@@ -91,29 +91,22 @@ public class UrnTargetGui implements InventoryProvider {
     private void recordVoteAgainst(GameManager game, IPlayerWW playerWW, IVoteOffice office, IPlayerWW target) {
         UrnVoteManager urn = game.getBuildingsManager().getUrnVoteManager();
 
-        if (!urn.isActive()) {
-            return;
-        }
-        if (office.isFull()) {
-            return;
-        }
-        if (urn.hasVotedAgainst(playerWW)) {
-            return;
-        }
-        if (urn.isElected(target)) {
+        UrnVoteManager.CastResult result = urn.castVoteAgainst(playerWW, target, office);
+
+        if (result == UrnVoteManager.CastResult.REJECTED) {
             return;
         }
 
-        office.recordVoteAgainst(target);
-        urn.markVotedAgainst(playerWW);
-
-        if (!MesquinWereWolf.isAnyUrnRiggedAt(game, office.getUrnLocation())) {
+        if (result == UrnVoteManager.CastResult.COUNTED
+                && !MesquinWereWolf.isAnyUrnRiggedAt(game, office.getUrnLocation())) {
             playerWW.modifyHonor(1);
         }
 
-        urn.fireCastEvent(playerWW, target, false, office);
-
-        playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.configurations.buildings.urn_voted_against",
-                Formatter.player(target.getName()));
+        if (result == UrnVoteManager.CastResult.DISCARDED) {
+            playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.configurations.buildings.urn_ballot_discarded");
+        } else {
+            playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.configurations.buildings.urn_voted_against",
+                    Formatter.player(target.getName()));
+        }
     }
 }
