@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 
 @RoleCommand(key = "werewolf.roles.witch.command_life",
         roleKeys = RoleBase.WITCH,
+        requiredPowerKey = Witch.POWER_LIFE,
         argNumbers = 1,
         autoCompletion = false,
         args = @Params(players = @PlayerArg(index = 0, byUuid = true,
@@ -29,11 +30,6 @@ public class CommandWitchLife implements IParameterizedCommandRole {
     public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
         Witch witch = (Witch) playerWW.getRole();
-
-        if (!witch.hasLifePotion()) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.witch.potion_already_used");
-            return;
-        }
 
         IPlayerWW target = ctx.player(0);
 
@@ -62,7 +58,7 @@ public class CommandWitchLife implements IParameterizedCommandRole {
             return;
         }
 
-        witch.setLifePotion(false);
+        witch.usePower(Witch.POWER_LIFE);
         if (!self) {
             witch.clearOffer(target);
         }

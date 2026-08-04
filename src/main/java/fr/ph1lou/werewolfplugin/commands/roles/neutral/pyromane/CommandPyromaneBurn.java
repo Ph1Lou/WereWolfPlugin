@@ -12,17 +12,13 @@ import fr.ph1lou.werewolfplugin.roles.neutrals.Pyromane;
 
 @RoleCommand(key = "werewolf.roles.pyromane.burn_command",
         roleKeys = RoleBase.PYROMANE,
-        argNumbers = 0)
+        argNumbers = 0,
+        requiredPowerKey = Pyromane.POWER_BURN)
 public class CommandPyromaneBurn implements IParameterizedCommandRole {
 
     @Override
     public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
         Pyromane pyromane = (Pyromane) playerWW.getRole();
-
-        if (!pyromane.canBurn()) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.pyromane.burn_used");
-            return;
-        }
 
         IBuilding building = pyromane.findNearestBuilding();
         if (building == null) {

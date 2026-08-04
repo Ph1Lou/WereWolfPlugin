@@ -10,6 +10,7 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
+import fr.ph1lou.werewolfapi.role.interfaces.IPowers;
 import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.Register;
 import org.bukkit.command.CommandSender;
@@ -142,6 +143,13 @@ public class Command implements TabExecutor {
 
         if (command.requiredPower()) {
             if (!(playerWW.getRole() instanceof IPower) || !((IPower) playerWW.getRole()).hasPower()) {
+                return game.translate(Prefix.RED, "werewolf.check.power");
+            }
+        }
+
+        if (!command.requiredPowerKey().isEmpty()) {
+            if (!(playerWW.getRole() instanceof IPowers)
+                    || !((IPowers) playerWW.getRole()).hasPower(command.requiredPowerKey())) {
                 return game.translate(Prefix.RED, "werewolf.check.power");
             }
         }

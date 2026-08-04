@@ -21,9 +21,9 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.registers.IRegisterManager;
 import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
-import fr.ph1lou.werewolfapi.role.interfaces.ILimitedUse;
-import fr.ph1lou.werewolfapi.role.interfaces.IPower;
+import fr.ph1lou.werewolfapi.role.interfaces.IPowers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.role.utils.Powers;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -55,12 +55,16 @@ import java.util.stream.Collectors;
                 defaultValue = 30,
                 meetUpValue = 30,
                 step = 5))
-public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, IPower {
+public class Citizen extends RoleImpl implements IAffectedPlayers, IPowers {
+
+    // Clés des pouvoirs nommés (servent aussi de clés de traduction du nom affiché
+    // dans la commande admin role). Toujours garder en minuscules (cf. LanguageLoader).
+    public static final String POWER_REDIRECT = "werewolf.roles.citizen.powers.redirect";
+    public static final String POWER_SEE_VOTE = "werewolf.roles.citizen.powers.see_vote";
 
     private final List<IPlayerWW> affectedPlayer = new ArrayList<>();
     private final Set<Integer> canceledSessions = new HashSet<>();
-    private int use = 0;
-    private boolean power = true;
+    private final Powers powers = new Powers();
 
     @Nullable
     private IVoteOffice votedOffice;
@@ -77,26 +81,13 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
         super(api, playerWW);
         GetWereWolfAPI getWereWolfAPI = Bukkit.getServer().getServicesManager().load(GetWereWolfAPI.class);
         this.registerManager = getWereWolfAPI.getRegisterManager();
+        powers.add(POWER_REDIRECT)
+              .add(POWER_SEE_VOTE, Math.max(0, game.getConfig().getValue(IntValueBase.CITIZEN_SEE_VOTE_NUMBER)));
     }
 
     @Override
-    public boolean hasPower() {
-        return this.power;
-    }
-
-    @Override
-    public void setPower(boolean power) {
-        this.power = power;
-    }
-
-    @Override
-    public int getUse() {
-        return this.use;
-    }
-
-    @Override
-    public void setUse(int use) {
-        this.use = use;
+    public Powers getPowers() {
+        return powers;
     }
 
     @Override
@@ -172,10 +163,10 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
             if (!this.getPlayerWW().isState(StatePlayer.ALIVE)) return;
             if (!game.getVoteManager().isStatus(VoteStatus.WAITING)) return;
 
-            if (this.getUse() < game.getConfig().getValue(IntValueBase.CITIZEN_SEE_VOTE_NUMBER)) {
+            if (this.hasPower(POWER_SEE_VOTE)) {
                 this.getPlayerWW().sendMessage(this.buildSeeVoteMessage());
             }
-            if (this.hasPower()) {
+            if (this.hasPower(POWER_REDIRECT)) {
                 this.canRedirect = true;
                 this.getPlayerWW().sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.citizen.redirect_window");
             }
@@ -212,7 +203,7 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
                 ClickEvent.Action.RUN_COMMAND,
                 game.translate("werewolf.roles.citizen.see"));
         TextComponent see = new TextComponent(game.translate(Prefix.YELLOW, "werewolf.roles.citizen.see_vote_message",
-                Formatter.number(game.getConfig().getValue(IntValueBase.CITIZEN_SEE_VOTE_NUMBER) - this.getUse())));
+                Formatter.number(this.getPowerUses(POWER_SEE_VOTE))));
         see.addExtra(seeVote);
         return see;
     }
@@ -316,7 +307,7 @@ public class Citizen extends RoleImpl implements ILimitedUse, IAffectedPlayers, 
 
     public void setRedirectTarget(IPlayerWW target) {
         this.redirectTarget = target;
-        this.setPower(false);
+        this.usePower(POWER_REDIRECT);
     }
 
     public int getCurrentUrnSession() {

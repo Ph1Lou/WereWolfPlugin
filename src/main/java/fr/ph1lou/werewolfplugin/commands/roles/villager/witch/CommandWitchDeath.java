@@ -19,6 +19,7 @@ import java.util.Optional;
 
 @RoleCommand(key = "werewolf.roles.witch.command_death",
         roleKeys = RoleBase.WITCH,
+        requiredPowerKey = Witch.POWER_DEATH,
         argNumbers = 1,
         autoCompletion = false,
         args = @Params(players = @PlayerArg(index = 0, byUuid = true,
@@ -31,11 +32,6 @@ public class CommandWitchDeath implements IParameterizedCommandRole {
     public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext ctx) {
 
         Witch witch = (Witch) playerWW.getRole();
-
-        if (!witch.hasDeathPotion()) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.roles.witch.potion_already_used");
-            return;
-        }
 
         IPlayerWW target = ctx.player(0);
 
@@ -67,7 +63,7 @@ public class CommandWitchDeath implements IParameterizedCommandRole {
             return;
         }
 
-        witch.setDeathPotion(false);
+        witch.usePower(Witch.POWER_DEATH);
         witch.clearOffer(target);
         witch.addCursedKiller(killer);
         playerWW.sendMessageWithKey(Prefix.YELLOW, "werewolf.roles.witch.curse_perform",

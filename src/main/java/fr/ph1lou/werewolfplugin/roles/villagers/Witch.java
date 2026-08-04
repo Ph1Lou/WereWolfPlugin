@@ -14,7 +14,9 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleImpl;
+import fr.ph1lou.werewolfapi.role.interfaces.IPowers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.role.utils.Powers;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -34,35 +36,29 @@ import java.util.*;
         category = Category.VILLAGER,
         attribute = RoleAttribute.VILLAGER,
         configurations = {@Configuration(config = @ConfigurationBasic(key = ConfigBase.WITCH_AUTO_RESURRECTION, defaultValue = true))})
-public class Witch extends RoleImpl {
+public class Witch extends RoleImpl implements IPowers {
 
     public static final int OFFER_WINDOW = 5;
     public static final double ABSORPTION_REDUCTION = 2d;
 
-    private boolean lifePotion = true;
-    private boolean deathPotion = true;
+    // Clés des pouvoirs nommés (servent aussi de clés de traduction du nom affiché
+    // dans la commande admin role). Toujours garder en minuscules (cf. LanguageLoader).
+    public static final String POWER_LIFE = "werewolf.roles.witch.powers.life";
+    public static final String POWER_DEATH = "werewolf.roles.witch.powers.death";
+
+    private final Powers powers = new Powers();
 
     private final Set<IPlayerWW> cursedKillers = new HashSet<>();
     private final Map<IPlayerWW, Integer> pendingOffers = new HashMap<>();
 
     public Witch(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
+        powers.add(POWER_LIFE).add(POWER_DEATH);
     }
 
-    public boolean hasLifePotion() {
-        return this.lifePotion;
-    }
-
-    public void setLifePotion(boolean lifePotion) {
-        this.lifePotion = lifePotion;
-    }
-
-    public boolean hasDeathPotion() {
-        return this.deathPotion;
-    }
-
-    public void setDeathPotion(boolean deathPotion) {
-        this.deathPotion = deathPotion;
+    @Override
+    public Powers getPowers() {
+        return powers;
     }
 
     public void addCursedKiller(IPlayerWW killer) {
@@ -84,10 +80,10 @@ public class Witch extends RoleImpl {
         return new DescriptionBuilder(game, this)
                 .setDescription(game.translate("werewolf.roles.witch.description"))
                 .setPower(game.translate("werewolf.roles.witch.power",
-                        Formatter.format("&life&", game.translate(this.lifePotion
+                        Formatter.format("&life&", game.translate(hasPower(POWER_LIFE)
                                 ? "werewolf.roles.witch.potion_available"
                                 : "werewolf.roles.witch.potion_used")),
-                        Formatter.format("&death&", game.translate(this.deathPotion
+                        Formatter.format("&death&", game.translate(hasPower(POWER_DEATH)
                                 ? "werewolf.roles.witch.potion_available"
                                 : "werewolf.roles.witch.potion_used"))))
                 .setItems(game.translate("werewolf.roles.witch.items"))
@@ -115,7 +111,7 @@ public class Witch extends RoleImpl {
             return;
         }
 
-        if (!this.lifePotion && !this.deathPotion) return;
+        if (!hasPower(POWER_LIFE) && !hasPower(POWER_DEATH)) return;
 
         this.pendingOffers.put(playerWW, game.getTimer());
 
@@ -123,7 +119,7 @@ public class Witch extends RoleImpl {
                 "werewolf.roles.witch.death_message",
                 Formatter.player(playerWW.getName())));
 
-        if (this.lifePotion) {
+        if (hasPower(POWER_LIFE)) {
             TextComponent life = VersionUtils.getVersionUtils().createClickableText(
                     game.translate("werewolf.roles.witch.life_potion"),
                     String.format("/ww %s %s",
@@ -133,7 +129,7 @@ public class Witch extends RoleImpl {
             message.addExtra(life);
         }
 
-        if (this.deathPotion && playerWW.getLastKiller().isPresent()) {
+        if (hasPower(POWER_DEATH) && playerWW.getLastKiller().isPresent()) {
             TextComponent death = VersionUtils.getVersionUtils().createClickableText(
                     game.translate("werewolf.roles.witch.death_potion"),
                     String.format("/ww %s %s",
@@ -170,7 +166,7 @@ public class Witch extends RoleImpl {
             return false;
         }
 
-        if (!this.lifePotion) {
+        if (!hasPower(POWER_LIFE)) {
             return false;
         }
 
@@ -183,7 +179,7 @@ public class Witch extends RoleImpl {
             return false;
         }
 
-        this.lifePotion = false;
+        usePower(POWER_LIFE);
         game.resurrection(this.getPlayerWW());
         return true;
     }

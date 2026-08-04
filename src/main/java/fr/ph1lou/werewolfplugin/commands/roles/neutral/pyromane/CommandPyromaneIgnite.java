@@ -11,7 +11,7 @@ import fr.ph1lou.werewolfplugin.roles.neutrals.Pyromane;
 
 @RoleCommand(key = "werewolf.roles.pyromane.ignite_command",
         roleKeys = RoleBase.PYROMANE,
-        requiredPower = true,
+        requiredPowerKey = Pyromane.POWER_IGNITE,
         argNumbers = 0)
 public class CommandPyromaneIgnite implements IParameterizedCommandRole {
 

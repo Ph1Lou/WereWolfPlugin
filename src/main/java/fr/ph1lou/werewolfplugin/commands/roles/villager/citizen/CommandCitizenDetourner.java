@@ -15,7 +15,7 @@ import fr.ph1lou.werewolfplugin.roles.villagers.Citizen;
 
 @RoleCommand(key = "werewolf.roles.citizen.detourner_command",
         roleKeys = RoleBase.CITIZEN,
-        requiredPower = true,
+        requiredPowerKey = Citizen.POWER_REDIRECT,
         argNumbers = 1,
         args = @Params(players = @PlayerArg(index = 0, states = { StatePlayer.ALIVE, StatePlayer.JUDGEMENT }, excludeSelf = true)))
 public class CommandCitizenDetourner implements IParameterizedCommandRole {

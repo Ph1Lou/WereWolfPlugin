@@ -27,8 +27,9 @@ import fr.ph1lou.werewolfapi.game.WereWolfAPI;
 import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.impl.RoleNeutral;
-import fr.ph1lou.werewolfapi.role.interfaces.IPower;
+import fr.ph1lou.werewolfapi.role.interfaces.IPowers;
 import fr.ph1lou.werewolfapi.role.utils.DescriptionBuilder;
+import fr.ph1lou.werewolfapi.role.utils.Powers;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.utils.Utils;
 import org.bukkit.Bukkit;
@@ -77,14 +78,18 @@ import java.util.UUID;
                         defaultValue = 3 * 60, meetUpValue = 3 * 60, step = 15),
                 @Timer(key = TimerBase.PYROMANE_IGNITION_DELAY_MAX,
                         defaultValue = 5 * 60, meetUpValue = 5 * 60, step = 15)})
-public class Pyromane extends RoleNeutral implements IPower {
+public class Pyromane extends RoleNeutral implements IPowers {
+
+    // Clés des pouvoirs nommés (servent aussi de clés de traduction du nom affiché
+    // dans la commande admin role). Toujours garder en minuscules (cf. LanguageLoader).
+    public static final String POWER_IGNITE = "werewolf.roles.pyromane.powers.ignite";
+    public static final String POWER_BURN = "werewolf.roles.pyromane.powers.burn";
 
     private final Set<UUID> coveredPlayers = new HashSet<>();
     private final Map<UUID, Float> burnResistance = new HashMap<>();
+    private final Powers powers = new Powers();
 
     private int lastCoverTimer = 0;
-    private boolean ignitePower = false;
-    private boolean burnPower = false;
 
     @Nullable private IBuilding burnedBuilding;
     @Nullable private Location fireLocation;
@@ -95,6 +100,12 @@ public class Pyromane extends RoleNeutral implements IPower {
 
     public Pyromane(WereWolfAPI api, IPlayerWW playerWW) {
         super(api, playerWW);
+        powers.add(POWER_IGNITE, 0).add(POWER_BURN, 0);
+    }
+
+    @Override
+    public Powers getPowers() {
+        return powers;
     }
 
     public boolean canCover() {
@@ -120,7 +131,6 @@ public class Pyromane extends RoleNeutral implements IPower {
     }
 
     public void ignite() {
-        setPower(false);
         Set<IPlayerWW> targets = new HashSet<>();
         for (UUID uuid : new HashSet<>(this.coveredPlayers)) {
             IPlayerWW p = game.getPlayerWW(uuid).orElse(null);
@@ -133,10 +143,11 @@ public class Pyromane extends RoleNeutral implements IPower {
         Bukkit.getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
-            setPower(true);
             this.getPlayerWW().sendMessageWithKey(Prefix.RED, "werewolf.check.cancel");
             return;
         }
+
+        usePower(POWER_IGNITE);
 
         for (IPlayerWW target : targets) {
             this.coveredPlayers.remove(target.getUUID());
@@ -164,10 +175,6 @@ public class Pyromane extends RoleNeutral implements IPower {
 
         this.getPlayerWW().sendMessageWithKey(Prefix.GREEN, "werewolf.roles.pyromane.ignited_perform",
                 Formatter.number(targets.size()));
-    }
-
-    public boolean canBurn() {
-        return this.burnPower;
     }
 
     @Nullable
@@ -198,7 +205,7 @@ public class Pyromane extends RoleNeutral implements IPower {
     }
 
     public void burnBuilding(IBuilding building) {
-        this.burnPower = false;
+        usePower(POWER_BURN);
         this.burnedBuilding = building;
         this.burnPending = true;
 
@@ -314,8 +321,8 @@ public class Pyromane extends RoleNeutral implements IPower {
             return;
         }
         dayNumber = event.getNumber();
-        setPower(true);
-        this.burnPower = true;
+        setPowerUses(POWER_IGNITE, 1);
+        setPowerUses(POWER_BURN, 1);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -339,15 +346,7 @@ public class Pyromane extends RoleNeutral implements IPower {
     }
 
     @Override
-    public boolean hasPower() { return this.ignitePower; }
-
-    @Override
-    public void setPower(boolean power) { this.ignitePower = power; }
-
-    @Override
     public void recoverPower() {
-        setPower(false);
-        this.burnPower = false;
         this.lastCoverTimer = -game.getConfig().getTimerValue(TimerBase.PYROMANE_COVER_COOLDOWN);
     }
 

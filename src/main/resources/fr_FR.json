@@ -235,6 +235,10 @@
         "command_death": "maudire_witch",
         "configurations": {
           "auto_rez_witch": "la Sorcière peut se ressusciter elle même"
+        },
+        "powers": {
+          "life": "Potion de Vie",
+          "death": "Potion de Mort"
         }
       },
       "little_girl": {
@@ -250,12 +254,29 @@
       },
       "troublemaker": {
         "display": "Trublion",
-        "description": "Une fois dans la partie, vous pouvez téléporter un joueur aléatoirement sur la carte avec §b/ww switch§f. Lorsque vous mourrez tous les joueurs sont téléportées aux quatre coins de la carte.",
+        "description": "Vous gagnez soit avec le Village, soit seul (décidé à l'annonce de votre rôle). Une fois dans la partie et avant la révélation de la liste des loups, vous pouvez échanger les rôles de 2 joueurs avec §b/ww switch [Pseudo1] [Pseudo2]§f. Une fois dans la partie, vous pouvez disperser tous les autres joueurs avec §b/ww tpall§f ; sinon, ils seront dispersés à votre mort.",
         "chat": "Vous pouvez envoyer des messages dans le chat des Loups-Garous néanmoins, vous ne pouvez pas voir son contenu",
-        "troublemaker_perform": "Vous venez de trublionner §b&player&",
+        "power_solo": "§cMode solitaire§f : vous connaissez les 2 rôles échangés, vous pouvez téléporter un joueur avec §b/ww tp [Pseudo]§f (1 fois) et bénéficiez de §b+1 Sharpness§f sur votre épée.",
+        "solo": "Votre condition de victoire est tirée au sort : vous êtes §csolitaire§f, vous devez gagner seul !",
+        "village": "Votre condition de victoire est tirée au sort : vous gagnez avec le §aVillage§f.",
+        "already_used": "Vous avez déjà utilisé ce pouvoir.",
+        "too_late": "La liste des loups a été révélée : vous ne pouvez plus échanger les rôles.",
+        "not_solo": "Ce pouvoir est réservé au mode solitaire.",
+        "switch_perform": "Vous avez échangé les rôles de §b&player1&§f et §b&player2&§f.",
+        "switch_concerned": "Votre rôle vient d'être secrètement échangé...",
+        "switch_reveal": "Les rôles échangés sont §b&role1&§f et §b&role2&§f.",
+        "tpall_perform": "Vous avez dispersé tous les autres joueurs sur la carte.",
+        "troublemaker_perform": "Vous venez de téléporter §b&player&§f",
         "troublemaker_death": "Un Trublion vient de mourir, tous les joueurs sont téléportés aléatoirement",
         "get_switch": "Vous venez d'être téléporté par un trublion",
-        "command": "switch"
+        "command": "switch",
+        "command_tp": "tp",
+        "command_tpall": "tpall",
+        "powers": {
+          "switch": "Échange",
+          "tpall": "Dispersion",
+          "tp": "Téléportation"
+        }
       },
       "citizen": {
         "display": "Citoyen",
@@ -288,6 +309,10 @@
         },
         "timers": {
           "redirect_window": "Fenêtre de détournement (§b&timer&§f)"
+        },
+        "powers": {
+          "redirect": "Détournement",
+          "see_vote": "Dépouillement"
         }
       },
       "angel": {
@@ -1490,6 +1515,10 @@
           "fire_duration": "Durée de l'incendie (§b&timer&§f)",
           "ignition_delay_min": "Délai d'ignition min. (§b&timer&§f)",
           "ignition_delay_max": "Délai d'ignition max. (§b&timer&§f)"
+        },
+        "powers": {
+          "ignite": "Embrasement",
+          "burn": "Condamnation"
         }
       },
       "alerter_werewolf": {
@@ -1815,6 +1844,7 @@
           "fake_lover": "En Faux Couple avec : §b&player&",
           "kill_by": "Tué par : §b&player&",
           "power": "Pouvoir : §b&on&",
+          "powers": "Pouvoirs : §b&list&",
           "role": "§b&player&§r est §b&role&",
           "transformed": "Transformé : §b&on&",
           "yes": "oui",

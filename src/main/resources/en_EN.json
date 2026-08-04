@@ -63,7 +63,11 @@
         "color": "§0",
         "description": "§6Werewolf §7➽§c A destructive link between §6&player&§c and you has emerged. You cannot win together, even if you are in the same team.\n §c You have an additional heart and NoFall while both of you are alive.",
         "death_cursed_lover": "Your cursed lover is dead, you loose all your bonus effects",
-        "not_enough_players": "There aren't enough players to add cursed lovers"
+        "not_enough_players": "There aren't enough players to add cursed lovers",
+        "configurations": {
+          "health_bonus": "Couple health bonus (§b&number&§f)",
+          "health_penalty": "Health penalty on partner's death (§b&number&§f)"
+        }
       },
       "amnesiac_lover": {
         "display": "Amnesiac Lovers",
@@ -115,7 +119,11 @@
         "items": "A Sharpness III book, a Protection III book and a Power III book",
         "effect": "Strength before his first kill",
         "hearts": "Additional Heart(s) : §b&heart&\n",
-        "power": "Whenever you kill a player, you get an additional permanent heart and a golden apple."
+        "power": "Whenever you kill a player, you get an additional permanent heart and a golden apple.",
+        "configurations": {
+          "health_per_kill": "Health gained per kill (§b&number&§f)",
+          "golden_apples": "Golden apples per kill (§b&number&§f)"
+        }
       },
       "amnesiac_werewolf": {
         "display": "Amnesiac Werewolf",
@@ -124,7 +132,15 @@
         "command": "§b/ww hurler§f to howl once per game.",
         "howl_command": "hurler",
         "howl_warn": "A §cWerewolf§f howls nearby...",
-        "howl_perform": "You howled. §b&number&§f Werewolf(ves) nearby."
+        "howl_perform": "You howled. §b&number&§f Werewolf(ves) nearby.",
+        "configurations": {
+          "proximity_range": "Proximity distance (§b&number&§f blocks)",
+          "howling_range": "Howl range (§b&number&§f blocks)"
+        },
+        "timers": {
+          "reveal_min": "Minimum reveal (§b&timer&§f)",
+          "reveal_max": "Maximum reveal (§b&timer&§f)"
+        }
       },
       "werewolf": {
         "display": "Werewolf",
@@ -219,6 +235,10 @@
         "command_death": "curse_witch",
         "configurations": {
           "auto_rez_witch": "the Witch can bring herself back to life"
+        },
+        "powers": {
+          "life": "Life Potion",
+          "death": "Death Potion"
         }
       },
       "little_girl": {
@@ -234,12 +254,29 @@
       },
       "troublemaker": {
         "display": "Troublemaker",
-        "description": "Once during the game, you may teleport a player to a random location on the map. When you die, all players are scattered around the map.",
+        "description": "You win either with the Village or alone (decided when your role is announced). Once per game, before the werewolf list is revealed, you may swap the roles of 2 players with §b/ww switch [Player1] [Player2]§f. Once per game you may scatter all other players with §b/ww tpall§f; otherwise they are scattered upon your death.",
         "chat": "You can send messages in the werewolf chat. However, you cannot see it's content",
-        "troublemaker_perform": "You have troublemade §b&player&",
+        "power_solo": "§cSolo mode§f: you know the 2 swapped roles, you may teleport a player with §b/ww tp [Player]§f (once) and gain §b+1 Sharpness§f on your sword.",
+        "solo": "Your win condition was drawn: you are §csolitary§f, you must win alone!",
+        "village": "Your win condition was drawn: you win with the §aVillage§f.",
+        "already_used": "You have already used this power.",
+        "too_late": "The werewolf list has been revealed: you can no longer swap roles.",
+        "not_solo": "This power is only available in solo mode.",
+        "switch_perform": "You swapped the roles of §b&player1&§f and §b&player2&§f.",
+        "switch_concerned": "Your role has been secretly swapped...",
+        "switch_reveal": "The swapped roles are §b&role1&§f and §b&role2&§f.",
+        "tpall_perform": "You scattered all other players across the map.",
+        "troublemaker_perform": "You have teleported §b&player&§f",
         "troublemaker_death": "A Troublemaker died, all players are randomly teleported",
         "get_switch": "You have been teleported by a troublemaker",
-        "command": "switch"
+        "command": "switch",
+        "command_tp": "tp",
+        "command_tpall": "tpall",
+        "powers": {
+          "switch": "Role Swap",
+          "tpall": "Scatter",
+          "tp": "Teleport"
+        }
       },
       "citizen": {
         "display": "Citizen",
@@ -267,7 +304,15 @@
         "hide_composition": "Among these 3 roles, only one is present in the game: &role1&, &role2&, &role3&",
         "rumor": "The player §b&player&§f has written the rumor &message&",
         "configurations": {
-          "vote_see_number": "Number of ballots counted §b&number&§r"
+          "vote_see_number": "Number of ballots counted §b&number&§r",
+          "office_proximity": "Voting office proximity (§b&number&§f blocks)"
+        },
+        "powers": {
+          "redirect": "Redirect",
+          "see_vote": "Vote Count"
+        },
+        "timers": {
+          "redirect_window": "Redirect window (§b&timer&§f)"
         }
       },
       "angel": {
@@ -356,7 +401,27 @@
         "kill_success": "You killed a Lover! Choose your bonus with §b/ww bonus <1-4>§f (1: 25 golden apples, 2: Speed II, 3: Strength I, 4: Regeneration I).",
         "survivor_alone": "Your Lover was killed by the Rival. Your couple is broken, you must now win alone.",
         "penalty": "The couple died without you: you lose §c5❤ permanent§f but regain §b1❤ every 5 minutes§f.",
-        "lover_arrow": "Lover"
+        "lover_arrow": "Lover",
+        "configurations": {
+          "isolate_range": "Isolation distance (§b&number&§f blocks)",
+          "damage_reduction": "Damage reduction vs lovers (§b&number&§f%)",
+          "penalty_health": "Health penalty (§b&number&§f)",
+          "isolate_max_use": "Max isolation uses (§b&number&§f)",
+          "regen_health": "Health regenerated (§b&number&§f)",
+          "regen_count": "Number of regenerations (§b&number&§f)",
+          "kill_golden_apples": "Bonus golden apples (§b&number&§f)",
+          "speed_amplifier": "Speed amplifier (§b&number&§f)"
+        },
+        "timers": {
+          "analyse_cooldown": "Analyser cooldown (§b&timer&§f)",
+          "deviner_cooldown": "Deviner cooldown (§b&timer&§f)",
+          "isolate_duration": "Isolation duration (§b&timer&§f)",
+          "regen_interval": "Regeneration interval (§b&timer&§f)"
+        },
+        "isolate_both": "Both Lovers are within range! The closest one (§b&player&§f) was targeted.",
+        "isolate_no_use": "You have no uses of your isolation power left.",
+        "isolate_targeted": "You have been targeted by a Rival! You cannot donate life at the moment.",
+        "isolate_deceptive": "Your partner doesn't seem to need that much life."
       },
       "fox": {
         "display": "Fox",
@@ -398,7 +463,10 @@
         "power_off": "You §ccannot§f come back to life anymore",
         "announce": "The Village Idiot §b&player&§r has come back to life.",
         "vote": "You have lost your voting right following you resurrection",
-        "description": "When you are killed by a player who isn't part of the Werewolves, you come back to life and all players are told your role, but you lose two permanent hearts."
+        "description": "When you are killed by a player who isn't part of the Werewolves, you come back to life and all players are told your role, but you lose two permanent hearts.",
+        "configurations": {
+          "health_penalty": "Health penalty (§b&number&§f)"
+        }
       },
       "villager": {
         "display": "Villager",
@@ -449,7 +517,10 @@
         "lose_health": "A falsified player died: you lose §c&number&❤ permanent§f.",
         "howl_warn": "A §cWerewolf§f howls nearby...",
         "howl_perform": "You howled. §b&number&§f Werewolf(ves) nearby.",
-        "howl_already_used": "You have already used your howl."
+        "howl_already_used": "You have already used your howl.",
+        "configurations": {
+          "heart_loss": "Health lost if the target dies (§b&number&§f❤)"
+        }
       },
       "vaudouiste": {
         "display": "Voodoo Priest",
@@ -513,7 +584,8 @@
         "guess_unavailable": "You cannot guess right now",
         "configurations": {
           "detective_every_other_day": "Detective every other day"
-        }
+        },
+        "guess_expired": "The time to guess has run out."
       },
       "naughty_little_wolf": {
         "display": "Naughty Little Wolf",
@@ -597,7 +669,10 @@
         "get_protection": "The Protector is protecting today, you now have Resistance and NoFall",
         "no_longer_protected": "You aren't protected anymore",
         "command": "protect",
-        "aura": "Being protected by the §bProtector§f grants a §bBright§f aura"
+        "aura": "Being protected by the §bProtector§f grants a §bBright§f aura",
+        "configurations": {
+          "fall_reduction": "Fall damage reduction (§b&number&§f%)"
+        }
       },
       "guard": {
         "display": "Guard",
@@ -636,7 +711,10 @@
       "white_werewolf": {
         "display": "White Werewolf",
         "heart": "Five additional permanent hearts",
-        "description": "You are infiltrated among the Werewolves."
+        "description": "You are infiltrated among the Werewolves.",
+        "configurations": {
+          "health_bonus": "Health bonus (§b&number&§f)"
+        }
       },
       "cupid": {
         "display": "Cupid",
@@ -659,13 +737,22 @@
         "power": "Two additional heart containers",
         "description": "You have been separated from your brother at birth, but keep a strong link to him. Your hearts above the fifth are linked.",
         "siamese_twin_list": "List of your Siamese Brothers: §b&list&",
-        "siamese_twin": "Siamese Twins : §b&list&"
+        "siamese_twin": "Siamese Twins : §b&list&",
+        "configurations": {
+          "health_bonus": "Health bonus (§b&number&§f)"
+        }
       },
       "alpha_werewolf": {
         "display": "Alpha Werewolf",
         "description": "Your name is visible for all other Werewolves in the wolf chat.",
         "effect": "2 ♥ of Absorption for 5 minutes at the beginning of each night.",
-        "prefix": "[§c&alpha&§r] &message&"
+        "prefix": "[§c&alpha&§r] &message&",
+        "configurations": {
+          "absorption_amplifier": "Absorption amplifier (§b&number&§f)"
+        },
+        "timers": {
+          "absorption_duration": "Absorption duration (§b&timer&§f)"
+        }
       },
       "mischievous_werewolf": {
         "display": "Mischievous Wolf",
@@ -704,7 +791,8 @@
           "progress": "Charming 1% every §b&timer&"
         },
         "configurations": {
-          "distance": "Pied Piper action radius §b&number&"
+          "distance": "Pied Piper action radius §b&number&",
+          "flute_player_every_other_day": "Pied Piper every other day"
         }
       },
       "librarian": {
@@ -784,7 +872,9 @@
         "victim_name": "§b&player&§r is the killer",
         "victim_role": "§b&role&§r is the killer",
         "command": "command_shaman",
-        "aura": "When the §bShaman§f uses his power, his aura becomes dark"
+        "aura": "When the §bShaman§f uses his power, his aura becomes dark",
+        "hidden_death": "A player has died, but their death is hidden. You cannot obtain any information.",
+        "victim_names": "The killer is hiding among: §b&names&§r"
       },
       "charmer": {
         "display": "Charmer",
@@ -989,7 +1079,12 @@
         "success": "The hunter fired at &target&. He loses 5 hearts.",
         "werewolf_slain": "You killed a wolf; you dealt more wolves than before.",
         "configurations": {
-          "can_shoot": "Hunter can shoot after death"
+          "can_shoot": "Hunter can shoot after death",
+          "base_bonus": "Base bonus vs wolves (§b&number&§f%)",
+          "bonus_increment": "Increment per wolf killed (§b&number&§f%)"
+        },
+        "timers": {
+          "shoot_window": "Time to shoot (§b&timer&§f)"
         }
       },
       "thug": {
@@ -1060,7 +1155,8 @@
         "use_power": "You can spy on a new player §b/ww spy",
         "result": "The player &player& has performed &number& story action(s)",
         "perform": "You have started to spy on §b&player&",
-        "day": "Power activated Day §b&number&"
+        "day": "Power activated Day §b&number&",
+        "not_consecutive": "You cannot spy on the same player twice in a row."
       },
       "benefactor": {
         "display": "Benefactor",
@@ -1073,12 +1169,28 @@
         "too_many_players": "You have already used your power on §b3§fplayers",
         "already_use_on_player": "You have already used your power over this player",
         "perform": "You gave §b1 ♥️ §f to §b&player& §f!",
-        "target_message": "The benefactor has given you §b1 ♥️ §f!"
+        "target_message": "The benefactor has given you §b1 ♥️ §f!",
+        "configurations": {
+          "min_clients": "Minimum number of clients (§b&number&§f)",
+          "regen_health": "Health regenerated (§b&number&§f)"
+        },
+        "timers": {
+          "cooldown": "Cooldown (§b&timer&§f)",
+          "regen_interval": "Regeneration interval (§b&timer&§f)"
+        }
       },
       "rabbit": {
         "display": "Rabbit",
         "description": "When you have less than &number& ♥️, all players in the Village around you (within &number1& blocks) take &number2&% less degae except those who already have a Resistance effect.",
-        "effects": "Weakness I at night Speed based on your lifebar: 10% at 3 ♥️ and + | 20% below 3 ♥️"
+        "effects": "Weakness I at night Speed based on your lifebar: 10% at 3 ♥️ and + | 20% below 3 ♥️",
+        "configurations": {
+          "low_health": "Low health threshold (§b&number&§f)",
+          "high_health": "High health threshold (§b&number&§f)",
+          "ally_range": "Ally range (§b&number&§f blocks)",
+          "ally_reduction": "Ally damage reduction (§b&number&§f%)",
+          "low_speed": "Low health speed (§b&number&§f%)",
+          "normal_speed": "Normal speed (§b&number&§f%)"
+        }
       },
       "interpreter": {
         "display": "Interpreter",
@@ -1110,10 +1222,12 @@
         "fur_numbers": "Number of furs: §b&number&",
         "recover": "You retrieve the fur from §b&player&",
         "timers": {
-          "progress": "Fur recovery duration §b&timer&"
+          "progress": "Fur recovery duration §b&timer&",
+          "carcass_duration": "Carcass duration (§b&timer&§f)"
         },
         "configurations": {
-          "distance": "Range of action of the Poacher §b&number&§f blocks"
+          "distance": "Range of action of the Poacher §b&number&§f blocks",
+          "detection_distance": "Detection distance (§b&number&§f blocks)"
         }
       },
       "bonesetter": {
@@ -1126,7 +1240,13 @@
         "perform": "§b&player& will be healed if he loses too much health!",
         "target_message": "The bonesetter will cure you of §b3 ♥ §f if you fall below §b4 ♥!",
         "activate": "A player has been cured thanks to you",
-        "receive_heal": "You are receiving the healing from the §bBonesetter"
+        "receive_heal": "You are receiving the healing from the §bBonesetter",
+        "configurations": {
+          "health_threshold": "Trigger threshold (§b&number&§f)",
+          "regen_duration": "Regeneration duration (§b&number&§f ticks)",
+          "regen_amplifier": "Regeneration amplifier (§b&number&§f)",
+          "bonus_health": "Bonus per golden apple (§b&number&§f)"
+        }
       },
       "witness": {
         "display": "Witness",
@@ -1137,7 +1257,11 @@
         "item": "Role by havwila",
         "reveal_culprit": "Player §b&player&§r belongs to the Werewolf camp",
         "culprit_death": "The culprit is dead, so you lose 2 permanent hearts",
-        "change": "The identity of the guilty party has changed, this is §b&player&§r"
+        "change": "The identity of the guilty party has changed, this is §b&player&§r",
+        "configurations": {
+          "health_penalty": "Health penalty (§b&number&§f)",
+          "culprit_reduction": "Damage reduction vs culprit (§b&number&§f%)"
+        }
       },
       "croupier": {
         "display": "Croupier",
@@ -1207,7 +1331,11 @@
         "not_guessed": "You did not guess the role of &player&. You cannot perform this action",
         "command_disable": "mindsilence",
         "disable_perform": "You disabled &player& skills",
-        "disable_target": "Your skills have been disabled. You are losing your effects and powers definitively"
+        "disable_target": "Your skills have been disabled. You are losing your effects and powers definitively",
+        "configurations": {
+          "correct_bonus": "Bonus if correct (§b&number&§f❤)",
+          "wrong_penalty": "Penalty if wrong (§b&number&§f❤)"
+        }
       },
       "silencer_werewolf": {
         "display": "Silencer Werewolf",
@@ -1294,7 +1422,10 @@
         "display": "Prophetess",
         "description": "At the start of each episode, you receive a list of all players whose current aura differs from their aura at the start of the previous episode. If an aura changes multiple times, you are not made aware of it.",
         "no_change": "No player's aura has changed since the start of the previous episode.",
-        "list": "The following players have a different aura than at the start of the previous episode: §b&list&§f."
+        "list": "The following players have a different aura than at the start of the previous episode: §b&list&§f.",
+        "configurations": {
+          "prophetess_every_other_day": "Prophetess every other day"
+        }
       },
       "renegade": {
         "display": "Renegade",
@@ -1307,7 +1438,16 @@
         "not_discovered": "You haven't discovered §b&player&§f's color yet.",
         "already_joined": "You have already joined a camp.",
         "join": "You joined the §b&camp&§f camp. Among the players whose matching color you discovered, §b&number&§f belong to the opposite camp.",
-        "actionbar_joined": "Camp: §b&camp&§f"
+        "actionbar_joined": "Camp: §b&camp&§f",
+        "configurations": {
+          "distance": "Discovery distance (§b&number&§f blocks)",
+          "balance_rate": "Balance rate (§b&number&§f%)",
+          "resistance_levels": "Resistance levels (§b&number&§f%)",
+          "forced_join_episode": "Forced join episode (§b&number&§f)"
+        },
+        "timers": {
+          "discovery": "Discovery duration (§b&timer&§f)"
+        }
       },
       "ronin": {
         "display": "Ronin",
@@ -1319,7 +1459,17 @@
         "silence_start": "You silence §b&player&§f!",
         "silence_target": "§b&player&§f silenced you! Your powers are disabled.",
         "silence_end": "You are no longer silenced. Your powers are restored.",
-        "actionbar": "Honor: §b&number&§f (peak: §b&number1&§f)"
+        "actionbar": "Honor: §b&number&§f (peak: §b&number1&§f)",
+        "configurations": {
+          "ronin_every_other_day": "Ronin every other day",
+          "hemorrhage_damage": "Hemorrhage damage (§b&number&§f)",
+          "group_distance": "Group distance (§b&number&§f blocks)",
+          "honor_max": "Maximum Honor (§b&number&§f)",
+          "honor_min": "Minimum Honor (§b&number&§f)"
+        },
+        "timers": {
+          "hemorrhage_delay": "Hemorrhage delay (§b&timer&§f)"
+        }
       },
       "pyromane": {
         "display": "Pyromaniac",
@@ -1341,7 +1491,50 @@
         "covered_by_fire": "You approached a burning building and got covered with oil!",
         "fire_covered": "§b&player&§f approached the burning building and was covered with oil.",
         "not_in_building": "You must be inside a building",
-        "burn_used": "You already used your condemnation this episode"
+        "burn_used": "You already used your condemnation this episode",
+        "powers": {
+          "ignite": "Ignite",
+          "burn": "Condemn"
+        },
+        "configurations": {
+          "pyromane_every_other_day": "Pyromaniac every other day",
+          "heart_loss": "Health lost on ignition (§b&number&§f)",
+          "fire_proximity": "Fire proximity (§b&number&§f blocks)",
+          "building_proximity": "Building proximity (§b&number&§f blocks)",
+          "min_burn_resistance": "Min. burn resistance (§b&number&§f%)",
+          "burn_initial": "Initial burn resistance (§b&number&§f%)",
+          "burn_increment": "Burn increment (§b&number&§f%)",
+          "burn_damage_factor": "Burn damage factor (§b&number&§f%)"
+        },
+        "timers": {
+          "cover_cooldown": "Cover cooldown (§b&timer&§f)",
+          "heart_loss_duration": "Health loss duration (§b&timer&§f)",
+          "fire_duration": "Fire duration (§b&timer&§f)",
+          "ignition_delay_min": "Min. ignition delay (§b&timer&§f)",
+          "ignition_delay_max": "Max. ignition delay (§b&timer&§f)"
+        }
+      },
+      "mesquin_werewolf": {
+        "display": "Petty Werewolf",
+        "description": "You possess the §bStrength I§f effect at night (its % depends on your Honor). §bThree times per game§f, you can §brig a ballot box§f by interacting with it (right-click on the jukebox), even outside of voting sessions. Villagers who vote in a rigged ballot box §bdo not gain any Honor§f. Once per game, you can let out a howl via §b/ww hurler§r. You gain §bSpeed I§f and §b2♥§f of Absorption for 1 minute if you kill a player.",
+        "rig_perform": "You have rigged this ballot box. Villagers who vote in it will not gain any Honor.",
+        "rig_no_use": "You have no more rigging available.",
+        "rig_already": "This ballot box is already rigged.",
+        "command": "hurler"
+      },
+      "alerter_werewolf": {
+        "display": "Alerter Werewolf",
+        "description": "Once per episode, you can target a player with §b/ww alerte§f. If you stay §b&number&§f seconds near your target, you reveal their role to another random Werewolf. You cannot alert on a member of your own camp. You learn the name of the alerted Werewolf, and they learn yours.",
+        "command": "alerte",
+        "distance": "Alert distance (§b&number&§f blocks)",
+        "perform": "You start following §b&player&§f. Stay nearby for §b&number&§f seconds to alert a Werewolf.",
+        "alert_received": "The Werewolf §b&player&§f alerted you: the target is a §b&role&§f.",
+        "alerter_notified": "You alerted the Werewolf §b&player&§f.",
+        "alert_no_wolf": "No other Werewolf is alive to be alerted.",
+        "configurations": {
+          "alerter_werewolf_every_other_day": "Alerter Werewolf every other day",
+          "proximity_required": "Proximity time required (§b&number&s§f)"
+        }
       }
     },
     "announcement": {
@@ -1461,6 +1654,7 @@
           "fake_lover": "False Couple with: §b&player&",
           "kill_by": "Killed by : §b&player&",
           "power": "Ability : §b&on&",
+          "powers": "Powers : §b&list&",
           "role": "§b&player&§r is §b&role&",
           "transformed": "Transformed: §b&on&",
           "yes": "yes",
@@ -1499,7 +1693,7 @@
         "revive": {
           "command": "revive",
           "description": "Revive a player",
-          "perform": "§b&player&§r has been revived by §b&dmin&",
+          "perform": "§b&player&§r has been revived by §b&admin&",
           "not_death": "The player isn't Dead"
         },
         "size": {
@@ -2058,10 +2252,18 @@
           "urn_capacity": "Ballot box capacity: §b&number&§r votes"
         },
         "timers": {
-          "urn_vote_1_start": { "name": "1st ballot vote (§b&timer&§r)" },
-          "urn_vote_2_start": { "name": "2nd ballot vote (§b&timer&§r)" },
-          "urn_vote_3_start": { "name": "3rd ballot vote (§b&timer&§r)" },
-          "urn_vote_duration": { "name": "Ballot vote duration (§b&timer&§r)" }
+          "urn_vote_1_start": {
+            "name": "1st ballot vote (§b&timer&§r)"
+          },
+          "urn_vote_2_start": {
+            "name": "2nd ballot vote (§b&timer&§r)"
+          },
+          "urn_vote_3_start": {
+            "name": "3rd ballot vote (§b&timer&§r)"
+          },
+          "urn_vote_duration": {
+            "name": "Ballot vote duration (§b&timer&§r)"
+          }
         },
         "urn_menu": "Ballot Box",
         "urn_full": "This ballot box is §cfull",
@@ -2329,6 +2531,30 @@
         "name": "Vengeful Cupidon",
         "description": "When the couple dies after episode 5, the Cupid becomes Vengeful and must win alone.",
         "transform": "[§5Vengeful Cupidon§r] Your couple has perished... Vengeance consumes you! You become a loner and must now win alone. Your aura is now dark."
+      },
+      "night_assembly": {
+        "name": "Night Assembly",
+        "description": "The Werewolves receive a message \nat the start of the first night of a random episode \nfrom episode 3 onward.\n They then have 1 minute to target a player \nwith the command /lg assemblee [Name]. \nAt the end of the minute: voters lose -1 Honor \nand receive a particle trail on the ground \nleading to the location of the most targeted player at the end of the assembly; \nnon-voters gain +1 Honor; \nthe targeted player is informed that they were targeted at the end of the night \nand receives the Weakness I effect until the end of the episode.",
+        "command": "assemblee",
+        "announce": "§5Night Assembly§r! You have §b1 minute§r to target a player with §b/ww assemblee [Name]§r. Voters lose §c-1 Honor§r but get the direction of the most targeted player. Non-voters gain §a+1 Honor§r.",
+        "vote_perform": "You voted to target §b&player&§r.",
+        "voted": "You took part in the assembly. §c-1 Honor§r. An arrow points you toward the most targeted player.",
+        "not_voted": "You did not take part in the assembly. §a+1 Honor§r.",
+        "targeted": "§cYou have been targeted by the Werewolves' Night Assembly.§r You suffer §cWeakness I§r until the end of the episode.",
+        "not_active": "No night assembly is currently underway."
+      },
+      "gri_gri_immunity": {
+        "name": "Immunity Gri-gri",
+        "description": "A Gri-gri appears in one of the voting office chests. \nThe player holding it during the tally will see the votes against them cancelled. \nThe player targeted by the vote will therefore be the next most voted player. \nThe Gri-gri does not disappear if the player holding it is not the most voted player.",
+        "item_name": "§5Immunity Gri-gri",
+        "item_lore": "§7The votes against you will be cancelled during the tally.",
+        "appeared": "§5An Immunity Gri-gri§r has appeared in one of the voting office chests!",
+        "consumed": "§5The Immunity Gri-gri§r protected §b&player&§r: their votes were cancelled. The next most voted player suffers the sanctions instead.",
+        "timers": {
+          "spawn": {
+            "name": "Gri-gri appearance (§b&timer&§f)"
+          }
+        }
       }
     },
     "check": {
@@ -2477,6 +2703,197 @@
         "vote": "This is the time for voting. Vote for your mayor with §b/ww election§f, you have §b&timer&",
         "result": "Mayor &forme& §b&name&§f has been chosen with §b&votes&§f votes. It has a double vote in addition to its shape power"
       }
+    },
+    "statistics_action": {
+      "alerter_event": "Wolf alert",
+      "all_enchanted": "All players enchanted",
+      "amnesiac_lover_death": "Amnesiac lover death",
+      "amnesiac_lover_revelation": "Amnesiac lovers revelation",
+      "amnesic_design": "Amnesic designation",
+      "amnesic_transform": "Amnesic transformation",
+      "analyst_analyst": "In-depth analysis",
+      "analyst_see": "Analysis",
+      "angel_choice": "Angel choice",
+      "angel_regeneration": "Angel regeneration",
+      "angel_target": "Angel target",
+      "angel_target_death": "Angel target death",
+      "assassination": "Assassination",
+      "auramancer_change_aura": "Aura change",
+      "auramancer_event": "Aura reading",
+      "avenger_list_death": "Registered wolf death",
+      "avenger_list_register": "Registered wolf",
+      "avocat_defend": "Lawyer defense",
+      "avocat_defense_end": "Defense end (Lawyer)",
+      "barbarian_event": "Barbarian concealment",
+      "bearing_ritual_event": "Pad ritual",
+      "begin_charm": "Charm start",
+      "begin_smell": "Sniff start",
+      "benefactor_give_heart_event": "Heart donation",
+      "blood_moon_event": "Blood moon",
+      "bloodthirsty_werewolf_hunt_down_event": "Bloodthirsty Werewolf hunt",
+      "bloodthirsty_werewolf_low_life_list_display": "Low-health player list",
+      "bohemian_sacrifice": "Bohemian sacrifice",
+      "bonesetter_choose": "Bonesetter choice",
+      "bonesetter_heal": "Bonesetter heal",
+      "border_start": "Border start",
+      "border_stop": "Border stop",
+      "charmed": "Charmed player",
+      "charmed_death_event": "Charmed player death",
+      "charmer_charmed": "Charmer charm",
+      "charmer_get_effect": "Effect recovered (Charmer)",
+      "citizen_change_vote": "Vote change (Citizen)",
+      "corruption_complete": "Corruption complete",
+      "counterfeiter_falsify_event": "Counterfeiter falsification",
+      "croupier_choose": "Croupier choice",
+      "croupier_event": "Croupier power",
+      "cursed": "Cursed player",
+      "cursed_lover_death": "Cursed lover death",
+      "cursed_lover_revelation": "Cursed lover revelation",
+      "day": "Day",
+      "designed_lover": "Lover designation",
+      "devoted_servant_event": "Role steal (Devoted Servant)",
+      "digging_end": "Digging end",
+      "disloyal_harm": "Harm (Disloyal)",
+      "don": "Donation",
+      "druid_power": "Druid power",
+      "drunken_werewolf": "Drunk Werewolf",
+      "elder_revive": "Elder resurrection",
+      "enchanted": "Enchanted player",
+      "enquire": "Detective investigation",
+      "event_loot_box": "Random loot box",
+      "exposed": "Exposed",
+      "fallen_angel_kill_target": "Fallen Angel kills target",
+      "final_kill": "Final kill",
+      "find_all_loot_box": "All loot boxes found",
+      "fruit_merchant_command": "Fruit Merchant command",
+      "fruit_merchant_death": "Tracked player death (Fruit Merchant)",
+      "fruit_merchant_recover": "Recovery (Fruit Merchant)",
+      "give_back_book": "Book returned",
+      "give_book": "Book given",
+      "give_flute": "Flute given",
+      "god_miracle_event": "Divine miracle",
+      "gravedigger_event": "Gravedigger power",
+      "grim": "Disguise",
+      "growl": "Growl",
+      "guard_event": "Guard protection",
+      "guard_resurrection": "Guard resurrection",
+      "guess_event": "Guess",
+      "hunter_shoot_event": "Hunter shot",
+      "idiot_village": "Village idiot",
+      "illusionist_activate_event": "Illusionist activation",
+      "illusionist_add_player_event": "Player added (Illusionist)",
+      "illusionist_get_names_event": "Names recovered (Illusionist)",
+      "incomplete_list_event": "Incomplete list",
+      "infection": "Infection",
+      "innkeeper_host": "Hosting (Innkeeper)",
+      "innkeeper_kill": "Customer kill (Innkeeper)",
+      "inquisitor_event": "Inquisitor power",
+      "interpret_event": "Interpretation",
+      "invisible": "Invisibility",
+      "invulnerability": "Invulnerability",
+      "kill_event": "Kill",
+      "librarian_death": "Librarian death",
+      "lone_wolf": "Lone wolf",
+      "lover_death": "Lover death",
+      "lover_revelation": "Lover revelation",
+      "mask": "Comedian mask",
+      "mastermind_event": "Mastermind power",
+      "mire_eat_gapple": "Eats golden apple (Mire)",
+      "mire_nearby_player": "Nearby player (Mire)",
+      "mire_under_three_hearts": "Under 3 hearts (Mire)",
+      "model": "Model",
+      "mysanthrope_sister": "Misanthrope sister",
+      "mystical_reveal": "Mystical reveal",
+      "necromancer_event": "Necromancer power",
+      "new_display_role": "New displayed role",
+      "new_werewolf": "New wolf",
+      "night": "Night",
+      "night_assembly_end_event": "Night assembly end",
+      "not_all_werewolf_event": "Masked wolves",
+      "oracle_see": "Oracle vision",
+      "poacher_recover_fur": "Fur recovery (Poacher)",
+      "priestess_spec": "Priestess speculation",
+      "protection": "Protection",
+      "putrefaction_event": "Putrefaction",
+      "pvp": "PvP",
+      "pyromane_cover": "Covered in gasoline (Pyromaniac)",
+      "pyromane_ignite": "Set on fire (Pyromaniac)",
+      "random_infection": "Random infection",
+      "renegade_join_camp": "Renegade joins a camp",
+      "renegade_swap": "Renegade swap",
+      "repartition": "Distribution",
+      "reveal_aura_amount": "Aura reveal",
+      "reveal_wishes_occultist": "Wishes revealed (Occultist)",
+      "revive": "Resurrection",
+      "rival_lover": "Lover assassination (Rival)",
+      "rival_lover_death": "Rival lover death",
+      "romulusremus_mother_death": "Mother death (Romulus/Remus)",
+      "ronin_duel": "Ronin duel",
+      "rumors_event": "Rumor",
+      "rumors_write_event": "Rumor writing",
+      "sanctuary_visit": "Sanctuary visit",
+      "scam_event": "Scam",
+      "scape_goat": "Scapegoat",
+      "see": "Seer vision",
+      "see_vote": "Vote vision (Citizen)",
+      "servitor_definitive_master": "Definitive master (Servitor)",
+      "servitor_master_chosen": "Master chosen (Servitor)",
+      "shaman": "Shaman power",
+      "sister_death": "Sister death",
+      "sister_role_name": "Sister role",
+      "sister_see_name": "Sister vision",
+      "sk_target_death": "Target death (Serial Killer)",
+      "sniff": "Sniff",
+      "spy_choose_event": "Spy choice",
+      "spy_result_event": "Spy result",
+      "steal": "Steal",
+      "story_teller_event": "Storyteller power",
+      "stud_lover": "Stud lover",
+      "succubus_resurrection": "Succubus resurrection",
+      "swap_event": "Role swap",
+      "tenebrous": "Tenebrous power",
+      "thug_command": "Thug command",
+      "thug_recover_golden_apple": "Golden apple recovered (Thug)",
+      "thug_reveal_event": "Thug reveal",
+      "track": "Tracking",
+      "troll": "Troll",
+      "troll_lover": "Troll lover",
+      "trouble": "Mischief",
+      "trouble_maker_death": "Troublemaker death",
+      "trouple_event": "Trouple",
+      "twin_list": "Twin list",
+      "twin_reveal": "Twin reveal",
+      "twin_role": "Twin role",
+      "urn_vote_cast": "Urn vote cast",
+      "urn_vote_result": "Urn vote result",
+      "villager_kit": "Villager kit",
+      "voodoo_create_doll_event": "Voodoo doll creation",
+      "vote": "Vote",
+      "vote_result": "Vote result",
+      "werewolf_howler": "Howl",
+      "werewolf_list": "Werewolf list",
+      "werewolf_message": "Werewolf message",
+      "wild_child_transformation": "Wild Child transformation",
+      "will_o_the_wisp_incendiary_madness": "Incendiary madness (Will-O-Wisp)",
+      "will_o_the_wisp_recover_role": "Role recovery (Will-O-Wisp)",
+      "will_o_the_wisp_teleport": "Teleport (Will-O-Wisp)",
+      "win": "Victory",
+      "wish_change": "Wish change",
+      "witch_curse": "Witch curse",
+      "witch_revive": "Witch resurrection",
+      "wolf_dog_choose_wolf": "Wolf Dog chooses wolves",
+      "wolf_fleas_event": "Wolf fleas",
+      "elections.mayor_death": "Mayor death",
+      "elections.mayor_extra_golden_apple": "Extra mayor golden apple",
+      "elections.mayor_golden_apple": "Mayor golden apple",
+      "elections.mayor_resurrection": "Mayor resurrection",
+      "elections.mayor_selection": "Mayor election",
+      "elections.mayor_vote": "Mayor vote",
+      "innkeeper.client_death": "Customer death (Innkeeper)",
+      "innkeeper.meet": "Meeting (Innkeeper)",
+      "innkeeper.speed": "Speed (Innkeeper)",
+      "track.astronomer": "Tracking (Astronomer)",
+      "random_events.vaccination": "Random vaccination"
     }
   }
 }

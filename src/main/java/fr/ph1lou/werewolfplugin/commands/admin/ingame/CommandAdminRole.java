@@ -14,11 +14,17 @@ import fr.ph1lou.werewolfapi.player.interfaces.IPlayerWW;
 import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IAffectedPlayers;
 import fr.ph1lou.werewolfapi.role.interfaces.IPower;
+import fr.ph1lou.werewolfapi.role.interfaces.IPowers;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.role.interfaces.ITransformed;
+import fr.ph1lou.werewolfapi.statistics.interfaces.IGameReview;
+import fr.ph1lou.werewolfapi.versions.VersionUtils;
+import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.roles.neutrals.Angel;
+import fr.ph1lou.werewolfplugin.statistiks.StatsHoverText;
 import org.bukkit.entity.Player;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,12 +48,23 @@ public class CommandAdminRole implements ICommand {
         }
 
         if (args.length == 0) {
+            IGameReview review = getReview();
+            Map<UUID, String> reviewNames = StatsHoverText.buildReviewNames(game);
             game.getPlayersWW()
                     .stream()
                     .filter(playerWW1 -> playerWW1.isState(StatePlayer.ALIVE))
-                    .forEach(playerWW1 -> player.sendMessage(game.translate("werewolf.commands.admin.role.role",
-                            Formatter.player(playerWW1.getName()),
-                            Formatter.role(game.translate(playerWW1.getRole().getKey())))));
+                    .forEach(playerWW1 -> {
+                        String name = playerWW1.getName();
+                        String message = game.translate("werewolf.commands.admin.role.role",
+                                Formatter.player(name),
+                                Formatter.role(game.translate(playerWW1.getRole().getKey())));
+                        String hover = StatsHoverText.build(game, playerWW1, review, reviewNames);
+                        if (hover.isEmpty()) {
+                            player.sendMessage(message);
+                        } else {
+                            VersionUtils.getVersionUtils().sendEndMessage(player, message, name, hover);
+                        }
+                    });
             return;
         }
 
@@ -66,9 +83,15 @@ public class CommandAdminRole implements ICommand {
         }
 
         IRole role = targetWW.getRole();
-        player.sendMessage(game.translate("werewolf.commands.admin.role.role",
+        String roleMessage = game.translate("werewolf.commands.admin.role.role",
                 Formatter.player(args[0]),
-                Formatter.role(game.translate(role.getKey()))));
+                Formatter.role(game.translate(role.getKey())));
+        String hover = StatsHoverText.build(game, targetWW, getReview(), StatsHoverText.buildReviewNames(game));
+        if (hover.isEmpty()) {
+            player.sendMessage(roleMessage);
+        } else {
+            VersionUtils.getVersionUtils().sendEndMessage(player, roleMessage, args[0], hover);
+        }
 
         if (role instanceof Angel && role.isKey(RoleBase.ANGEL) &&
             !((Angel) role).isChoice(AngelForm.ANGEL)) {
@@ -78,7 +101,18 @@ public class CommandAdminRole implements ICommand {
                             RoleBase.FALLEN_ANGEL :
                             RoleBase.GUARDIAN_ANGEL))));
         }
-        if (role instanceof IPower) {
+        if (role instanceof IPowers) {
+            IPowers powers = (IPowers) role;
+            StringBuilder list = new StringBuilder();
+            for (String key : powers.getPowers().keys()) {
+                if (list.length() > 0) list.append(", ");
+                list.append(game.translate(key)).append(":").append(powers.getPowerUses(key));
+            }
+            if (list.length() > 0) {
+                player.sendMessage(game.translate("werewolf.commands.admin.role.powers",
+                        Formatter.format("&list&", list.toString())));
+            }
+        } else if (role instanceof IPower) {
             player.sendMessage(game.translate("werewolf.commands.admin.role.power",
                     Formatter.format("&on&", ((IPower) role).hasPower())));
         }
@@ -170,5 +204,15 @@ public class CommandAdminRole implements ICommand {
         }
 
         player.sendMessage(game.translate("werewolf.commands.admin.role.honor", Formatter.number(targetWW.getHonor())));
+    }
+
+    /**
+     * Récupère le {@link IGameReview} courant (actions enregistrées pendant la partie),
+     * ou {@code null} si les statistiques sont indisponibles.
+     */
+    private IGameReview getReview() {
+        return Main.getPlugin(Main.class).getStatisticsEvents() != null
+                ? Main.getPlugin(Main.class).getStatisticsEvents().getGameReview()
+                : null;
     }
 }

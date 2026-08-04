@@ -1,7 +1,6 @@
 package fr.ph1lou.werewolfplugin.commands.roles.villager.citizen;
 
 import fr.ph1lou.werewolfapi.annotations.RoleCommand;
-import fr.ph1lou.werewolfapi.basekeys.IntValueBase;
 import fr.ph1lou.werewolfapi.basekeys.Prefix;
 import fr.ph1lou.werewolfapi.basekeys.RoleBase;
 import fr.ph1lou.werewolfapi.commands.CommandContext;
@@ -17,22 +16,19 @@ import org.bukkit.Bukkit;
 @RoleCommand(key = "werewolf.roles.citizen.command_1",
         roleKeys = RoleBase.CITIZEN,
         argNumbers = 0,
-        autoCompletion = false)
+        autoCompletion = false,
+        requiredPowerKey = Citizen.POWER_SEE_VOTE)
 public class CommandCitizenSeeVote implements IParameterizedCommandRole {
     @Override
     public void execute(WereWolfAPI game, IPlayerWW playerWW, CommandContext commandContext) {
 
-
         Citizen citizen = (Citizen) playerWW.getRole();
-        if (citizen.getUse() >= game.getConfig().getValue(IntValueBase.CITIZEN_SEE_VOTE_NUMBER)) {
-            playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
-            return;
-        }
+
         if (!game.getVoteManager().isStatus(VoteStatus.WAITING)) {
             playerWW.sendMessageWithKey(Prefix.RED, "werewolf.check.power");
             return;
         }
-        citizen.setUse(citizen.getUse() + 1);
+        citizen.usePower(Citizen.POWER_SEE_VOTE);
         CitizenSeeVoteEvent seeVoteEvent = new CitizenSeeVoteEvent(playerWW);
         Bukkit.getPluginManager().callEvent(seeVoteEvent);
         if (seeVoteEvent.isCancelled()) {
