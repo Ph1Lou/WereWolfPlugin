@@ -23,7 +23,11 @@ public class UpdateChecker {
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + this.resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
                 if (scanner.hasNext()) {
-                    consumer.accept(scanner.next());
+                    String version = scanner.next();
+                    // Bukkit player and world APIs must only be used on the server thread.
+                    if (this.plugin.isEnabled()) {
+                        Bukkit.getScheduler().runTask(this.plugin, () -> consumer.accept(version));
+                    }
                 }
             } catch (IOException exception) {
                 this.plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
