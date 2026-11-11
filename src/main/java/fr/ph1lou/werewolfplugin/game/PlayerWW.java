@@ -15,6 +15,7 @@ import fr.ph1lou.werewolfapi.player.utils.Formatter;
 import fr.ph1lou.werewolfapi.role.interfaces.IRole;
 import fr.ph1lou.werewolfapi.utils.BukkitUtils;
 import fr.ph1lou.werewolfapi.versions.VersionUtils;
+import fr.ph1lou.werewolfplugin.Main;
 import fr.ph1lou.werewolfplugin.roles.villagers.Villager;
 import fr.ph1lou.werewolfplugin.utils.MessageAction;
 import io.papermc.lib.PaperLib;
@@ -26,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +35,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -89,25 +93,33 @@ public class PlayerWW implements IPlayerWW {
         this.role = new Villager(api, this);
         this.game = api;
         this.honor = game.getRandom().nextInt(3) - 1;
-        try {
-            this.mojangUUID = getUUID(name);
-        } catch (Exception ignored) {
-            this.game.setCrack();
+        if (this.uuid.version() == 4) {
+            this.mojangUUID = this.uuid;
+        } else {
+            // Never perform HTTP requests on Bukkit's main thread during player joins.
+            final Main plugin = JavaPlugin.getPlugin(Main.class);
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                try {
+                    UUID resolved = fetchMojangUUID(name);
+                    Bukkit.getScheduler().runTask(plugin, () -> this.mojangUUID = resolved);
+                } catch (IOException | RuntimeException exception) {
+                    Bukkit.getScheduler().runTask(plugin, this.game::setCrack);
+                }
+            });
         }
         this.clearPlayer();
     }
 
-    private UUID getUUID(String name) throws IOException {
-
-        if (this.uuid.version() == 4) {
-            return this.uuid;
+    private UUID fetchMojangUUID(String name) throws IOException {
+        URLConnection connection = new URL("https://api.mojang.com/users/profiles/minecraft/" + name).openConnection();
+        connection.setConnectTimeout(3000);
+        connection.setReadTimeout(3000);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+            JsonObject profile = new JsonParser().parse(in).getAsJsonObject();
+            String uuid = profile.get("id").getAsString();
+            uuid = uuid.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5");
+            return UUID.fromString(uuid);
         }
-        String uuid;
-        BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://api.mojang.com/users/profiles/minecraft/" + name).openStream()));
-        uuid = (((JsonObject) new JsonParser().parse(in)).get("id")).toString().replaceAll("\"", "");
-        uuid = uuid.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5");
-        in.close();
-        return UUID.fromString(uuid);
     }
 
     @Override
@@ -356,6 +368,10 @@ public class PlayerWW implements IPlayerWW {
 
     @Override
     public void clearPotionEffects() {
+        // Cancel expiration callbacks before replacing role effects (e.g. Troll mode).
+        this.potionModifiers.values().stream()
+                .filter(id -> id != -1)
+                .forEach(Bukkit.getScheduler()::cancelTask);
         this.potionModifiers.clear();
 
         Player player = Bukkit.getPlayer(this.uuid);
