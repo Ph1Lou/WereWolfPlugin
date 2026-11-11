@@ -99,11 +99,20 @@ public class PlayerWW implements IPlayerWW {
             // Never perform HTTP requests on Bukkit's main thread during player joins.
             final Main plugin = JavaPlugin.getPlugin(Main.class);
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                final UUID resolved;
                 try {
-                    UUID resolved = fetchMojangUUID(name);
-                    Bukkit.getScheduler().runTask(plugin, () -> this.mojangUUID = resolved);
+                    resolved = fetchMojangUUID(name);
                 } catch (IOException | RuntimeException exception) {
-                    Bukkit.getScheduler().runTask(plugin, this.game::setCrack);
+                    // Keep the original behavior: an unresolved Mojang profile flags
+                    // the game as cracked, without blocking the player join thread.
+                    if (plugin.isEnabled()) {
+                        Bukkit.getScheduler().runTask(plugin, () -> this.game.setCrack());
+                    }
+                    return;
+                }
+
+                if (plugin.isEnabled()) {
+                    Bukkit.getScheduler().runTask(plugin, () -> this.mojangUUID = resolved);
                 }
             });
         }
