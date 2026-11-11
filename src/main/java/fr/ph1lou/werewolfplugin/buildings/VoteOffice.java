@@ -76,6 +76,7 @@ public class VoteOffice extends Building implements IVoteOffice {
     @Override
     public void resetSession() {
         this.votesCast = 0;
+        this.blankVotes = 0;
         this.votesAgainst.clear();
         this.blankVoters.clear();
     }

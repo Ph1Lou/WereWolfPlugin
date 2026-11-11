@@ -142,7 +142,7 @@ public class ArgumentResolver {
                 return null; // unreachable
             }
         } else {
-            Player bukkitPlayer = Bukkit.getPlayer(raw);
+            Player bukkitPlayer = Bukkit.getPlayerExact(raw);
             if (bukkitPlayer == null) {
                 fail(sender, "werewolf.check.offline_player");
             }
@@ -187,7 +187,7 @@ public class ArgumentResolver {
     }
 
     private Object resolveBukkitPlayer(MessageSender sender, PlayerBukkitArg spec, String raw) {
-        Player bukkitPlayer = Bukkit.getPlayer(raw);
+        Player bukkitPlayer = Bukkit.getPlayerExact(raw);
         if (bukkitPlayer == null) {
             fail(sender, "werewolf.check.offline_player");
         }
