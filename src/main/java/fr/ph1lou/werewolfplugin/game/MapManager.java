@@ -128,9 +128,13 @@ public class MapManager implements IMapManager {
                 .forEach(player -> player.teleport(lobby.getSpawnLocation()));
 
         try {
-            Bukkit.unloadWorld(world, false);
-            FileUtils.deleteDirectory(new File(Bukkit.getWorldContainer() + File.separator + world.getName()));
+            if (!Bukkit.unloadWorld(world, false)) {
+                Bukkit.getLogger().warning("[WereWolfPlugin] Failed to unload world " + world.getName());
+                return;
+            }
+            File worldFolder = world.getWorldFolder();
             this.world = null;
+            FileUtils.deleteDirectory(worldFolder);
         } catch (IOException e) {
             e.printStackTrace();
         }
