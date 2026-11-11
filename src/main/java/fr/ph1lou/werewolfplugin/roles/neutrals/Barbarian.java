@@ -129,7 +129,7 @@ public class Barbarian extends RoleNeutral implements IPower, IAffectedPlayers {
 
     @EventHandler
     @RequireAbility
-    private void onPlayerDamageByPlayer(EntityDamageByEntityEvent event) {
+    public void onPlayerDamageByPlayer(EntityDamageByEntityEvent event) {
 
         if (!game.isState(StateGame.GAME)) {
             return;
