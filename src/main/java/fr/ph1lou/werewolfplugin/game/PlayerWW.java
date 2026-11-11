@@ -106,7 +106,9 @@ public class PlayerWW implements IPlayerWW {
                     // Keep the original behavior: an unresolved Mojang profile flags
                     // the game as cracked, without blocking the player join thread.
                     if (plugin.isEnabled()) {
-                        Bukkit.getScheduler().runTask(plugin, () -> this.game.setCrack());
+                        Bukkit.getScheduler().runTask(plugin, () -> {
+                            this.game.setCrack();
+                        });
                     }
                     return;
                 }
