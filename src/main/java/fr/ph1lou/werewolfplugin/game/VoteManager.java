@@ -66,6 +66,12 @@ public class VoteManager implements Listener, IVoteManager {
 
     public void setOneVote(IPlayerWW voterWW, IPlayerWW vote) {
 
+        // Also enforce the one-vote rule for GUI and API callers, not only commands.
+        if (this.voters.containsKey(voterWW)) {
+            voterWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.already_voted");
+            return;
+        }
+
         if (!voterWW.getRole().getPlayersMet().contains(vote)) {
             voterWW.sendMessageWithKey(Prefix.RED, "werewolf.configurations.vote.not_met",
                     Formatter.number(game.getConfig().getValue(IntValueBase.VOTE_DISTANCE)));
